@@ -1,0 +1,119 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+<div class="container-xl px-4 mt-4">
+    <!-- Account page navigation-->
+    <nav class="nav nav-borders rounded" style="background-color: rgba(224, 153, 94);">
+        <a class="nav-link active ms-0" href="{{ url_for('settings') }}"  style="color: #182c07e8;">Dane podstawowe</a>
+        <a class="nav-link" href="{{ url_for('passwordChange') }}" style="color: #182c07e8;">Prywatność</a>
+        <a class="nav-link" href="#" style="color: #182c07e8;">Inne</a>
+
+    </nav>
+    <hr class="mt-0 mb-4">
+    <div class="row">
+        <div class="col-xl-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Zdjęcie profilowe</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    {% if current_user.avatarCheck(avatarsPath): %}
+                        <img class="img-account-profile rounded-circle mb-2" src=" {{ '/static/avatars/{}'.format(current_user.id+'.jpg') }} " alt=""> 
+                     {% else: %}
+                        <!--<img src="{{ avatars.robohash((current_user.id) , size='100') }}">-->
+                        <img class="img-account-profile rounded-circle mb-2" src="/static/pictures/runner_logo.svg" alt="">
+                    {% endif %}
+                    <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">JPG lub PNG nie większe niż 5 MB</div>
+                    <!-- Profile picture upload button-->
+                    <form method="POST" style="margin-top:30px;" enctype="multipart/form-data">
+                        <div class="row justify-content-center">
+                            {{ avatarForm.csrf_token }}
+                            <div class="small font-italic text-muted mb-4">
+                                {{ avatarForm.image }}
+                                <ul>
+                                    {% for error in avatarForm.image.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <button class="btn btn-dark" type="submit" style="background-color: #182c07e8;">Prześlij nowe zdjęcie</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Szczegóły konta</div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.csrf_token }}
+                        <!-- Form Group (username)-->
+                        <div class="mb-3">
+                            <label class="small mb-1">Login (Nazwa pod którą będziesz widoczna/y na stronie dla innych użytkowników)</label>
+                            <input class="form-control" type="text" value="{{current_user.id}}" aria-label="Disabled input example" disabled readonly>
+                            <ul>
+                                {% for error in form.id.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1">{{ form.name.label }}</label>
+                                {{ form.name(class_="form-control" ) }}
+                                <ul>
+                                    {% for error in form.name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1">{{ form.lastName.label }}</label>
+                                {{ form.lastName(class_="form-control") }}
+                                <ul>
+                                    {% for error in form.lastName.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Form Group (email address)-->
+                        <div class="mb-3">
+                            <label class="small mb-1">Adres E-mail</label>
+                            <input class="form-control" type="text" value="{{current_user.mail}}" aria-label="Disabled input example" disabled readonly>
+                            <ul>
+                                {% for error in form.mail.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Numer telefonu</label>
+                                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="brak">
+                            </div>
+                            <!-- Form Group (birthday)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputBirthday">Urodziny</label>
+                                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="brak">
+                            </div>
+                        </div>
+                        <!-- Save changes button-->
+                        <button class="btn btn-dark" style="background-color: #182c07e8;" type="submit">Zapisz zmiany</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

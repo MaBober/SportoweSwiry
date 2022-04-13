@@ -1,0 +1,16 @@
+Czołem {{ current_user.id }}!,
+
+Witaj w wyzwaniu sportowym {{ event.name }}!
+
+Data rozpoczęcia: {{ event.start }}
+Długość: {{ event.lengthWeeks }} tygodni
+
+Życzymy samych sukcesów i wielu pokonanych kilometrów.
+
+Ubieraj buty i zaczynaj zabawę już dziś! ;)
+
+Pozdrawiamy,
+
+Administracja Sportowych Świrów
+
+Uwaga: Nie odpisuj na tę wiadomość.

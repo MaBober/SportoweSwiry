@@ -1,0 +1,106 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+<div class="container-xl px-4 mt-4">
+    <div class="card-header" style="background-color: rgba(224, 153, 94);">
+        <b>Lista wszystkich wyzwań</b>
+    </div>
+</div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Usuwanie rekordu danych</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="idDeleteModalBody">
+            ...
+            </div>
+            <div class="modal-footer">
+                <form action="" method="GET" id="confirmDeleteForm">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="submit" class="btn btn-danger">Usuń wyzwanie</button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script> 
+        $(document).ready(function () { 
+            // For A Delete Record Popup 
+            // This function is applied to all elements with class ending with ".delete-confirm" 
+            $('.delete-confirm').click(function () { 
+                // get attributes of the found element 
+                var desc = $(this).attr('data-desc'); 
+                var url = $(this).attr('data-url'); 
+                // the #... designates id of an element - change the text in the modal window 
+                $('#idDeleteModalBody').text(desc); 
+                $("#confirmDeleteForm").attr("action", url); 
+            }); 
+        }); 
+    </script>
+
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-12">
+                <div class="table-responsive-md">
+                    <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Administrator</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Początek</th>
+                            <th scope="col">Długość</th>
+                            <th scope="col">Koniec</th>
+                            <th scope="col">Zestaw współczynników</th>
+                            <th scope="col">Wydarzenie prywatne</th>
+                            <th scope="col">Operacje</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in events: %}
+                            <tr>
+                                <td scope="row">{{loop.index}}</td>
+                                <td>{{event.name}}</td>
+                                <td>{{event.adminID}}</td>
+                                <td>{{event.status}}</td>
+                                <td>{{event.start}}</td>
+                                <td>{{event.lengthWeeks}}</td>
+                                <td>{{event.end}}</td>
+                                <td>{{event.coefficientsSetName}}</td>
+                                <td >{{event.isPrivate}}</td>
+                                <td>
+                                    <!-- Button trigger modal -->
+                                    <a href="{{ url_for('viewEvent', eventID=event.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Podgląd  </a></div>
+                                    <a href="{{ url_for('adminModifyEvent', eventID=event.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Modyfikuj  </a></div>
+                                    <a type="button" class="btn btn-danger btn-sm delete-confirm" 
+                                        data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                        data-desc="{{ 'Napewno chcesz usunać wyzwania: {}?'.format(event.name) }}"
+                                        data-url="{{ url_for('adminDeleteEvent', eventID=event.id )}}">
+                                        Usuń
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="row justify-content-left">
+                        <div class="col-3"><a href="{{ url_for('createEvent')}}" class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">
+                            Dodaj nowe wyzwanie
+                        </a></div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

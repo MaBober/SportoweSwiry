@@ -1,0 +1,172 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+{% include "/includes/event_menu.html" %}
+
+<div class="container-xl px-4 mt-4">
+
+    <div class="row">
+        <div class="col-xl-4">
+
+            <!-- Event info card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Szczegóły wyzwania</div>
+                <div class="card-body">
+                    <h6>Rozpoczęcie: {{event.start}}<br></h6>
+                    <h6>Koniec: {{event.end}}</h6>
+                    <h6>Ilość ucztstników: {{usersAmount}} </h6>
+                    <h6>Zapisanych aktywności: {{activitiesAmount}}</h6>
+
+                </div>
+            </div>
+            <br>
+   
+            <!-- Your week card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Aktualny tydzień</div>
+                
+                <div class="card-body">
+                    {% if event.status != "Zakończone" %}
+                    <div class="row">
+                        <div class="col-4"><h5>Tydzień</h5></div>
+                        <div class="col-4"><h5>Twój dystans</h5></div>
+                        <div class="col-4"><h5>Cel</h5></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">{{presentWeek}} / {{event.lengthWeeks}}</div>
+                        {% if WeekDistance >= targets[presentWeek-1].value %}
+                            <div class="col-4" style="color:rgb(27, 80, 10)"><b>{{WeekDistance}} km</b></div>
+                        {% endif %}
+            
+                        {% if WeekDistance < targets[presentWeek-1].value  %}
+                            <div class="col-4" style="color:rgb(146, 40, 7)"><b>{{WeekDistance}} km</b></div>
+                        {% endif %}
+
+                    <div class="col-4">{{targets[presentWeek-1].value}} km</div>
+                    
+                </div>
+                {% else %}
+                   <h5> Wyzwanie zakończone!</h5>
+                {% endif %}
+                </div>
+            </div>
+            
+        </div>
+
+
+        
+        <div class="col-xl-8">
+            <!-- Coeficient list card-->
+            <div class="card mb-4">
+                <div class="card-header">Współczynniki aktywności</div>
+                <div class="card-body">
+                    <h5>Mnożniki</h5>
+                    <div class="row">
+                   
+                    {% for coef in coefSet: %}
+                    {% if coef.constant != True %}
+                    <div class="col-md-3 border">
+                        
+                       <b> {{coef.activityName}}</b><br>
+                            1km x {{coef.value}} 
+                    
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    </div>
+                    <hr noshade size="4" align="right" width="80%">
+                    <h5>Stałe wartości</h5>
+                    <div class="row">
+                        {% for coef in coefSet: %}
+                        {% if coef.constant == True %}
+                        <div class="col-md-3 border">
+                        
+                            <b> {{coef.activityName}}</b><br>
+                            {{coef.value}}  km
+                        
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        </div>
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="container-xl px-4 mt-4">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+
+            <!-- Actiities summary -->
+            <div class="card mb-12 mb-xl-0">
+            <div class="card-header">Podsumowanie aktywności</div>
+            <div class="card-body"> 
+            <div class="table-responsive-md">
+
+                {% for week in range(event.lengthWeeks): %}
+                <table class="table table-sm table-secondary table-striped table-hover" style="border-radius: 50px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">Tydzień {{week+1}}</th>
+                        {% for user in eventUsers: %}
+                        <th scope="col">
+                            {% if user.avatarCheck(avatarsPath): %}
+                            <img src=" {{ '/static/avatars/{}'.format(user.id+'.jpg') }} " width="40"> 
+                            {% else: %}
+                             <!--<img src="{{ avatars.robohash((user.id) , size='100') }}">-->
+                            <img src="/static/pictures/runner_logo.svg" width="40">
+                            {% endif %}{{user.name}} {{user.lastName}} 
+                        </th>
+                        {% endfor %}
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for day in weekDays[week]: %}
+                        <tr>
+
+                            <td>{{day[0]}}</td>
+                                {% for i in eventUsers: %}
+                                <td>{{eventData[week][loop.index-1][day[1]]}} km</td>
+                                {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                    <thead>
+                        <tr>
+                            <th scope="col">Cel: {{targets[week].value}} km</th>
+                            {% for user in eventUsers: %}
+                            {% if eventData[week][loop.index-1][7] >= targets[week].value %}
+                            <th scope="col" style="background-color: rgb(111, 245, 111);">{{eventData[week][loop.index-1][7]}} km</th>
+                            {% endif %}
+
+                            {% if eventData[week][loop.index-1][7] < targets[week].value %}
+                            <th scope="col" style="background-color: rgb(245, 73, 11);">{{eventData[week][loop.index-1][7]}} km</th>
+                            {% endif %}
+                            {% endfor %}
+    
+                        </tr>
+                    </thead>
+
+
+                </table>
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+<form method ="post" action="{{ url_for('createCoeficientsTable') }}">
+    {{ form.csrf_token}}
+
+    <div class="row justify-content-left">
+        
+
+        <div class="col-md-8"><label class="form-label">{{ form.setName.label()}}</label> 
+            {{ form.setName(class_="form-control form-control-sm" ) }} </br>
+            <ul>
+                {% for error in form.setName.errors %}
+                    {{ error }}
+                {% endfor %}
+            </ul>
+        </div>  
+    </div>
+
+    <div class="row justify-content-left">
+        <div class="col-3"><button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">Utwórz!</button></div>
+    </div>
+</form>
+
+

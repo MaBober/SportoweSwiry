@@ -1,0 +1,32 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+<div class="row pt-6">
+    <div class="col-1"></div>
+    <div class="col-11" style="margin-top:10px;">
+        <h1>Witaj Sportowy Świrze!</h1>
+    </div>
+</div>
+
+<div class="row pt-6">
+    <div class="col-1"></div>
+    <div class="col-6" >
+        <h4 align="justify">Zmierz się ze swoimi lenistwem i nieregularnością, zbuduj kondycję i baw się wspólnie z przyjaciółmi!</h4>
+    </div>
+</div>
+<div class="row pt-6">
+    <div class="col-1"></div>
+    <div class="col-6" >
+        <br>
+        {% if current_user.id %}
+        
+        {% else %}
+        <div class="col-10"> <a href="{{ url_for('createAccount') }}" type="button" class="btn btn-success" style="background-color: #182c07e8;">DOŁĄCZ JUŻ DZIŚ!</a></div>
+        {% endif %}
+    </div>
+</div>
+
+ 
+
+
+{% endblock %}s

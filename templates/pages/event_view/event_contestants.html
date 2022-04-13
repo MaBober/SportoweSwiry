@@ -1,0 +1,90 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+{% include "/includes/event_menu.html" %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Usuwanie rekordu danych</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="idDeleteModalBody">
+            ...
+            </div>
+            <div class="modal-footer">
+                <form action="" method="GET" id="confirmDeleteForm">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="submit" class="btn btn-danger">Usuń użytkownika</button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script> 
+        $(document).ready(function () { 
+            // For A Delete Record Popup 
+            // This function is applied to all elements with class ending with ".delete-confirm" 
+            $('.delete-confirm').click(function () { 
+                // get attributes of the found element 
+                var desc = $(this).attr('data-desc'); 
+                var url = $(this).attr('data-url'); 
+                // the #... designates id of an element - change the text in the modal window 
+                $('#idDeleteModalBody').text(desc); 
+                $("#confirmDeleteForm").attr("action", url); 
+            }); 
+        }); 
+    </script>
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
+            <div class="table-responsive-md">
+                <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Uczestnik</th>
+
+                        {% if current_user.isAdmin %}
+                        <th scope="col">Akcje</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in eventUsers: %}
+                        <tr>
+                            <td scope="row">{{loop.index}}</td>
+                            <td>             
+                            {% if user.avatarCheck(avatarsPath): %}
+                            <img src=" {{ '/static/avatars/{}'.format(user.id+'.jpg') }} " width="40"> 
+                            {% else: %}
+                             <!--<img src="{{ avatars.robohash((user.id) , size='100') }}">-->
+                            <img src="/static/pictures/runner_logo.svg" width="40">
+                            {% endif %}
+                            {{user.id}}
+                        
+                            {% if current_user.isAdmin %}
+                                <td>
+                                <!-- Button trigger modal -->
+                                <a type="button" class="btn btn-danger btn-sm delete-confirm" 
+                                data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                data-desc="{{ 'Napewno chcesz usunać użytkownika: {}?'.format(user.id) }}"
+                                data-url="{{ url_for('adminDeleteContestant', eventID =event.id, userID=user.id)}}">
+                                Usuń
+                            </a></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

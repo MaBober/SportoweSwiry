@@ -1,0 +1,81 @@
+<div class="container">
+    <nav class="navbar sticky-top  navbar-expand-lg navbar-dark rounded" style="background-color: #182c07e8;">
+      <div class="container-fluid">
+        {% if current_user.id %}
+        <a class="navbar-brand" href="{{ url_for('basicDashboard') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
+        {% else %}
+        <a class="navbar-brand" href="{{ url_for('hello') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
+        {% endif %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample09">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link rounded border" href="{{ url_for('addActivity') }}">DODAJ AKTYWNOŚĆ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('myActivities') }}">Twoje aktywności</a> 
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-bs-toggle="dropdown" aria-expanded="false">Wyzwania</a>
+              <ul class="dropdown-menu" aria-labelledby="dropdown09">
+                <li><a class="dropdown-item" href="{{ url_for('yourEvents', mode='ongoing') }}">Twoje wyzwania</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('exploreEvents') }}">Dostępne wyzwania</a></li>
+                
+              </ul>
+            </li>
+          </ul>
+          
+          <ul class="nav navbar-nav flex-row justify-content-md-center justify-content-start flex-nowrap">
+            {% if current_user.isAdmin %}
+            <li class="nav-item dropdown" >
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Admin
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="{{ url_for('listOfUsers') }}">Użytkownicy</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('createAccount') }}">Stwórz konto</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('adminListOfEvents') }}">Wyzwania</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('listOfCoefficients') }}">Zestawy współczynników</a></li> 
+                  <li><a class="dropdown-item" href="{{ url_for('createCoeficientsTable') }}">Nowa tabela współczynników</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('createEvent') }}">Nowe wyzwanie</a></li>
+                </ul>
+              </li>
+              {% endif %}
+          </ul>
+
+          <ul class="nav navbar-nav flex-row justify-content-md-center justify-content-start flex-nowrap">
+            <li class="nav-item dropdown" >
+              {% if current_user.id %}
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ current_user.id }}
+                </a>
+
+              {% else %}                
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Moje konto
+                </a>
+              {% endif %}
+
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="{{ url_for('settings') }}">Ustawienia konta</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  
+
+                  {% if current_user.id %}
+                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Wyloguj</a></li>
+                  {% else %}
+                    <li><a class="dropdown-item" href="{{ url_for('createAccount') }}">Zarejestruj</a></li>                
+                    <li><a class="dropdown-item" href="{{ url_for('login') }}" style="border:2px solid rgba(224, 153, 94); border-radius: 5px;">Zaloguj</a></li>
+                  {% endif %}
+                  
+                </ul>
+              </li>
+        </ul>
+        
+        </div>
+      </div>
+    </nav>
+</div>

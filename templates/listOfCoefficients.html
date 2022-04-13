@@ -1,0 +1,88 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Usuwanie rekordu danych</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="idDeleteModalBody">
+        ...
+        </div>
+        <div class="modal-footer">
+            <form action="" method="GET" id="confirmDeleteForm">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <button type="submit" class="btn btn-danger">Usuń zestaw współczynników</button>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script> 
+    $(document).ready(function () { 
+        // For A Delete Record Popup 
+        // This function is applied to all elements with class ending with ".delete-confirm" 
+        $('.delete-confirm').click(function () { 
+            // get attributes of the found element 
+            var desc = $(this).attr('data-desc'); 
+            var url = $(this).attr('data-url'); 
+            // the #... designates id of an element - change the text in the modal window 
+            $('#idDeleteModalBody').text(desc); 
+            $("#confirmDeleteForm").attr("action", url); 
+        }); 
+    }); 
+</script>
+
+<div class="container-xl px-4 mt-4">
+    <div class="card-header" style="background-color: rgba(224, 153, 94);">
+        <b>Lista zestawów współczynników</b>
+    </div>
+</div>
+
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-10">
+                <div class="table-responsive-md">
+                    <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Akcje</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for name in names: %}
+                            <tr>
+                                <td scope="row">{{loop.index}}</td>
+                                <td>{{name}}
+
+                                </td>
+                                <td><a href="{{ url_for('coefficientsSetView', name=name) }}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Podgląd / Edytuj  </a></div>
+                                    {% if name != "Podstawowy zestaw współczynników" %}
+                                    <a type="button" class="btn btn-danger btn-sm delete-confirm" 
+                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                    data-desc="{{ 'Napewno chcesz usunać zestaw współczynników dla {}?'.format(name) }}"
+                                    data-url="{{ url_for('deleteCoefficientsSet', name=name )}}">
+                                    Usuń
+                                    </a>
+                                    {% endif %}
+                            </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

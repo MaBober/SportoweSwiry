@@ -1,0 +1,99 @@
+{% extends "pages//base.html" %}
+
+
+   
+
+{% block body_content %}
+
+
+ <!-- Modal -->
+ <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">www}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="idDeleteModalBody">
+        </div>
+        <div class="modal-footer">
+            <form action="" method="GET" id="confirmDeleteForm">
+                <button type="submit" class="btn" style="background-color: rgba(224, 153, 94); color:white">Zapisz się!</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script> 
+    $(document).ready(function () { 
+        // For A Delete Record Popup 
+        // This function is applied to all elements with class ending with ".delete-confirm" 
+        $('.delete-confirm').click(function () { 
+            // get attributes of the found element 
+            var desc = $(this).attr('data-desc'); 
+            var url = $(this).attr('data-url'); 
+            // the #... designates id of an element - change the text in the modal window 
+            $('#idDeleteModalBody').text(desc); 
+            $("#confirmDeleteForm").attr("action", url); 
+        }); 
+    }); 
+</script>
+
+
+<div class="container-xl px-4 mt-4">
+    <div class="card-header" style="background-color: rgba(224, 153, 94);">
+        <b>Dostępne wyzwania</b>
+    </div>
+</div>
+
+
+</nav>
+
+
+<div class="container">
+    <div class="row row-cols-auto">
+    <div class="col-1"></div>
+    <div class="col-11">
+        <div class="row row-cols-auto">
+            
+            
+            {% for event in events: %}
+            
+            
+            <div class="col-5">
+                <div class="row pt-3"></div>
+
+                <div class="row border bg-light"><h3><center>{{ event.name }}</center></h3></div>
+                <div class ="row border">
+                    <div class="col-3 border"><img src="/static/pictures/index_picture.svg" class="img-fluid" position="20" alt="" width="100" height="100"> </div>
+                    <div class="col-9">
+                        <div class="row pt-2"></div>
+                        <h6><b>Początek: </b> {{event.start}}</h6>
+                        <h6><b>Koniec: </b> {{event.end}}</h6> 
+                        <h6><b>Długość: </b> {{event.lengthWeeks}} tygodni</h6> 
+                    </div>
+                    
+                    <div class="row">
+                        <div class="p-2"> </div>
+                        <div class="col-2"></div>
+                        <div class="col-4"> <a href="{{ url_for('joinEvent', eventID=event.id )}}" type="button" class="btn btn-success" style="background-color: #182c07e8;">Zapisz się!</a></div>
+                        <div class="col-1"></div>
+                        <div class="col-4"> <a href="{{ url_for('eventPreview', eventID=event.id )}}" type="button" class="btn btn" style="background-color: rgba(224, 153, 94);">Szczegóły</a></div>
+                        <div class="col-1"></div>
+                        <div class="p-2"> </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class ="col-1"> </div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}

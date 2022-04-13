@@ -1,0 +1,105 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+<div class="container-xl px-4 mt-4">
+    <div class="card-header" style="background-color: rgba(224, 153, 94);">
+        <b>{{event.name}}</b>
+    </div>
+</div>
+
+<div class="container-xl px-4 mt-4">
+
+    <div class="row">
+        <div class="col-xl-4">
+
+            <!-- Event info card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Szczegóły wyzwania</div>
+                <div class="card-body">
+                    <h6>Rozpoczęcie: {{event.start}}<br></h6>
+                    <h6>Koniec: {{event.end}}</h6>
+                    <h6>Długość: {{event.lengthWeeks}} tygodni</h6>
+                    <h6>Ilość ucztstników: {{usersAmount}} </h6>
+
+
+                </div>
+            </div>
+            <br>
+            <div class="col-12"> <a href="{{ url_for('joinEvent', eventID=event.id )}}" type="button" class="btn-lg btn-success" style="background-color: #182c07e8;">Zapisz się!</a></div>
+            
+        </div>
+
+
+        
+        <div class="col-xl-8">
+            <!-- Coeficient list card-->
+            <div class="card mb-4">
+                <div class="card-header">Wymagane dystanse</div>
+                <div class="card-body">
+                    <h5></h5>
+                    <div class="row">
+                   
+                    {% for weekTarget in weekTargets: %}
+                    {% if loop.index <= event.lengthWeeks  %}
+                    <div class="col-md-3 border px-4">
+                        
+                       <b> Tydzień {{loop.index}}</b><br>
+                       {{ weekTarget.value }} km
+                    
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    </div>
+                    <hr noshade size="4" align="right" width="80%">
+
+                    
+
+                </div>
+            </div>
+            <!-- Coeficient list card-->
+            <div class="card mb-4">
+                <div class="card-header">Współczynniki aktywności</div>
+                <div class="card-body">
+                    <h5>Mnożniki</h5>
+                    <div class="row">
+                   
+                    {% for coef in coefSet: %}
+                    {% if coef.constant != True %}
+                    <div class="col-md-3 border px-4">
+                        
+                       <b> {{coef.activityName}}</b><br>
+                            1km x {{coef.value}} 
+                    
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    </div>
+                    <hr noshade size="4" align="right" width="80%">
+                    <h5>Stałe wartości</h5>
+                    <div class="row">
+                        {% for coef in coefSet: %}
+                        {% if coef.constant == True %}
+                        <div class="col-md-3 border px-4">
+                        
+                            <b> {{coef.activityName}}</b><br>
+                            {{coef.value}}  km
+                        
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        </div>
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+    <div class="page-header">
+        <h1>
+            Witaj, {{ current_user.id }}!
+        </h1>
+        <h3>Twoje konto nie zostało jeszcze potwierdzone.</h3>
+        <p>
+            Zanim uzyskasz pełny dostęp do tej strony musisz potwierdzić swoje konto.
+            Sprawdź skrzynkę pocztową, powinienieś otrzymać wiadomość e-mail z linkiem potwierdzającym.
+        </p>
+        <p>
+            Potrzebujesz nowego linka potwierdzającego?
+            <a href="{{ url_for('sendTokenAgain')  }}">Klinij tutaj</a>
+        </p>
+    </div>
+
+{% endblock %}

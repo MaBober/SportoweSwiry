@@ -1,0 +1,7 @@
+<p>Czołem {{ user.userName }},</p>
+<p>Żeby zresetować swoje hasło proszę <a href="{{ url_for('resetPassword', token=token, _external=True) }}">kliknij tutaj</a>.</p>
+<p>Alternatywnie możesz wkleić poniższy link w swoją przeglądarke:</p>
+<p>{{ url_for('resetPassword', token=token, _external=True) }}</p>
+<p>Pozdrawiamy,</p>
+<p>Administracja Sportowych Świrów</p>
+<p><small>Uwaga: Nie odpisuj na tę wiadomość.</small></p>

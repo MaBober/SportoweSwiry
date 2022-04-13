@@ -1,0 +1,2 @@
+SQLALCHEMY_DATABASE_URI='mysql://22021:BiegoweSwiry22@localhost/22021_produkcja'
+SQLALCHEMY_TRACK_MODIFICATIONS=False

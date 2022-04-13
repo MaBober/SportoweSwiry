@@ -1,0 +1,11 @@
+Czołem {{ user.userName }},
+
+Żeby zresetować swoje hasło kliknij w poniższy link:
+
+{{ url_for('resetPassword', token=token, _external=True) }}
+
+Pozdrawiamy,
+
+Administracja Sportowych Świrów
+
+Uwaga: Nie odpisuj na tę wiadomość.

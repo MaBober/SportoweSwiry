@@ -1,0 +1,28 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+    <form method="POST" style="margin-top:30px;">
+        <div class="row justify-content-center">
+            {{ form.csrf_token }}
+
+        <div class="row justify-content-center">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <label class="form-label"> <h6>Jeśli chcesz zresetować hasło dla swojego konta wprowadź swój adres e-mail:</h6> </label>
+                {{ form.mail(class_="form-control" ) }}
+                <ul>
+                    {% for error in form.mail.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">Wyślij</button>
+        </div>
+
+    </form>
+
+{% endblock %}

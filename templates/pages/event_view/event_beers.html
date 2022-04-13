@@ -1,0 +1,44 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+{% include "/includes/event_menu.html" %}
+
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
+            <div class="table-responsive-md">
+                <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Uczestnik</th>
+                        <th scope="col">Otrzyma</th>
+                        <th scope="col">Kupi</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in eventUsers: %}
+                        <tr>
+                            <td scope="row">{{loop.index}}</td>
+                            <td>             
+                            {% if user.avatarCheck(avatarsPath): %}
+                            <img src=" {{ '/static/avatars/{}'.format(user.id+'.jpg') }} " width="40"> 
+                            {% else: %}
+    
+                            <img src="/static/pictures/runner_logo.svg" width="40">
+                            {% endif %}
+                            {{user.id}}
+                            <td scope="row">{{beerToBuy[loop.index-1][0]}}</td>
+                            <td scope="row">{{beerToBuy[loop.index-1][1]}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

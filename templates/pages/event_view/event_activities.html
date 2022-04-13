@@ -1,0 +1,43 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+{% include "/includes/event_menu.html" %}
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
+            <div class="table-responsive-md">
+                <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Osoba</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Aktywność</th>
+                        <th scope="col">Dystans</th>
+                        <th scope="col">Przeliczone</th>
+                        <th scope="col">Czas</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in activities: %}
+                        <tr>
+                            <td scope="row">{{loop.index}}</td>
+                            <td>{{activity.userName}}</td>
+                            <td>{{activity.date}}</td>
+                            <td>{{activity.activity}}</td>
+                            <td>{{activity.distance}}</td>
+                            <td>{{calculatedDistance[activity.id]}}</td>
+                            <td>{{activity.time}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

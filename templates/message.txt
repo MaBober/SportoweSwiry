@@ -1,0 +1,7 @@
+Czołem!
+
+Użytownik {{name}} {{lastName}} ( {{mail}} ) przesyła wiadomość:
+
+{{message}}
+
+Uwaga:Wiadomość przesłana za pośrednictwem formularza kontaktowego.

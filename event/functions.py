@@ -1,8 +1,8 @@
 
 from start import db
-from classesDefinition import CoefficientsList, Event, DistancesTable, Participation, User
+from event.classes import CoefficientsList, Event, DistancesTable, Participation, User
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 def passCoefficientsTableToDB(form):
 

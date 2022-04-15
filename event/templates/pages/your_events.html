@@ -43,10 +43,10 @@
 <div class="container-xl px-4 mt-4">
     <nav class="nav nav-borders rounded" style="background-color: rgba(224, 153, 94);">
         
-        <a class="nav-link " href="{{ url_for('yourEvents', mode='ongoing') }}"  style="color: #182c07e8;"><b>Twoje wyzwania</b></a>
-        <a class="nav-link " href="{{ url_for('yourEvents', mode='ongoing') }}"  style="color: #182c07e8;">Aktualne</a>
-        <a class="nav-link " href="{{ url_for('yourEvents', mode='finished') }}"  style="color: #182c07e8;">Zakończone</a>
-        <a class="nav-link " href="{{ url_for('yourEvents', mode='all') }}"  style="color: #182c07e8;">Wszystkie</a>
+        <a class="nav-link " href="{{ url_for('event.yourEvents', mode='ongoing') }}"  style="color: #182c07e8;"><b>Twoje wyzwania</b></a>
+        <a class="nav-link " href="{{ url_for('event.yourEvents', mode='ongoing') }}"  style="color: #182c07e8;">Aktualne</a>
+        <a class="nav-link " href="{{ url_for('event.yourEvents', mode='finished') }}"  style="color: #182c07e8;">Zakończone</a>
+        <a class="nav-link " href="{{ url_for('event.yourEvents', mode='all') }}"  style="color: #182c07e8;">Wszystkie</a>
 
     </nav>
 </div>
@@ -117,13 +117,13 @@
                     <div class="row">
                         <div class="p-2"> </div>
                         <div class="col-2"></div>
-                        <div class="col"><a href="{{ url_for('viewEvent', eventID=event.id )}}" type="button" class="btn" style="background-color: rgba(224, 153, 94); color:white">  Szczegóły  </a></div>
+                        <div class="col"><a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn" style="background-color: rgba(224, 153, 94); color:white">  Szczegóły  </a></div>
                         {% if event.status == "Zapisy otwarte"%}
                         <div class="col-5">
                             <a type="button" class="btn btn-danger btn delete-confirm"
                             data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                             data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?"
-                            data-url="{{ url_for('leaveEvent', eventID=event.id )}}">
+                            data-url="{{ url_for('event.leaveEvent', eventID=event.id )}}">
                             Opuść wyzwanie</a>
                         </div>
                         {% endif %}
@@ -154,7 +154,7 @@
                     <div class="row">
                         <div class="p-2"> </div>
                         <div class="col-4"></div>
-                        <div class="col"><a href="{{ url_for('viewEvent', eventID=event.id )}}" type="button" class="btn" style="background-color: rgba(224, 153, 94); color:white">  Szczegóły  </a></div>
+                        <div class="col"><a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn" style="background-color: rgba(224, 153, 94); color:white">  Szczegóły  </a></div>
                         <div class="col-4"></div>
                         <div class="p-2"> </div>
                     </div>

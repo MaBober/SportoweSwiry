@@ -75,11 +75,11 @@
                                 Współczynnik
                                 {% endif %}
                             </td>
-                            <td><a href="{{ url_for('modifyCoeficientSport', coeficientID=activity.id) }}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Edytuj  </a>
+                            <td><a href="{{ url_for('event.modifyCoeficientSport', coeficientID=activity.id) }}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Edytuj  </a>
                                 <a type="button" class="btn btn-danger btn-sm delete-confirm" 
                                 data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                                 data-desc="{{ 'Napewno chcesz usunać współczynnik dla : {}?'.format(activity.activityName) }}"
-                                data-url="{{ url_for('deleteCoeficientSport', coeficientID=activity.id )}}">
+                                data-url="{{ url_for('event.deleteCoeficientSport', coeficientID=activity.id )}}">
                                 Usuń
                             </a></td>
 
@@ -89,7 +89,7 @@
                 </table>
             </div>
             {% if name == "Podstawowy zestaw współczynników" %}
-            <a href="{{ url_for('addNewSport') }}"  type="button" class="btn btn delete-confirm" style="background-color: #182c07e8; color:white">Dodaj nowy sport  </a>
+            <a href="{{ url_for('event.addNewSport') }}"  type="button" class="btn btn delete-confirm" style="background-color: #182c07e8; color:white">Dodaj nowy sport  </a>
             {% endif %}
         </div>
 

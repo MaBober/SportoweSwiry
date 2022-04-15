@@ -80,9 +80,9 @@
                     <div class="row">
                         <div class="p-2"> </div>
                         <div class="col-2"></div>
-                        <div class="col-4"> <a href="{{ url_for('joinEvent', eventID=event.id )}}" type="button" class="btn btn-success" style="background-color: #182c07e8;">Zapisz się!</a></div>
+                        <div class="col-4"> <a href="{{ url_for('event.joinEvent', eventID=event.id )}}" type="button" class="btn btn-success" style="background-color: #182c07e8;">Zapisz się!</a></div>
                         <div class="col-1"></div>
-                        <div class="col-4"> <a href="{{ url_for('eventPreview', eventID=event.id )}}" type="button" class="btn btn" style="background-color: rgba(224, 153, 94);">Szczegóły</a></div>
+                        <div class="col-4"> <a href="{{ url_for('event.eventPreview', eventID=event.id )}}" type="button" class="btn btn" style="background-color: rgba(224, 153, 94);">Szczegóły</a></div>
                         <div class="col-1"></div>
                         <div class="p-2"> </div>
                     </div>

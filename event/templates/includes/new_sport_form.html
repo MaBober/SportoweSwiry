@@ -1,16 +1,16 @@
-<form method ="post" action="{{ url_for('modifyCoeficientSport', coeficientID = coeficientID  ) }}">
+<form method ="post" action="{{ url_for('event.addNewSport') }}">
     {{ form.csrf_token}}
 
     <div class="row justify-content-left px-4">
         
 
         <div class="col-md-8"><label class="form-label"><b>{{ form.setName.label()}}</b></label> 
-            <br>{{ form.setName.data}} 
+            <br>Podstawowy zestaw współczynników
         </div> 
           
         <div class="row pt-3"></div>
         <div class="col-md-8"><label class="form-label"><b>{{ form.activityName.label()}}</b></label> 
-            <br>{{ form.activityName.data}} 
+            <br>{{ form.activityName(class_="form-control form-control-sm" )}} 
         </div>
 
         <div class="row pt-3"></div>
@@ -25,6 +25,7 @@
     <div class="row pt-3"></div>
     <div class="row justify-content-left">
         <div class="col-3"><button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">Zapisz</button></div>
+    </div>
     </div>
 </form>
 

@@ -100,7 +100,6 @@ class User(db.Model, UserMixin):
         db.session.add(user)
         return True
 
-    
 
 
 #Definition class for User - WTF-FlaskForm
@@ -169,136 +168,6 @@ class LoginForm(FlaskForm):
     remember=BooleanField("Zapamiętaj mnie")
 
 
-class CoefficientsList(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    setName = db.Column(db.String(50))
-
-    activityName = db.Column(db.String(50))
-    value = db.Column(db.Float)
-    constant = db.Column(db.Boolean)
-
-    def __repr__(self):
-        return self.setName
-
-class DistancesTable(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    event_ID = db.Column(db.Integer, nullable=False)
-    week = db.Column(db.Integer)
-    value = db.Column(db.Float)
-
-    
-#Defines event table
-
-class Event(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50),nullable=False)
-    start = db.Column(db.Date,nullable=False)
-    lengthWeeks = db.Column(db.Integer,nullable=False)
-    end = db.Column(db.Date)
-    adminID = db.Column(db.String(50), db.ForeignKey(User.id)) 
-    status = db.Column(db.String(50), nullable=False)
-    isPrivate = db.Column(db.Boolean, nullable=False)
-    isSecret = db.Column(db.Boolean, nullable=False)
-    password = db.Column(db.String(50))
-
-    coefficientsSetName = db.Column(db.String(50))
-    
-    participants = db.relationship('Participation', backref='Events', lazy='dynamic')
-
-    def __repr__(self):
-        return self.name
-
-        
-# Defines tabele, which connect users with events
-class Participation(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(50), db.ForeignKey(User.id))
-    event_id = db.Column(db.Integer, db.ForeignKey(Event.id))
-
-    def __repr__(self):
-        eventName = Event.query.filter(Event.id==self.event_id).first()
-        return "Użytkownik:{} bierze udział w Wydarzeniu: {}" .format(self.user_name, eventName)
-
-def get_event():
-    return Event.query
-
-def getIDCoefficient():
-    return CoefficientsList.query
-
-
-class EventForm(FlaskForm):
-
-    name = StringField("Nazwa")
-
-    start = DateField("Data rozpoczęcia")
-    length = IntegerField("Długość w tygodniach", validators=[NumberRange(min=0, max=15, message="Podaj proszę liczbę nie ujemną!")], default=10)
-
-    #adminID = IntegerField("ID administratora", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
-    adminID = SelectField("Administrator wyzwania", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1, choices=[])
-
-    isPrivate =BooleanField("Wydarzenie prywatne")
-    isSecret = BooleanField("Wydarenie ukryte")
-    status = SelectField("Status wyzwania", validators=[NumberRange(min=0, message="Wybierz pozycję z listy!")], default=1, choices=[])
-
-    #coefficientsTable_id = IntegerField("ID tablicy ze wspołczynnikami", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
-    coefficientsSetName = SelectField("ID tablicy ze wspołczynnikami", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1, choices=[])
-
-class CoeficientsForm(FlaskForm):
-
-    setName = StringField("Nazwa zestawu współczynników", validators=[DataRequired("Pole nie może być puste")])
-    activityName = StringField("Nazwa aktywności", validators=[DataRequired("Pole nie może być puste")])
-    constant = BooleanField("Stała wartość?", default=False)
-    value = DecimalField("Współczynnik", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
-    
-class NewCoeficientsSetForm(FlaskForm):
-
-    setName = StringField("Nazwa zestawu współczynników", validators=[DataRequired("Pole nie może być puste")])
-
-class DistancesForm(FlaskForm):
-
-    w1 = DecimalField("Tydzień 1", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w2 = DecimalField("Tydzień 2", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w3 = DecimalField("Tydzień 3", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w4 = DecimalField("Tydzień 4", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w5 = DecimalField("Tydzień 5", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w6 = DecimalField("Tydzień 6", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w7 = DecimalField("Tydzień 7", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w8 = DecimalField("Tydzień 8", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w9 = DecimalField("Tydzień 9", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w10 = DecimalField("Tydzień 10", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w11 = DecimalField("Tydzień 11", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w12 = DecimalField("Tydzień 12", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w13 = DecimalField("Tydzień 13", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w14 = DecimalField("Tydzień 14", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    w15 = DecimalField("Tydzień 15", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-
-
-# Defines tabele for activities for date base
-class Activities(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False)
-    week = db.Column(db.Integer, default=0) 
-    activity = db.Column(db.String(50), nullable=False)
-    distance = db.Column(db.Float, nullable=False)
-    time = db.Column(db.Time)
-    userName = db.Column(db.String(50), db.ForeignKey(User.id))
-
-# Defines form for activities
-class ActivityForm(FlaskForm):
-
-    def ValidateFutureDate (form, field):
-        today=datetime.date.today()
-        if field.data>today:
-            raise ValidationError("Nie możesz podać daty z przyszłości")
-
-    date = DateField("Data aktywności", validators=[InputRequired("Musisz podać date"), ValidateFutureDate], default=datetime.date.today())
-    activity = SelectField("Rodzaj aktywności", default=1, choices=[])
-    distance = DecimalField("Dystans", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    time = DateTimeField("Czas", format='%H:%M:%S', default=datetime.time())
-
-
 class UploadAvatarForm(FlaskForm):
     image = FileField('Wgraj zdjęcie (<=3MB)', validators=[
         FileRequired(),
@@ -310,4 +179,3 @@ class MessageForm(FlaskForm):
     mail=EmailField("E-mail", validators=[DataRequired("Pole nie może być puste"), Email("Wpisz e-mail w poprawnej formie")])
     subject=StringField("Temat", validators=[DataRequired("Pole nie może być puste")])
     message = TextAreaField("Wiadomość", validators=[DataRequired("Pole nie może być puste")])
-  

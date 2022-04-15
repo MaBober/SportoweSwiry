@@ -150,12 +150,12 @@
                                     <td>{{activity.distance}}</td>
                                     <td>{{activity.time}}</td>
                                     <td>
-                                        <a href="{{ url_for('modifyActivity', activityID=activity.id )}}" class="btn btn-warning btn-sm" role="button">Edytuj</a>
+                                        <a href="{{ url_for('activity.modifyActivity', activityID=activity.id )}}" class="btn btn-warning btn-sm" role="button">Edytuj</a>
                                         <!-- Button trigger modal -->
                                         <a type="button" class="btn btn-danger btn-sm delete-confirm" 
                                             data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                                             data-desc="{{ 'Napewno chcesz usunać aktywność: {} ({} km)?'.format(activity.activity, activity.distance) }}"
-                                            data-url="{{ url_for('deleteActivity', activityID=activity.id )}}">
+                                            data-url="{{ url_for('activity.deleteActivity', activityID=activity.id )}}">
                                             Usuń
                                         </a>
     

@@ -4,7 +4,7 @@
         {% if current_user.id %}
         <a class="navbar-brand" href="{{ url_for('basicDashboard') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
         {% else %}
-        <a class="navbar-brand" href="{{ url_for('hello') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
+        <a class="navbar-brand" href="{{ url_for('other.hello') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
         {% endif %}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -13,16 +13,16 @@
         <div class="collapse navbar-collapse" id="navbarsExample09">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link rounded border" href="{{ url_for('addActivity') }}">DODAJ AKTYWNOŚĆ</a>
+              <a class="nav-link rounded border" href="{{ url_for('activity.addActivity') }}">DODAJ AKTYWNOŚĆ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('myActivities') }}">Twoje aktywności</a> 
+              <a class="nav-link" href="{{ url_for('activity.myActivities') }}">Twoje aktywności</a> 
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-bs-toggle="dropdown" aria-expanded="false">Wyzwania</a>
               <ul class="dropdown-menu" aria-labelledby="dropdown09">
-                <li><a class="dropdown-item" href="{{ url_for('yourEvents', mode='ongoing') }}">Twoje wyzwania</a></li>
-                <li><a class="dropdown-item" href="{{ url_for('exploreEvents') }}">Dostępne wyzwania</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('event.yourEvents', mode='ongoing') }}">Twoje wyzwania</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('event.exploreEvents') }}">Dostępne wyzwania</a></li>
                 
               </ul>
             </li>
@@ -37,10 +37,10 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="{{ url_for('listOfUsers') }}">Użytkownicy</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('createAccount') }}">Stwórz konto</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('adminListOfEvents') }}">Wyzwania</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('listOfCoefficients') }}">Zestawy współczynników</a></li> 
-                  <li><a class="dropdown-item" href="{{ url_for('createCoeficientsTable') }}">Nowa tabela współczynników</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('createEvent') }}">Nowe wyzwanie</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('event.adminListOfEvents') }}">Wyzwania</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('event.listOfCoefficients') }}">Zestawy współczynników</a></li> 
+                  <li><a class="dropdown-item" href="{{ url_for('event.createCoeficientsTable') }}">Nowa tabela współczynników</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('event.createEvent') }}">Nowe wyzwanie</a></li>
                 </ul>
               </li>
               {% endif %}

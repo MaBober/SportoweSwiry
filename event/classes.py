@@ -1,5 +1,5 @@
 from start import db
-from classesDefinition import User
+from user.classes import User
 
 
 class CoefficientsList(db.Model):

@@ -1,6 +1,6 @@
 #from datetime import datetime
 
-from classesDefinition import User
+from user.classes import User
 from start import db
 
 # Defines tabele for activities for date base

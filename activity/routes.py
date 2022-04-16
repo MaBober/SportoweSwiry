@@ -18,7 +18,7 @@ activity = Blueprint("activity", __name__,
 def deleteActivity(activityID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     activityToDelete=Activities.query.filter(Activities.id == activityID).first()
     db.session.delete(activityToDelete)
@@ -26,7 +26,7 @@ def deleteActivity(activityID):
     flash("Aktywność ({}) została usunięta z bazy danych".format(activityToDelete.activity))
   
 
-    return redirect(url_for('myActivities'))
+    return redirect(url_for('activity.myActivities'))
 
 
 @activity.route("/modifyActivity/<int:activityID>", methods=['POST','GET'])
@@ -34,7 +34,7 @@ def deleteActivity(activityID):
 def modifyActivity(activityID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
  
     activity = Activities.query.filter(Activities.id == activityID).first()
 
@@ -61,9 +61,9 @@ def modifyActivity(activityID):
         db.session.commit()
     
         flash('Zmodyfikowano aktywność: {}'.format(form.activity.data))
-        return redirect(url_for('myActivities'))
+        return redirect(url_for('activity.myActivities'))
 
-    return render_template("addActivity.html", title_prefix = "Modyfikuj aktywność", form=form, mode="edit", activityID=activity.id)
+    return render_template("/pages/addActivity.html", title_prefix = "Modyfikuj aktywność", form=form, mode="edit", activityID=activity.id)
 
 
 @activity.route("/addActivity", methods=['POST','GET'])
@@ -71,7 +71,7 @@ def modifyActivity(activityID):
 def addActivity():
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     form=ActivityForm()
 
@@ -104,7 +104,7 @@ def addActivity():
 def myActivities():
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     activities=Activities.query.filter(Activities.userName == current_user.id).all()
 

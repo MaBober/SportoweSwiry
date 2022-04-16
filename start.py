@@ -26,8 +26,6 @@ def create_app():
     app.config['MAIL_USE_SSL'] = True
     app.config['MAIL_DEFAULT_SENDER'] = 'Sportowe Świry <admin@sportoweswiry.atthost24.pl>'
 
-    
-
     app.config['AVATARS_SAVE_PATH'] = os.path.join(app.static_folder, 'avatars')
 
     app.debug = True

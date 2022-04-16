@@ -2,7 +2,7 @@
     <nav class="navbar sticky-top  navbar-expand-lg navbar-dark rounded" style="background-color: #182c07e8;">
       <div class="container-fluid">
         {% if current_user.id %}
-        <a class="navbar-brand" href="{{ url_for('basicDashboard') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
+        <a class="navbar-brand" href="{{ url_for('user.basicDashboard') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
         {% else %}
         <a class="navbar-brand" href="{{ url_for('other.hello') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
         {% endif %}
@@ -35,8 +35,8 @@
                   Admin
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="{{ url_for('listOfUsers') }}">Użytkownicy</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('createAccount') }}">Stwórz konto</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('user.listOfUsers') }}">Użytkownicy</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('user.createAccount') }}">Stwórz konto</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('event.adminListOfEvents') }}">Wyzwania</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('event.listOfCoefficients') }}">Zestawy współczynników</a></li> 
                   <li><a class="dropdown-item" href="{{ url_for('event.createCoeficientsTable') }}">Nowa tabela współczynników</a></li>
@@ -60,15 +60,15 @@
               {% endif %}
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="{{ url_for('settings') }}">Ustawienia konta</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('user.settings') }}">Ustawienia konta</a></li>
                   <li><hr class="dropdown-divider"></li>
                   
 
                   {% if current_user.id %}
-                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Wyloguj</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('user.logout') }}">Wyloguj</a></li>
                   {% else %}
-                    <li><a class="dropdown-item" href="{{ url_for('createAccount') }}">Zarejestruj</a></li>                
-                    <li><a class="dropdown-item" href="{{ url_for('login') }}" style="border:2px solid rgba(224, 153, 94); border-radius: 5px;">Zaloguj</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('user.createAccount') }}">Zarejestruj</a></li>                
+                    <li><a class="dropdown-item" href="{{ url_for('user.login') }}" style="border:2px solid rgba(224, 153, 94); border-radius: 5px;">Zaloguj</a></li>
                   {% endif %}
                   
                 </ul>

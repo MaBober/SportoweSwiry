@@ -24,7 +24,7 @@
             {% endif %}
 
             {% if mode == 'edit' %}
-            <form method ="post" action="{{ url_for('modifyActivity', activityID=activityID) }}">
+            <form method ="post" action="{{ url_for('activity.modifyActivity', activityID=activityID) }}">
                 {{ form.csrf_token}}
             {% endif %}
 

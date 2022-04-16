@@ -1,4 +1,4 @@
-from classesDefinition import User
+from user.classes import User
 from start import db
 
 def checkIfIsAdmin():

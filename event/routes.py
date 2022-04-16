@@ -9,6 +9,7 @@ from .forms import CoeficientsForm, DistancesForm, EventForm, NewCoeficientsSetF
 from flask_login import login_required, current_user
 from .functions import passEventToDB, addUserToEvent, deleteEvent, changeEvent, giveUserEvents, giveEventParticipants, deleteUserFromEvent
 from activity.classes import Activities
+from other.functions import send_email
 
 import os
 
@@ -25,7 +26,7 @@ eventStatusOptions = ['Zapisy otwarte', 'W trakcie', 'Zakończone']
 def createCoeficientsTable():
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -62,7 +63,7 @@ def createCoeficientsTable():
 def exploreEvents():
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     events=Event.query.filter(Event.status == "Zapisy otwarte").filter(Event.isPrivate == False).filter().all()
 
@@ -74,7 +75,7 @@ def exploreEvents():
 def joinEvent(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
     
     event = Event.query.filter(Event.id == eventID).first()
 
@@ -142,7 +143,7 @@ def yourEvents(mode):
 def viewEvent(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -259,7 +260,7 @@ def viewEvent(eventID):
 def eventActivities(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -300,7 +301,7 @@ def eventActivities(eventID):
 def eventPreview(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     event = Event.query.filter(Event.id == eventID).first()
     eventUsers = giveEventParticipants(event.id)
@@ -316,7 +317,7 @@ def eventPreview(eventID):
 def eventStatistics(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -376,7 +377,7 @@ def eventStatistics(eventID):
 def eventContestants(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -397,7 +398,7 @@ def eventContestants(eventID):
 def eventBeers(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -514,7 +515,7 @@ def eventBeers(eventID):
 def createEvent():
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -554,7 +555,7 @@ def createEvent():
 def adminListOfEvents():
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -591,7 +592,7 @@ def adminDeleteContestant(eventID, userID):
 def adminDeleteEvent(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -612,7 +613,7 @@ def adminDeleteEvent(eventID):
 def adminModifyEvent(eventID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -671,7 +672,7 @@ def adminModifyEvent(eventID):
 def listOfCoefficients():
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -689,7 +690,7 @@ def listOfCoefficients():
 def coefficientsSetView(name):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -704,7 +705,7 @@ def coefficientsSetView(name):
 def deleteCoefficientsSet(name):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -729,7 +730,7 @@ def deleteCoefficientsSet(name):
 def deleteCoeficientSport(coeficientID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -746,7 +747,7 @@ def deleteCoeficientSport(coeficientID):
 def modifyCoeficientSport(coeficientID):
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -777,7 +778,7 @@ def modifyCoeficientSport(coeficientID):
 def addNewSport():
 
     if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('unconfirmed'))
+        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej akcji")

@@ -75,7 +75,7 @@ def changeEvent(eventID, form, formDist):
     eventToChange.isPrivate = form.isPrivate.data
     eventToChange.isSecret = form.isSecret.data
     eventToChange.coefficientsSetName = form.coefficientsSetName.data
-    eventToChange.status = "Zapisy otwarte"
+    eventToChange.status = form.status.data
 
     db.session.commit()
 

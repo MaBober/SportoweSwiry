@@ -53,9 +53,6 @@ def createCoeficientsTable():
     
 
     return render_template("/pages/new_coeficients.html", title_prefix = "Nowa tabela współczynników", form = form)
-
-
-
     
 
 @event.route("/eksploruj_wyzwania")
@@ -158,8 +155,11 @@ def viewEvent(eventID):
         beerData=[]
         targetDone = False
 
-        days = abs(datetime.date.today() - event.start).days
-        presentWeek = math.ceil((days+1)/7) 
+        if datetime.date.today() >= event.start:
+            days = abs(datetime.date.today() - event.start).days
+            presentWeek = math.ceil((days+1)/7) 
+        else:
+            presentWeek = 0
 
         weekStart = event.start + datetime.timedelta(weeks=1*presentWeek-1)
         weekEnd = event.start + datetime.timedelta(weeks=1*presentWeek-1, days=6)
@@ -244,8 +244,6 @@ def viewEvent(eventID):
                     userBuy = userBuy + beerData[weekB].count(1)
             beerToBuy.append([userRecive,userBuy])
 
-        print(beerData)
-        print(beerToBuy)
         avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
         return render_template('/pages/event_view/event_main.html', event=event,avatarsPath=avatarsPath, weekDays=weekDays, title_prefix = event.name, eventUsers=eventUsers, eventData=eventData, targets=targets, usersAmount = len(eventUsers),
@@ -274,7 +272,8 @@ def eventActivities(eventID):
         for user in eventParticipations:
             eventParticipantsUserNames.append(user.user_name)
 
-        activities=Activities.query.filter(Activities.userName.in_(eventParticipantsUserNames)).filter(Activities.date >= event.start).filter(Activities.date <= event.end).all()
+        activities=Activities.query.filter(Activities.userName.in_(eventParticipantsUserNames)).filter(Activities.date >= event.start).filter(Activities.date <= event.end).order_by(Activities.date.desc()).all()
+        
         # for position in activities:
         #     nameToShow = User.query.filter(User.id == position.userName).first()
         #     position.userName = nameToShow.name
@@ -499,8 +498,7 @@ def eventBeers(eventID):
                     userBuy = userBuy + beerData[weekB].count(1)
             beerToBuy.append([userRecive,userBuy])
 
-        print(beerData)
-        print(beerToBuy)
+
         avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
         return render_template('/pages/event_view/event_beers.html', event=event,avatarsPath=avatarsPath, eventUsers=eventUsers, title_prefix = event.name, current_user=current_user, beerToBuy=beerToBuy)
@@ -625,7 +623,8 @@ def adminModifyEvent(eventID):
 
     form = EventForm(name = event.name,
             start = event.start,
-            length = event.lengthWeeks)
+            length = event.lengthWeeks,
+            status = event.status)
 
     formDist = DistancesForm(w1 = distanceSet[0].value,
     w2 = distanceSet[1].value,
@@ -662,7 +661,7 @@ def adminModifyEvent(eventID):
         changeEvent(event.id, form, formDist)
     
         flash('Zmodyfikowano wydarzenie "{}"!'.format(form.name.data))
-        return redirect(url_for('other.hello'))
+        return redirect(url_for('event.adminListOfEvents'))
 
     return render_template("/pages/modify_event.html", title_prefix = "Modfyfikuj wydarzenie", form = form, formDist=formDist, mode = "edit", eventID=event.id)
 

@@ -75,7 +75,7 @@
                                 <a type="button" class="btn btn-danger btn-sm delete-confirm" 
                                 data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                                 data-desc="{{ 'Napewno chcesz usunać użytkownika: {}?'.format(user.id) }}"
-                                data-url="{{ url_for('adminDeleteContestant', eventID =event.id, userID=user.id)}}">
+                                data-url="{{ url_for('event.adminDeleteContestant', eventID =event.id, userID=user.id)}}">
                                 Usuń
                             </a></td>
                             {% endif %}

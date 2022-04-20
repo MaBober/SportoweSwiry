@@ -294,11 +294,11 @@ def eventActivities(eventID):
         for position in activities:
 
             coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
-            if coef != None:
-                if coef.constant == False:
-                    calculatedDistance.update({position.id:round(coef.value*position.distance,2)})
-                else: 
-                    calculatedDistance.update({position.id:coef.value})
+
+            if coef.constant == False:
+                calculatedDistance.update({position.id:round(coef.value*position.distance,2)})
+            else: 
+                calculatedDistance.update({position.id:coef.value})
 
         return render_template('/pages/event_view/event_activities.html', activities=activities,calculatedDistance=calculatedDistance, event=event, title_prefix = "Aktywności wyzwania" )
         
@@ -362,6 +362,7 @@ def eventStatistics(eventID):
                         userCalculatedDistance = userCalculatedDistance +  round(coef.value*position.distance,2)
                     else: 
                         userCalculatedDistance = userCalculatedDistance + coef.value
+
             # usersDistances.append(userObject.name)
             userRow = [userCalculatedDistance, userName + " " + userSurname]
             userRowAmount = [userAmount, userName + " " + userSurname]

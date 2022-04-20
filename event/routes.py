@@ -12,6 +12,7 @@ from flask_login import login_required, current_user
 from .functions import passEventToDB, addUserToEvent, deleteEvent, changeEvent, giveUserEvents, giveEventParticipants, deleteUserFromEvent
 from activity.classes import Activities
 from other.functions import send_email
+from urllib.parse import unquote
 
 import os
 
@@ -697,10 +698,11 @@ def listOfCoefficients():
     names= list(dict.fromkeys(names))
     return render_template('/pages/listOfCoefficients.html', coefficients=coefficients, title_prefix = "Lista współczynników", names=names)
 
-@event.route("/coefficientsSetView/<name>")
+@event.route("/coefficientsSetView/<setName>")
 @login_required #This page needs to be login
-def coefficientsSetView(name):
+def coefficientsSetView(setName):
 
+    flash (unquote(setName))
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
@@ -708,11 +710,10 @@ def coefficientsSetView(name):
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == name.replace("%20"," ")).all()
-    name = name.replace("%20"," ")
-    flash(name)
+    coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == setName).all()
+    flash(setName)
 
-    return render_template('/pages/coeficientSet_edit.html', title_prefix = name, name=name, CoefficientsSet=coefficientsSet)
+    return render_template('/pages/coeficientSet_edit.html', title_prefix = setName, name=setName, CoefficientsSet=coefficientsSet)
 
 @event.route("/deleteCoeficientsSet/<name>")
 @login_required #This page needs to be login

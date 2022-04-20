@@ -698,7 +698,7 @@ def listOfCoefficients():
 
 @event.route("/coefficientsSetView/<name>")
 @login_required #This page needs to be login
-def coefficientsSetView(name : string):
+def coefficientsSetView(name):
 
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))

@@ -708,7 +708,7 @@ def coefficientsSetView(name):
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == name).all()
+    coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == name.replace("%20"," ")).all()
     name = name.replace("%20"," ")
     flash(name)
 

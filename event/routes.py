@@ -45,7 +45,8 @@ def createCoeficientsTable():
                 db.session.add(newPosition)
 
             db.session.commit()
-            flash('Dodano tabelę współczynników "{}"!'.format(form.setName.data))
+            #flash('Dodano tabelę współczynników "{}"!'.format(str(form.setName.data)))
+            flash("123!")
             return redirect(url_for('event.coefficientsSetView', name = form.setName.data))
         
         else:

@@ -1,5 +1,6 @@
 import datetime
 import math
+import string
 
 from flask_login import current_user
 from start import db, app
@@ -696,7 +697,7 @@ def listOfCoefficients():
 
 @event.route("/coefficientsSetView/<name>")
 @login_required #This page needs to be login
-def coefficientsSetView(name):
+def coefficientsSetView(name : string):
 
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))

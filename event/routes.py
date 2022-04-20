@@ -269,10 +269,20 @@ def eventActivities(eventID):
         eventParticipantsUserNames = []
         eventParticipations = Participation.query.filter(Participation.event_id==event.id).all()
 
+        eventActivityTypes = []
+        eventSports = CoefficientsList.query.filter(CoefficientsList.setName==event.coefficientsSetName).all()
+
+        for sport in eventSports:
+            eventActivityTypes.append(sport.activityName)
+
         for user in eventParticipations:
             eventParticipantsUserNames.append(user.user_name)
 
-        activities=Activities.query.filter(Activities.userName.in_(eventParticipantsUserNames)).filter(Activities.date >= event.start).filter(Activities.date <= event.end).order_by(Activities.date.desc()).all()
+        activities=Activities.query.filter(Activities.userName.in_(eventParticipantsUserNames)) \
+            .filter(Activities.date >= event.start) \
+            .filter(Activities.date <= event.end) \
+            .filter(Activities.activity.in_(eventActivityTypes)) \
+            .order_by(Activities.date.desc()).all()
         
         # for position in activities:
         #     nameToShow = User.query.filter(User.id == position.userName).first()
@@ -284,10 +294,11 @@ def eventActivities(eventID):
         for position in activities:
 
             coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
-            if coef.constant == False:
-                calculatedDistance.update({position.id:round(coef.value*position.distance,2)})
-            else: 
-                calculatedDistance.update({position.id:coef.value})
+            if coef != None:
+                if coef.constant == False:
+                    calculatedDistance.update({position.id:round(coef.value*position.distance,2)})
+                else: 
+                    calculatedDistance.update({position.id:coef.value})
 
         return render_template('/pages/event_view/event_activities.html', activities=activities,calculatedDistance=calculatedDistance, event=event, title_prefix = "Aktywności wyzwania" )
         
@@ -320,9 +331,6 @@ def eventStatistics(eventID):
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
-    usersDistances = 2
-    usersActivitiesAmount =(["Bob",20],["Bar",330])
-
     if isParticipating != None or current_user.isAdmin:
 
         event = Event.query.filter(Event.id == eventID).first()
@@ -349,10 +357,11 @@ def eventStatistics(eventID):
                 
                 coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
                 userAmount= userAmount +  1
-                if coef.constant == False:
-                    userCalculatedDistance = userCalculatedDistance +  round(coef.value*position.distance,2)
-                else: 
-                    userCalculatedDistance = userCalculatedDistance + coef.value
+                if coef != None:
+                    if coef.constant == False:
+                        userCalculatedDistance = userCalculatedDistance +  round(coef.value*position.distance,2)
+                    else: 
+                        userCalculatedDistance = userCalculatedDistance + coef.value
             # usersDistances.append(userObject.name)
             userRow = [userCalculatedDistance, userName + " " + userSurname]
             userRowAmount = [userAmount, userName + " " + userSurname]

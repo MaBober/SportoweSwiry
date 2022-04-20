@@ -119,7 +119,9 @@
                             {% else: %}
                              <!--<img src="{{ avatars.robohash((user.id) , size='100') }}">-->
                             <img src="/static/pictures/runner_logo.svg" width="40">
-                            {% endif %}{{user.name}} {{user.lastName}} 
+                            {% endif %}
+                            <br>{{user.name}} 
+                            <br>{{user.lastName}} 
                         </th>
                         {% endfor %}
 

@@ -46,11 +46,11 @@ def createCoeficientsTable():
 
             db.session.commit()
             flash('Dodano tabelę współczynników "{}"!'.format(form.setName.data))
-            return redirect(url_for('coefficientsSetView', name = form.setName.data))
+            return redirect(url_for('event.coefficientsSetView', name = form.setName.data))
         
         else:
             flash("Zestaw o tej nazwie już istnieje. Podaj inną!")
-            return redirect(url_for('createCoeficientsTable'))
+            return redirect(url_for('event.createCoeficientsTable'))
     
 
     return render_template("/pages/new_coeficients.html", title_prefix = "Nowa tabela współczynników", form = form)
@@ -90,11 +90,11 @@ def joinEvent(eventID):
         else:
             flash("Już jesteś zapisny/a na to wyzwanie!")
 
-        return redirect(url_for('exploreEvents'))
+        return redirect(url_for('event.exploreEvents'))
 
     else:
         flash('Wyzwanie "{}" już się rozpoczęło, nie możesz się do niego dopisać!'.format(event.name))
-        return redirect(url_for('exploreEvents'))
+        return redirect(url_for('event.exploreEvents'))
 
 
 
@@ -132,7 +132,7 @@ def yourEvents(mode):
     
     else:
        flash ("Nie bierzesz udziału w żadnych wyzwaniach. Zapisz się już dziś!")
-       return redirect(url_for('exploreEvents'))
+       return redirect(url_for('event.exploreEvents'))
 
 ###############################
 
@@ -251,7 +251,7 @@ def viewEvent(eventID):
                 activitiesAmount = activitiesAmount, coefSet =coefSet, presentWeek=presentWeek, WeekDistance=round(WeekDistance,2), today = datetime.date.today())
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")
-        return redirect(url_for('exploreEvents'))
+        return redirect(url_for('event.exploreEvents'))
 
 
 @event.route("/event_activities/<int:eventID>")
@@ -305,7 +305,7 @@ def eventActivities(eventID):
         
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")
-        return redirect(url_for('exploreEvents'))
+        return redirect(url_for('event.exploreEvents'))
 
 @event.route("/event_preview/<int:eventID>")
 @login_required #This page needs to be login
@@ -401,7 +401,7 @@ def eventContestants(eventID):
 
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")
-        return redirect(url_for('exploreEvents'))
+        return redirect(url_for('event.exploreEvents'))
 
 @event.route("/event_beers/<int:eventID>")
 @login_required
@@ -516,7 +516,7 @@ def eventBeers(eventID):
 
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")
-        return redirect(url_for('exploreEvents'))
+        return redirect(url_for('event.exploreEvents'))
 
 
 @event.route("/new_event", methods=['POST','GET'])
@@ -613,7 +613,7 @@ def adminDeleteEvent(eventID):
 
     flash("Usunięto wyzwanie {}!".format(event.name))
 
-    return redirect(url_for('adminListOfEvents'))
+    return redirect(url_for('event.adminListOfEvents'))
 
 
 
@@ -733,7 +733,7 @@ def deleteCoefficientsSet(name):
     
     else:
         flash("Podstawowy zestaw współczynników nie może zostać usunięty!")
-    return redirect(url_for('listOfCoefficients'))
+    return redirect(url_for('event.listOfCoefficients'))
 
 
 @event.route("/deleteCoeficientSport/<int:coeficientID>")
@@ -751,7 +751,7 @@ def deleteCoeficientSport(coeficientID):
     db.session.delete(positionToDelete)
     db.session.commit()
 
-    return redirect(url_for('coefficientsSetView', name=positionToDelete.setName))
+    return redirect(url_for('event.coefficientsSetView', name=positionToDelete.setName))
 
 @event.route("/modifyCoeficientSport/<int:coeficientID>", methods=['POST', 'GET'])
 @login_required #This page needs to be login
@@ -778,7 +778,7 @@ def modifyCoeficientSport(coeficientID):
         positionToModify.constant= form.constant.data
         db.session.commit()
     
-        return redirect(url_for('coefficientsSetView', name=positionToModify.setName))
+        return redirect(url_for('event.coefficientsSetView', name=positionToModify.setName))
 
     flash("Nie usunieto!")
     return render_template("/pages/modify_coeficients.html", title_prefix = "Nowa tabela współczynników", form = form , coeficientID = coeficientID)
@@ -806,6 +806,6 @@ def addNewSport():
 
         db.session.add(newSport)
         db.session.commit()
-        return redirect(url_for('coefficientsSetView', name="Podstawowy zestaw współczynników"))
+        return redirect(url_for('event.coefficientsSetView', name="Podstawowy zestaw współczynników"))
 
     return render_template("/pages/new_sport.html", title_prefix = "Nowy sport", form = form) 

@@ -1,3 +1,4 @@
+from dataclasses import replace
 import datetime
 import math
 import string
@@ -708,6 +709,7 @@ def coefficientsSetView(name):
         return redirect(url_for('other.hello'))
 
     coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == name).all()
+    name = name.replace("%20"," ")
     flash(name)
 
     return render_template('/pages/coeficientSet_edit.html', title_prefix = name, name=name, CoefficientsSet=coefficientsSet)

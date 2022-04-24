@@ -703,7 +703,8 @@ def listOfCoefficients():
 def coefficientsSetView(setName):
 
     flash (unquote(setName))
-    #setName = unquote(setName)
+
+    correctedSetName = unquote(setName)
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
@@ -711,11 +712,10 @@ def coefficientsSetView(setName):
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    # coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == setName).all()
-    # flash(setName & "UN!")
+    coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == correctedSetName).all()
+    flash(correctedSetName & "UN!")
 
-    # return render_template('/pages/coeficientSet_edit.html', title_prefix = setName, name=setName, CoefficientsSet=coefficientsSet)
-    return redirect(url_for('other.hello'))
+    return render_template('/pages/coeficientSet_edit.html', title_prefix = correctedSetName, name=correctedSetName, CoefficientsSet=coefficientsSet)
 
 @event.route("/deleteCoeficientsSet/<name>")
 @login_required #This page needs to be login

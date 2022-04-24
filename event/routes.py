@@ -712,7 +712,7 @@ def coefficientsSetView(setName):
         return redirect(url_for('other.hello'))
 
     coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == setName).all()
-    flash(setName)
+    flash(setName & "UN!")
 
     return render_template('/pages/coeficientSet_edit.html', title_prefix = setName, name=setName, CoefficientsSet=coefficientsSet)
 

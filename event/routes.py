@@ -711,10 +711,11 @@ def coefficientsSetView(setName):
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == setName).all()
-    flash(setName & "UN!")
+    # coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == setName).all()
+    # flash(setName & "UN!")
 
-    return render_template('/pages/coeficientSet_edit.html', title_prefix = setName, name=setName, CoefficientsSet=coefficientsSet)
+    # return render_template('/pages/coeficientSet_edit.html', title_prefix = setName, name=setName, CoefficientsSet=coefficientsSet)
+    return redirect(url_for('other.hello'))
 
 @event.route("/deleteCoeficientsSet/<name>")
 @login_required #This page needs to be login

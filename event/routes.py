@@ -703,6 +703,7 @@ def listOfCoefficients():
 def coefficientsSetView(setName):
 
     flash (unquote(setName))
+    setName = unquote(setName)
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 

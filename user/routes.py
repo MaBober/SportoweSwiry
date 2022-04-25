@@ -138,7 +138,6 @@ def resetPassword(token):
     return render_template("resetPassword.html", title_prefix = "Resetowanie hasła", form=form)
 
 
-
 @user.route("/listOfUsers")
 @login_required #This page needs to be login
 def listOfUsers():
@@ -183,10 +182,9 @@ def login():
 
     logForm=LoginForm()
     if logForm.validate_on_submit():
-        user=User.query.filter(User.id == logForm.name.data).first()
+        user=User.query.filter(User.id == logForm.name.data).first() #if login=userName
         if not user:
-            user=User.query.filter(User.mail == logForm.name.data).first()
-        #password=User.query.filter(User.password == logForm.password.data).first()
+            user=User.query.filter(User.mail == logForm.name.data).first() #if login=mail
 
         verify=User.verify_password(user.password, logForm.password.data)
 
@@ -313,6 +311,15 @@ def basicDashboard():
             (h, m, s) = time.split(':')
             d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
             sumTime += d
+
+        try:
+            (h, m, s) = str(sumTime).split(':')
+            (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
+            sumTime= datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
+        except:
+            print("Something went wrong")
+
+        sumDistance=round(sumDistance,2)
 
         #creating a pie chart
         pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)

@@ -368,7 +368,7 @@ def eventStatistics(eventID):
                         userCalculatedDistance = userCalculatedDistance + coef.value
 
             # usersDistances.append(userObject.name)
-            userRow = [userCalculatedDistance, userName + " " + userSurname]
+            userRow = [round(userCalculatedDistance,2), userName + " " + userSurname]
             userRowAmount = [userAmount, userName + " " + userSurname]
             
             usersDistances.append(userRow)

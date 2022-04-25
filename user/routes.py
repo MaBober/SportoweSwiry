@@ -23,7 +23,7 @@ avatars = Avatars(app)
 
 
 loginManager=LoginManager(app) #Instancy for Login Manager
-loginManager.login_view = 'login' #Redirect to login for restricted pages
+loginManager.login_view = 'user.login' #Redirect to login for restricted pages
 loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zawartości"
 
 user = Blueprint("user", __name__,

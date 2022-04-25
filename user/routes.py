@@ -184,6 +184,8 @@ def login():
     logForm=LoginForm()
     if logForm.validate_on_submit():
         user=User.query.filter(User.id == logForm.name.data).first()
+        if not user:
+            user=User.query.filter(User.mail == logForm.name.data).first()
         #password=User.query.filter(User.password == logForm.password.data).first()
 
         verify=User.verify_password(user.password, logForm.password.data)
@@ -201,7 +203,7 @@ def login():
 
             return redirect(url_for('user.basicDashboard'))
         else:
-            flash("Nie udało się zalogować. Podaj pawidłowe dane")
+            flash("Nie udało się zalogować. Podaj pawidłowe hasło")
 
     return render_template('login.html', logForm=logForm, title_prefix = "Zaloguj")
 

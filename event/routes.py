@@ -88,7 +88,7 @@ def joinEvent(eventID):
             addUserToEvent(current_user.id, eventID)
             send_email(current_user.mail, "Witaj w wyzwaniu {}".format(event.name),'welcome', event=event)
             flash("Zapisano do wyzwania " + event.name + "!")
-            return redirect(url_for('viewEvent', eventID = eventID))
+            return redirect(url_for('event.viewEvent', eventID = eventID))
 
         else:
             flash("Już jesteś zapisny/a na to wyzwanie!")
@@ -127,7 +127,7 @@ def leaveEvent(eventID):
 @login_required #This page needs to be login
 def yourEvents(mode):
 
-    userEvents = giveUserEvents(current_user.id )
+    userEvents = giveUserEvents(current_user.id, mode)
 
     if userEvents != None:
         return render_template('/pages/your_events.html', events=userEvents, title_prefix = "Twoje wyzwania", mode  = mode)

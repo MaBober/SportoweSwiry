@@ -200,7 +200,7 @@ def createCofficientTemplate():
 
     return None
 
-def giveUserEvents(userID):
+def giveUserEvents(userID, eventStatus="all"):
 
     userEventsNames=[]
     userParticipations = Participation.query.filter(Participation.user_name == userID).all()
@@ -211,8 +211,13 @@ def giveUserEvents(userID):
     #Creates list of events id in which user takes part
     for event in userParticipations:
         userEventsNames.append(event.event_id)
+    if eventStatus =="all":
+        userEvents = Event.query.filter(Event.id.in_(userEventsNames)).all()
+    elif eventStatus == "ongoing":
+        userEvents = Event.query.filter(Event.id.in_(userEventsNames)).filter(db.or_(Event.status=="W trakcie", Event.status=="Zapisy otwarte")).all()
+    elif eventStatus == "finished":
+        userEvents = Event.query.filter(Event.id.in_(userEventsNames)).filter(Event.status=="Zakończone").all()
 
-    userEvents = Event.query.filter(Event.id.in_(userEventsNames)).all()
 
     return userEvents
 

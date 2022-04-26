@@ -68,9 +68,10 @@ def createAccount():
         db.session.add(newUser)
         db.session.commit()
 
-        token = newUser.generate_reset_token()
+        token = newUser.generate_confirmation_token()
         send_email(newUser.mail, 'Potwierdź swoje konto','confirm', user=newUser, token=token)
 
+        login_user(newUser)
         flash("Nowe konto zostało utworzone a na Twój adres e-mail wysłano prośbę o potwierdzenie konta ;)")
         return redirect(url_for('other.hello'))
 
@@ -388,4 +389,4 @@ def basicDashboard():
 
     else:
         flash("Nie posiadasz dodanych żadnych aktywności")
-        return redirect(url_for('other.hello'))
+        return render_template("pages/index.html", title_prefix = "Home")

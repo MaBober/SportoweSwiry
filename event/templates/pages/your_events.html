@@ -52,120 +52,42 @@
 </div>
 
 
-
 <div class="container">
-    <div class="row row-cols-auto">
-    <div class="col-1"></div>
-    <div class="col-11">
-        <div class="row row-cols-auto">
-            
-            
-            {% for event in events: %}
 
-            {% if mode == "all" %}
-            
-            <div class="col-4">
-                <div class="row pt-3"></div>
-
+    <div class="row d-flex justify-content-cente">
+        {% for event in events: %}
+        <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <div class="row pt-2"></div>
                 <div class="row border bg-light"><h3><center>{{ event.name }}</center></h3></div>
                 <div class ="row border">
-                    <div class="col-9">
+                    <div class="col">
                         <div class="row pt-2"></div>
                         <h6><b>Początek: </b> {{event.start}}</h6>
                         <h6><b>Koniec: </b> {{event.end}}</h6> 
                         <h6><b>Status: </b> {{event.status}}</h6> 
                     </div>
                     
-                    <div class="row">
+                <div class="row text-center">
                         <div class="p-2"> </div>
-                        <div class="col-2"></div>
-                        <div class="col"><a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn" style="background-color: rgba(224, 153, 94); color:white">Szczegóły</a></div>
+                        <div class="col-md p-1"><a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn" style="background-color: rgba(224, 153, 94); color:white">Szczegóły</a></div>
                         {% if event.status == "Zapisy otwarte"%}
-                        <div class="col-5">
+                        <div class="col-md p-1">
                             <a type="button" class="btn btn-danger btn delete-confirm"
                             data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                             data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?">
                             Opuść wyzwanie</a>
                         </div>
                         {% endif %}
-                        <div class="col-2"></div>
                         <div class="p-2"> </div>
                     </div>
                 </div>
-                
+                 
             </div>
-            <div class ="col-1"> </div>
-            {% endif %}
-
-
-            {% if event.status != "Zakończone" and mode == "ongoing" %}
-            
-            <div class="col-4">
-                <div class="row pt-3"></div>
-
-                <div class="row border bg-light"><h3><center>{{ event.name }}</center></h3></div>
-                <div class ="row border">
-                    <div class="col-9">
-                        <div class="row pt-2"></div>
-                        <h6><b> Początek: </b> {{event.start}}</h6>
-                        <h6><b>Koniec: </b> {{event.end}}</h6> 
-                        <h6><b>Status: </b> {{event.status}}</h6> 
-                    </div>
-                    
-                    <div class="row">
-                        <div class="p-2"> </div>
-                        <div class="col-2"></div>
-                        <div class="col"><a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn" style="background-color: rgba(224, 153, 94); color:white">  Szczegóły  </a></div>
-                        {% if event.status == "Zapisy otwarte"%}
-                        <div class="col-5">
-                            <a type="button" class="btn btn-danger btn delete-confirm"
-                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                            data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?"
-                            data-url="{{ url_for('event.leaveEvent', eventID=event.id )}}">
-                            Opuść wyzwanie</a>
-                        </div>
-                        {% endif %}
-                        <div class="col-4"></div>
-                        <div class="p-2"> </div>
-                    </div>
-                </div>
-                
-            </div>
-            <div class ="col-1"> </div>
-            {% endif %}
-
-            {% if event.status == "Zakończone" and mode == "finished" %}
-            
-            <div class="col-4">
-                <div class="row pt-3"></div>
-
-                <div class="row border bg-light"><h3><center>{{ event.name }}</center></h3></div>
-                <div class ="row border">
-                    <div class="col-9">
-                        <div class="row pt-2"></div>
-                        <h6><b> Początek: </b> {{event.start}}</h6>
-                        <h6><b>Koniec: </b> {{event.end}}</h6> 
-                        <h6><b>Status: </b> {{event.status}}</h6> 
-                    </div>
-                    
-                    <div class="row">
-                        <div class="p-2"> </div>
-                        <div class="col-4"></div>
-                        <div class="col"><a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn" style="background-color: rgba(224, 153, 94); color:white">  Szczegóły  </a></div>
-                        <div class="col-4"></div>
-                        <div class="p-2"> </div>
-                    </div>
-                </div>
-                
-            </div>
-            <div class ="col-1"> </div>
-            {% endif %}
-
-
+            <div class="col-md-1"></div>
             {% endfor %}
-        </div>
     </div>
-    </div>
+    
 </div>
 
 {% endblock %}

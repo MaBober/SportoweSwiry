@@ -131,6 +131,15 @@ def myActivities():
         averageDistance=round(sumDistance/amount,2)
         averageTime=(sumTime/amount)
 
+        try:
+            (h, m, s) = str(averageTime).split(':')
+            (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
+            averageTime= datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
+        except:
+            print("Something went wrong")
+
+        sumDistance=round(sumDistance,2)
+
         #creating a pie chart
         pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
         pie_chart.title = 'Różnorodność aktywności (w %)'

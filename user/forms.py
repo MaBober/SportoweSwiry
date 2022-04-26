@@ -66,7 +66,14 @@ class NewPasswordForm(FlaskForm):
 
 #Definition class for LOGIN function
 class LoginForm(FlaskForm):
-    name=StringField("Login")
+
+    def ValidateLoginIsCorrect(form, field):
+        tempLogin = User.query.filter(User.id==field.data).first()
+        tempMail = User.query.filter(User.mail==field.data).first()
+        if (not tempMail) and (not tempLogin):
+            raise ValidationError("Tego loginu/adresu email nie ma w naszej bazie danych")
+
+    name=StringField("Login lub adres mailowy", validators=[ValidateLoginIsCorrect])
     password=PasswordField("Hasło")
     remember=BooleanField("Zapamiętaj mnie")
 

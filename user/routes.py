@@ -388,3 +388,26 @@ def basicDashboard():
     else:
         flash("Nie posiadasz dodanych żadnych aktywności")
         return redirect(url_for('other.hello'))
+
+    
+@user.route("/rotateAvatarRight")
+@login_required #This page needs to be login
+def rotateAvatarRight():
+
+    filename = secure_filename(current_user.id + '.jpg')
+    avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+    angle = -90
+    rotatedAvatar = avatar.rotate(angle, expand=True)
+    rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+    return redirect(url_for('user.settings'))
+
+@user.route("/rotateAvatarLeft")
+@login_required #This page needs to be login
+def rotateAvatarLeft():
+
+    filename = secure_filename(current_user.id + '.jpg')
+    avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+    angle = 90
+    rotatedAvatar = avatar.rotate(angle, expand=True)
+    rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+    return redirect(url_for('user.settings'))

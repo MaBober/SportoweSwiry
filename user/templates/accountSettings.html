@@ -39,7 +39,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <button class="btn btn-dark" type="submit" style="background-color: #182c07e8;">Prześlij nowe zdjęcie</button>
+                        <a href="{{ url_for('user.rotateAvatarLeft') }}"><img src="/static/pictures/rotate-left-solid.svg" alt="" width="30" height="30"></a>
+                        <button class="btn btn-dark" type="submit" style="background-color: #182c07e8; margin-left: 10px; margin-right: 10px;">Prześlij nowe zdjęcie</button>
+                        <a href="{{ url_for('user.rotateAvatarRight') }}"><img src="/static/pictures/rotate-right-solid.svg" alt="" width="30" height="30"></a>
                     </form>
                 </div>
             </div>

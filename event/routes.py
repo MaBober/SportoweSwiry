@@ -49,7 +49,7 @@ def createCoeficientsTable():
             db.session.commit()
             #flash('Dodano tabelę współczynników "{}"!'.format(str(form.setName.data)))
             flash("123!")
-            return redirect(url_for('event.coefficientsSetView', name = form.setName.data))
+            return redirect(url_for('event.coefficientsSetView', setName = form.setName.data))
         
         else:
             flash("Zestaw o tej nazwie już istnieje. Podaj inną!")
@@ -702,9 +702,8 @@ def listOfCoefficients():
 @login_required #This page needs to be login
 def coefficientsSetView(setName):
 
-    flash (unquote(setName))
-
     correctedSetName = unquote(setName)
+
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
@@ -713,14 +712,13 @@ def coefficientsSetView(setName):
         return redirect(url_for('other.hello'))
 
     coefficientsSet=CoefficientsList.query.filter(CoefficientsList.setName == correctedSetName).all()
-    flash(correctedSetName + "UN!")
-
     return render_template('/pages/coeficientSet_edit.html', title_prefix = correctedSetName, name=correctedSetName, CoefficientsSet=coefficientsSet)
 
-@event.route("/deleteCoeficientsSet/<name>")
+@event.route("/deleteCoeficientsSet/<setName>")
 @login_required #This page needs to be login
-def deleteCoefficientsSet(name):
+def deleteCoefficientsSet(setName):
 
+    correctedSetName = unquote(setName)
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
@@ -728,14 +726,14 @@ def deleteCoefficientsSet(name):
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
     
-    if name !="Podstawowy zestaw współczynników":
+    if correctedSetName !="Podstawowy zestaw współczynników":
 
-        coeficientsSet = CoefficientsList.query.filter(CoefficientsList.setName == name).all()
+        coeficientsSet = CoefficientsList.query.filter(CoefficientsList.setName == correctedSetName).all()
         for position in coeficientsSet:
             db.session.delete(position)
 
         db.session.commit()
-        flash("Usutnięto zestaw współczynników {}".format(name))
+        flash("Usutnięto zestaw współczynników {}".format(correctedSetName))
     
     else:
         flash("Podstawowy zestaw współczynników nie może zostać usunięty!")

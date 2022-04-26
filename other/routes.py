@@ -43,10 +43,10 @@ def sendMessage():
 
     if form.validate_on_submit():
 
-        admins=User.query.filter(User.isAdmin == True).all()
+        # admins=User.query.filter(User.isAdmin == True).all()
 
-        for admin in admins:
-            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.lastName.data, form.subject.data),'message', 
+        # for admin in admins:
+        send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.lastName.data, form.subject.data),'message', 
                         name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, message=form.message.data)
 
         

@@ -9,6 +9,11 @@
                 <div class="col-md-6">
                     <label class="form-label"> <h5>{{ logForm.name.label }}:</h5> </label>
                     {{ logForm.name(class_="form-control" ) }}
+                    <ul>
+                        {% for error in logForm.name.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </ul>
                 </div>
                 <div class="col-md-3"></div>
             </div>

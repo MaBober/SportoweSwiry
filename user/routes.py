@@ -44,7 +44,7 @@ def isSafeUrl(target):
 
 
 
-@user.route("/create", methods=['POST', 'GET'])
+@user.route("/createUser", methods=['POST', 'GET'])
 def createAccount():
     
     form=UserForm()
@@ -76,7 +76,7 @@ def createAccount():
 
     return render_template('NewUserForm.html', form=form, title_prefix = "Nowe konto")
 
-@user.route("/unconfirmed")
+@user.route("/unconfirmedUser")
 @login_required
 def unconfirmed():
     return render_template('unconfirmed.html')
@@ -91,7 +91,7 @@ def sendTokenAgain():
     flash('Na twój adres e-mail wysłano nowego linka potwierdzającego.')
     return redirect(url_for('other.hello'))
 
-@user.route('/confirm/<token>')
+@user.route('/confirmUser/<token>')
 @login_required
 def confirm(token):
     #Accepting the token confirmation from the link in the email
@@ -104,7 +104,7 @@ def confirm(token):
         flash('Link potwierdzający jest nieprawidłowy lub już wygasł.')
     return redirect(url_for('other.hello'))
 
-@user.route('/reset', methods=['POST', 'GET'])
+@user.route('/resetPassword', methods=['POST', 'GET'])
 def reset():
 
     form=VerifyEmailForm()
@@ -213,7 +213,7 @@ def logout():
     return redirect(url_for('other.hello'))
 
 
-@user.route("/settings", methods=['POST','GET'])
+@user.route("/settingsUser", methods=['POST','GET'])
 @login_required #This page needs to be login
 def settings():
 
@@ -386,8 +386,6 @@ def basicDashboard():
             return render_template('basicDashboard.html', activities=activities, title_prefix = "Dashboard", 
                             sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart)
 
-
-        
     else:
         flash("Nie posiadasz dodanych żadnych aktywności")
         return redirect(url_for('other.hello'))

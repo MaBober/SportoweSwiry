@@ -93,7 +93,8 @@ def addActivity():
         #adding new activity to datebase
         db.session.add(newActivity)
         db.session.commit()
-        flash("Poprawnie dodano nową aktywność")
+        flash("Poprawnie dodano nową aktywność TEST")
+        return  redirect(url_for('activity.addActivity'))
 
     return render_template("/pages/addActivity.html", title_prefix = "Dodaj aktywność", form=form, mode="create")
 

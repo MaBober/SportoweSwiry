@@ -1,8 +1,8 @@
 <p>Czołem {{ user.userName }},</p>
 <p>Witaj w <b>Sportowych Świrach</b>!</p>
-<p>Żeby potwierdzić Twoje konto prosze <a href="{{ url_for('confirm', token=token, _external=True) }}">kliknij tutaj</a>.</p>
+<p>Żeby potwierdzić Twoje konto prosze <a href="{{ url_for('user.confirm', token=token, _external=True) }}">kliknij tutaj</a>.</p>
 <p>Alternatywnie możesz wkleić poniższy link w swoją przeglądarke:</p>
-<p>{{ url_for('confirm', token=token, _external=True) }}</p>
+<p>{{ url_for('user.confirm', token=token, _external=True) }}</p>
 <p>Jest to pierwsza wersja tej apliakcji dlatego jesteśmy świadomi, że mogą w niej być pewne niedoskonałości.</p>
 <p>Daj nam znać jeśli napotkasz jakąś z nich ;)</p>
 <p>Pozdrawiamy,</p>

@@ -4,7 +4,7 @@ Witaj w Sportowych Świrach!
 
 Żeby potwierdzić Twoje konto prosze kliknij w poniższy link:
 
-{{ url_for('confirm', token=token, _external=True) }}
+{{ url_for('user.confirm', token=token, _external=True) }}
 
 Jest to pierwsza wersja tej apliakcji dlatego jesteśmy świadomi, że mogą w niej być pewne niedoskonałości.
 Daj nam znać jeśli napotkasz jakąś z nich ;)

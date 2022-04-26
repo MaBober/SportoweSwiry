@@ -9,10 +9,11 @@
 
 <div class="container">
     <div class="row row-cols-auto center">
+      {% if current_user.is_anonymous == False %}
     <div clas="col">
       <img src="/static/pictures/about.PNG" alt="">
     </div>
-    
+      {% endif %}
     <div clas="col">
       <br><h4>Życzymy powodzenia i dobrej zabawy!</h4> Bartsch i Bober
     </div>

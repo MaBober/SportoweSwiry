@@ -755,7 +755,7 @@ def deleteCoeficientSport(coeficientID):
     db.session.delete(positionToDelete)
     db.session.commit()
 
-    return redirect(url_for('event.coefficientsSetView', name=positionToDelete.setName))
+    return redirect(url_for('event.coefficientsSetView', setName=positionToDelete.setName))
 
 @event.route("/modifyCoeficientSport/<int:coeficientID>", methods=['POST', 'GET'])
 @login_required #This page needs to be login
@@ -782,9 +782,8 @@ def modifyCoeficientSport(coeficientID):
         positionToModify.constant= form.constant.data
         db.session.commit()
     
-        return redirect(url_for('event.coefficientsSetView', name=positionToModify.setName))
+        return redirect(url_for('event.coefficientsSetView', setName=positionToModify.setName))
 
-    flash("Nie usunieto!")
     return render_template("/pages/modify_coeficients.html", title_prefix = "Nowa tabela współczynników", form = form , coeficientID = coeficientID)
 
 

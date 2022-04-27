@@ -59,7 +59,7 @@ def createCoeficientsTable():
     return render_template("/pages/new_coeficients.html", title_prefix = "Nowa tabela współczynników", form = form)
     
 
-@event.route("/eksploruj_wyzwania")
+@event.route("/explore_events")
 @login_required #This page needs to be login
 def exploreEvents():
 
@@ -123,7 +123,7 @@ def leaveEvent(eventID):
 
 
 
-@event.route("/twoje_wyzwania/<mode>")
+@event.route("/your_events/<mode>")
 @login_required #This page needs to be login
 def yourEvents(mode):
 

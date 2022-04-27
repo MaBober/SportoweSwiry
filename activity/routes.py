@@ -3,11 +3,14 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from activity.classes import Activities
 from activity.forms import ActivityForm
-from event.classes import CoefficientsList
+from event.classes import CoefficientsList, DistancesTable
+from event.functions import giveUserEvents
+
 
 import pygal
 from pygal.style import Style
 import datetime
+import math
 
 activity = Blueprint("activity", __name__,
     template_folder='templates')
@@ -85,6 +88,16 @@ def addActivity():
 
     form.userName=current_user.id
 
+     #Return list of user events
+    userEvents = giveUserEvents(current_user.id)
+    activities=Activities.query.filter(Activities.userName == current_user.id).all()
+    #Return array with data to event data to present
+
+    eventNames = {}
+    eventWeek = {}
+    eventWeekDistance = {}
+    eventWeekTarget = {}
+
     if form.validate_on_submit():
 
         newActivity=Activities(date=form.date.data, week=1, activity=form.activity.data, distance=form.distance.data, 
@@ -96,7 +109,41 @@ def addActivity():
         flash("Poprawnie dodano nową aktywność TEST")
         return  redirect(url_for('activity.addActivity'))
 
-    return render_template("/pages/addActivity.html", title_prefix = "Dodaj aktywność", form=form, mode="create")
+
+    if userEvents != None:
+
+        for event in userEvents:
+
+            #Defines present week of event
+            days = abs(datetime.date.today() - event.start).days
+            week = math.ceil((days+1)/7) 
+            weekStart = event.start + datetime.timedelta(weeks=1*week-1)
+            weekEnd = event.start + datetime.timedelta(weeks=1*week-1, days=6)
+    
+            activities=Activities.query.filter(Activities.userName == current_user.id).filter(Activities.date >= weekStart).filter(Activities.date <= weekEnd).all()
+            target = DistancesTable.query.filter(DistancesTable.event_ID == event.id).filter(DistancesTable.week == week).first()
+
+            WeekDistance = 0
+
+            #Create dictionary which keeps calculated distance of activity
+            for position in activities:
+                coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
+                if coef != None:
+                    if coef.constant == False:
+                        WeekDistance = WeekDistance + (coef.value*position.distance)
+                    else: 
+                        WeekDistance = WeekDistance + coef.value
+
+            eventNames.update({event.id:event.name})
+            eventWeek.update({event.id:week})
+            eventWeekDistance.update({event.id:round(WeekDistance,2)})
+            eventWeekTarget.update({event.id:target.value})
+
+        return render_template("/pages/addActivity.html", title_prefix = "Dodaj aktywność", form=form, mode="create" , activities=activities, 
+                            today_7 = datetime.date.today() + datetime.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget)
+    
+    else:
+        return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywnośćd")
 
 
 

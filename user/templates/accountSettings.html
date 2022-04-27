@@ -24,7 +24,12 @@
                         <!--<img src="{{ avatars.robohash((current_user.id) , size='100') }}">-->
                         <img class="img-account-profile rounded-circle mb-2" src="/static/pictures/runner_logo.svg" alt="">
                     {% endif %}
+                    
                     <!-- Profile picture help block-->
+                    <div class="small font-italic text-muted mb-4">
+                        <a href="{{ url_for('user.rotateAvatarLeft') }}"><img src="/static/pictures/rotate-left-solid.svg" alt="" width="30" height="30"></a>
+                        <a href="{{ url_for('user.rotateAvatarRight') }}"><img src="/static/pictures/rotate-right-solid.svg" alt="" width="30" height="30"></a>
+                    </div>
                     <div class="small font-italic text-muted mb-4">JPG lub PNG nie większe niż 5 MB</div>
                     <!-- Profile picture upload button-->
                     <form method="POST" style="margin-top:30px;" enctype="multipart/form-data">
@@ -39,9 +44,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <a href="{{ url_for('user.rotateAvatarLeft') }}"><img src="/static/pictures/rotate-left-solid.svg" alt="" width="30" height="30"></a>
                         <button class="btn btn-dark" type="submit" style="background-color: #182c07e8; margin-left: 10px; margin-right: 10px;">Prześlij nowe zdjęcie</button>
-                        <a href="{{ url_for('user.rotateAvatarRight') }}"><img src="/static/pictures/rotate-right-solid.svg" alt="" width="30" height="30"></a>
                     </form>
                 </div>
             </div>

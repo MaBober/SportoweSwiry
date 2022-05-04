@@ -2,7 +2,7 @@ Czołem {{ user.userName }},
 
 Żeby zresetować swoje hasło kliknij w poniższy link:
 
-{{ url_for('resetPassword', token=token, _external=True) }}
+{{ url_for('user.resetPassword', token=token, _external=True) }}
 
 Pozdrawiamy,
 

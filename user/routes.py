@@ -269,7 +269,7 @@ def passwordChange():
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
-    form=NewPasswordForm(userName=current_user.id)
+    form=NewPasswordForm(id=current_user.id)
 
     if form.validate_on_submit():
         #update password in date base

@@ -46,7 +46,7 @@ class VerifyEmailForm(FlaskForm):
 class NewPasswordForm(FlaskForm):
 
     def ValidatePasswordIsCorrect(form, field):
-        tempUser = User.query.filter(User.id==form.userName.data).first()
+        tempUser = User.query.filter(User.id==form.id.data).first()
         currentPassword=tempUser.password
 
         verify=User.verify_password(currentPassword, field.data)

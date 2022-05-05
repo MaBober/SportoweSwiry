@@ -14,7 +14,6 @@ app.register_blueprint(activity)
 
 app.debug = True
 
-
 @app.before_first_request
 def appStartup():
     db.create_all()

@@ -1,5 +1,5 @@
 import datetime
-from start import db
+from start import db, app
 from flask_login import UserMixin
 import hashlib
 import binascii
@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     isAdmin = db.Column(db.Boolean)
     avatar = db.Column(db.LargeBinary)
     confirmed = db.Column(db.Boolean, default=False)
+    readMessage = db.Column(db.Boolean, default=False)
 
     events = db.relationship('Participation', backref='User', lazy='dynamic')
     activities = db.relationship('Activities', backref='User', lazy='dynamic')

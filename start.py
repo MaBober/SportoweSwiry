@@ -1,11 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
+from flask_migrate import Migrate
+
 db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
+    migrate = Migrate(app, db)
 
     app.config['SECRET_KEY'] ='SportoweSwiry22'
 

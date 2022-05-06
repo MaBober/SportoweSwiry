@@ -34,6 +34,7 @@ class Event(db.Model):
     isPrivate = db.Column(db.Boolean, nullable=False)
     isSecret = db.Column(db.Boolean, nullable=False)
     password = db.Column(db.String(50))
+    maxUserAmount = db.Column(db.Integer,nullable=False)
 
     coefficientsSetName = db.Column(db.String(50))
     

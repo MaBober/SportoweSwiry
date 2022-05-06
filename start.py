@@ -1,7 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import os
+
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -28,10 +31,9 @@ def create_app():
 
     app.config['AVATARS_SAVE_PATH'] = os.path.join(app.static_folder, 'avatars')
 
-    app.debug = True
     db.init_app(app)
+    migrate.init_app(app, db)
 
     return app
 
 app = create_app()
-

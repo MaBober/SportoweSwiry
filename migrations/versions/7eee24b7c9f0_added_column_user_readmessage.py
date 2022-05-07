@@ -1,8 +1,8 @@
-"""empty message
+"""Added column 'user.readMessage'
 
-Revision ID: 092809ce1ce4
-Revises: 
-Create Date: 2022-05-05 21:04:51.825936
+Revision ID: 7eee24b7c9f0
+Revises: 8aac882c474e
+Create Date: 2022-05-07 15:40:56.506395
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '092809ce1ce4'
-down_revision = None
+revision = '7eee24b7c9f0'
+down_revision = '8aac882c474e'
 branch_labels = None
 depends_on = None
 

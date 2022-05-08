@@ -16,8 +16,11 @@ import datetime
 import math
 import pygal
 from PIL import Image
-
 from flask_avatars import Avatars
+
+from authlib.integrations.flask_client import OAuth
+
+
 avatars = Avatars(app)
 
 
@@ -28,6 +31,10 @@ loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zaw
 
 user = Blueprint("user", __name__,
     template_folder='templates')
+
+
+#app.config['SERVER_NAME'] = 'localhost:5000'
+oauth = OAuth(app)
 
 
 #Function which can connect user with good ID (for logging)
@@ -412,4 +419,58 @@ def rotateAvatarLeft():
     rotatedAvatar = avatar.rotate(angle, expand=True)
     rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
     return redirect(url_for('user.settings'))
+
+
+
+@user.route("/loginTEST", methods=['POST', 'GET'])
+def loginTEST():
+
+    return render_template('loginTEST.html', title_prefix = "Zaloguj")
+
+
+@user.route('/facebook/')
+def facebook():
+    #app.config['SERVER_NAME'] = 'localhost:5000'
+   
+    # Facebook Oauth Config
+    #FACEBOOK_CLIENT_ID = os.environ.get('FACEBOOK_CLIENT_ID')
+    #FACEBOOK_CLIENT_SECRET = os.environ.get('FACEBOOK_CLIENT_SECRET')
+
+    #SportoweSwiryTest
+    #FACEBOOK_CLIENT_ID='405719734491130'
+    #FACEBOOK_CLIENT_SECRET='3eedc4e349acba2f950088efe790ce77'
+
+    #SportoweSwiry
+    FACEBOOK_CLIENT_ID='1201203197289242'
+    FACEBOOK_CLIENT_SECRET='90116a2987ba2a3dfce1b7c72064cf6f'
+
+    oauth.register(
+        name='facebook',
+        client_id=FACEBOOK_CLIENT_ID,
+        client_secret=FACEBOOK_CLIENT_SECRET,
+        access_token_url='https://graph.facebook.com/oauth/access_token',
+        access_token_params=None,
+        authorize_url='https://www.facebook.com/dialog/oauth',
+        authorize_params=None,
+        api_base_url='https://graph.facebook.com/',
+        client_kwargs={'scope': 'email'},
+    )
+    redirect_uri = url_for('user.facebook_auth', _external=True)
+    return oauth.facebook.authorize_redirect(redirect_uri)
+ 
+@user.route('/facebook/auth/')
+def facebook_auth():
+    token = oauth.facebook.authorize_access_token()
+    resp = oauth.facebook.get(
+        'https://graph.facebook.com/me?fields=id,name,email,picture{url}')
+    profile = resp.json()
+    print("Facebook User ", profile)
+    return redirect('user.succes')
+
+
+@user.route("/succes")
+def succes():
+
+    return "autoryzacja udała się"
+
 

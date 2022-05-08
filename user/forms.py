@@ -75,7 +75,7 @@ class LoginForm(FlaskForm):
 
     name=StringField("Login lub adres mailowy", validators=[ValidateLoginIsCorrect])
     password=PasswordField("Hasło")
-    remember=BooleanField("Zapamiętaj mnie")
+    remember=BooleanField("Zapamiętaj mnie", default=False)
 
 
 class UploadAvatarForm(FlaskForm):

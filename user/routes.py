@@ -196,7 +196,7 @@ def login():
         verify=User.verify_password(user.password, logForm.password.data)
 
         if user != None and verify:
-            login_user(user)
+            login_user(user, remember=logForm.remember.data)
 
             #Checking if next page is exist and if it is safe
             next = request.args.get('next')

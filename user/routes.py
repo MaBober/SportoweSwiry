@@ -25,6 +25,10 @@ import requests_oauthlib
 from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 
 
+import os 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+
 avatars = Avatars(app)
 
 
@@ -37,16 +41,25 @@ user = Blueprint("user", __name__,
     template_folder='templates')
 
 #SportoweSwiry
-FB_CLIENT_ID = '1201203197289242'
+#FB_CLIENT_ID = '1201203197289242'
+#FB_CLIENT_SECRET = '90116a2987ba2a3dfce1b7c72064cf6f'
+
+#SportoweSwiryTest
 #FB_CLIENT_ID = '405719734491130'
-FB_CLIENT_SECRET = '90116a2987ba2a3dfce1b7c72064cf6f'
 #FB_CLIENT_SECRET = '3eedc4e349acba2f950088efe790ce77'
+
+#SportoweSwiry (2)
+FB_CLIENT_ID = '427488192540443'
+FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
+
+
+
 
 
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 
-URL = "http://127.0.0.1:5000"
+URL = "https://ab72-178-235-146-56.eu.ngrok.io"
 
 FB_SCOPE = ["email"]
 
@@ -456,9 +469,7 @@ def facebook():
 
 @app.route("/fb-login")
 def login():
-	facebook = requests_oauthlib.OAuth2Session(
-    	FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE
-	)
+	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
 	authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
 
 	return flask.redirect(authorization_url)
@@ -466,24 +477,16 @@ def login():
 
 @app.route("/fb-callback")
 def callback():
-	facebook = requests_oauthlib.OAuth2Session(
-    	FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback"
-	)
+	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback")
 
 	# we need to apply a fix for Facebook here
 	facebook = facebook_compliance_fix(facebook)
 
-	facebook.fetch_token(
-    	FB_TOKEN_URL,
-    	client_secret=FB_CLIENT_SECRET,
-    	authorization_response=flask.request.url,
-	)
+	facebook.fetch_token(FB_TOKEN_URL, client_secret=FB_CLIENT_SECRET, authorization_response=flask.request.url)
 
 	# Fetch a protected resource, i.e. user profile, via Graph API
 
-	facebook_user_data = facebook.get(
-    	"https://graph.facebook.com/me?fields=id,name,email,picture{url}"
-	).json()
+	facebook_user_data = facebook.get("https://graph.facebook.com/me?fields=id,name,email,picture{url}").json()
 
 	email = facebook_user_data["email"]
 	name = facebook_user_data["name"]

@@ -59,7 +59,7 @@ FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 
-URL = "https://ab72-178-235-146-56.eu.ngrok.io"
+URL = "https://test.sportoweswiry.atthost24.pl"
 
 FB_SCOPE = ["email"]
 

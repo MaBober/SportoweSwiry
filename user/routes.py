@@ -452,23 +452,8 @@ def rotateAvatarLeft():
     return redirect(url_for('user.settings'))
 
 
-
-@user.route("/loginTEST", methods=['POST', 'GET'])
-def loginTEST():
-
-    return render_template('loginTEST.html', title_prefix = "Zaloguj")
-
-
-@user.route('/facebook/')
-def facebook():
-
-    return """
-	<a href="/fb-login">Login with Facebook</a>
-	"""
- 
-
 @app.route("/fb-login")
-def login():
+def loginFacebook():
 	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
 	authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
 

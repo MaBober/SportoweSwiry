@@ -1,0 +1,52 @@
+.row-login {
+  margin: auto;
+  width: 340px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.btn-facebook {
+  color: #fff;
+  background-color: #3b5998;
+  border-color: rgba(0,0,0,0.2);
+}
+
+.btn-google {
+  color: #fff;
+  background-color: #db4c3e;
+  border: 1px solid rgb(163, 28, 16);
+}
+
+.btn-social {
+  position: relative;
+  padding-left: 44px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-social:hover {
+  color: #eee;
+}
+
+.btn-social :first-child {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  padding: 7px;
+  font-size: 1.6em;
+  text-align: center;
+  border-right: 1px solid rgba(0,0,0,0.2);
+}
+
+.login-trad {
+  margin: auto;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+}

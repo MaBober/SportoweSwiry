@@ -1,0 +1,18 @@
+{% if not cookies_check %}
+<div class="row border rounded dark pb-2 pt-2">
+<h1>Ta strona używa plików cookie</h1>
+<h5>Używamy plików cookie, żeby zapewnić Ci usługi na najwyższym poziomie. Dalsze korzystanie ze strony oznacza, że zgadzasz się na ich użycie.</h5> <br><br>
+<div id="cookie-consent-container">
+    <form action = "{{ url_for('other.acceptCookies')}}" method = "POST">
+      <button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">
+          Zgoda!
+      </button>
+        <a href="{{url_for('other.privacyPolicy')}} " class="btn btn-dark btn-lg" style="background-color: #182c07e8;" >Polityka Prywatności</a>
+    </button>
+    </form>
+</div>
+</div>
+{% else %}
+
+
+{% endif %}

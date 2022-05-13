@@ -1,10 +1,11 @@
 from flask_login import current_user
-from flask import Blueprint, render_template, redirect, url_for, blueprints
+from flask import Blueprint, make_response, render_template, redirect, url_for, blueprints, request
 
 from flask import flash
 from .forms import MessageForm
 from user.classes import User
 from .functions import send_email
+from datetime import datetime, timedelta
 
 
 other = Blueprint("other", __name__,
@@ -54,3 +55,21 @@ def sendMessage():
         return redirect(url_for('other.hello'))
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
+
+@other.route("/acceptCookies", methods=['POST','GET'])
+def acceptCookies():
+
+    if request.method == 'POST':
+
+        expire_date = datetime.now() + timedelta(days=365)
+        response = make_response(redirect(url_for('other.hello')))
+        response.set_cookie(key='cookie_consent', value='true', expires=expire_date)
+
+        return response
+    
+    return redirect(url_for('other.hello'))
+
+@other.route("/privacyPolicy")
+def privacyPolicy():
+
+    return render_template('/pages/privacyPolicy.html', title_prefix= "Polityka Prywatności")

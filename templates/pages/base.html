@@ -23,7 +23,9 @@
   <body>
 
     {% include "includes/menu_main.html" %}
-    
+
+
+
  
     <div class="container" >
       {% for message in get_flashed_messages() %}
@@ -32,7 +34,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       {% endfor %}
-
+    {% include "includes/cookie_consent.html" %}
     {% block body_content %}
     
     {% endblock %}

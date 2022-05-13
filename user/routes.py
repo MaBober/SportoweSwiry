@@ -486,9 +486,9 @@ def callback():
 	"""
 
 
-@user.route("/succes")
-def succes():
+@user.route("/mailbox")
+def mailbox():
 
-    return "autoryzacja udała się"
+    return render_template('mailbox.html')
 
 

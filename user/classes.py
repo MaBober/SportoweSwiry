@@ -6,6 +6,7 @@ import binascii
 from flask import current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import os
+import string
 
 class User(db.Model, UserMixin):
     id = db.Column(db.String(50), unique=True, nullable=False , primary_key=True)
@@ -18,11 +19,29 @@ class User(db.Model, UserMixin):
     confirmed = db.Column(db.Boolean, default=False)
     readMessage = db.Column(db.Boolean, default=False)
 
+    isAddedByGoogle = db.Column(db.Boolean, default=False)
+    isAddedByFB = db.Column(db.Boolean, default=False)
+
     events = db.relationship('Participation', backref='User', lazy='dynamic')
     activities = db.relationship('Activities', backref='User', lazy='dynamic')
 
     def __repr__(self):
         return '<User %r>' % self.id
+
+    def generate_ID(self):
+
+        sufix = 0
+
+        id = self.name[0:3] + self.lastName[0:3] + str(sufix)
+        user=User.query.filter(User.id == id).first()
+
+        while user != None:
+            sufix +=1
+            print(sufix)
+            id = self.name[0:3] + self.lastName[0:3] + str(sufix)
+            user=User.query.filter(User.id == id).first()
+
+        return id
 
     def hash_password(self):
         """Hash a password for storing."""

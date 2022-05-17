@@ -486,9 +486,4 @@ def callback():
 	"""
 
 
-@user.route("/mailbox")
-def mailbox():
-
-    return render_template('mailbox.html')
-
 

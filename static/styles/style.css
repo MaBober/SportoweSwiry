@@ -7,6 +7,15 @@
   margin-bottom: 20px;
 }
 
+.form-group {
+    padding: 10px;
+}
+
+.writeAndSendMessageConfirm {
+    background-color: #182c07e8;
+    text-align: center;
+}
+
 .btn-facebook {
   color: #fff;
   background-color: #3b5998;

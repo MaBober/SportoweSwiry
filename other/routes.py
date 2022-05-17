@@ -2,7 +2,7 @@ from flask_login import current_user
 from flask import Blueprint, render_template, redirect, url_for, blueprints
 
 from flask import flash
-from .forms import MessageForm
+from .forms import MessageForm,  AppMailForm
 from user.classes import User
 from .functions import send_email
 
@@ -54,3 +54,16 @@ def sendMessage():
         return redirect(url_for('other.hello'))
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
+
+@other.route("/mailbox")
+def mailbox():
+
+    if current_user.is_authenticated and not current_user.confirmed:
+        return redirect(url_for('user.unconfirmed'))
+
+    form=AppMailForm()
+
+    if form.validate_on_submit():
+        flash("Wiadomość przesłana")
+
+    return render_template('/pages/mailbox.html')

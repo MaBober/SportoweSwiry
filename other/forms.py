@@ -14,8 +14,8 @@ class MessageForm(FlaskForm):
 
 
 class AppMailForm(FlaskForm):
-    receiverEmail=SelectMultipleField("Odbiorca/y", choices=[])
-    subject=StringField("Temat", validators=[DataRequired("Pole nie może być puste")])
-    message = TextAreaField("Wiadomość", validators=[DataRequired("Pole nie może być puste")])
-    sendByApp=BooleanField("Wiadomość w aplikacji", default=True)
-    sendByEmail=BooleanField("Wiadomość na maila", default=False)
+    receiverEmail=SelectMultipleField("Odbiorca/y", choices=[('1','Łukasz'), ('2','Dawid'), ('3','Konrad'), ('4','Ola'), ('5','Janek')])
+    #subject=StringField("Temat", validators=[DataRequired("Pole nie może być puste")])
+    #message = TextAreaField("Wiadomość", validators=[DataRequired("Pole nie może być puste")])
+    #sendByApp=BooleanField("Wiadomość w aplikacji", default=True)
+    #sendByEmail=BooleanField("Wiadomość na maila", default=False)

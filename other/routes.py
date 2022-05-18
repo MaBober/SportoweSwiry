@@ -55,7 +55,7 @@ def sendMessage():
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
 
-@other.route("/mailbox")
+@other.route("/mailbox", methods=['POST','GET'])
 def mailbox():
 
     if current_user.is_authenticated and not current_user.confirmed:
@@ -66,4 +66,5 @@ def mailbox():
     if form.validate_on_submit():
         flash("Wiadomość przesłana")
 
-    return render_template('/pages/mailbox.html')
+    return render_template('/pages/mailbox.html', form=form)
+

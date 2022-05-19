@@ -1,10 +1,13 @@
+
 from flask_login import current_user
 from flask import Blueprint, render_template, redirect, url_for, blueprints
 
 from flask import flash
 from .forms import MessageForm,  AppMailForm
 from user.classes import User
-from .functions import send_email
+from other.classes import mailboxMessage
+from .functions import send_email, prepareListOfUsers, saveMessageInDB
+
 
 
 other = Blueprint("other", __name__,
@@ -63,8 +66,16 @@ def mailbox():
 
     form=AppMailForm()
 
-    if form.validate_on_submit():
-        flash("Wiadomość przesłana")
+    form.receiverEmail.choices = prepareListOfUsers()
 
-    return render_template('/pages/mailbox.html', form=form)
+    if form.validate_on_submit():
+
+        saveMessageInDB(form)
+        flash("Wiadomość przesłana do: {}".format(form.receiverEmail.data))
+
+
+
+    messagesCurrentUser=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).all()
+    amoutOfMails = len(messagesCurrentUser)
+    return render_template('/pages/mailbox.html', form=form, messagesCurrentUser=messagesCurrentUser, current_user=current_user, amoutOfMails=amoutOfMails)
 

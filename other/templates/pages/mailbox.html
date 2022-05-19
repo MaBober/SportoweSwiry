@@ -64,6 +64,11 @@
 								{% endfor %}
 							</ul>
 						</div>
+
+
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+						<button type="button" class="btn btn-warning" id="buttonTestt">Warning1</button>
+						<button type="button" class="btn btn-warning" id="buttonTest">Warning</button>
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmWriteMessageForm">
@@ -92,6 +97,20 @@
             }); 
         }); 
     </script>
+
+	<script> 
+		//$("#flexCheckDefault").on("click", function() {
+			//$("#buttonTest").attr("disabled", true);
+		//});
+
+		$("#flexCheckDefault").change(function() {
+        if($(this).prop('checked')) {
+            $("#buttonTest").attr("disabled", true);
+        } else {
+            $("#buttonTest").attr("disabled", false);
+        }
+    });
+	</script>
 
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -241,5 +260,42 @@
 	<!-- END INBOX -->
 </div>
 </div>
+
+
+
+
+<h1>jQuery - How to disabled submit button after clicked</h1>
+
+<form id="formABC" action="#" method="POST">
+    <input type="submit" id="btnSubmit" value="Submit"></input>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<input type="button" value="i am normal abc" id="btnTest"></input>
+
+<script>
+    $(document).ready(function () {
+
+        $("#formABC").submit(function (e) {
+
+            //stop submitting the form to see the disabled button effect
+            e.preventDefault();
+
+            //disable the submit button
+            $("#btnSubmit").attr("disabled", true);
+
+            //disable a normal button
+            $("#btnTest").attr("disabled", true);
+
+            return true;
+
+        });
+    });
+</script>
+
+
+
+
 
 {% endblock %}

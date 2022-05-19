@@ -16,8 +16,53 @@
 				<div class="modal-body" id="idMessageModalBody">
 					{{ form.csrf_token }}
 						<div class="form-group">
-							{{ form.receiverEmail.label }}
+							<label class="form-label"> {{ form.receiverEmail.label }} </label>
 							{{ form.receiverEmail(class="form-select") }}
+							<ul>
+								{% for error in form.receiverEmail.errors %}
+									{{ error }}
+								{% endfor %}
+							</ul>
+						</div>
+
+						<div class="form-group">
+							<label class="form-label"> {{ form.subject.label }} </label>
+							{{ form.subject(class="form-control") }}
+							<ul>
+								{% for error in form.subject.errors %}
+									{{ error }}
+								{% endfor %}
+							</ul>
+						</div>
+
+						<div class="form-group">
+							<label class="form-label"> {{ form.message.label }} </label>
+							{{ form.message(class="form-control") }}
+							<ul>
+								{% for error in form.message.errors %}
+									{{ error }}
+								{% endfor %}
+							</ul>
+						</div>
+
+						<div class="form-group">
+							<label class="form-label"> {{ form.sendByApp.label }} </label>
+							{{ form.sendByApp(class_="form-check-input" ) }}
+							<ul>
+								{% for error in form.sendByApp.errors %}
+									{{ error }}
+								{% endfor %}
+							</ul>
+						</div>
+
+						<div class="form-group">
+							<label class="form-label"> {{ form.sendByEmail.label }} </label>
+							{{ form.sendByEmail(class_="form-check-input" ) }}
+							<ul>
+								{% for error in form.sendByEmail.errors %}
+									{{ error }}
+								{% endfor %}
+							</ul>
 						</div>
 				</div>
 				<div class="modal-footer">
@@ -74,7 +119,7 @@
 						<div>
 							<ul class="nav nav-pills nav-stacked">
 								<li class="header">Folders</li>
-								<li class="active"><a href="#"><i class="fa fa-inbox"></i> Inbox (14)</a></li>
+								<li class="active"><a href="#"><i class="fa fa-inbox"></i> Inbox ({{ amoutOfMails }})</a></li>
 								<li><a href="#"><i class="fa fa-star"></i> Starred</a></li>
 								<li><a href="#"><i class="fa fa-bookmark"></i> Important</a></li>
 								<li><a href="#"><i class="fa fa-mail-forward"></i> Sent</a></li>
@@ -123,87 +168,19 @@
 						
 						<div class="table-responsive">
 							<table class="table">
-								<tbody><tr>
-									<td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star-o"></i></td>
-									<td class="action"><i class="fa fa-bookmark-o"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr>
-									<td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star-o"></i></td>
-									<td class="action"><i class="fa fa-bookmark"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr class="read">
-									<td class="action"><div class="icheckbox_square-blue" st<td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star"></i></td>
-									<td class="action"><i class="fa fa-bookmark"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr>
-									<td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star-o"></i></td>
-									<td class="action"><i class="fa fa-bookmark-o"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr class="read">
-									<td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star-o"></i></td>
-									<td class="action"><i class="fa fa-bookmark-o"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr class="read">
-                                    <td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star-o"></i></td>
-									<td class="action"><i class="fa fa-bookmark"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr>
-                                    <td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star"></i></td>
-									<td class="action"><i class="fa fa-bookmark-o"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr>
-									<td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star-o"></i></td>
-									<td class="action"><i class="fa fa-bookmark-o"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr class="read">
-									<td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star"></i></td>
-									<td class="action"><i class="fa fa-bookmark"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-								<tr>
-									<td class="action"><input type="checkbox" /></td>
-									<td class="action"><i class="fa fa-star"></i></td>
-									<td class="action"><i class="fa fa-bookmark-o"></i></td>
-									<td class="name"><a href="#">Larry Gardner</a></td>
-									<td class="subject"><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed </a></td>
-									<td class="time">08:30 PM</td>
-								</tr>
-							</tbody></table>
+								<tbody>
+									{% for message in messagesCurrentUser: %}
+									<tr>
+										<td class="action"><input type="checkbox" /></td>
+										<td class="action"><i class="fa fa-star-o"></i></td>
+										<td class="action"><i class="fa fa-bookmark-o"></i></td>
+										<td class="name"><a href="#">{{ message.sender }}</a></td>
+										<td class="subject"><a href="#">{{ message.subject }}</a></td>
+										<td class="time">{{ message.date }}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
 						</div>
 
 						<ul class="pagination">

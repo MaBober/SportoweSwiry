@@ -26,7 +26,7 @@ class UserForm(FlaskForm):
     name=StringField("Imię", validators=[DataRequired("Pole nie może być puste")])
     lastName=StringField("Nazwisko", validators=[DataRequired("Pole nie może być puste")])
     mail=EmailField("E-mail", validators=[DataRequired("Pole nie może być puste"), Email("Wpisz e-mail w poprawnej formie"), ValidateMailisExist])
-    #id=StringField("Login", validators=[DataRequired("Pole nie może być puste"), ValidateUserNameisExist])
+    id=StringField("Login", validators=[DataRequired("Pole nie może być puste"), ValidateUserNameisExist])
     password=PasswordField("Hasło", validators=[DataRequired("Pole nie może być puste"), Length(min=8, message="Hasło nie może być krótsze niż 8 znaków")])
     verifyPassword=PasswordField("Potwierdź hasło", validators=[DataRequired("Pole nie może być puste"), ValidatePassword])
     isAdmin=BooleanField("Admin", default=False)

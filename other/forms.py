@@ -20,7 +20,7 @@ class AppMailForm(FlaskForm):
             raise ValidationError("Minimum jedna opcja musi być zaznaczona")
 
     receiverEmail=SelectField("Adresat", choices=[])
-    subject=StringField("Temat", validators=[DataRequired("Pole nie może być puste")])
-    message = TextAreaField("Wiadomość", validators=[DataRequired("Pole nie może być puste")])
+    subject=StringField("Temat", validators=[DataRequired("Pole nie może być puste")], default="")
+    message = TextAreaField("Wiadomość", validators=[DataRequired("Pole nie może być puste")], default="")
     sendByApp=BooleanField("Wiadomość w aplikacji", default=True, validators=[ValidateSendByApp])
     sendByEmail=BooleanField("Wiadomość na maila", default=False)

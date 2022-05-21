@@ -1,6 +1,7 @@
 
 from flask_login import current_user
 from flask import Blueprint, render_template, redirect, url_for, blueprints
+from flask_login import login_required
 
 from flask import flash
 from .forms import MessageForm,  AppMailForm
@@ -58,13 +59,14 @@ def sendMessage():
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
 
-@other.route("/mailbox", methods=['POST','GET'])
-def mailbox():
+@other.route("/mailbox/<actionName>", methods=['POST','GET'])
+@login_required #This page needs to be login
+def mailbox(actionName):
 
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
-    form=AppMailForm()
+    form=AppMailForm(subject="", message ="", sendByApp=True, sendByEmail=False)
 
     form.receiverEmail.choices = prepareListOfUsers()
 
@@ -74,8 +76,18 @@ def mailbox():
         flash("Wiadomość przesłana do: {}".format(form.receiverEmail.data))
 
 
+    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).all()
 
-    messagesCurrentUser=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).all()
-    amoutOfMails = len(messagesCurrentUser)
-    return render_template('/pages/mailbox.html', form=form, messagesCurrentUser=messagesCurrentUser, current_user=current_user, amoutOfMails=amoutOfMails)
+    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).all()
+    amountOfReceivedMessages=len(messagesCurrentUserReceived)
+    amountOfSentMessages=len(messagesCurrentUserSent)
 
+
+    if actionName=='sent':
+        messagesCurrentUser=messagesCurrentUserSent
+    else:
+        messagesCurrentUser=messagesCurrentUserReceived
+
+
+    return render_template('/pages/mailbox.html', form=form, messagesCurrentUser=messagesCurrentUser, current_user=current_user, 
+            amountOfReceivedMessages=amountOfReceivedMessages, amountOfSentMessages=amountOfSentMessages, actionName=actionName)

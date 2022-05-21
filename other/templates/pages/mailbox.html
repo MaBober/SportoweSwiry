@@ -89,11 +89,40 @@
             </div>
 			<form action="#" method="post">
 				<div class="modal-body" id="idReadMessageModalBody">
-					...
+					{{ readForm.csrf_token }}
+						<div class="form-group">
+							<label class="form-label"> Nadawca </label>
+							{{ readForm.sender(class="form-control") }}
+							<ul>
+								{% for error in readForm.sender.errors %}
+									{{ error }}
+								{% endfor %}
+							</ul>
+						</div>
+
+						<div class="form-group">
+							<label class="form-label"> {{ readForm.subject.label }} </label>
+							{{ readForm.subject(class="form-control") }}
+							<ul>
+								{% for error in readForm.subject.errors %}
+									{{ error }}
+								{% endfor %}
+							</ul>
+						</div>
+
+						<div class="form-group">
+							<label class="form-label"> {{ readForm.message.label }} </label>
+							{{ readForm.message(class="form-control") }}
+							<ul>
+								{% for error in readForm.message.errors %}
+									{{ error }}
+								{% endfor %}
+							</ul>
+						</div>					
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmReadMessage">
-						<button type="submit" class="btn btn-dark" style="background-color: #182c07e8;" id="sendButtonId">Zamknij</button>
+						<button type="button" class="btn btn-dark" style="background-color: #182c07e8;" data-bs-dismiss="modal">Zamknij</button>
 					</form>
 				</div>
 			</form>
@@ -229,10 +258,12 @@
 							<table class="table">
 								<tbody>
 									{% for message in messagesCurrentUser: %}
+
 									<tr class="listOfMessages readMessageConfirm" 
 										data-bs-toggle="modal" data-bs-target="#readMessageModal"
 										data-desc="{{ message.message }}"
 										data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
+
 									
 										<td class="action"><input type="checkbox" /></td>
 										<td class="action"><i class="fa fa-star-o"></i></td>
@@ -245,6 +276,7 @@
 										<td class="subject"><a href="#">{{ message.subject }}</a></td>
 										<td class="time">{{ message.date }}</td>
 									</tr>
+									
 									{% endfor %}
 								</tbody>
 							</table>

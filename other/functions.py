@@ -40,6 +40,7 @@ def saveMessageInDB(form):
     newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, receiver = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data )
     db.session.add(newMessage)
     db.session.commit()
+    
 @app.context_processor
 def cookies_check():
     value = request.cookies.get('cookie_consent')

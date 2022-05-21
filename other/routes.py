@@ -1,9 +1,10 @@
 
+from random import choices
 from flask_login import current_user, login_required
 from flask import Blueprint, make_response, render_template, redirect, url_for, blueprints, request
 
 from flask import flash
-from .forms import MessageForm,  AppMailForm
+from .forms import MessageForm,  AppMailForm, AppMailToRead
 from user.classes import User
 
 from other.classes import mailboxMessage
@@ -66,7 +67,8 @@ def mailbox(actionName):
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
-    form=AppMailForm(subject="", message ="", sendByApp=True, sendByEmail=False)
+    form=AppMailForm()
+    readForm=AppMailToRead()
 
     form.receiverEmail.choices = prepareListOfUsers()
 
@@ -76,11 +78,10 @@ def mailbox(actionName):
         flash("Wiadomość przesłana do: {}".format(form.receiverEmail.data))
 
 
-    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).order_by(mailboxMessage.date.desc()).all()
-    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).order_by(mailboxMessage.date.desc()).all()
+    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).order_by(mailboxMessage.id.desc()).all()
+    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).order_by(mailboxMessage.id.desc()).all()
     amountOfReceivedMessages=len(messagesCurrentUserReceived)
     amountOfSentMessages=len(messagesCurrentUserSent)
-
 
     if actionName=='sent':
         messagesCurrentUser=messagesCurrentUserSent
@@ -88,8 +89,9 @@ def mailbox(actionName):
         messagesCurrentUser=messagesCurrentUserReceived
 
 
-    return render_template('/pages/mailbox.html', form=form, messagesCurrentUser=messagesCurrentUser, current_user=current_user, 
+    return render_template('/pages/mailbox.html', form=form, readForm=readForm, messagesCurrentUser=messagesCurrentUser, current_user=current_user, 
             amountOfReceivedMessages=amountOfReceivedMessages, amountOfSentMessages=amountOfSentMessages, actionName=actionName)
+
 @other.route("/acceptCookies", methods=['POST','GET'])
 def acceptCookies():
 

@@ -1,7 +1,6 @@
-
 from start import db
 from flask_login import current_user
-from flask import render_template, current_app
+from flask import render_template, current_app, request, flash
 from flask_mail import Mail, Message
 from start import app
 from user.classes import User
@@ -41,3 +40,8 @@ def saveMessageInDB(form):
     newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, receiver = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data )
     db.session.add(newMessage)
     db.session.commit()
+@app.context_processor
+def cookies_check():
+    value = request.cookies.get('cookie_consent')
+    return dict(cookies_check = value == 'true')
+

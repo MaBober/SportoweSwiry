@@ -1,14 +1,23 @@
 
 from flask_login import current_user
+<<<<<<< HEAD
 from flask import Blueprint, render_template, redirect, url_for, blueprints
 from flask_login import login_required
+=======
+from flask import Blueprint, make_response, render_template, redirect, url_for, blueprints, request
+>>>>>>> BoberTest
 
 from flask import flash
 from .forms import MessageForm,  AppMailForm
 from user.classes import User
+<<<<<<< HEAD
 from other.classes import mailboxMessage
 from .functions import send_email, prepareListOfUsers, saveMessageInDB
 
+=======
+from .functions import send_email
+from datetime import datetime, timedelta
+>>>>>>> BoberTest
 
 
 other = Blueprint("other", __name__,
@@ -59,6 +68,7 @@ def sendMessage():
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
 
+<<<<<<< HEAD
 @other.route("/mailbox/<actionName>", methods=['POST','GET'])
 @login_required #This page needs to be login
 def mailbox(actionName):
@@ -91,3 +101,22 @@ def mailbox(actionName):
 
     return render_template('/pages/mailbox.html', form=form, messagesCurrentUser=messagesCurrentUser, current_user=current_user, 
             amountOfReceivedMessages=amountOfReceivedMessages, amountOfSentMessages=amountOfSentMessages, actionName=actionName)
+=======
+@other.route("/acceptCookies", methods=['POST','GET'])
+def acceptCookies():
+
+    if request.method == 'POST':
+
+        expire_date = datetime.now() + timedelta(days=365)
+        response = make_response(redirect(url_for('other.hello')))
+        response.set_cookie(key='cookie_consent', value='true', expires=expire_date)
+
+        return response
+    
+    return redirect(url_for('other.hello'))
+
+@other.route("/privacyPolicy")
+def privacyPolicy():
+
+    return render_template('/pages/privacyPolicy.html', title_prefix= "Polityka Prywatności")
+>>>>>>> BoberTest

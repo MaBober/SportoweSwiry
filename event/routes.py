@@ -1,4 +1,4 @@
-from dataclasses import replace
+from dataclasses import dataclass, replace
 import datetime
 import math
 import string
@@ -163,6 +163,9 @@ def viewEvent(eventID):
             presentWeek = math.ceil((days+1)/7) 
         else:
             presentWeek = 0
+
+        if datetime.date.today() > event.end:
+                presentWeek = event.lengthWeeks
 
         weekStart = event.start + datetime.timedelta(weeks=1*presentWeek-1)
         weekEnd = event.start + datetime.timedelta(weeks=1*presentWeek-1, days=6)

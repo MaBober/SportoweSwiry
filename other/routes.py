@@ -1,23 +1,14 @@
 
-from flask_login import current_user
-<<<<<<< HEAD
-from flask import Blueprint, render_template, redirect, url_for, blueprints
-from flask_login import login_required
-=======
+from flask_login import current_user, login_required
 from flask import Blueprint, make_response, render_template, redirect, url_for, blueprints, request
->>>>>>> BoberTest
 
 from flask import flash
 from .forms import MessageForm,  AppMailForm
 from user.classes import User
-<<<<<<< HEAD
+
 from other.classes import mailboxMessage
 from .functions import send_email, prepareListOfUsers, saveMessageInDB
-
-=======
-from .functions import send_email
 from datetime import datetime, timedelta
->>>>>>> BoberTest
 
 
 other = Blueprint("other", __name__,
@@ -68,7 +59,6 @@ def sendMessage():
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
 
-<<<<<<< HEAD
 @other.route("/mailbox/<actionName>", methods=['POST','GET'])
 @login_required #This page needs to be login
 def mailbox(actionName):
@@ -86,9 +76,8 @@ def mailbox(actionName):
         flash("Wiadomość przesłana do: {}".format(form.receiverEmail.data))
 
 
-    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).all()
-
-    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).all()
+    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).order_by(mailboxMessage.date.desc()).all()
+    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).order_by(mailboxMessage.date.desc()).all()
     amountOfReceivedMessages=len(messagesCurrentUserReceived)
     amountOfSentMessages=len(messagesCurrentUserSent)
 
@@ -101,7 +90,6 @@ def mailbox(actionName):
 
     return render_template('/pages/mailbox.html', form=form, messagesCurrentUser=messagesCurrentUser, current_user=current_user, 
             amountOfReceivedMessages=amountOfReceivedMessages, amountOfSentMessages=amountOfSentMessages, actionName=actionName)
-=======
 @other.route("/acceptCookies", methods=['POST','GET'])
 def acceptCookies():
 
@@ -119,4 +107,3 @@ def acceptCookies():
 def privacyPolicy():
 
     return render_template('/pages/privacyPolicy.html', title_prefix= "Polityka Prywatności")
->>>>>>> BoberTest

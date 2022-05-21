@@ -4,7 +4,7 @@
 
 
 
-    <!-- Modal -->
+    <!-- Send Message - Modal -->
     <div class="modal fade" id="confirmWriteMessageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
@@ -47,7 +47,7 @@
 
 						<div class="form-group">
 							<label class="form-label"> {{ form.sendByApp.label }} </label>
-							{{ form.sendByApp(class_="form-check-input" ) }}
+							{{ form.sendByApp(class_="form-check-input", id="checkboxAppId") }}
 							<ul>
 								{% for error in form.sendByApp.errors %}
 									{{ error }}
@@ -57,23 +57,18 @@
 
 						<div class="form-group">
 							<label class="form-label"> {{ form.sendByEmail.label }} </label>
-							{{ form.sendByEmail(class_="form-check-input" ) }}
+							{{ form.sendByEmail(class_="form-check-input", id="checkboxEmailId") }}
 							<ul>
 								{% for error in form.sendByEmail.errors %}
 									{{ error }}
 								{% endfor %}
 							</ul>
 						</div>
-
-
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-						<button type="button" class="btn btn-warning" id="buttonTestt">Warning1</button>
-						<button type="button" class="btn btn-warning" id="buttonTest">Warning</button>
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmWriteMessageForm">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-						<button type="submit" class="btn btn-dark" style="background-color: #182c07e8;">Wyślij wiadomość</button>
+						<button type="submit" class="btn btn-dark" style="background-color: #182c07e8;" id="sendButtonId">Wyślij wiadomość</button>
 					</form>
 				</div>
 			</form>
@@ -82,8 +77,40 @@
     </div>
 
 
+
+
+	 <!-- READ Message - Modal -->
+	 <div class="modal fade" id="readMessageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Treść wiadomości</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+			<form action="#" method="post">
+				<div class="modal-body" id="idReadMessageModalBody">
+					...
+				</div>
+				<div class="modal-footer">
+					<form method="GET" id="confirmReadMessage">
+						<button type="submit" class="btn btn-dark" style="background-color: #182c07e8;" id="sendButtonId">Zamknij</button>
+					</form>
+				</div>
+			</form>
+        </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script> 
+		//Write Message
         $(document).ready(function () { 
             // For a write and sent new message
             // This function is applied to all elements with class ending with ".writeAndSendMessage 
@@ -98,18 +125,32 @@
         }); 
     </script>
 
-	<script> 
-		//$("#flexCheckDefault").on("click", function() {
-			//$("#buttonTest").attr("disabled", true);
-		//});
 
-		$("#flexCheckDefault").change(function() {
-        if($(this).prop('checked')) {
-            $("#buttonTest").attr("disabled", true);
-        } else {
-            $("#buttonTest").attr("disabled", false);
-        }
-    });
+	<script>
+		//Read Message
+		$(document).ready(function () { 
+			// For a write and sent new message
+			// This function is applied to all elements with class ending with ".writeAndSendMessage 
+			$('.readMessageConfirm').click(function () { 
+				// get attributes of the found element 
+				var desc = $(this).attr('data-desc'); 
+				var url = $(this).attr('data-url'); 
+				// the #... designates id of an element - change the text in the modal window 
+				$('#idReadMessageModalBody').text(desc); 
+				$("#confirmReadMessage").attr("action", url); 
+			}); 
+		}); 
+	</script>
+
+	<script>
+		// Checking of checkboxes
+		$("#idMessageModalBody").change(function() {
+			if($("#checkboxAppId").prop('checked') || $("#checkboxEmailId").prop('checked')) {
+				$("#sendButtonId").attr("disabled", false);
+			} else {
+				$("#sendButtonId").attr("disabled", true);
+			}
+    	});
 	</script>
 
 
@@ -123,27 +164,26 @@
 				<div class="row">
 					<!-- BEGIN INBOX MENU -->
 					<div class="col-md-3">
-						<h2 class="grid-title"><i class="fa fa-inbox"></i> Inbox</h2>
+						<h2 class="grid-title"><i class="fa fa-inbox"></i> Wiadomości</h2>
 
 
 						<!-- Button trigger modal -->
 						<a type="button" class="btn btn-dark btn-lg writeAndSendMessageConfirm" 
 							data-bs-toggle="modal" data-bs-target="#confirmWriteMessageModal"
-							data-url="{{ url_for('other.mailbox') }}">
+							data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
 							<i class="fa fa-pencil"></i>&nbsp;&nbsp;Nowa wiadomość
 						</a>
 
 						<hr>
 
-						<div>
+						<div class="katalogi">
 							<ul class="nav nav-pills nav-stacked">
-								<li class="header">Folders</li>
-								<li class="active"><a href="#"><i class="fa fa-inbox"></i> Inbox ({{ amoutOfMails }})</a></li>
-								<li><a href="#"><i class="fa fa-star"></i> Starred</a></li>
-								<li><a href="#"><i class="fa fa-bookmark"></i> Important</a></li>
-								<li><a href="#"><i class="fa fa-mail-forward"></i> Sent</a></li>
-								<li><a href="#"><i class="fa fa-pencil-square-o"></i> Drafts</a></li>
-								<li><a href="#"><i class="fa fa-folder"></i> Spam (217)</a></li>
+								<li class="header">Katalogi</li>
+								<li class="{{ 'active' if actionName=='inbox' }}"><a href="{{ url_for('other.mailbox', actionName='inbox') }}"><i class="fa fa-inbox"></i> Odebrane ({{ amountOfReceivedMessages}})</a></li>
+								<li><a href="#"><i class="fa fa-star"></i> Oznaczone gwiazdką</a></li>
+								<li><a href="#"><i class="fa fa-bookmark"></i> Ważne</a></li>
+								<li class="{{ 'active' if actionName=='sent' }}"><a href="{{ url_for('other.mailbox', actionName='sent') }}"><i class="fa fa-mail-forward"></i> Wysłane ({{ amountOfSentMessages }})</a></li>
+								<li><a href="#"><i class="fa fa-folder"></i> Kosz</a></li>
 							</ul>
 
 						</div>
@@ -159,7 +199,7 @@
 								</label>
 								<div class="btn-group">
 									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-										Action <span class="caret"></span>
+										Akcję <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" role="menu">
 										<li><a href="#">Mark as read</a></li>
@@ -175,7 +215,7 @@
 							<div class="col-md-6 search-form">
 								<form action="#" class="text-right">
 									<div class="input-group">
-										<input type="text" class="form-control input-sm" placeholder="Search">
+										<input type="text" class="form-control input-sm" placeholder="Szukaj">
 										<span class="input-group-btn">
                                             <button type="submit" name="search" class="btn_ btn-primary btn-sm search"><i class="fa fa-search"></i></button></span>
 									</div>			 
@@ -189,11 +229,19 @@
 							<table class="table">
 								<tbody>
 									{% for message in messagesCurrentUser: %}
-									<tr>
+									<tr class="listOfMessages readMessageConfirm" 
+										data-bs-toggle="modal" data-bs-target="#readMessageModal"
+										data-desc="{{ message.message }}"
+										data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
+									
 										<td class="action"><input type="checkbox" /></td>
 										<td class="action"><i class="fa fa-star-o"></i></td>
 										<td class="action"><i class="fa fa-bookmark-o"></i></td>
-										<td class="name"><a href="#">{{ message.sender }}</a></td>
+										{% if actionName=='inbox': %}
+											<td class="name"><a href="#" style="font-weight: 400;">{{ message.sender }}</a></td>
+										{% else %}
+											<td class="name"><a href="#">{{ message.sender }}</a></td>
+										{% endif %}
 										<td class="subject"><a href="#">{{ message.subject }}</a></td>
 										<td class="time">{{ message.date }}</td>
 									</tr>
@@ -214,45 +262,6 @@
 					</div>
 					<!-- END INBOX CONTENT -->
 					
-					<!-- BEGIN COMPOSE MESSAGE -->
-					<div class="modal fade" id="compose-modal" tabindex="-1" role="dialog" aria-hidden="true">
-						<div class="modal-wrapper">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header bg-blue">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-										<h4 class="modal-title"><i class="fa fa-envelope"></i> Compose New Message</h4>
-									</div>
-									<form action="#" method="post">
-										<div class="modal-body">
-											<div class="form-group">
-												<input name="to" type="email" class="form-control" placeholder="To">
-											</div>
-											<div class="form-group">
-												<input name="cc" type="email" class="form-control" placeholder="Cc">
-											</div>
-											<div class="form-group">
-												<input name="bcc" type="email" class="form-control" placeholder="Bcc">
-											</div>
-											<div class="form-group">
-												<input name="subject" type="email" class="form-control" placeholder="Subject">
-											</div>
-											<div class="form-group">
-												<textarea name="message" id="email_message" class="form-control" placeholder="Message" style="height: 120px;"></textarea>
-											</div>
-											<div class="form-group">														<input type="file" name="attachment">
-											</div>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Discard</button>
-											<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-envelope"></i> Send Message</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- END COMPOSE MESSAGE -->
 				</div>
 			</div>
 		</div>
@@ -260,42 +269,5 @@
 	<!-- END INBOX -->
 </div>
 </div>
-
-
-
-
-<h1>jQuery - How to disabled submit button after clicked</h1>
-
-<form id="formABC" action="#" method="POST">
-    <input type="submit" id="btnSubmit" value="Submit"></input>
-</form>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-<input type="button" value="i am normal abc" id="btnTest"></input>
-
-<script>
-    $(document).ready(function () {
-
-        $("#formABC").submit(function (e) {
-
-            //stop submitting the form to see the disabled button effect
-            e.preventDefault();
-
-            //disable the submit button
-            $("#btnSubmit").attr("disabled", true);
-
-            //disable a normal button
-            $("#btnTest").attr("disabled", true);
-
-            return true;
-
-        });
-    });
-</script>
-
-
-
-
 
 {% endblock %}

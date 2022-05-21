@@ -60,7 +60,7 @@
               {% endif %}
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="{{ url_for('other.mailbox') }}">Wiadomości</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('user.settings') }}">Ustawienia konta</a></li>
                   <li><hr class="dropdown-divider"></li>
                   

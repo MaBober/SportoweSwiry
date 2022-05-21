@@ -7,14 +7,8 @@
   margin-bottom: 20px;
 }
 
-.form-group {
-    padding: 10px;
-}
 
-.writeAndSendMessageConfirm {
-    background-color: #182c07e8;
-    text-align: center;
-}
+
 
 .btn-facebook {
   color: #fff;
@@ -62,6 +56,57 @@
 
 
 
+
+
+
+
+
+
+.form-group {
+    padding: 10px;
+}
+
+.writeAndSendMessageConfirm {
+    background-color: #182c07e8;
+    text-align: center;
+}
+
+
+.katalogi a {
+    text-decoration: none;
+    padding: 5px;
+}
+
+.search {
+    background-color: #182c07e8;
+    border-color: #182c07e8;
+}
+
+.search:hover {
+    background-color: rgba(224, 153, 94);
+    border-color: rgba(224, 153, 94);
+}
+
+.listOfMessages a {
+    text-decoration: none !important;
+    font-weight: 400;
+}
+
+.listOfMessages a:hover {
+    text-decoration: none !important;
+    color:#000000
+}
+
+.listOfMessages .time {
+    font-weight: 400;
+}
+
+.listOfMessages:hover {
+    background-color: rgba(224, 153, 94);
+    color:#000000
+}
+
+
 /* mailbox style */
 /*
 body{
@@ -98,8 +143,8 @@ body{
 
 .email .nav.nav-pills > li.active > a,
 .email .nav.nav-pills > li.active > a:hover {
-	background-color: #f6f6f6;
-	border-top-color: #3c8dbc;
+	background-color: rgba(224, 153, 94);
+	border-top-color: #182c07e8;
 }
 
 .email .nav.nav-pills > li.active > a {
@@ -107,7 +152,7 @@ body{
 }
 
 .email .nav.nav-pills > li > a:hover {
-	background-color: #f6f6f6;
+	background-color: rgba(224, 153, 94);
 }
 
 .email .nav.nav-pills.nav-stacked > li > a {
@@ -119,8 +164,8 @@ body{
 
 .email .nav.nav-pills.nav-stacked > li.active > a,
 .email .nav.nav-pills.nav-stacked > li.active > a:hover {
-	background-color: #f6f6f6;
-	border-left-color: #3c8dbc;
+	background-color: rgba(224, 153, 94);
+	border-left-color: #182c07e8;
 	color: #444;
 }
 

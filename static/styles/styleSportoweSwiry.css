@@ -1,0 +1,104 @@
+.Rectangle-8 {
+    width: 1440px;
+    height: 865px;
+    background: #262626;
+    opacity: 1;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+
+  }
+
+.v33_419 {
+  width: 1440px;
+  height: 100%;
+  background: url("/static/img/icon-image 4.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 3px;
+  left: 0px;
+  overflow: hidden;
+}
+
+.v33_451 {
+    width: 1440px;
+    height: 960px;
+    background: #262626;
+    opacity: 0.7;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+  }
+
+
+.v11_6 {
+    width: 92px;
+    height: 104px;
+    background: url("/static/img/icon-logo 1.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    opacity: 1;
+    position: absolute;
+    top: 29px;
+    left: 100px;
+    overflow: hidden;
+  }
+
+
+  .v11_12 {
+    width: 100px;
+    height: 48px;
+    background: rgba(87,153,86,1);
+    padding: 0px 0px;
+    margin: 0px;
+    opacity: 1;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    overflow: hidden;
+  }
+
+  .v13_88 {
+    width: 100px;
+    height: 48px;
+    background: rgba(255,255,255,1);
+    margin: 0px;
+    opacity: 1;
+    position: absolute;
+    top: 57px;
+    left: 1240px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    overflow: hidden;
+  }
+
+  .Login {
+    color: white;
+    width: 100px;
+    height: 48px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 23px;
+    border-radius: 15px;
+    background-color: #579956;
+  }
+
+
+

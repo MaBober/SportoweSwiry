@@ -73,7 +73,7 @@ class LoginForm(FlaskForm):
         if (not tempMail) and (not tempLogin):
             raise ValidationError("Tego loginu/adresu email nie ma w naszej bazie danych")
 
-    name=StringField("Login lub adres mailowy", validators=[ValidateLoginIsCorrect])
+    name=StringField("Adres mailowy", validators=[ValidateLoginIsCorrect])
     password=PasswordField("Hasło")
     remember=BooleanField("Zapamiętaj mnie", default=False)
 

@@ -456,7 +456,7 @@ def rotateAvatarLeft():
     return redirect(url_for('user.settings'))
 
 
-@app.route("/fb-login")
+@user.route("/fb-login")
 def loginFacebook():
 	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
 	authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
@@ -464,7 +464,7 @@ def loginFacebook():
 	return flask.redirect(authorization_url)
 
 
-@app.route("/fb-callback")
+@user.route("/fb-callback")
 def callback():
 	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback")
 
@@ -481,13 +481,29 @@ def callback():
 	name = facebook_user_data["name"]
 	picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
 
-	return f"""
-	User information: <br>
-	Name: {name} <br>
-	Email: {email} <br>
-	Avatar <img src="{picture_url}"> <br>
-	<a href="/">Home</a>
-	"""
+	return redirect(url_for('user.LoginToAppByFB', email=email, name=name, picture_url=picture_url))
 
 
+@user.route("/LoginToAppByFB/<email>/<name>/<picture_url>", methods=['GET'])
+def LoginToAppByFB(email, name, picture_url):
 
+    user=User.query.filter(User.mail == email).first()
+
+    if user != None:
+            login_user(user)
+
+            #Checking if next page is exist and if it is safe
+            next = request.args.get('next')
+            if next and isSafeUrl(next):
+                flash("Jesteś zalogowany jako: {} ({})".format(current_user.id, name))
+                return redirect(next)
+            else:
+                flash("Jesteś zalogowany jako: {} ({})".format(current_user.id, name))
+
+            return redirect(url_for('user.basicDashboard'))
+    else:
+        flash("Nie udało sięzalogować do apliakcji. Ale jesteś zalogowany do facebooka jako: {} ({})".format(name,email))
+
+    return redirect(url_for('user.login'))
+
+  

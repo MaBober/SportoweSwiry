@@ -1,4 +1,4 @@
-<p>Czołem {{ user.userName }},</p>
+<p>Czołem {{ '{} {}'.format(user.name, user.lastName) }},</p>
 <p>Witaj w <b>Sportowych Świrach</b>!</p>
 <p>Żeby potwierdzić Twoje konto prosze <a href="{{ url_for('user.confirm', token=token, _external=True) }}">kliknij tutaj</a>.</p>
 <p>Alternatywnie możesz wkleić poniższy link w swoją przeglądarke:</p>

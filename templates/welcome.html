@@ -1,4 +1,4 @@
-<p>Czołem {{ current_user.id }},</p>
+<p>Czołem {{ '{} {}'.format(current_user.name, current_user.lastName) }},</p>
 <p>Witaj w wyzwaniu sportowym <b>{{ event.name }}</b></p>
 <p>Data rozpoczęcia: {{ event.start }}</p>
 <p>Długość: {{ event.lengthWeeks  }} tygodni</p>

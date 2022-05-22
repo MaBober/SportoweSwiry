@@ -1,4 +1,4 @@
-Czołem {{ user.userName }},
+Czołem {{ '{} {}'.format(current_user.name, current_user.lastName) }},
 
 Żeby zresetować swoje hasło kliknij w poniższy link:
 

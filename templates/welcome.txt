@@ -1,4 +1,4 @@
-Czołem {{ current_user.id }}!,
+Czołem {{ '{} {}'.format(current_user.name, current_user.lastName) }}!,
 
 Witaj w wyzwaniu sportowym {{ event.name }}!
 

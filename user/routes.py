@@ -10,6 +10,7 @@ from event.classes import CoefficientsList, DistancesTable
 from event.functions import giveUserEvents
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
 from other.functions import send_email
+from .functions import SaveAvatarFromFacebook, PasswordGenerator
 
 from werkzeug.utils import secure_filename
 import datetime
@@ -23,9 +24,9 @@ from authlib.integrations.flask_client import OAuth
 import flask
 import requests_oauthlib
 from requests_oauthlib.compliance_fixes import facebook_compliance_fix
-
-
 import os 
+
+
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 
@@ -59,7 +60,7 @@ FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 
-URL = "https://test.sportoweswiry.atthost24.pl"
+URL = "https://5650-178-235-146-56.eu.ngrok.io"
 
 FB_SCOPE = ["email"]
 
@@ -212,9 +213,9 @@ def deleteUser(userName):
     if not userToDelete.isAdmin:
         db.session.delete(userToDelete)
         db.session.commit()
-        flash("Użytkownik {} został usunięty z bazy danych".format(userToDelete.id))
+        flash("Użytkownik {} {} został usunięty z bazy danych".format(userToDelete.name, userToDelete.lastName))
     else:
-        flash("Nie można usunąć użytkownika {}".format(userToDelete.id))
+        flash("Nie można usunąć użytkownika {} {}".format(userToDelete.name, userToDelete.lastName))
 
     return redirect(url_for('user.listOfUsers'))
 
@@ -236,10 +237,10 @@ def login():
             #Checking if next page is exist and if it is safe
             next = request.args.get('next')
             if next and isSafeUrl(next):
-                flash("Jesteś zalogowany jako: {}".format(current_user.id))
+                flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
                 return redirect(next)
             else:
-                flash("Jesteś zalogowany jako: {}".format(current_user.id))
+                flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
 
             return redirect(url_for('user.basicDashboard'))
         else:
@@ -464,46 +465,67 @@ def loginFacebook():
 	return flask.redirect(authorization_url)
 
 
-@user.route("/fb-callback")
+@user.route("/fb-callback", methods=['GET'])
 def callback():
-	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback")
+    facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback")
 
 	# we need to apply a fix for Facebook here
-	facebook = facebook_compliance_fix(facebook)
+    facebook = facebook_compliance_fix(facebook)
 
-	facebook.fetch_token(FB_TOKEN_URL, client_secret=FB_CLIENT_SECRET, authorization_response=flask.request.url)
+    facebook.fetch_token(FB_TOKEN_URL, client_secret=FB_CLIENT_SECRET, authorization_response=flask.request.url)
 
 	# Fetch a protected resource, i.e. user profile, via Graph API
-
-	facebook_user_data = facebook.get("https://graph.facebook.com/me?fields=id,name,email,picture{url}").json()
-
-	email = facebook_user_data["email"]
-	name = facebook_user_data["name"]
-	picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
-
-	return redirect(url_for('user.LoginToAppByFB', email=email, name=name, picture_url=picture_url))
-
-
-@user.route("/LoginToAppByFB/<email>/<name>/<picture_url>", methods=['GET'])
-def LoginToAppByFB(email, name, picture_url):
-
+    facebook_user_data = facebook.get("https://graph.facebook.com/me?fields=id,name,email,picture{url}").json()
+    
+    email = facebook_user_data["email"]
+    name = facebook_user_data["name"]
+    picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
+    
     user=User.query.filter(User.mail == email).first()
-
     if user != None:
-            login_user(user)
+            login_user(user, remember=True)
+
+            SaveAvatarFromFacebook(picture_url, current_user.id)
 
             #Checking if next page is exist and if it is safe
             next = request.args.get('next')
             if next and isSafeUrl(next):
-                flash("Jesteś zalogowany jako: {} ({})".format(current_user.id, name))
+                flash("Jesteś zalogowany jako: {}".format(name))
                 return redirect(next)
             else:
-                flash("Jesteś zalogowany jako: {} ({})".format(current_user.id, name))
+                flash("Jesteś zalogowany jako: {}".format(name))
 
             return redirect(url_for('user.basicDashboard'))
     else:
-        flash("Nie udało sięzalogować do apliakcji. Ale jesteś zalogowany do facebooka jako: {} ({})".format(name,email))
+        fullName=str(name).split(" ")
+        firstName=fullName[0]
+        lastName=fullName[1]
 
-    return redirect(url_for('user.login'))
+        newUser=User(name=firstName, lastName=lastName, mail=email, 
+                    id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByFB=True)
 
-  
+        #Generatin new user ID
+        newUser.id = newUser.generate_ID()
+        newUser.id = newUser.removeAccents()
+
+        #Hash of password       
+        newUser.password=newUser.hash_password()
+
+        #adding admins to datebase 
+        db.session.add(newUser)
+        db.session.commit()
+
+        user=User.query.filter(User.mail == email).first()
+        login_user(user, remember=True)
+
+        SaveAvatarFromFacebook(picture_url, current_user.id)
+
+        #Checking if next page is exist and if it is safe
+        next = request.args.get('next')
+        if next and isSafeUrl(next):
+            flash("Jesteś zalogowany jako: {}".format(name))
+            return redirect(next)
+        else:
+            flash("Jesteś zalogowany jako: {}".format(name))
+
+        return redirect(url_for('user.basicDashboard'))

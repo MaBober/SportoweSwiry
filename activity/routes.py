@@ -234,5 +234,4 @@ def myActivities():
                                 sumDistance=sumDistance, averageDistance=averageDistance, averageTime=averageTime, pie_chart=pie_chart, line_chart=line_chart)
         
     else:
-        flash("Nie posiadasz dodanych żadnych aktywności")
         return redirect(url_for('other.hello'))

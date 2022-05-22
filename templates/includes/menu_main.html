@@ -50,7 +50,7 @@
             <li class="nav-item dropdown" >
               {% if current_user.id %}
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  {{ current_user.id }}
+                  {{ '{} {}'.format(current_user.name, current_user.lastName) }}
                 </a>
 
               {% else %}                

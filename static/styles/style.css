@@ -1,8 +1,8 @@
 .row-login {
   margin: auto;
-  width: 340px;
+  width: 360px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   margin-bottom: 20px;
 }
@@ -17,18 +17,22 @@
 }
 
 .btn-google {
+  width: 300px;
   color: #fff;
   background-color: #db4c3e;
   border: 1px solid rgb(163, 28, 16);
+  margin-top: 20px;
 }
 
 .btn-social {
   position: relative;
   padding-left: 44px;
-  text-align: left;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  justify-content: center;
+  margin-left: auto;
 }
 
 .btn-social:hover {

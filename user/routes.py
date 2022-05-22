@@ -60,7 +60,7 @@ FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 
-URL = "https://5650-178-235-146-56.eu.ngrok.io"
+URL = "https://test.sportoweswiry.atthost24.pl"
 
 FB_SCOPE = ["email"]
 
@@ -91,6 +91,7 @@ def createAccount():
     #Delete of not necessary inputs
     del form.isAdmin
     del form.avatar
+    del form.id
 
     #CreateUser.CreateUser()
 
@@ -102,6 +103,8 @@ def createAccount():
 
         #Generatin new user ID
         newUser.id = newUser.generate_ID()
+        newUser.id = newUser.removeAccents()
+
 
         #Hash of password       
         newUser.password=newUser.hash_password()
@@ -529,3 +532,48 @@ def callback():
             flash("Jesteś zalogowany jako: {}".format(name))
 
         return redirect(url_for('user.basicDashboard'))
+
+
+@user.route("/fb-login-connect")
+def loginConnectFacebook():
+	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback-connect", scope=FB_SCOPE)
+	authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
+
+	return flask.redirect(authorization_url)
+
+
+@user.route("/fb-callback-connect", methods=['GET'])
+@login_required #This page needs to be login
+def callbackConnect():
+    facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback-connect")
+
+	# we need to apply a fix for Facebook here
+    facebook = facebook_compliance_fix(facebook)
+
+    facebook.fetch_token(FB_TOKEN_URL, client_secret=FB_CLIENT_SECRET, authorization_response=flask.request.url)
+
+	# Fetch a protected resource, i.e. user profile, via Graph API
+    facebook_user_data = facebook.get("https://graph.facebook.com/me?fields=id,name,email,picture{url}").json()
+    
+    email = facebook_user_data["email"]
+    name = facebook_user_data["name"]
+    picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
+
+    checkingExistUser=User.query.filter(User.mail == email).first()
+
+    if checkingExistUser:
+        flash("Konto facebook ({}) jest już wykorzystywane przez innego użytkownika. Użyj innego konta facebook".format(email))
+    else:
+        user=User.query.filter(User.id == current_user.id).first()
+        fullName=str(name).split(" ")
+        firstName=fullName[0]
+        lastName=fullName[1]
+        user.name=firstName
+        user.lastName=lastName
+        user.mail=email
+        db.session.commit()
+        SaveAvatarFromFacebook(picture_url, current_user.id)
+        flash("Twoje konto zostało połączone z kontem na facebooku: {} ({})".format(name,email))
+
+
+    return redirect(url_for('user.settings'))

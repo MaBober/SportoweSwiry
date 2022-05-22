@@ -4,7 +4,7 @@
 
     <div class="page-header">
         <h1>
-            Witaj, {{ current_user.id }}!
+            Witaj, {{ '{} {}'.format(current_user.name, current_user.lastName) }}!
         </h1>
         <h3>Twoje konto nie zostało jeszcze potwierdzone.</h3>
         <p>

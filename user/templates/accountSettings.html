@@ -58,7 +58,7 @@
                         {{ form.csrf_token }}
                         <!-- Form Group (username)-->
                         <div class="mb-3">
-                            <label class="small mb-1">Login (Nazwa pod którą będziesz widoczna/y na stronie dla innych użytkowników)</label>
+                            <label class="small mb-1">Login (Nazwa, która jest tylko dla potrzeb aplikacji. Nigdzie nie będzie widoczna)</label>
                             <input class="form-control" type="text" value="{{current_user.id}}" aria-label="Disabled input example" disabled readonly>
                             <ul>
                                 {% for error in form.id.errors %}
@@ -117,6 +117,20 @@
                     </form>
                 </div>
             </div>
+
+            <div class="row-social-connect">
+                <div class="container">
+                    <a class="btn btn-lg btn-social btn-facebook" href="{{ url_for('user.loginConnectFacebook') }}">
+                        <i class="fa fa-facebook fa-fw"></i> Połącz konto z Facebook
+                    </a>
+                </div>
+                <div class="container">
+                    <a class="btn btn-lg btn-social btn-google" href="#">
+                        <i class="fa fa-google fa-fw"></i> Połącz konto z Google
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

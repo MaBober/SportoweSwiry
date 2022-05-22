@@ -7,10 +7,18 @@
   margin-bottom: 20px;
 }
 
-
+.row-social-connect {
+    margin: auto;
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 
 
 .btn-facebook {
+  width: 300px;
   color: #fff;
   background-color: #3b5998;
   border-color: rgba(0,0,0,0.2);

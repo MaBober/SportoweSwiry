@@ -82,7 +82,7 @@
                                     <!-- Button trigger modal -->
                                     <a type="button" class="btn btn-danger btn-sm delete-confirm" 
                                         data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                                        data-desc="{{ 'Napewno chcesz usunać użytkownika: {}?'.format(user.id) }}"
+                                        data-desc="{{ 'Napewno chcesz usunać użytkownika: {} ({} {})?'.format(user.id, user.name, user.lastName) }}"
                                         data-url="{{ url_for('user.deleteUser', userName=user.id )}}">
                                         Usuń
                                     </a>

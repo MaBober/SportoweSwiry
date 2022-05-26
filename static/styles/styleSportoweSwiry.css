@@ -1,104 +1,287 @@
-.Rectangle-8 {
-    width: 1440px;
-    height: 865px;
-    background: #262626;
-    opacity: 1;
-    position: relative;
-    top: 0px;
-    left: 0px;
-    overflow: hidden;
-
-  }
-
-.v33_419 {
-  width: 1440px;
-  height: 100%;
-  background: url("/static/img/icon-image 4.svg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
-  position: absolute;
-  top: 3px;
-  left: 0px;
-  overflow: hidden;
+.About {
+  width: 100%;
+  height: 865px;
+  flex-grow: 0;
+  background-color: #3a3a3a;
 }
 
-.v33_451 {
-    width: 1440px;
-    height: 960px;
-    background: #262626;
-    opacity: 0.7;
-    position: relative;
-    top: 0px;
-    left: 0px;
-    overflow: hidden;
+.Rectangle-8 {
+  /*background: linear-gradient(rgb(38,38,38,0.5), rgb(38,38,38,0.5), rgb(38,38,38,0.5));*/
+  background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/icon-image 4.svg") no-repeat;
+  /*background: url("img/icon-image 4.svg");*/
+  /*background-repeat: no-repeat;*/
+  background-size: cover;
+  /*height: 100vh;*/
+  width: 100%;
+  height: 865px;
+  display: flex;
+  flex-direction: column;
+  /*justify-content: center;*/
+  /*align-items: center;*/
+
+
+  /*background-color: #262626;
+  position: absolute;*/
+  object-fit: contain;
+}
+
+
+.First-Row {
+  display: flex;
+  flex-direction: row;
+}
+
+.First-Row a {
+  margin-left: 5%;
+}
+
+.Login {
+  width: 100px;
+  height: 48px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  /*justify-content: flex-start;*/
+  align-items: flex-start;
+  gap: 10px;
+  padding: 13px 12px;
+  border-radius: 15px;
+  background-color: #579956;
+  margin-left: 75%;
+  margin-top: 50px;
+}
+
+.Zaloguj {
+  height: 22px;
+  flex-grow: 1;
+  font-family: Lato;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+}
+
+
+img.icon-logo-1 {
+  width: 92px;
+  height: 104px;
+  /*margin: 0 118px 61px 0;*/
+  object-fit: contain;
+  margin-left: 5%;
+  margin-top: 50px;
+}
+
+
+
+.Title-O-nas {
+
+  font-family: Lato;
+  font-size: 40px;
+  color: white;
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* Zdjęcie + opis */
+
+
+.Content {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  margin-top: 10px;
+}
+
+img.icon-Rectangle-12 {
+  width: 295px;
+  height: 295px;
+  margin: 53px 0 0 118px;
+  object-fit: contain;
+}
+
+.Rectangle-13 {
+  width: 525px;
+  height: 295px;
+  margin: 53px 110px 0 0;
+  padding: 36px 28px 27px 38px;
+  background-color: #efefef;
+}
+
+
+.Lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-Aenean-ac-dui-lacus-Mauris-eget-lacus-magn {
+  width: 459px;
+  height: 151px;
+  margin: 0 0 33px;
+  font-family: Lato;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+}
+
+
+.Rectangle-14 {
+  width: 192px;
+  height: 48px;
+  margin: 33px 140px 0 127px;
+  border-radius: 15px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background-color: gold;
+}
+
+
+
+/* STOPKA */
+
+.Rectangle-10 {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 64px;
+  margin: 150px 0 0 0;
+  padding: 21px 16px 23px 29px;
+  opacity: 0.8;
+  background-color: #000;
+}
+
+.-Bartsch-Bober-Inc {
+  width: 196px;
+  height: 19px;
+  /*margin: 1px 806px 0 0;*/
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #636363;
+}
+
+.O-nas {
+  width: 40px;
+  height: 19px;
+  margin: 1px 13px 0 846px;
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+}
+
+
+.FAQ {
+  width: 32px;
+  height: 19px;
+  margin: 1px 13px 0 14px;
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+}
+
+
+.Kontakt {
+  width: 57px;
+  height: 19px;
+  margin: 1px 0 0 14px;
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+}
+
+
+
+@media(max-width: 670px) {
+  .About {
+      height: 100%;
   }
 
 
-.v11_6 {
-    width: 92px;
-    height: 104px;
-    background: url("/static/img/icon-logo 1.svg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    opacity: 1;
-    position: absolute;
-    top: 29px;
-    left: 100px;
-    overflow: hidden;
+  .Rectangle-8 {
+      height: 100%;
   }
 
 
-  .v11_12 {
-    width: 100px;
-    height: 48px;
-    background: rgba(87,153,86,1);
-    padding: 0px 0px;
-    margin: 0px;
-    opacity: 1;
-    position: relative;
-    top: 0px;
-    left: 0px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    overflow: hidden;
-  }
-
-  .v13_88 {
-    width: 100px;
-    height: 48px;
-    background: rgba(255,255,255,1);
-    margin: 0px;
-    opacity: 1;
-    position: absolute;
-    top: 57px;
-    left: 1240px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    overflow: hidden;
-  }
 
   .Login {
-    color: white;
-    width: 100px;
-    height: 48px;
-    flex-grow: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 12px 23px;
-    border-radius: 15px;
-    background-color: #579956;
+      margin-left: 50%;
+      margin-top: 20px;
+    }
+
+
+  img.icon-logo-1 {
+      width: 52px;
+      height: 64px;
+      margin-top: 20px;
+  }
+
+  .Title-O-nas {
+      font-size: 30px;
   }
 
 
+  .Content {
+      flex-direction: column;
+  }
 
+
+  img.icon-Rectangle-12 {
+      width: 205px;
+      height: 205px;
+      margin: auto;
+      margin-bottom: 15px;
+
+    }
+
+  .Rectangle-13 {
+      width: 325px;
+      height: 405px;
+      /*margin: 53px 110px 0 0;*/
+      justify-content: center;
+      margin: auto;
+    }
+
+  .Lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-Aenean-ac-dui-lacus-Mauris-eget-lacus-magn {
+      width: 359px;
+      height: 101px;
+    }
+
+
+  .Rectangle-14 {
+      margin: auto;
+      margin-top: 30px;
+    }
+
+
+  .Rectangle-10 {
+      flex-direction: column;
+      height: 200px;
+  }
+
+}

@@ -1,45 +1,62 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseSportoweSwiry.html" %}
 
 
 {% block body_content %}
 
-<!--
-<div class="Rectangle-8">
-    <div class="v33_419"></div>
-    <div class="v33_451"></div>
-    <div class="v11_6"></div>
+<header>  
+</header>
 
-
-
-    <div class="v13_88">
-      <div class="v11_12">
-          <div class="Login">Zaloguj</div>
+<div class="About">
+  <div class="Rectangle-8">
+    <div class="First-Row">
+      <a href="{{ url_for('other.hello') }}"><img src="static/img/icon-logo 1.svg" class="icon-logo-1"></a>
+      <div class="Login">
+        {% if current_user.id %}
+        <a class="Zaloguj" href="{{ url_for('user.logout') }}"> Wyloguj</a>
+        {% else %}
+        <a class="Zaloguj" href="{{ url_for('user.login') }}"> Zaloguj</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="Title-O-nas">O nas</div>
+    <div class="Content">
+      <img src="static/img/icon-rectangle 12.svg" class="icon-Rectangle-12">
+      <div class="Rectangle-13">
+        <span class="Lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-Aenean-ac-dui-lacus-Mauris-eget-lacus-magn">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ac dui lacus. Mauris eget lacus magna. Nulla sapien nunc, egestas ac commodo vitae, ornare sit amet purus. Sed vehicula odio id venenatis accumsan. Nam vestibulum, mi vitae ultrices tempor, est nisl convallis orci, eget sollicitudin libero nisi in dui.
+        </span>
+        <div class="Rectangle-14">
+        </div>
       </div>
     </div>
 
-
-    <div class="Login2">Zaloguj</div>
-
-
-  
-</div>
--->
-
-
-
-<div class="container-xl px-4 mt-4">
-</div>
-
-<div class="container">
-    <div class="row row-cols-auto center">
-      {% if current_user.is_anonymous == False %}
-    <div clas="col">
-      <img src="/static/pictures/about.PNG" alt="">
+    <div class="Rectangle-10">
+      <span class="-Bartsch-Bober-Inc">
+        ©2022 Bartsch & Bober Inc.
+      </span>
+      <span class="O-nas">
+        O nas
+      </span>
+      <span>
+        |
+      </span>
+      <span class="FAQ">
+        FAQ
+      </span>
+      <span>
+        |
+      </span>
+      <span class="Kontakt">
+        Kontakt
+      </span>
     </div>
-      {% endif %}
-    <div clas="col">
-      <br><h4>Życzymy powodzenia i dobrej zabawy!</h4> Bartsch i Bober
-    </div>
+
+  </div>
 </div>
+
+
+<footer>
+</footer>
+
 
 {% endblock %}

@@ -2,22 +2,13 @@
 
 
 {% block body_content %}
-
-<header>  
+<header>
+  {% include "includes/headerWithoutMenu.html" %} 
 </header>
 
 <div class="About">
   <div class="Rectangle-8">
-    <div class="First-Row">
-      <a href="{{ url_for('other.hello') }}"><img src="static/img/icon-logo 1.svg" class="icon-logo-1"></a>
-      <div class="Login">
-        {% if current_user.id %}
-        <a class="Zaloguj" href="{{ url_for('user.logout') }}"> Wyloguj</a>
-        {% else %}
-        <a class="Zaloguj" href="{{ url_for('user.login') }}"> Zaloguj</a>
-        {% endif %}
-      </div>
-    </div>
+    
     <div class="Title-O-nas">O nas</div>
     <div class="Content">
       <img src="static/img/icon-rectangle 12.svg" class="icon-Rectangle-12">
@@ -30,32 +21,12 @@
       </div>
     </div>
 
-    <div class="Rectangle-10">
-      <span class="-Bartsch-Bober-Inc">
-        ©2022 Bartsch & Bober Inc.
-      </span>
-      <span class="O-nas">
-        O nas
-      </span>
-      <span>
-        |
-      </span>
-      <span class="FAQ">
-        FAQ
-      </span>
-      <span>
-        |
-      </span>
-      <span class="Kontakt">
-        Kontakt
-      </span>
-    </div>
-
   </div>
 </div>
 
 
 <footer>
+  {% include "includes/footer.html" %} 
 </footer>
 
 

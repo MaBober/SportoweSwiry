@@ -28,19 +28,18 @@
 
   <body>
 
- 
-    <div class="container" >
+    <!--<div class="container" >
       {% for message in get_flashed_messages() %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>{{ message }}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
-      {% endfor %}
+      {% endfor %}-->
     {% include "includes/cookie_consent.html" %}
     {% block body_content %}
     
     {% endblock %}
-    </div>
+    <!--</div>-->
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

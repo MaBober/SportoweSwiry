@@ -1,10 +1,19 @@
 <div class="First-Row">
-    <a href="{{ url_for('other.hello') }}"><img src="static/img/icon-logo 1.svg" class="icon-logo-1"></a>
-    <div class="Login">
-      {% if current_user.id %}
-      <a class="Zaloguj" href="{{ url_for('user.logout') }}"> Wyloguj</a>
-      {% else %}
-      <a class="Zaloguj" href="{{ url_for('user.login') }}"> Zaloguj</a>
-      {% endif %}
+  <div class="row justify-content-around">
+
+    <div class="col">
+      <a href="{{ url_for('other.hello') }}"><img src="static/img/icon-logo 1.svg" class="Logo-Main"></a>
+   </div>
+
+   <div class="col">
+      <div class="Login-Button">
+        {% if current_user.id %}
+        <a class="Login-Button-Text" href="{{ url_for('user.logout') }}"> Wyloguj</a>
+        {% else %}
+        <a class="Login-Button-Text" href="{{ url_for('user.login') }}"> Zaloguj</a>
+        {% endif %}
+      </div>
     </div>
+
+  </div>
 </div>

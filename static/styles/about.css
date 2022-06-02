@@ -103,6 +103,10 @@
     .About-Us-Text {
         width: 325px;
       }
+
+    .About-Us-Font {
+        font-size: 14px;
+      }
   
     .Coffee-Button {
         margin: auto;

@@ -138,4 +138,16 @@ body {
     top: 29px;
     left: 50px;
   }
+
+
+  /* FOOTER */
+  .Bartsch-Bober-Inc {
+    font-size: 13px;
+  }
+
+  .Footer-text {
+    font-size: 13px;
+    margin-right: 3px;
+  }
+  
 }

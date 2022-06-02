@@ -6,13 +6,19 @@
    </div>
 
    <div class="col">
-      <div class="Login-Button">
-        {% if current_user.id %}
-        <a class="Login-Button-Text" href="{{ url_for('user.logout') }}"> Wyloguj</a>
-        {% else %}
-        <a class="Login-Button-Text" href="{{ url_for('user.login') }}"> Zaloguj</a>
-        {% endif %}
-      </div>
+      {% if current_user.id %}
+      <a class="Login-Button-Text" href="{{ url_for('user.logout') }}">
+        <div class="Login-Button">
+          <div class="Login-Button-Text">Wyloguj</div>
+        </div>
+      </a>
+      {% else %}
+      <a class="Login-Button-Text" href="{{ url_for('user.login') }}">
+        <div class="Login-Button">
+          <div class="Login-Button-Text">Zaloguj</div>
+        </div>
+      </a>
+      {% endif %}
     </div>
 
   </div>

@@ -1,0 +1,118 @@
+
+  /* MAIN STATIC CONTENER */
+  
+  .Static-Content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  
+  }
+  
+  
+  /* TITLE "ABOUT US" */
+  
+  .Title-About-Us {
+  
+    font-family: Lato;
+    font-size: 40px;
+    color: white;
+    text-align: center;
+    margin-top: 110px;
+  }
+  
+  
+  /* MAIN CONTENER WITH PHOTO AND TEXT - ABOUT US */
+  
+  .About-Us-Box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 54px;
+  }
+  
+  img.Bartsch-Bober-Image {
+    width: 295px;
+    height: 295px;
+    object-fit: contain;
+  }
+  
+  .About-Us-Text {
+    width: 525px;
+    height: auto;
+    padding: 36px 28px 27px 38px;
+    background-color: #efefef;
+  }
+  
+  
+  .About-Us-Font {
+    margin: 0 0 33px;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+  
+  
+  .Coffee-Button {
+    width: 170px;
+    height: 48px;
+    margin: 33px 140px 0 127px;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-image: url("https://www.twosoutherncorners.com/img/bmc-button.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  
+  .Coffee-Button:hover {
+    width: 153px;
+    height: 43px;
+    margin-bottom: 5px;
+    margin-left: 135px;
+  }
+  
+  
+  /* FOR SMALL SCREENS */
+  @media(max-width: 850px) {
+  
+  
+    /* TITLE "ABOUT US" */
+    .Title-About-Us {
+        font-size: 30px;
+        margin-top: 150px;
+    }
+  
+    /* MAIN CONTENER WITH PHOTO AND TEXT - ABOUT US */
+    .About-Us-Box {
+        flex-direction: column;
+        margin: auto;
+    }
+  
+    img.Bartsch-Bober-Image {
+        width: 325px;
+        height: 325px;
+        margin: auto;
+  
+      }
+  
+    .About-Us-Text {
+        width: 325px;
+      }
+  
+    .Coffee-Button {
+        margin: auto;
+        margin-top: 30px;
+      }
+
+    .Coffee-Button:hover {
+        margin-left: 55px;
+      }
+  
+  
+  }
+  

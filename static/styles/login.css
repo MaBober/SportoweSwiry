@@ -1,0 +1,55 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/icon-image 1.webp") no-repeat center fixed;
+    background-size: cover;
+    /* background-color: #3a3a3a;
+    min-height: 100%;
+    position: relative; */
+  }
+
+
+  .Login-Main-Box {
+    width: 610px;
+    height: 651px;
+    display: flex;
+    flex-direction: column;
+    /* margin: 38px 175px 138px 223px; */
+    padding: 0 0 41px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-color: #efefef;
+    margin: auto;
+    margin-top: 171px;
+  }
+
+  .Login-Title {
+    width: 610px;
+    height: 61px;
+    flex-grow: 0;
+    /* margin: 0 0 49px; */
+    padding: 13px 257px 12px 255px;
+    background-color: #000;
+  }
+
+
+  .Login-Title-Font {
+    width: 98px;
+    height: 36px;
+    flex-grow: 0;
+    font-family: Lato;
+    font-size: 30px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+  }
+
+  img.FB-Login {
+    width: 399px;
+    height: 56px;
+    flex-grow: 0;
+    margin: 49px 106px 20px 105px;
+    object-fit: contain;
+    /* box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25); */
+  }

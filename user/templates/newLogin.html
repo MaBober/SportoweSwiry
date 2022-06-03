@@ -1,0 +1,19 @@
+{% extends "pages//baseNew.html" %}
+
+
+{% block body_content %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
+<div class="Static-Content">
+    <div class="Login-Main-Box">
+        <div class="Login-Title">
+            <span class="Login-Title-Font">
+                Zaloguj
+            </span>
+        </div>
+        <img src="/static/img/fb login.webp"  class="FB-Login">
+    </div>
+
+</div>
+
+
+{% endblock %}

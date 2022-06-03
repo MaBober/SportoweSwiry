@@ -15,6 +15,17 @@ body {
 }
 
 
+/* MAIN STATIC CONTENER */
+  
+.Static-Content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: 94px;
+  
+}
+
+
 /* HEADER WITHOUT MENU */
 .First-Row {
   width: 100%;

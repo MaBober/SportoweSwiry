@@ -577,3 +577,11 @@ def callbackConnect():
 
 
     return redirect(url_for('user.settings'))
+
+
+
+
+@user.route("/test")
+def test():
+
+	return render_template("newLogin.html")

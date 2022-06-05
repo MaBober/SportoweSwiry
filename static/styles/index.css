@@ -190,10 +190,16 @@ body {
         width: 400px;
     }
 
+    .icon{
+        justify-self: center;
+        margin: 0;
+        margin-left: 124px;
+    }
+
     .Subtitle-index {
 
-        width: 400px;
-        height: 72px;
+        width: 320px;
+        height: 90px;
         flex-grow: 0;
         margin-top: 15px;
         margin-left: 50px;
@@ -232,11 +238,13 @@ body {
       }
 
       .Content-Box {
-        width: 400px;
-        /* height: 251px; */
+        width: 350px;
+        height: auto;
         flex-grow: 0;
         margin-top: 15px;
-        padding: 30px 24px 23px 22px;
+        /* padding: 30px 24px 23px 22px; */
+        text-align: left;
+        justify-content: center;
 
       }
   }

@@ -1,0 +1,250 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_index.webp") no-repeat center fixed;
+    background-size: cover;
+    background-color: #3a3a3a;
+    min-height: 100%;
+    position: relative;
+  }
+
+  /* MAIN STATIC CONTENER */
+  
+  .Static-Content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: center;
+    padding-bottom: 94px;
+  
+  }
+
+/* TITLE "index" */
+  
+    .Title-index {
+        width: 466px;
+        flex-grow: 0;
+        margin-top: 250px;
+        margin-left: 205px;
+        text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        font-family: Lato;
+        font-size: 45px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #fff;
+      }
+
+      .Subtitle-index {
+
+        width: 654px;
+        height: 72px;
+        flex-grow: 0;
+        margin-left:205px;
+        margin-top: 25px;
+        text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        font-family: Lato;
+        font-size: 30px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #fff;
+      }
+
+/* Register buttton */
+
+      .Register-Button {
+        width: 240px;
+        height: 66px;
+        position: absolute;
+        margin-left:205px;
+        margin-top: 25px;
+        flex-grow: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        background-color: #579956;
+      }
+
+      .Register-Button-font{
+        flex-grow: 0;
+        font-family: Lato;
+        font-size: 30px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #fff;
+
+      }
+      
+      .Register-Button:hover {
+        background-color: #000;
+      }
+      
+      .Register-Button:active {
+        background-color: #3a3a3a;
+      }
+      
+      .Register-Button-Text {
+        height: 22px;
+        flex-grow: 1;
+        font-family: Lato;
+        font-size: 18px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #fff;
+        text-decoration: none;
+      }
+      
+      .Register-Button-Text:hover {
+        color: white;
+      }
+
+      /* Content boxes*/
+
+      .row-boxes{
+
+        justify-content: space-between;
+        margin-left: 100px;
+        margin-right: 100px;
+      }
+
+      .Content-Box {
+        width: 400px;
+        height: 251px;
+        flex-grow: 0;
+        margin-top: 156px;
+        /* margin-right: 20px; */
+        margin-left: 0px;
+        padding: 30px 24px 23px 22px;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        background-color: #efefef;
+        justify-content: center;
+      }
+
+
+      .icon{
+        /* width: 38px; */
+        height: 65px;
+        flex-grow: 0;
+        margin: 0 158px 18px 158px;
+        
+
+      }
+
+      .box-header{
+        flex-grow: 0;
+        justify-self: center;
+        font-family: Lato;
+        font-size: 30px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #000;
+
+      }
+
+      .box-text{
+        flex-grow: 0;
+        margin: 13px 0 0;
+        font-family: Lato;
+        font-size: 18px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #000;
+      }
+
+
+        /* FOR SMALL SCREENS */
+  @media(max-width: 850px) {
+  
+  
+    /* TITLE "ABOUT US" */
+    .Title-index {
+        font-size: 30px;
+        margin-top: 150px;
+        margin-left: 50px;
+        width: 400px;
+    }
+
+    .icon{
+        justify-self: center;
+        margin: 0;
+        margin-left: 124px;
+    }
+
+    .Subtitle-index {
+
+        width: 320px;
+        height: 90px;
+        flex-grow: 0;
+        margin-top: 15px;
+        margin-left: 50px;
+        text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        font-family: Lato;
+        font-size: 25px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #fff;
+    }
+
+
+    .Register-Button {
+        width: 160px;
+        height: 60px;
+        margin-top: 45px;
+        margin-left: 50px;
+
+      }
+
+      .Register-Button-font{
+        font-size: 25px;
+      }
+
+
+      .row-boxes{
+
+        justify-content: space-between;
+        margin-left: 50px;
+        margin-left: 50px;
+        margin-top: 156px;
+      }
+
+      .Content-Box {
+        width: 350px;
+        height: auto;
+        flex-grow: 0;
+        margin-top: 15px;
+        /* padding: 30px 24px 23px 22px; */
+        text-align: left;
+        justify-content: center;
+
+      }
+  }

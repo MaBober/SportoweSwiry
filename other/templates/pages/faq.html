@@ -1,58 +1,64 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
 
 
 {% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/faq.css') }}">
 
-<div class="container-xl px-4 mt-4">
-    <div class="card-header" style="background-color: rgba(224, 153, 94);">
-        <b>Najczęsciej zadawane pytania</b>
-    </div>
-</div>
-
-
-</nav>
+<div class="Static-Content">
+  <div class="Title-FAQ">Najczęściej zadawane pytania</div>
 
 
-<div class="container-xl px-4 mt-4">
-    <div class="row row-cols-auto">
-        <div class="col-1"></div>
-    </div>
+  <div class="FAQ-Box">
 
+    <div class="accordion accordion-flush" id="accordionFlushExample">
 
-<div class="accordion accordion-flush border" id="accordionFlushExample">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="flush-headingOne">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-          Czy muszę zapisać się do jakiegoś wyzwania, żeby dodawć aktywności?
-        </button>
-      </h2>
-      <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-        <div class="accordion-body">Nie, możesz dodawać aktywności nie będąc zapisanym do żadnego wyzwania, i traktować naszą aplikację jako swego rodzaju archiwum swoich sportowych osiągnieć.
-          <br> Jednak pamiętaj, że nic tak mobilizuje do działania jak rywalizacja ze swoimi przyjaciółmi<br><br>
-           <i><h5>"Zwycięstwo nie jest ważne, jest najważniejsze!"
-</i></h5>Marcin Bober  </div>
+        <div class="accordion-item">
+          <div class="accordion-header Question-Backgorund" id="flush-headingOne">
+            <button class="accordion-button collapsed Question-Font" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              Czy muszę zapisać się do jakiegoś wyzwania, żeby dodawć aktywności?
+            </button>
+          </div>
+          <div id="flush-collapseOne" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body Answer-Font">
+              Nie, możesz dodawać aktywności nie będąc zapisanym do żadnego wyzwania, i traktować naszą aplikację jako swego rodzaju archiwum swoich sportowych osiągnieć.
+              Jednak pamiętaj, że nic tak mobilizuje do działania jak rywalizacja ze swoimi przyjaciółmi<br><br>
+              <i><h5 style="text-align: center;"><b>"Zwycięstwo nie jest ważne, jest najważniejsze!"</b></i></h5>
+            </div>
+          </div>
+        </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header Question-Backgorund" id="flush-headingTwo">
+          <button class="accordion-button collapsed Question-Font" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+            Czy mogę stworzyć swoje własne wyzwanie?
+          </button>
+        </div>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body Answer-Font"">
+            Na ten moment jedynie administratorzy aplikacji mogą uruchomić nowe wyzwania. Jeżeli chcesz stworzyć nowe wydarzenie, skontaktuj się nami przez <a href="{{ url_for('other.sendMessage') }}" >Formularz Kontaktowy</a>.
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="flush-headingTwo">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-          Czy mogę stworzyć swoje własne wyzwanie?
-        </button>
-      </h2>
-      <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-        <div class="accordion-body">Na ten moment jedynie administratorzy aplikacji mogą uruchomić nowe wyzwania. Jeżeli chcesz stworzyć nowe wydarzenie, skontaktuj się nami przez <a href="{{ url_for('other.sendMessage') }}" >Formularz Kontaktowy </a></div>
+
+      <div class="accordion-item">
+        <div class="accordion-header Question-Backgorund" id="flush-headingThree">
+          <button class="accordion-button collapsed Question-Font" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+            Czy mogę brać jednocześnie udział w paru wyzwaniach?
+          </button>
+        </div>
+        <div id="flush-collapseThree" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body Answer-Font">
+            Tak, jak najbardziej! Możesz się zapisać do kilku trwających jednocześnie wyzwań. Aplikacja policzy dodawaną aktywność do każdego z nich, uwzględniając przelicznik ustalony dla każdego z wyzwań.
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="flush-headingThree">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-          Czy mogę brać jednocześnie udział w paru wyzwaniach?
-        </button>
-      </h2>
-      <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-        <div class="accordion-body">Tak, jak najbardziej! Możesz się zapisać do kilku trwających jednocześnie wyzwań. Aplikacja policzy dodawaną aktywność do każdego z nich, uwzględniając przelicznik ustalony dla każdego z wyzwań.</div>
-      </div>
+
+      
+
     </div>
   </div>
+  </div>
 </div>
+
 {% endblock %}

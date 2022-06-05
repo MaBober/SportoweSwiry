@@ -1,32 +1,67 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
 
 {% block body_content %}
-<div class="row pt-6">
-    <div class="col-1"></div>
-    <div class="col col-lg-5" style="margin-top:10px;">
-        <h1>Witaj Sportowy Świrze!</h1>
-    </div>
-</div>
 
-<div class="row pt-6">
-    <div class="col-1"></div>
-    <div class="col col-lg-5" >
-        <h4 align="justify">Zmierz się ze swoimi lenistwem i nieregularnością, zbuduj kondycję i baw się wspólnie z przyjaciółmi!</h4>
-    </div>
-</div>
-<div class="row pt-6">
-    <div class="col-1"></div>
-    <div class="col-6" >
-        <br>
-        {% if current_user.id %}
-        
-        {% else %}
-        <div class="col-10"> <a href="{{ url_for('user.login') }}" type="button" class="btn btn-success mb-2" style="background-color: #182c07e8;">Zaloguj się</a>
-                                <a href="{{ url_for('user.createAccount') }}" type="button" class="btn btn-success mb-2" style="background-color: #182c07e8;">Dołącz do świrów!</a></div>
-        {% endif %}
-    </div>
-</div>
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
 
+<div class="Static-Content">
+    <div class="Title-index">Witaj Sportowy Świrze!</div>
+
+
+
+    <div class="Subtitle-index">
+            Zmierz się ze swoimi lenistwem i nieregularnością, zbuduj kondycję i baw się wspólnie z przyjaciółmi!
+    </div>
+
+    <a  class="Register-Button-font" href="{{ url_for('user.createAccount') }}">
+        <div class="Register-Button">
+            <div class="Register-Button-font">Załóż konto</div>
+        </div>
+    </a>
+
+    <div class="row row-boxes">
+        <div class="Content-Box">
+
+            <img src="static\img\timmer_icon.webp" class="icon">
+            <div class="box-header">
+                Śledź swoje postępy
+            </div>
+
+            <div class="box-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            </div>
+
+        </div>
+
+        <div class="Content-Box">
+
+            <img src="static\img\winner_icon.webp" class="icon">
+            <div class="box-header">
+                Rywalizuj ze znajomymi
+            </div>
+
+            <div class="box-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            </div>
+
+        </div>
+
+        <div class="Content-Box">
+
+            <img src="static\img\beer_icon.webp" class="icon">
+            <div class="box-header">
+                Odbieraj nagrody
+            </div>
+
+            <div class="box-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            </div>
+
+        </div>
+    </div>      
+
+</div>
  
 
 

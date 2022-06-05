@@ -1,0 +1,115 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_FAQ.webp") no-repeat center fixed;
+    background-size: cover;
+    background-color: #3a3a3a;
+    min-height: 100%;
+    position: relative;
+  }
+
+
+/* MAIN STATIC CONTENER */
+  
+  .Static-Content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: center;
+    padding-bottom: 94px;
+  
+  }
+
+  /* TITLE "FAQ" */
+  
+    .Title-FAQ {
+  
+        font-family: Lato;
+        font-size: 40px;
+        color: white;
+        text-align: center;
+        margin-top: 110px;
+      }
+
+/* MAIN CONTENER WITH PHOTO AND TEXT - ABOUT US */
+  
+  .FAQ-Box {
+    display: flex;
+    width: 820px; 
+    align-self: center;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 54px;
+  }
+
+  .Question-Backgorund {
+    width: 820px;
+
+    margin-top: 10px;
+    padding: 11px 10px 13px 10px;
+    opacity: 0.8;
+    background-color: #000;
+    justify-content: center;
+    text-align: center;
+    
+  }
+
+  .Question-Font {
+    height: auto;
+    padding: 10px;
+    font-family: Lato;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    background-color: transparent;
+    border: 0px;
+  }
+
+
+  .Answer-Backgorund {
+    padding: 21px 39px 6px 31px;
+    opacity: 0.8;
+    background-color: rgb(255, 255, 255);
+    text-align: left;
+    
+  }
+
+  .Answer-Font {
+    margin: 0 0 14px;
+    font-family: Lato;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+
+
+  /* FOR SMALL SCREENS */
+  @media(max-width: 850px) {
+  
+  
+    /* TITLE "ABOUT US" */
+    .Title-FAQ {
+        font-size: 30px;
+        margin-top: 150px;
+    }
+  
+    /* MAIN CONTENER WITH PHOTO AND TEXT - ABOUT US */
+    .FAQ-Box {
+        flex-direction: column;
+        margin: auto;
+        width: 325px;
+    }
+  
+    .Question-Backgorund {
+        width: 325px;
+    }
+
+  }

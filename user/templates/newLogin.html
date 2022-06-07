@@ -10,18 +10,18 @@
                 Zaloguj
             </span>
         </div>
-        <div class="Login-Social-Button">
+        <a class="Login-Social-Button" href="#">
             <img src="static/img/icon-Facebook.webp" class="icon-social-button">
             <span class="Login-Social-Font">
                 Zaloguj używając Facebooka
             </span>
-        </div>
-        <div class="Login-Social-Button">
+        </a>
+        <a class="Login-Social-Button" href="#">
             <img src="static/img/icon-Google.webp" class="icon-social-button">
             <span class="Login-Social-Font">
                 Zaloguj używając konta Google
             </span>
-        </div>
+        </a>
         <div class="Login-Optional-Way-Box">
             <div class="Login-Line-1"></div>
             <span class="Login-Optional-Way-Font">
@@ -29,7 +29,21 @@
             </span>
             <div class="Login-Line-1"></div>
         </div>
-        <div class="Login-Input-Email-Box">
+        {{ logForm.name(class_="form-control Login-Input-Email-Box", placeholder="E-mail" ) }}
+        <ul>
+            {% for error in logForm.name.errors %}
+                {{ error }}
+            {% endfor %}
+        </ul>
+
+        {{ logForm.password(class_="form-control Login-Input-Password-Box", placeholder="Hasło" ) }}
+        <ul>
+            {% for error in logForm.password.errors %}
+                {{ error }}
+            {% endfor %}
+        </ul>
+ 
+        <!-- <div class="Login-Input-Email-Box">
             <span class="Login-Input-Font">
                 Adres e-mail
             </span>
@@ -38,9 +52,10 @@
             <span class="Login-Input-Font">
                 Hasło
             </span>
-        </div>
+        </div> -->
         <div class="Login-Remember-Me-Main-Box">
             <div class="Login-Remember-Me-Check-Box"></div>
+            {{ logForm.remember(class_="Login-Remember-Me-Check-Box form-check-input" ) }}
             <span class="Login-Remember-Me-Font">
                 Zapamiętaj mnie
             </span>

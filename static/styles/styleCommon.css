@@ -138,6 +138,13 @@ body {
 @media(max-width: 850px) {
 
   /* HEADER WITHOUT MENU */
+
+
+  .First-Row {
+
+    width: 95%;
+    position: absolute;
+  }
   .Login-Button {
     right: 50px;
     top: 30px;

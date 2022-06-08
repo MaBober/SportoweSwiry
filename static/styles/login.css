@@ -9,6 +9,7 @@ body {
 
   .Login-Main-Box {
     width: 610px;
+    max-width: 610px;
     height: 631px;
     display: flex;
     flex-direction: column;
@@ -266,6 +267,7 @@ body {
     
     .Login-Main-Box {
       /* width: 400px; */
+      max-width: 400px;
       width: 90%;
     }
 
@@ -309,9 +311,10 @@ body {
     }
   
 
-    .Checkbox-Box {
+    .Checkbox-Main-Box {
       /* text-align: center; */
-      justify-content: center;
+      /* justify-content: center; */
+      margin: auto;
     }
 
     .Main-Button {

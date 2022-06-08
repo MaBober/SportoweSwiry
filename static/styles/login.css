@@ -95,7 +95,7 @@ body {
     text-decoration: none;
   }
 
-  .Login-Optional-Way-Box {
+  .Optional-Way-Box {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -103,7 +103,7 @@ body {
     margin-top: 15px;
   }
 
-  .Login-Line-1 {
+  .Optional-Way-Line-1 {
     width: 70px;
     height: 3px;
     flex-grow: 0;
@@ -116,7 +116,7 @@ body {
   }
   
 
-  .Login-Optional-Way-Font {
+  .Optional-Way-Font {
     width: 221px;
     height: 22px;
     flex-grow: 0;
@@ -135,7 +135,7 @@ body {
   
   }
 
-  .Login-Input-Email-Box {
+  .Input-Box {
     width: 399px;
     height: 43px;
     flex-grow: 0;
@@ -147,18 +147,6 @@ body {
     margin-right: auto;
   }
 
-  .Login-Input-Password-Box{
-    width: 399px;
-    height: 43px;
-    flex-grow: 0;
-    margin: 0px 106px 14px 105px;
-    padding: 10px 19px 15px 19px;
-    /* border: solid 0 #000; */
-    background-color: #fff;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    margin-left: auto;
-    margin-right: auto;
-  }
 
   .form-control:focus {
     border-color: #579956;
@@ -166,14 +154,14 @@ body {
   }
 
 
-  .Login-Remember-Me-Main-Box {
+  .Checkbox-Main-Box {
     display: flex;
     flex-direction: row;
     margin-left: 105px;
   }
 
 
-  .Login-Remember-Me-Check-Box {
+  .Checkbox-Box {
     width: 15px;
     height: 15px;
     flex-grow: 0;
@@ -182,7 +170,7 @@ body {
     background-color: #efefef;
   }
 
-  .Login-Remember-Me-Font {
+  .Checkbox-Font {
     width: 88px;
     height: 14px;
     flex-grow: 0;
@@ -202,7 +190,7 @@ body {
     accent-color: #579956;
   }
 
-  .Login-Main-Button {
+  .Main-Button {
     width: 399px;
     height: 56px;
     margin: 24px 108px 13px 103px;
@@ -213,12 +201,12 @@ body {
     border: solid 2px #579956;
   }
 
-  .Login-Main-Button:hover {
+  .Main-Button:hover {
     background-color: #000;
     border-color: #000;
   }
 
-  .Login-Main-Button-Font {
+  .Main-Button-Font {
     width: 59px;
     height: 22px;
     font-family: Lato;
@@ -233,7 +221,7 @@ body {
     margin: auto;
   }
 
-  .Login-Remind-Password-Button {
+  .Small-Button {
     width: 108px;
     height: 28px;
     margin: 13px 257px 0 30px;
@@ -244,7 +232,7 @@ body {
     margin-right: auto;
   }
 
-  .Login-Remind-Password-Font {
+  .Small-Button-Font {
     width: 91px;
     height: 14px;
     font-family: Lato;
@@ -258,11 +246,11 @@ body {
     color: #fff;
   }
 
-  a.Login-Remind-Password-Button {
+  a.Small-Button {
     text-decoration: none;
   }
 
-  .Login-Remind-Password-Button:hover {
+  .Small-Button:hover {
     background-color: #000;
   }
 
@@ -277,15 +265,18 @@ body {
    @media(max-width: 850px) {
     
     .Login-Main-Box {
-      width: 400px;
+      /* width: 400px; */
+      width: 90%;
     }
 
     .Login-Title {
-      width: 400px;
+      /* width: 400px; */
+      width: 100%;
     }
 
     .Login-Social-Button {
-      width: 360px;
+      /* width: 360px; */
+      width: 80%;
     }
 
     .Login-Social-Font {
@@ -299,27 +290,31 @@ body {
       margin: 0 26px 0 0;
     }
 
-    .Login-Line-1 {
-      width: 50px;
+    .Optional-Way-Line-1 {
+      /* width: 50px; */
+      width: 20%;
     }
     
-    .Login-Optional-Way-Font {
-      font-size: 16px;
+    .Optional-Way-Font {
+      width: 121px;
+      font-size: 14px;
+      margin-left: 5px;
+      margin-right: 5px;
     }
 
-    .Login-Input-Email-Box {
-      width: 360px;
+    .Input-Box {
+      /* width: 360px; */
+      width: 80%;
     }
   
-    .Login-Input-Password-Box{
-      width: 360px;
+
+    .Checkbox-Box {
+      /* text-align: center; */
+      justify-content: center;
     }
 
-    .Login-Remember-Me-Main-Box {
-      margin-left: 25px;
-    }
-
-    .Login-Main-Button {
-      width: 350px;
+    .Main-Button {
+      /* width: 360px; */
+      width: 80%;
     }
    }

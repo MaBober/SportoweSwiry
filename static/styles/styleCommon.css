@@ -82,6 +82,27 @@ body {
   text-decoration: none
 }
 
+.Create-Account-Button {
+  width: 140px;
+  height: 48px;
+  position: absolute;
+  right: 100px;
+  top: 57px;
+  border-radius: 15px;
+  background-color: #579956;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Create-Account-Button:hover {
+  background-color: #000;
+}
+
+.Create-Account-Button:active {
+  background-color: #3a3a3a;
+}
 
 /* FOOTER */
 
@@ -156,6 +177,11 @@ body {
     position: absolute;
     top: 29px;
     left: 50px;
+  }
+
+  .Create-Account-Button {
+    right: 50px;
+    top: 30px;
   }
 
 

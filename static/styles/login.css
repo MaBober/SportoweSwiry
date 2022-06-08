@@ -9,7 +9,7 @@ body {
 
   .Login-Main-Box {
     width: 610px;
-    height: 651px;
+    height: 631px;
     display: flex;
     flex-direction: column;
     /* margin: 38px 175px 138px 223px; */
@@ -17,17 +17,16 @@ body {
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     background-color: #efefef;
     margin: auto;
-    margin-top: 171px;
+    margin-top: 146px;
   }
 
   .Login-Title {
     width: 610px;
     height: 61px;
     flex-grow: 0;
-    /* margin: 0 0 49px; */
-    /* padding: 13px 257px 12px 255px; */
     background-color: #000;
     display: flex;
+    margin-bottom: 10px;
   }
 
 
@@ -140,7 +139,7 @@ body {
     width: 399px;
     height: 43px;
     flex-grow: 0;
-    margin: 20px 106px 24px 105px;
+    margin: 10px 106px 14px 105px;
     padding: 10px 19px 15px 19px;
     background-color: #fff;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -152,7 +151,7 @@ body {
     width: 399px;
     height: 43px;
     flex-grow: 0;
-    margin: 5px 106px 24px 105px;
+    margin: 0px 106px 14px 105px;
     padding: 10px 19px 15px 19px;
     /* border: solid 0 #000; */
     background-color: #fff;
@@ -165,24 +164,6 @@ body {
     border-color: #579956;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #579956;
   }
-
-
-  /* .Login-Input-Font {
-    width: 67px;
-    height: 14px;
-    flex-grow: 0;
-    font-family: Lato;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: center;
-    color: #000;
-    margin-top: auto;
-    margin-bottom: auto;
-  } */
 
 
   .Login-Remember-Me-Main-Box {
@@ -217,15 +198,24 @@ body {
     color: #000;
   }
 
+  .form-check-input:checked {
+    accent-color: #579956;
+  }
+
   .Login-Main-Button {
     width: 399px;
     height: 56px;
     margin: 24px 108px 13px 103px;
-    padding: 17px 170px;
     border-radius: 5px;
     background-color: #579956;
     margin-left: auto;
     margin-right: auto;
+    border: solid 2px #579956;
+  }
+
+  .Login-Main-Button:hover {
+    background-color: #000;
+    border-color: #000;
   }
 
   .Login-Main-Button-Font {
@@ -240,6 +230,7 @@ body {
     letter-spacing: normal;
     text-align: center;
     color: #fff;
+    margin: auto;
   }
 
   .Login-Remind-Password-Button {
@@ -267,19 +258,68 @@ body {
     color: #fff;
   }
 
+  a.Login-Remind-Password-Button {
+    text-decoration: none;
+  }
+
+  .Login-Remind-Password-Button:hover {
+    background-color: #000;
+  }
+
+  .Error-Message {
+    width: 100%;
+
+    text-align: center;
+  }
+
 
    /* FOR SMALL SCREENS */
    @media(max-width: 850px) {
     
     .Login-Main-Box {
-      width: 450px;
+      width: 400px;
     }
 
     .Login-Title {
-      width: 450px;
+      width: 400px;
+    }
+
+    .Login-Social-Button {
+      width: 360px;
+    }
+
+    .Login-Social-Font {
+      width: 243px;
+      height: 22px;
+      font-size: 16px;
+
+    }
+
+    img.icon-social-button {
+      margin: 0 26px 0 0;
+    }
+
+    .Login-Line-1 {
+      width: 50px;
+    }
+    
+    .Login-Optional-Way-Font {
+      font-size: 16px;
+    }
+
+    .Login-Input-Email-Box {
+      width: 360px;
+    }
+  
+    .Login-Input-Password-Box{
+      width: 360px;
     }
 
     .Login-Remember-Me-Main-Box {
-      margin-left: 30px;
+      margin-left: 25px;
+    }
+
+    .Login-Main-Button {
+      width: 350px;
     }
    }

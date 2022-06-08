@@ -71,7 +71,7 @@ class LoginForm(FlaskForm):
         tempLogin = User.query.filter(User.id==field.data).first()
         tempMail = User.query.filter(User.mail==field.data).first()
         if (not tempMail) and (not tempLogin):
-            raise ValidationError("Tego loginu/adresu email nie ma w naszej bazie danych")
+            raise ValidationError("Tego adresu email nie ma w naszej bazie danych")
 
     name=StringField("Adres mailowy", validators=[ValidateLoginIsCorrect])
     password=PasswordField("Hasło")

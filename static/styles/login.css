@@ -277,17 +277,18 @@ body {
     .Login-Social-Button {
       /* width: 360px; */
       width: 80%;
+      padding: 10px 12px 6px 14px;
     }
 
     .Login-Social-Font {
       width: 243px;
       height: 22px;
-      font-size: 16px;
+      font-size: 13px;
 
     }
 
     img.icon-social-button {
-      margin: 0 26px 0 0;
+      margin: 0 6px 0 0;
     }
 
     .Optional-Way-Line-1 {
@@ -316,5 +317,11 @@ body {
     .Main-Button {
       /* width: 360px; */
       width: 80%;
+    }
+
+    .Error-Message {
+      width: 80%;
+      margin: auto;
+      font-size: 12px;
     }
    }

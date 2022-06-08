@@ -160,10 +160,16 @@ def reset():
         user=User.query.filter(User.mail == form.mail.data).first()
         token = user.generate_reset_token()
         send_email(user.mail, 'Zresetuj hasło','reset', user=user, token=token)
-        flash("Na twój adres e-mail wysłano link do resetowania hasła")
-        return redirect(url_for('other.hello'))
+        # flash("Na twój adres e-mail wysłano link do resetowania hasła")
+        return redirect(url_for('user.resetSent'))
 
     return render_template("verifyEmail.html", title_prefix = "Resetowanie hasła", form=form)
+
+
+@user.route('/resetPasswordSent')
+def resetSent():
+
+    return render_template("verifyEmailSent.html", title_prefix = "Resetowanie hasła")
 
 @user.route('/resetPassword/<token>', methods=['POST', 'GET'])
 def resetPassword(token):

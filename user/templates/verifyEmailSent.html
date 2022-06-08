@@ -1,0 +1,29 @@
+{% extends "pages//baseNew.html" %}
+
+{% block body_content %}
+
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/verifyEmailSent.css') }}">
+
+<div class="Static-Content">
+
+    <div class="container box">
+
+        <div class="row box-header">
+           <span class="box-header-font"> Przypomnij hasło</span>
+        </div>
+
+            <div class="row justify-content-center">
+
+
+                <div class="col">
+                    <label class="box-text">Na podany przez Ciebie adres e-mail wysłaliśmy instrukcję umożliwiającą utworzenie nowego hasła.</label>
+                    <a href="{{ url_for('user.login') }}"><div class="reset-button">Zaloguj</div></a>
+                </div>
+
+            </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -35,7 +35,7 @@ def faq():
 @other.route("/about")
 def about():
 
-    return render_template('/pages/about.html', title_prefix = "FAQ" )
+    return render_template('/pages/about.html', title_prefix = "O nas" )
 
 
 @other.route("/sendMessage", methods=['POST','GET'])

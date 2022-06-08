@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmail.webp") no-repeat center fixed;
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmailSent.webp") no-repeat center fixed;
     background-size: cover;
     background-color: #3a3a3a;
     min-height: 100%;
@@ -81,14 +81,6 @@ body {
       }
 
 
-      .email-form{
-        width: 65%;
-        margin-left: 17%;
-        margin-right: 17%;
-        border-radius: 0%;
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-      }
-
       .reset-button{
         width: 65%;
         height: 56px;
@@ -97,37 +89,14 @@ body {
         margin-bottom: 28px;
         border-radius: 5px;
         border-width: 0ch;
+        padding-top: 17px;
+        padding-bottom: 17px;
 
         background-color: #579956;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
         font-family: Lato;
         font-size: 18px;
-        text-align: center;
-        color: #fff;
-
-      }
-
-
-      .back-button{
-        width: 17%;
-        height: 28px;
-        margin-left: 41.5%;
-        margin-right: 41.5%;
-        margin-bottom: 28px;
-        border-radius: 5px;
-        border-width: 0ch;
-        padding-top: 7px;
-        padding-bottom: 7px;
-        justify-self: center;
-
-
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-        opacity: 0.7;
-        background-color: #262626;
-
-        font-family: Lato;
-        font-size: 12px;
         text-align: center;
         color: #fff;
 

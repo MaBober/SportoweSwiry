@@ -1,28 +1,41 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
 
 {% block body_content %}
 
-    <form method="POST" style="margin-top:30px;">
-        <div class="row justify-content-center">
-            {{ form.csrf_token }}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/verifyEmail.css') }}">
 
-        <div class="row justify-content-center">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <label class="form-label"> <h6>Jeśli chcesz zresetować hasło dla swojego konta wprowadź swój adres e-mail:</h6> </label>
-                {{ form.mail(class_="form-control" ) }}
-                <ul>
-                    {% for error in form.mail.errors %}
-                        {{ error }}
-                    {% endfor %}
-                </ul>
+<div class="Static-Content">
+
+    <div class="container box">
+        <div class="row box-header">
+           <span class="box-header-font"> Przypomnij hasło</span>
+        </div>
+
+        <form method="POST">
+            <div class="row justify-content-center">
+                {{ form.csrf_token }}
+
+                <div class="col">
+                    <label class="box-text">Wpisz swój adres e-mail. Otrzymasz na niego instrukcję, która pomoże Ci utworzyć nowe hasło.</label>
+                    {{ form.mail(class_="form-control email-form" ) }}
+                    <ul>
+                        {% for error in form.mail.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </ul>
+
+
+                    <button class="reset-button" type="submit">Przypomnij hasło</button>
+                    <a href="{{ url_for('other.hello') }}"><div class="back-button">Cofnij</siv</a>
+
+                </div>
+
             </div>
-            <div class="col-md-3"></div>
-        </div>
-        <div class="d-grid gap-2 col-6 mx-auto">
-            <button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">Wyślij</button>
-        </div>
+        </form>
 
-    </form>
+    </div>
+
+</div>
 
 {% endblock %}

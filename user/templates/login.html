@@ -23,41 +23,41 @@
                 Zaloguj używając konta Google
             </span>
         </a>
-        <div class="Login-Optional-Way-Box">
-            <div class="Login-Line-1"></div>
-            <span class="Login-Optional-Way-Font">
+        <div class="Optional-Way-Box">
+            <div class="Optional-Way-Line-1"></div>
+            <span class="Optional-Way-Font">
                 lub za pomocą adresu e-mail
             </span>
-            <div class="Login-Line-1"></div>
+            <div class="Optional-Way-Line-1"></div>
         </div>
-        {{ logForm.name(class_="form-control Login-Input-Email-Box", placeholder="E-mail" ) }}
+        {{ logForm.name(class_="form-control Input-Box", placeholder="E-mail" ) }}
         <p class="Error-Message">
             {% for error in logForm.name.errors %}
                 {{ error }}
             {% endfor %}
         </p>
 
-        {{ logForm.password(class_="form-control Login-Input-Password-Box", placeholder="Hasło" ) }}
-        <ul class="Error-Message">
+        {{ logForm.password(class_="form-control Input-Box", placeholder="Hasło" ) }}
+        <p class="Error-Message">
             {% for error in logForm.password.errors %}
                 {{ error }}
             {% endfor %}
-        </ul>
+        </p>
 
-        <div class="Login-Remember-Me-Main-Box">
-            <div class="Login-Remember-Me-Check-Box"></div>
-            {{ logForm.remember(class_="Login-Remember-Me-Check-Box form-check-input" ) }}
-            <span class="Login-Remember-Me-Font">
+        <div class="Checkbox-Main-Box">
+            <div class="Checkbox-Box"></div>
+            {{ logForm.remember(class_="Checkbox-Box form-check-input" ) }}
+            <span class="Checkbox-Font">
                 Zapamiętaj mnie
             </span>
         </div>
-        <button class="Login-Main-Button" type="submit">
-            <span class="Login-Main-Button-Font">
+        <button class="Main-Button" type="submit">
+            <span class="Main-Button-Font">
                 Zaloguj
             </span>
         </button>
-        <a class="Login-Remind-Password-Button" href="{{ url_for('user.reset') }}">
-            <span class="Login-Remind-Password-Font">
+        <a class="Small-Button" href="{{ url_for('user.reset') }}">
+            <span class="Small-Button-Font">
                 Przypomnij hasło
             </span>
         </a>

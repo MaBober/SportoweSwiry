@@ -1,0 +1,61 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_newUserForm.webp") no-repeat center fixed;
+    background-size: cover;
+  }
+
+
+.Login-Main-Box {
+    height: 742px;
+  }
+
+
+.Login-Social-Button {
+    padding: 6px 32px 6px 14px;
+  }
+
+
+img.icon-social-button {
+    margin: 0 26px 0 0;
+  }
+
+.Login-Social-Font {
+    width: 272px;
+  }
+
+
+.Input-Row-Box {
+    width: 185px;
+    height: 43px;
+    flex-grow: 0;
+    background-color: #fff;
+    border-radius: 0;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .Input-Row1 {
+      margin: auto;
+  }
+
+
+/* FOR SMALL SCREENS */
+@media(max-width: 850px) {
+
+    
+    .Input-Row-Box {
+        width: 257px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+    .Login-Social-Button {
+        padding: 8px 5px 6px 3px;
+      }
+     
+    img.icon-social-button {
+        margin: 0 3px 0 0;
+      }
+}
+
+

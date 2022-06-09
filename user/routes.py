@@ -584,5 +584,5 @@ def callbackConnect():
 @user.route("/test", methods=['POST', 'GET'])
 def test():
 
-    logForm=LoginForm()
-    return render_template("newLogin.html", logForm=logForm)
+    form=UserForm()
+    return render_template("newNewUserForm.html", form=form)

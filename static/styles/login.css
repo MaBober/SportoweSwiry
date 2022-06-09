@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/icon-image 1.webp") no-repeat center fixed;
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_login.webp") no-repeat center fixed;
     background-size: cover;
     /* background-color: #3a3a3a;
     min-height: 100%;
@@ -13,7 +13,6 @@ body {
     height: 631px;
     display: flex;
     flex-direction: column;
-    /* margin: 38px 175px 138px 223px; */
     padding: 0 0 41px;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     background-color: #efefef;
@@ -32,7 +31,7 @@ body {
 
 
   .Login-Title-Font {
-    width: 98px;
+    /* width: 98px; */
     height: 36px;
     flex-grow: 0;
     font-family: Lato;
@@ -51,14 +50,12 @@ body {
   .Login-Social-Button {
     width: 399px;
     height: 56px;
-    /* margin: 20px 106px 38px 105px; */
     padding: 6px 52px 6px 14px;
     border-radius: 5px;
     background-color: #fff;
     display: flex;
     flex-direction: row;
     flex-grow: 0;
-    /* margin: 20px 106px 20px 105px; */
     object-fit: contain;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     margin-left: auto;
@@ -78,7 +75,8 @@ body {
   }
 
   .Login-Social-Font {
-    width: 243px;
+    /* width: 243px; */
+    /* width: 272px; */
     height: 22px;
     margin: 11px 0 11px 0px;
     font-family: Lato;
@@ -108,10 +106,8 @@ body {
     width: 70px;
     height: 3px;
     flex-grow: 0;
-    /* margin: auto; */
     transform: rotate(-180deg);
     border-top: solid 3px #000;
-    /* margin-top: 50px; */
     margin-top: auto;
     margin-bottom: auto;
   }
@@ -121,7 +117,6 @@ body {
     width: 221px;
     height: 22px;
     flex-grow: 0;
-    /* margin: 0 90px 0 88.5px; */
     font-family: Lato;
     font-size: 18px;
     font-weight: normal;
@@ -141,7 +136,8 @@ body {
     height: 43px;
     flex-grow: 0;
     margin: 10px 106px 14px 105px;
-    padding: 10px 19px 15px 19px;
+    padding: 15px 19px 15px 19px;
+    border-radius: 0;
     background-color: #fff;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     margin-left: auto;
@@ -172,7 +168,6 @@ body {
   }
 
   .Checkbox-Font {
-    width: 88px;
     height: 14px;
     flex-grow: 0;
     margin: 0 0 1px 7px;
@@ -257,7 +252,6 @@ body {
 
   .Error-Message {
     width: 100%;
-
     text-align: center;
   }
 
@@ -266,18 +260,15 @@ body {
    @media(max-width: 850px) {
     
     .Login-Main-Box {
-      /* width: 400px; */
       max-width: 400px;
       width: 90%;
     }
 
     .Login-Title {
-      /* width: 400px; */
       width: 100%;
     }
 
     .Login-Social-Button {
-      /* width: 360px; */
       width: 80%;
       padding: 10px 12px 6px 14px;
     }
@@ -294,7 +285,6 @@ body {
     }
 
     .Optional-Way-Line-1 {
-      /* width: 50px; */
       width: 20%;
     }
     
@@ -306,19 +296,15 @@ body {
     }
 
     .Input-Box {
-      /* width: 360px; */
       width: 80%;
     }
   
 
     .Checkbox-Main-Box {
-      /* text-align: center; */
-      /* justify-content: center; */
       margin: auto;
     }
 
     .Main-Button {
-      /* width: 360px; */
       width: 80%;
     }
 

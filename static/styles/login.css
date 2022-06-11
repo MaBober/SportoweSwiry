@@ -1,0 +1,316 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_login.webp") no-repeat center fixed;
+    background-size: cover;
+    /* background-color: #3a3a3a;
+    min-height: 100%;
+    position: relative; */
+  }
+
+
+  .Login-Main-Box {
+    width: 610px;
+    max-width: 610px;
+    height: 631px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 41px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-color: #efefef;
+    margin: auto;
+    margin-top: 146px;
+  }
+
+  .Login-Title {
+    width: 610px;
+    height: 61px;
+    flex-grow: 0;
+    background-color: #000;
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+
+  .Login-Title-Font {
+    /* width: 98px; */
+    height: 36px;
+    flex-grow: 0;
+    font-family: Lato;
+    font-size: 30px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    margin: auto;
+    text-decoration: none;
+  }
+
+  .Login-Social-Button {
+    width: 399px;
+    height: 56px;
+    padding: 6px 52px 6px 14px;
+    border-radius: 5px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    object-fit: contain;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+  }
+
+  .Login-Social-Button:hover {
+    background-color: #579956;
+  }
+
+  img.icon-social-button {
+    width: 44px;
+    height: 44px;
+    margin: 0 46px 0 0;
+    object-fit: contain;
+  }
+
+  .Login-Social-Font {
+    /* width: 243px; */
+    /* width: 272px; */
+    height: 22px;
+    margin: 11px 0 11px 0px;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000;
+  }
+
+  a.Login-Social-Button {
+    text-decoration: none;
+  }
+
+  .Optional-Way-Box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px;
+    margin-top: 15px;
+  }
+
+  .Optional-Way-Line-1 {
+    width: 70px;
+    height: 3px;
+    flex-grow: 0;
+    transform: rotate(-180deg);
+    border-top: solid 3px #000;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  
+
+  .Optional-Way-Font {
+    width: 221px;
+    height: 22px;
+    flex-grow: 0;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000;
+    margin-left: 15px;
+    margin-right: 15px;
+  
+  }
+
+  .Input-Box {
+    width: 399px;
+    height: 43px;
+    flex-grow: 0;
+    margin: 10px 106px 14px 105px;
+    padding: 15px 19px 15px 19px;
+    border-radius: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .form-control:focus {
+    border-color: #579956;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #579956;
+  }
+
+
+  .Checkbox-Main-Box {
+    display: flex;
+    flex-direction: row;
+    margin-left: 105px;
+  }
+
+
+  .Checkbox-Box {
+    width: 15px;
+    height: 15px;
+    flex-grow: 0;
+    margin: 0 7px 0 0;
+    border: solid 1px #000;
+    background-color: #efefef;
+  }
+
+  .Checkbox-Font {
+    height: 14px;
+    flex-grow: 0;
+    margin: 0 0 1px 7px;
+    font-family: Lato;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000;
+  }
+
+  .form-check-input:checked {
+    accent-color: #579956;
+  }
+
+  .Main-Button {
+    width: 399px;
+    height: 56px;
+    margin: 24px 108px 13px 103px;
+    border-radius: 5px;
+    background-color: #579956;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 2px #579956;
+  }
+
+  .Main-Button:hover {
+    background-color: #000;
+    border-color: #000;
+  }
+
+  .Main-Button-Font {
+    width: 59px;
+    height: 22px;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    margin: auto;
+  }
+
+  .Small-Button {
+    width: 108px;
+    height: 28px;
+    margin: 13px 257px 0 30px;
+    padding: 0px 9px 7px 8px;
+    border-radius: 5px;
+    background-color: #787878;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .Small-Button-Font {
+    width: 91px;
+    height: 14px;
+    font-family: Lato;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+  }
+
+  a.Small-Button {
+    text-decoration: none;
+  }
+
+  .Small-Button:hover {
+    background-color: #000;
+  }
+
+  .Error-Message {
+    width: 100%;
+    text-align: center;
+  }
+
+
+   /* FOR SMALL SCREENS */
+   @media(max-width: 850px) {
+    
+    .Login-Main-Box {
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .Login-Title {
+      width: 100%;
+    }
+
+    .Login-Social-Button {
+      width: 80%;
+      padding: 10px 12px 6px 14px;
+    }
+
+    .Login-Social-Font {
+      width: 243px;
+      height: 22px;
+      font-size: 13px;
+
+    }
+
+    img.icon-social-button {
+      margin: 0 6px 0 0;
+    }
+
+    .Optional-Way-Line-1 {
+      width: 20%;
+    }
+    
+    .Optional-Way-Font {
+      width: 121px;
+      font-size: 14px;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    .Input-Box {
+      width: 80%;
+    }
+  
+
+    .Checkbox-Main-Box {
+      margin: auto;
+    }
+
+    .Main-Button {
+      width: 80%;
+    }
+
+    .Error-Message {
+      width: 80%;
+      margin: auto;
+      font-size: 12px;
+    }
+   }

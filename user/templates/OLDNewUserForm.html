@@ -1,0 +1,87 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+    <form method="POST" style="margin-top:30px;">
+        <div class="row justify-content-center">
+            {{ form.csrf_token }}
+            <div class="col-md-3">
+                <label class="form-label"> <h5>{{ form.name.label }}:</h5> </label>
+                {{ form.name(class_="form-control" ) }}
+                <ul>
+                    {% for error in form.name.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label"> <h5>{{ form.lastName.label }}:</h5> </label>
+                {{ form.lastName(class_="form-control" ) }}
+                <ul>
+                    {% for error in form.lastName.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <label class="form-label"> <h5>{{ form.mail.label }}:</h5> </label>
+                {{ form.mail(class_="form-control" ) }}
+                <ul>
+                    {% for error in form.mail.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <label class="form-label"> <h5>{{ form.password.label }}:</h5> </label>
+                {{ form.password(class_="form-control" ) }}
+                <ul>
+                    {% for error in form.password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <label class="form-label"> <h5>{{ form.verifyPassword.label }}:</h5> </label>
+                {{ form.verifyPassword(class_="form-control" ) }}
+                <ul>
+                    {% for error in form.verifyPassword.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+                {% if form.isAdmin %}
+                    <label class="form-label"> <h5>{{ form.isAdmin.label }}:</h5> </label>
+                    {{ form.isAdmin(class_="form-check-input" ) }}
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                {% if form.avatar %}
+                    <label class="form-label"> <h4>{{ form.avatar.label }}:</h4> </label>
+                    {{ form.avatar(class_="form-check-input" ) }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">Utwórz konto</button>
+        </div>
+
+    </form>
+
+{% endblock %}

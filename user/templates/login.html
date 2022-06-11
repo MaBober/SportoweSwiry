@@ -1,80 +1,69 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
+
 
 {% block body_content %}
-
-        <form method="POST" style="margin-top:30px;">
-            {{ logForm.csrf_token }}
-
-            <div class="row justify-content-center">
-
-                <div class="row-login">
-                    <div class="container">
-                        <a class="btn btn-lg btn-social btn-facebook" href="{{ url_for('user.loginFacebook') }}">
-                            <i class="fa fa-facebook fa-fw"></i> Zaloguj się przez Facebook
-                        </a>
-                    </div>
-                    <div class="container">
-                        <a class="btn btn-lg btn-social btn-google">
-                            <i class="fa fa-google fa-fw"></i> Zaloguj się przez Google
-                            
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <p class="login-trad">lub tradycyjnie</p>
-
-            <div class="row justify-content-center">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <label class="form-label"> <h5>{{ logForm.name.label }}:</h5> </label>
-                    {{ logForm.name(class_="form-control" ) }}
-                    <ul>
-                        {% for error in logForm.name.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="col-md-3"></div>
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <label class="form-label"> <h5>{{ logForm.password.label }}:</h5> </label>
-                    {{ logForm.password(class_="form-control" ) }}
-                </div>
-                <div class="col-md-3"></div>
-            </div>
-            
-            <div class="row justify-content-center">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                        <label class="form-label"> <h5>{{ logForm.remember.label }}:</h5> </label>
-                        {{ logForm.remember(class_="form-check-input" ) }}
-                </div>
-                <div class="col-md-3"></div>
-            </div>
-
-            <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">Zaloguj</button>
-            </div>
-        </form>
-        
-        <div class="row justify-content-center">
-            <div class="col-md-3"></div>
-            <div class="col-md-6"><br>
-                <a style="text-decoration: none; color: #182c07e8;" href="{{ url_for('user.reset') }}"><h6>Nie pamiętam hasła</h6></a>
-            </div>
-            <div class="col-md-3"></div>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
+<div class="Static-Content">
+    <form class="Login-Main-Box" method="POST">
+        {{ logForm.csrf_token }}
+        <div class="Login-Title">
+            <span class="Login-Title-Font">
+                Zaloguj
+            </span>
         </div>
-
-        <div class="row justify-content-center">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <a style="text-decoration: none; color: #182c07e8;" href="{{ url_for('user.createAccount') }}"><h6>Nie masz jeszcze konta? Zarejestruj się</h6></a>
-            </div>
-            <div class="col-md-3"></div>
+        <a class="Login-Social-Button" href="{{ url_for('user.loginFacebook') }}">
+            <img src="static/img/icon-Facebook.webp" class="icon-social-button">
+            <span class="Login-Social-Font">
+                Zaloguj używając Facebooka
+            </span>
+        </a>
+        <a class="Login-Social-Button" href="#">
+            <img src="static/img/icon-Google.webp" class="icon-social-button">
+            <span class="Login-Social-Font">
+                Zaloguj używając konta Google
+            </span>
+        </a>
+        <div class="Optional-Way-Box">
+            <div class="Optional-Way-Line-1"></div>
+            <span class="Optional-Way-Font">
+                lub za pomocą adresu e-mail
+            </span>
+            <div class="Optional-Way-Line-1"></div>
         </div>
-        
+        {{ logForm.name(class_="form-control Input-Box", placeholder="E-mail" ) }}
+        <p class="Error-Message">
+            {% for error in logForm.name.errors %}
+                {{ error }}
+            {% endfor %}
+        </p>
+
+        {{ logForm.password(class_="form-control Input-Box", placeholder="Hasło" ) }}
+        <p class="Error-Message">
+            {% for error in logForm.password.errors %}
+                {{ error }}
+            {% endfor %}
+        </p>
+
+        <div class="Checkbox-Main-Box">
+            <div class="Checkbox-Box"></div>
+            {{ logForm.remember(class_="Checkbox-Box form-check-input" ) }}
+            <span class="Checkbox-Font">
+                Zapamiętaj mnie
+            </span>
+        </div>
+        <button class="Main-Button" type="submit">
+            <span class="Main-Button-Font">
+                Zaloguj
+            </span>
+        </button>
+        <a class="Small-Button" href="{{ url_for('user.reset') }}">
+            <span class="Small-Button-Font">
+                Przypomnij hasło
+            </span>
+        </a>
+    </form>
+
+</div>
+
 
 {% endblock %}

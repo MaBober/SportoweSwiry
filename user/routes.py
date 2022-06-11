@@ -583,3 +583,12 @@ def callbackConnect():
 
 
     return redirect(url_for('user.settings'))
+
+
+
+
+@user.route("/test", methods=['POST', 'GET'])
+def test():
+
+    form=UserForm()
+    return render_template("newNewUserForm.html", form=form)

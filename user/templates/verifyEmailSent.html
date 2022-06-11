@@ -18,7 +18,12 @@
 
                 <div class="col">
                     <label class="box-text">Na podany przez Ciebie adres e-mail wysłaliśmy instrukcję umożliwiającą utworzenie nowego hasła.</label>
-                    <a href="{{ url_for('user.login') }}"><div class="reset-button">Zaloguj</div></a>
+
+                    <div class="row justify-content-center">
+                        <a class="reset-button" href="{{ url_for('user.login') }}" >
+                           <span class="reset-button-font"> Zaloguj </span>
+                        </a>
+                    </div>
                 </div>
 
             </div>
@@ -27,3 +32,4 @@
 </div>
 
 {% endblock %}
+

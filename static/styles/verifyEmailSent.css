@@ -102,6 +102,24 @@ body {
 
       }
 
+      a.reset-button{
+        text-decoration: none;
+      }
+
+
+      .reset-button:hover
+      {
+        background-color: #000000;
+      }
+
+      .reset-button-font{
+
+        font-family: Lato;
+        font-size: 18px;
+        text-align: center;
+        color: #fff;
+
+      }
 
         /* FOR SMALL SCREENS */
   @media(max-width: 850px) {

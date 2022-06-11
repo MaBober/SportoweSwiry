@@ -19,10 +19,12 @@
                 <div class="col">
                     <label class="box-text">Wpisz swój adres e-mail. Otrzymasz na niego instrukcję, która pomoże Ci utworzyć nowe hasło.</label>
                     {{ form.mail(class_="form-control email-form" , placeholder="Adres e-mail" ) }}
-                    <div class="Error-Message">
-                        {% for error in form.mail.errors %}
-                            {{ error }}
-                        {% endfor %}
+                    <div class="row justify-content-center">
+                        <div class="Error-Message">
+                            {% for error in form.mail.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
                     </div>
 
                     <div class="row justify-content-center">

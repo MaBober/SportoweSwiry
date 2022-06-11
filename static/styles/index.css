@@ -98,6 +98,10 @@ body {
       .Register-Button:active {
         background-color: #3a3a3a;
       }
+
+      a.Register-Button {
+        text-decoration: none;
+      }
       
       /* Content boxes*/
 
@@ -211,6 +215,9 @@ body {
         font-size: 25px;
       }
 
+      a.Register-Button {
+        text-decoration: none;
+      }
 
       .row-boxes{
         padding-left:10%;

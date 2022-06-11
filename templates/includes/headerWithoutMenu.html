@@ -12,6 +12,12 @@
           <div class="Login-Button-Text">Wyloguj</div>
         </div>
       </a>
+      {% elif title_prefix=="Zaloguj" %}
+      <a class="Login-Button-Text" href="{{ url_for('user.createAccount') }}">
+        <div class="Create-Account-Button">
+          <div class="Login-Button-Text">Załóż konto</div>
+        </div>
+      </a>
       {% else %}
       <a class="Login-Button-Text" href="{{ url_for('user.login') }}">
         <div class="Login-Button">

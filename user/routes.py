@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash , redirect, url_for, request, current_app, session
+from flask import Blueprint, render_template, flash , redirect, url_for, request, current_app, session, abort
 from start import app, db
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse, urljoin
@@ -25,6 +25,14 @@ import flask
 import requests_oauthlib
 from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 import os 
+
+#Google login
+import requests
+import pathlib
+from google.oauth2 import id_token
+from google_auth_oauthlib.flow import Flow
+from pip._vendor import cachecontrol
+import google.auth.transport.requests
 
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -53,10 +61,6 @@ user = Blueprint("user", __name__,
 FB_CLIENT_ID = '427488192540443'
 FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
 
-
-
-
-
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 
@@ -66,7 +70,11 @@ FB_SCOPE = ["email"]
 
 oauth = OAuth(app)
 
-
+#Gogole
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
+client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://127.0.0.1:5000/callback")
 
 
 #Function which can connect user with good ID (for logging)
@@ -464,6 +472,90 @@ def rotateAvatarLeft():
     rotatedAvatar = avatar.rotate(angle, expand=True)
     rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
     return redirect(url_for('user.settings'))
+
+@user.route("/google-login")
+def loginGoogle():
+
+    authorization_url, state = flow.authorization_url() 
+    session["state"] = state   
+    #flash(session["google_id"])
+
+    return redirect(authorization_url)
+
+
+@user.route("/callback")
+def callbackGoogle():
+
+    #Gets data from Google
+    flow.fetch_token(authorization_response=request.url)
+
+    if not session["state"] == request.args["state"]:
+        abort(500)
+
+    credentials = flow.credentials
+    request_session = requests.session()
+    cached_session = cachecontrol.CacheControl(request_session)
+    token_request = google.auth.transport.requests.Request(session=cached_session)
+
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials._id_token,
+        request=token_request,
+        audience=GOOGLE_CLIENT_ID
+    )
+
+    name = id_info.get("name")
+    email = id_info.get("email")
+
+    #Login user to APP
+    user=User.query.filter(User.mail == email).first()
+    if user != None:
+            login_user(user, remember=True)
+
+            #SaveAvatarFromFacebook(picture_url, current_user.id)
+
+            #Checking if next page is exist and if it is safe
+            next = request.args.get('next')
+            if next and isSafeUrl(next):
+                flash("Jesteś zalogowany jako: {}".format(name))
+                return redirect(next)
+            else:
+                flash("Jesteś zalogowany jako: {}".format(name))
+
+            return redirect(url_for('user.basicDashboard'))
+
+    else:
+        fullName=str(name).split(" ")
+        firstName=fullName[0]
+        lastName=fullName[1]
+
+        newUser=User(name=firstName, lastName=lastName, mail=email, 
+                    id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
+
+        #Generatin new user ID
+        newUser.id = newUser.generate_ID()
+        newUser.id = newUser.removeAccents()
+
+        #Hash of password       
+        newUser.password=newUser.hash_password()
+
+        #adding admins to datebase 
+        db.session.add(newUser)
+        db.session.commit()
+
+        user=User.query.filter(User.mail == email).first()
+        login_user(user, remember=True)
+
+        #SaveAvatarFromFacebook(picture_url, current_user.id)
+
+        #Checking if next page is exist and if it is safe
+        next = request.args.get('next')
+        if next and isSafeUrl(next):
+            flash("Jesteś zalogowany jako: {}".format(name))
+            return redirect(next)
+        else:
+            flash("Jesteś zalogowany jako: {}".format(name))
+
+    return redirect(url_for('other.hello'))
 
 
 @user.route("/fb-login")

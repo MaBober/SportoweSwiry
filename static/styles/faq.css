@@ -104,12 +104,15 @@ body {
     /* MAIN CONTENER WITH PHOTO AND TEXT - ABOUT US */
     .FAQ-Box {
         flex-direction: column;
-        margin: auto;
-        width: 325px;
+        margin-left: 5%;
+        margin-right: 5%;
+        width: auto;
     }
   
     .Question-Backgorund {
-        width: 325px;
+      /* margin-left: 5%;
+      margin-right: 5%; */
+      width: auto;
     }
 
   }

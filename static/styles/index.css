@@ -11,7 +11,7 @@ body {
   .Static-Content {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    /* overflow: hidden; */
     justify-content: center;
     padding-bottom: 94px;
   
@@ -22,7 +22,7 @@ body {
     .Title-index {
         width: 466px;
         flex-grow: 0;
-        margin-top: 250px;
+        margin-top: 200px;
         margin-left: 205px;
         text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
         font-family: Lato;
@@ -38,8 +38,8 @@ body {
 
       .Subtitle-index {
 
-        width: 654px;
-        height: 72px;
+        width: 45%;
+        /* height: 72px; */
         flex-grow: 0;
         margin-left:205px;
         margin-top: 25px;
@@ -60,13 +60,14 @@ body {
       .Register-Button {
         width: 240px;
         height: 66px;
-        position: absolute;
+        margin-top: 20px;
+        /* position: absolute; */
         margin-left:205px;
-        margin-top: 25px;
-        margin-bottom: 136px;
-        flex-grow: 0;
+        /* margin-top: 25px; */
+        /* margin-bottom: 136px; */
+        /* flex-grow: 0; */
         display: flex;
-        flex-direction: row;
+        /* flex-direction: row; */
         justify-content: center;
         align-items: center;
         gap: 15px;
@@ -97,6 +98,10 @@ body {
       .Register-Button:active {
         background-color: #3a3a3a;
       }
+
+      a.Register-Button {
+        text-decoration: none;
+      }
       
       /* Content boxes*/
 
@@ -106,7 +111,7 @@ body {
         padding-right: 100px;
         justify-content: flex-start;
         gap: 1%;
-        margin-top: 156px;
+        margin-top: 6%;
 
       }
 
@@ -169,7 +174,7 @@ body {
     .Title-index {
         font-size: 30px;
         margin-top: 150px;
-        margin-left: 50px;
+        margin-left: 9%;
         width: 400px;
     }
 
@@ -180,11 +185,11 @@ body {
 
     .Subtitle-index {
 
-        width: 320px;
-        height: 90px;
+        width: 80%;
+        /* height: 90px; */
         flex-grow: 0;
         margin-top: 15px;
-        margin-left: 50px;
+        margin-left: 9%;
         text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
         font-family: Lato;
         font-size: 25px;
@@ -202,7 +207,7 @@ body {
         width: 160px;
         height: 60px;
         margin-top: 45px;
-        margin-left: 50px;
+        margin-left: 9%;
 
       }
 
@@ -210,11 +215,15 @@ body {
         font-size: 25px;
       }
 
+      a.Register-Button {
+        text-decoration: none;
+      }
 
       .row-boxes{
-        padding-left: 80px;
-        padding-right: 80px;
-        margin-top: 156px;
+        padding-left:10%;
+        padding-right: 10%;
+        margin-top: 28px;
+
 
       }
 
@@ -222,6 +231,7 @@ body {
 
         width: 80%;
         margin-top: 10px;
+        min-width: 250px;
         height: auto;
         text-align: left;
         justify-content: left;

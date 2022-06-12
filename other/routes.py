@@ -45,18 +45,18 @@ def sendMessage():
         form=MessageForm(name=current_user.name, lastName=current_user.lastName, mail=current_user.mail)
     else:
         form=MessageForm()
+        form.lastName.data="X"
+
 
     if form.validate_on_submit():
-
-        # admins=User.query.filter(User.isAdmin == True).all()
 
         # for admin in admins:
         send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.lastName.data, form.subject.data),'message', 
                         name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, message=form.message.data)
 
         
-        flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")
-        return render_template('/pages/messageSent.html', title_prefix = "Formularz kontaktowy" )
+        # flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")
+        return redirect(url_for('other.test'))
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
 
@@ -112,8 +112,7 @@ def privacyPolicy():
 
 
 
-@other.route("/test", methods=['POST', 'GET'])
+@other.route("/test")
 def test():
 
-    form=MessageForm()
-    return render_template("/pages/messageSent.html", form=form)
+    return render_template('/pages/messageSent.html', title_prefix = "Formularz kontaktowy" )

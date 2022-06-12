@@ -152,9 +152,12 @@ body {
 
 
   .Checkbox-Main-Box {
+    width: 399px;
     display: flex;
     flex-direction: row;
-    margin-left: 105px;
+    /* margin-left: 105px; */
+    justify-content: left;
+    margin: auto;
   }
 
 
@@ -301,7 +304,8 @@ body {
   
 
     .Checkbox-Main-Box {
-      margin: auto;
+      /* margin: auto; */
+      width: 80%;
     }
 
     .Main-Button {

@@ -24,7 +24,7 @@ img.icon-social-button {
 
 
 .Input-Row-Box {
-    width: 185px;
+    width: 189px;
     height: 43px;
     flex-grow: 0;
     background-color: #fff;
@@ -32,17 +32,21 @@ img.icon-social-button {
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   }
 
-  .Input-Row1 {
-      margin: auto;
+  .Special-Row-Input {
+    width: 399px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: auto;
+    margin-bottom: 30px;
   }
-
 
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {
 
     
     .Input-Row-Box {
-        width: 280px;
+        width: 90%;
         margin-top: 10px;
         margin-bottom: 15px;
         margin-left: auto;
@@ -55,6 +59,17 @@ img.icon-social-button {
      
     img.icon-social-button {
         margin: 0 3px 0 0;
+      }
+
+    .Special-Row-Input {
+        width: 90%;
+        flex-direction: column;
+        margin-bottom: 0;
+      }
+
+    .Checkbox-Main-Box {
+        margin-top: 15px;
+
       }
 }
 

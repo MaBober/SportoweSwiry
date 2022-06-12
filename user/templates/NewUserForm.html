@@ -32,7 +32,7 @@
             <div class="Optional-Way-Line-1"></div>
         </div>
 
-        <div class="row justify-content-center Input-Row1">
+        <!-- <div class="row justify-content-center Input-Row1">
             <div class="col Input-Col1">
                 {{ form.name(class_="form-control Input-Row-Box", placeholder="Imię" ) }}
                 <p class="Error-Message">
@@ -49,6 +49,12 @@
                     {% endfor %}
                 </p>
             </div>
+        </div> -->
+
+        <div class="Special-Row-Input">
+            {{ form.name(class_="form-control Input-Row-Box", placeholder="Imię" ) }}
+            
+            {{ form.name(class_="form-control Input-Row-Box", placeholder="Nazwisko" ) }}
         </div>
 
         {{ form.mail(class_="form-control Input-Box", placeholder="Adres e-mail" ) }}

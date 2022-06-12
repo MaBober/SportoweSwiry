@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmail.webp") no-repeat center fixed;
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmailSent.webp") no-repeat center fixed;
     background-size: cover;
     background-color: #3a3a3a;
     min-height: 100%;
@@ -35,7 +35,6 @@ body {
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
         background-color: #efefef;
         text-align: center;
-        padding-bottom: 28px;
 
       }
       .box-header{
@@ -82,119 +81,57 @@ body {
       }
 
 
-      .email-form{
-        width: 65%;
-        margin-left: 17%;
-        margin-right: 17%;
-        border-radius: 0%;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-      }
-
-      .email-form:focus {
-        border-color: #579956;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #579956;
-      }
-
       .reset-button{
         width: 65%;
         height: 56px;
         margin-left: 17%;
         margin-right: 17%;
-        margin-bottom: 28x;
+        margin-bottom: 28px;
         border-radius: 5px;
         border-width: 0ch;
-        margin-top: 14px;
+        padding-top: 17px;
+        padding-bottom: 17px;
+
         background-color: #579956;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
         font-family: Lato;
         font-size: 18px;
         text-align: center;
         color: #fff;
 
-
-        margin: 24px 108px 13px 103px;
-        border-radius: 5px;
-        background-color: #579956;
-        margin-left: auto;
-        margin-right: auto;
-        /* border: solid 2px #579956; */
-
       }
+
+      a.reset-button{
+        text-decoration: none;
+      }
+
 
       .reset-button:hover
       {
         background-color: #000000;
       }
 
+      .reset-button-font{
 
-      .Small-Button {
-        width: 108px;
-        height: 28px;
-        margin: 13px 257px 0 30px;
-        padding: 0px 9px 7px 8px;
-        border-radius: 5px;
-        background-color: #787878;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    
-      .Small-Button-Font {
-        width: 91px;
-        height: 14px;
         font-family: Lato;
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
+        font-size: 18px;
         text-align: center;
         color: #fff;
-      }
-    
-      a.Small-Button {
-        text-decoration: none;
-      }
-    
-      .Small-Button:hover {
-        background-color: #000;
-      }
-    
-      .Error-Message {
-        width: 65%;
-        text-align: center;
+
       }
 
-
-
-/* FOR SMALL SCREENS */
+        /* FOR SMALL SCREENS */
   @media(max-width: 850px) {
   
     .box{
       margin-top: 171px;
       margin-bottom: 10px;
       min-width: 300px;
-      width: 90%;
-    }
-
-    .box-text{
-      font-size: 14px;
-      margin-left: 5%;
-      margin-right: 5%;
-    }
-
-    .email-form{
-      width: 90%;
-      margin-left: 5%;
-      margin-right: 5%;
-    }
+      width: 63%;
+ 
 
 
-    .reset-button{
-      width: 90%;
-      margin-left: 5%;
-      margin-right: 5%;
     }
     
   }

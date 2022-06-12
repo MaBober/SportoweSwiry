@@ -18,16 +18,28 @@
 
                 <div class="col">
                     <label class="box-text">Wpisz swój adres e-mail. Otrzymasz na niego instrukcję, która pomoże Ci utworzyć nowe hasło.</label>
-                    {{ form.mail(class_="form-control email-form" ) }}
-                    <ul>
-                        {% for error in form.mail.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </ul>
+                    {{ form.mail(class_="form-control email-form" , placeholder="Adres e-mail" ) }}
+                    <div class="row justify-content-center">
+                        <div class="Error-Message">
+                            {% for error in form.mail.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    </div>
 
-
-                    <button class="reset-button" type="submit">Przypomnij hasło</button>
-                    <a href="{{ url_for('other.hello') }}"><div class="back-button">Cofnij</siv</a>
+                    <div class="row justify-content-center">
+                        <button class="reset-button" type="submit">
+                            Przypomnij hasło
+                        </button>
+                    </div>
+                     
+                    <div class="row justify-content-center">
+                        <a class="Small-Button" href="{{ url_for('other.hello') }}" >
+                            <span class="Small-Button-Font">
+                            Cofnij
+                            </span>
+                        </a>
+                    </div>
 
                 </div>
 
@@ -39,3 +51,4 @@
 </div>
 
 {% endblock %}
+

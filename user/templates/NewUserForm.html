@@ -18,7 +18,7 @@
                 Zarejestruj używając Facebooka
             </span>
         </a>
-        <a class="Login-Social-Button" href="#">
+        <a class="Login-Social-Button" href="{{ url_for('user.loginGoogle') }}">
             <img src="static/img/icon-Google.webp" class="icon-social-button">
             <span class="Login-Social-Font">
                 Zarejestruj używając konta Google
@@ -34,7 +34,6 @@
 
         <div class="Special-Row-Input">
             {{ form.name(class_="form-control Input-Row-Box", placeholder="Imię" ) }}
-
             {{ form.lastName(class_="form-control Input-Row-Box", placeholder="Nazwisko" ) }}
         </div>
 

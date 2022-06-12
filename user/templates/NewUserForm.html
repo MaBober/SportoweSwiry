@@ -34,7 +34,7 @@
 
         <div class="row justify-content-center Input-Row1">
             <div class="col Input-Col1">
-                {{ form.name(class_="form-control Input-Row-Box", placeholder="Imię" ) }}
+                {{ form.lastName(class_="form-control Input-Row-Box", placeholder="Imię" ) }}
                 <p class="Error-Message">
                     {% for error in form.name.errors %}
                         {{ error }}

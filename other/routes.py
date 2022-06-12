@@ -56,7 +56,7 @@ def sendMessage():
 
         
         flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")
-        return redirect(url_for('other.hello'))
+        return render_template('/pages/messageSent.html', title_prefix = "Formularz kontaktowy" )
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
 
@@ -109,3 +109,11 @@ def acceptCookies():
 def privacyPolicy():
 
     return render_template('/pages/privacyPolicy.html', title_prefix= "Polityka Prywatności")
+
+
+
+@other.route("/test", methods=['POST', 'GET'])
+def test():
+
+    form=MessageForm()
+    return render_template("/pages/messageSent.html", form=form)

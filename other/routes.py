@@ -23,10 +23,7 @@ def hello():
         return redirect(url_for('user.unconfirmed'))
 
     if current_user.is_authenticated:
-        notReadedMessages=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).filter(mailboxMessage.messageReaded == 0).all()
-        amountOfNotReadedMessages=len(notReadedMessages)
-        # flash("Ilośc wiadomosci nieprzecztanych: {}".format(amountOfNotReadedMessages))
-        return redirect(url_for('user.basicDashboard', amountOfNotReadedMessages=amountOfNotReadedMessages))
+        return redirect(url_for('user.basicDashboard'))
 
     return render_template("pages/index.html", title_prefix = "Home")
 
@@ -118,4 +115,11 @@ def privacyPolicy():
 @other.route("/test")
 def test():
 
+    flash("dupa")
     return render_template('/pages/messageSent.html', title_prefix = "Formularz kontaktowy" )
+
+
+@other.route("/changeMessageStatus/<messageID>", methods=['POST','GET'])
+def changeStatusOfMessage(messageID):
+    current_user.changeStatusOfMessage(messageID)
+    return redirect(url_for('other.mailbox', actionName='inbox'))

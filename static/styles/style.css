@@ -114,7 +114,7 @@
 }
 
 .listOfMessages:hover {
-    background-color: rgba(224, 153, 94);
+    background-color: rgba(224, 153, 94) !important;
     color:#000000
 }
 

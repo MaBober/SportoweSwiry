@@ -29,6 +29,12 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User %r>' % self.id
 
+    def changeStatusOfMessage(self,id):
+        messageFromInBox=mailboxMessage.query.filter(mailboxMessage.id == id).first()
+        messageFromInBox.messageReaded=1
+        db.session.commit()
+        return None
+
     def countNotReadedMessages(self):
         notReadedMessages=mailboxMessage.query.filter(mailboxMessage.receiver == self.mail).filter(mailboxMessage.messageReaded == 0).all()
         amountOfNotReadedMessages=len(notReadedMessages)

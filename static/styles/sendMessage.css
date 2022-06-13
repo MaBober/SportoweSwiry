@@ -1,0 +1,212 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_sendMessage.webp") no-repeat center fixed;
+    background-size: cover;
+    background-color: #3a3a3a;
+  }
+
+
+  .Title-Write-To-Us {
+  
+    font-family: Lato;
+    font-size: 40px;
+    color: white;
+    text-align: center;
+    margin-top: 110px;
+  }
+
+  .Contact-Form-Main-Box {
+    width: 610px;
+    max-width: 610px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 41px;
+    margin: auto;
+  }
+
+
+  .Input-Row-Box {
+    width: 189px;
+    height: 43px;
+    flex-grow: 0;
+    background-color: #fff;
+    border-radius: 0;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .Special-Row-Input {
+    width: 399px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: auto;
+    margin-bottom: 30px;
+  }
+
+  .Input-Box {
+    width: 399px;
+    height: 43px;
+    flex-grow: 0;
+    margin: 10px 106px 14px 105px;
+    padding: 15px 19px 15px 19px;
+    border-radius: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+
+  .Input-Message-Box {
+    width: 399px;
+    height: 153px;
+    flex-grow: 0;
+    margin: 10px 106px 5px 105px;
+    padding: 15px 19px 15px 19px;
+    border-radius: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .form-control:focus {
+    border-color: #579956;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #579956;
+  }
+
+  .Main-Button {
+    width: 399px;
+    height: 56px;
+    margin: 14px 108px 13px 103px;
+    border-radius: 5px;
+    background-color: #579956;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 2px #579956;
+  }
+
+  .Main-Button:hover {
+    background-color: #000;
+    border-color: #000;
+  }
+
+  .Main-Button-Font {
+    width: 59px;
+    height: 22px;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    margin: auto;
+  }
+
+  .Error-Message {
+    width: 100%;
+    text-align: center;
+  }
+
+
+  .Contact-Data-Box {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 20px;
+  }
+
+  .Contact-Row-Box {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .icon-Contact-Data{
+    width: 20px;
+    height: 20px;
+    flex-grow: 0;
+    margin: 3px 4px 3px 5px;
+
+  }
+
+  .Contact-Data-Font {
+    font-family: Lato;
+    font-size: 16px;
+    color: white;
+  }
+
+
+  img.icon-Thumb {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin: auto;
+    margin-top: 50px;
+  }
+
+  .Sent-Message {
+    width: 369px;
+    height: 89px;
+    /* margin: 107px 354px 0 342px; */
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    margin: auto;
+  }
+
+   /* FOR SMALL SCREENS */
+   @media(max-width: 850px) {
+    
+    .Contact-Form-Main-Box {
+      max-width: 400px;
+      width: 90%;
+    }
+
+
+    .Title-Write-To-Us {
+        margin-top: 150px;
+      }
+    
+
+    .Special-Row-Input {
+        width: 90%;
+        flex-direction: column;
+        margin-bottom: 0;
+    }
+
+    .Input-Row-Box {
+        width: 90%;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .Input-Box {
+        width: 80%;
+    }
+
+    .Input-Message-Box {
+        width: 80%;
+    }
+
+    .Main-Button {
+        width: 80%;
+    }
+
+    .Contact-Data-Box {
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+}

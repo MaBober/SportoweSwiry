@@ -1,66 +1,58 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
+
 
 {% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/sendMessage.css') }}">
 
-<div class="row justify-content-center" style="margin-top: 10px;">
-        <div class="col-lg-6">
-            <div class="card mb-4">
-                <div class="card-header">Formularz kontaktowy</div>
-                <div class="card-body">
-                    <form method="POST">
-                        {{ form.csrf_token }}
-                        
-                        <div class="mb-3">
-                            <label class="small mb-1" for="newPassword">{{ form.name.label }}</label>
-                            {{ form.name(class_="form-control" ) }}
-                            <ul>
-                                {% for error in form.name.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="mb-3">
-                            <label class="small mb-1" for="confirmPassword">{{ form.lastName.label }}</label>
-                            {{ form.lastName(class_="form-control" ) }}
-                            <ul>
-                                {% for error in form.lastName.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="mb-3">
-                            <label class="small mb-1" for="confirmPassword">{{ form.mail.label }}</label>
-                            {{ form.mail(class_="form-control" ) }}
-                            <ul>
-                                {% for error in form.mail.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="mb-3">
-                            <label class="small mb-1" for="confirmPassword">{{ form.subject.label }}</label>
-                            {{ form.subject(class_="form-control" ) }}
-                            <ul>
-                                {% for error in form.subject.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="mb-3">
-                            <label class="small mb-1" for="confirmPassword">{{ form.message.label }}</label>
-                            {{ form.message(class_="form-control" ) }}
-                            <ul>
-                                {% for error in form.message.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">Wyślij</button>
-                    </form>
-                </div>
-            </div>
+<div class="Static-Content">
+    <div class="Title-Write-To-Us">Napisz do nas</div>
+    <div class="Contact-Data-Box">
+        <div class="Contact-Row-Box">
+            <img src="static/img/icon-Facebook.webp" class="icon-Contact-Data">
+            <span class="Contact-Data-Font">
+                admin@sportoweswiry.atthost24.pl
+            </span>
+        </div>
+        <div class="Contact-Row-Box">
+            <img src="static/img/icon-Facebook.webp" class="icon-Contact-Data">
+            <span class="Contact-Data-Font">
+                fb.com/sportoweswiry
+            </span>
         </div>
     </div>
+    <form class="Contact-Form-Main-Box" method="POST">
+        {{ form.csrf_token }}
+        
+        <div class="Special-Row-Input">
+            {{ form.name(class_="form-control Input-Row-Box", placeholder="Imię i nazwisko" ) }}
+
+            {{ form.mail(class_="form-control Input-Row-Box", placeholder="Adres e-mail" ) }}
+        </div>
+
+        {{ form.subject(class_="form-control Input-Box", placeholder="Temat wiadomości" ) }}
+        <p class="Error-Message">
+            {% for error in form.subject.errors %}
+                {{ error }}
+            {% endfor %}
+        </p>
+
+        {{ form.message(class_="form-control Input-Message-Box", placeholder="Wiadomość" ) }}
+        <p class="Error-Message">
+            {% for error in form.message.errors %}
+                {{ error }}
+            {% endfor %}
+        </p>
+
+
+        <button class="Main-Button" type="submit">
+            <span class="Main-Button-Font">
+                Wyślij
+            </span>
+        </button>
+    </form>
+    
 </div>
+
 
 {% endblock %}

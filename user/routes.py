@@ -689,8 +689,8 @@ def callbackConnect():
 
 
 
-@user.route("/test", methods=['POST', 'GET'])
-def test():
+# @user.route("/test", methods=['POST', 'GET'])
+# def test():
 
-    form=UserForm()
-    return render_template("newNewUserForm.html", form=form)
+#     form=UserForm()
+#     return render_template("NEWsendMessage.html", form=form)

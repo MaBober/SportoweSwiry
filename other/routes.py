@@ -23,7 +23,10 @@ def hello():
         return redirect(url_for('user.unconfirmed'))
 
     if current_user.is_authenticated:
-        return redirect(url_for('user.basicDashboard'))
+        notReadedMessages=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).filter(mailboxMessage.messageReaded == 0).all()
+        amountOfNotReadedMessages=len(notReadedMessages)
+        # flash("Ilośc wiadomosci nieprzecztanych: {}".format(amountOfNotReadedMessages))
+        return redirect(url_for('user.basicDashboard', amountOfNotReadedMessages=amountOfNotReadedMessages))
 
     return render_template("pages/index.html", title_prefix = "Home")
 

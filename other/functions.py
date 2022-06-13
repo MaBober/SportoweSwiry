@@ -37,7 +37,10 @@ def prepareListOfUsers():
     return availableListOfUsers
 
 def saveMessageInDB(form):
-    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, receiver = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data )
+    name=current_user.name
+    lastName=current_user.lastName
+    fullName=name+" "+lastName
+    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=fullName, receiver = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False )
     db.session.add(newMessage)
     db.session.commit()
     

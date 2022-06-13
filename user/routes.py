@@ -415,7 +415,11 @@ def basicDashboard():
                 weekEnd = event.start + datetime.timedelta(weeks=1*week-1, days=6)
      
                 activities=Activities.query.filter(Activities.userName == current_user.id).filter(Activities.date >= weekStart).filter(Activities.date <= weekEnd).all()
-                target = DistancesTable.query.filter(DistancesTable.event_ID == event.id).filter(DistancesTable.week == week).first()
+                if week <= event.lengthWeeks:
+                    target = DistancesTable.query.filter(DistancesTable.event_ID == event.id).filter(DistancesTable.week == week).first()
+                    target = target.value
+                else:
+                    target = 0
 
                 WeekDistance = 0
 
@@ -431,7 +435,7 @@ def basicDashboard():
                 eventNames.update({event.id:event.name})
                 eventWeek.update({event.id:week})
                 eventWeekDistance.update({event.id:round(WeekDistance,2)})
-                eventWeekTarget.update({event.id:target.value})
+                eventWeekTarget.update({event.id:target})
                 
             return render_template('basicDashboard.html', activities=activities, title_prefix = "Dashboard", 
                             sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, today_7 = datetime.date.today() + datetime.timedelta(days=-7),

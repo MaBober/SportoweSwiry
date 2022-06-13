@@ -60,7 +60,7 @@
               {% endif %}
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości {{ '{}'.format(amountOfNotReadedMessages) }}</a></li>
+                  <li style="display: flex;"><a class="dropdown-item" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a> {% if current_user.countNotReadedMessages()>0 %} <p style="margin-right: 15px; background-color: red; margin: auto; padding-left: 10px; padding-right: 10px; border-radius: 5px; font-size: 18px;">{{ current_user.countNotReadedMessages() }}</p>{% endif %}</li>
                   <li><a class="dropdown-item" href="{{ url_for('user.settings') }}">Ustawienia konta</a></li>
                   <li><hr class="dropdown-divider"></li>
                   

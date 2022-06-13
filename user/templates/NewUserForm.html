@@ -32,28 +32,8 @@
             <div class="Optional-Way-Line-1"></div>
         </div>
 
-        <!-- <div class="row justify-content-center Input-Row1">
-            <div class="col Input-Col1">
-                {{ form.lastName(class_="form-control Input-Row-Box", placeholder="Imię" ) }}
-                <p class="Error-Message">
-                    {% for error in form.name.errors %}
-                        {{ error }}
-                    {% endfor %}
-                </p>
-            </div>
-            <div class="col Input-Col1">
-                {{ form.name(class_="form-control Input-Row-Box", placeholder="Nazwisko" ) }}
-                <p class="Error-Message">
-                    {% for error in form.lastName.errors %}
-                        {{ error }}
-                    {% endfor %}
-                </p>
-            </div>
-        </div> -->
-
         <div class="Special-Row-Input">
             {{ form.name(class_="form-control Input-Row-Box", placeholder="Imię" ) }}
-            
             {{ form.lastName(class_="form-control Input-Row-Box", placeholder="Nazwisko" ) }}
         </div>
 

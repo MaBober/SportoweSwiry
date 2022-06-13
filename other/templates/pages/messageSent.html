@@ -1,0 +1,32 @@
+{% extends "pages//baseNew.html" %}
+
+
+{% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/sendMessage.css') }}">
+
+<div class="Static-Content">
+    <div class="Title-Write-To-Us">Napisz do nas</div>
+    <div class="Contact-Data-Box">
+        <div class="Contact-Row-Box">
+            <img src="static/img/icon-Facebook.webp" class="icon-Contact-Data">
+            <span class="Contact-Data-Font">
+                admin@sportoweswiry.atthost24.pl
+            </span>
+        </div>
+        <div class="Contact-Row-Box">
+            <img src="static/img/icon-Facebook.webp" class="icon-Contact-Data">
+            <span class="Contact-Data-Font">
+                fb.com/sportoweswiry
+            </span>
+        </div>
+    </div>
+    <img src="static/img/icon-Thumb.webp" class="icon-Thumb">
+    <span class="Sent-Message">
+        Twoja wiadomość została wysłana.
+        Odpowiemy tak szybko jak tylko się da!
+    </span>
+</div>
+
+
+{% endblock %}

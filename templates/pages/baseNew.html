@@ -29,23 +29,32 @@
   </head>
 
   <body>
+        <div class="d-flex justify-content-center cookie">
+      {% include "includes/cookie_consent.html" %}
+    </div>
     <header>
       {% include "includes/headerWithoutMenu.html" %} 
+
     </header>
 
+
+
     <div class="container" >
+
       {% for message in get_flashed_messages() %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>{{ message }}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       {% endfor %}
+
     </div>
+
     
-    {% include "includes/cookie_consent.html" %}
     {% block body_content %}
     
     {% endblock %}
+    
     <!--</div>-->
     <!-- Optional JavaScript; choose one of the two! -->
 

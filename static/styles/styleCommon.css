@@ -154,6 +154,119 @@ body {
   color: #579956;
 }
 
+.cookie{
+  
+  /* margin-top: 20%;
+  margin-bottom: 200px; */
+  margin-left: 10%;
+  margin-right: 10%;
+  
+}
+
+.cookie-box{
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  max-width: 1300px;
+  min-width: 500px;
+  margin-top: 17px;
+  margin-bottom: 10px;
+  width: 80%;
+  height: auto;
+  flex-grow: 0;
+  justify-self: center;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background-color: #efefef;
+  text-align: center;
+  padding-bottom: 28px;
+
+}
+.cookie-header{
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: auto;
+  flex-grow: 0;
+  background-color: #000;
+  justify-content: center;
+  vertical-align: text-bottom;
+  
+}
+
+.cookie-header-font{
+  font-family: Lato;
+  font-size: 30px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+
+}
+
+
+.cookie-box-text{
+  margin-top: 31px;
+  margin-bottom: 28px;
+  margin-left: 17%;
+  margin-right: 17%;
+  font-family: Lato;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+}
+
+.cookie-button {
+  /* width: 100px; */
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 48px;
+  right: 100px;
+  top: 57px;
+  border-radius: 15px;
+  border-width: 0;
+  background-color: #579956;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.cookie-button-text {
+  height: 22px;
+  flex-grow: 1;
+  font-family: Lato;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+}
+
+a.cookie-button-text {
+  text-decoration: none;
+}
+
+
+.cookie-button:hover {
+  background-color: #000;
+}
 
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {

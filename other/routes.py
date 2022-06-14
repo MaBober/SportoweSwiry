@@ -8,7 +8,7 @@ from .forms import MessageForm,  AppMailForm, AppMailToRead
 from user.classes import User
 
 from other.classes import mailboxMessage
-from .functions import send_email, prepareListOfUsers, saveMessageInDB
+from .functions import send_email, prepareListOfUsers, saveMessageInDB, deleteMessagesFromDB
 from datetime import datetime, timedelta
 
 
@@ -76,6 +76,15 @@ def mailbox(actionName):
 
         saveMessageInDB(form)
         flash("Wiadomość przesłana do: {}".format(form.receiverEmail.data))
+    elif request.method == 'POST':
+        messagesToDelete=request.form.getlist('checkboxesWithMessagesToDelete')
+        if not messagesToDelete:
+            flash("Brak zaznaczonych wiadomości do usunięcia")
+        else:
+            deleteMessagesFromDB(messagesToDelete)
+            flash ("Zaznaczone wiadomości zostały poprawnie usnięte")
+        return redirect(url_for('other.mailbox', actionName='inbox'))
+
 
 
     messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).order_by(mailboxMessage.id.desc()).all()

@@ -1,16 +1,23 @@
+import re
 from start import db
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from activity.classes import Activities
 from activity.forms import ActivityForm
 from event.classes import CoefficientsList, DistancesTable
 from event.functions import giveUserEvents
 
+import json
+import requests
 
 import pygal
 from pygal.style import Style
 import datetime
 import math
+
+import urllib3
+
+from urllib.parse import urlparse, parse_qs
 
 activity = Blueprint("activity", __name__,
     template_folder='templates')
@@ -147,7 +154,7 @@ def addActivity():
                             today_7 = datetime.date.today() + datetime.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget)
     
     else:
-        return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywnośćd")
+        return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")
 
 
 
@@ -239,3 +246,51 @@ def myActivities():
         
     else:
         return redirect(url_for('other.hello'))
+
+@activity.route("/stravaTEST")
+@login_required
+def stravaTEST():
+
+
+    return render_template('/pages/stravaLOG.html')
+
+@activity.route("/stravaLoginTest")
+@login_required
+def stravaLoginTEST():
+
+    return redirect('https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=http://127.0.0.1:5000//strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all')
+
+@activity.route("/strava-callback",methods=['POST','GET'])
+@login_required
+def stravaCallback():
+
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+    print(request.query_string)
+    code = request.args['code']
+
+    auth_url = "https://www.strava.com/oauth/token"
+    activites_url = "https://www.strava.com/api/v3/athlete/activities"
+
+    payload = {
+    'client_id': "87931",
+    'client_secret': 'a02f77e5eedb0784e84a5646e59072f300562e84',
+    'code': code,
+    'grant_type': "authorization_code",
+    'f': 'json'
+    }
+
+    res = requests.post(auth_url, data=payload, verify=False)
+    print(res)
+    access_token = res.json()['access_token']
+    print(access_token)
+
+    header = {'Authorization': 'Bearer ' + access_token}
+    param = {'per_page': 200, 'page': 1}
+    activities = requests.get(activites_url, headers=header, params=param).json()
+
+    print(activities[0]["name"])
+    print(activities[0]["distance"])
+    print(activities[0]["start_date"])
+
+    return 'ttt'

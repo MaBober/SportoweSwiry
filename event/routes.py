@@ -640,7 +640,8 @@ def adminModifyEvent(eventID):
     form = EventForm(name = event.name,
             start = event.start,
             length = event.lengthWeeks,
-            status = event.status)
+            status = event.status,
+            coefficientsSetName = event.coefficientsSetName)
 
     formDist = DistancesForm(w1 = distanceSet[0].value,
     w2 = distanceSet[1].value,

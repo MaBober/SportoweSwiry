@@ -118,6 +118,17 @@
     color:#000000
 }
 
+.action input {
+    accent-color: #182c07e8;
+    margin-left: 10px;
+}
+
+
+.small-button {
+    background-color: gray;
+    margin-top: 10px;
+}
+
 
 /* mailbox style */
 /*

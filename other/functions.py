@@ -43,6 +43,14 @@ def saveMessageInDB(form):
     newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=fullName, receiver = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False )
     db.session.add(newMessage)
     db.session.commit()
+
+def deleteMessagesFromDB(messagesToDelete):
+
+    for messageID in messagesToDelete:
+        messageToDelete=mailboxMessage.query.filter(mailboxMessage.id == messageID).first()
+        db.session.delete(messageToDelete)
+        db.session.commit()
+    return None
     
 @app.context_processor
 def cookies_check():

@@ -8,7 +8,7 @@ from .forms import MessageForm,  AppMailForm, AppMailToRead
 from user.classes import User
 
 from other.classes import mailboxMessage
-from .functions import send_email, prepareListOfUsers, saveMessageInDB, deleteMessagesFromDB
+from .functions import send_email, prepareListOfChoices, saveMessageInDB, deleteMessagesFromDB, saveMessageInDBforEvent, saveMessageInDBforAll
 from datetime import datetime, timedelta
 
 
@@ -70,12 +70,21 @@ def mailbox(actionName):
     form=AppMailForm()
     readForm=AppMailToRead()
 
-    form.receiverEmail.choices = prepareListOfUsers()
+    form.receiverEmail.choices = prepareListOfChoices()
 
     if form.validate_on_submit():
 
-        saveMessageInDB(form)
-        flash("Wiadomość przesłana do: {}".format(form.receiverEmail.data))
+        if form.receiverEmail.data=="Wszyscy":
+            saveMessageInDBforAll(form)
+            flash("Wiadomość przesłana do wszystkich użytkowników aplikacji")
+        elif ("ID:" in form.receiverEmail.data):
+            saveMessageInDBforEvent(form)
+            (eventName, id) = (form.receiverEmail.data).split(', ID:')
+            flash("Wiadomość przesłana do uczestników wyzwania: {}".format(eventName))
+        else:
+            saveMessageInDB(form)
+            flash("Wiadomość przesłana do użytkownika: {}".format(form.receiverEmail.data))
+
     elif request.method == 'POST':
         messagesToDelete=request.form.getlist('checkboxesWithMessagesToDelete')
         if not messagesToDelete:
@@ -88,7 +97,7 @@ def mailbox(actionName):
 
 
     messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).order_by(mailboxMessage.id.desc()).all()
-    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).order_by(mailboxMessage.id.desc()).all()
+    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).filter(mailboxMessage.multipleMessage == False).order_by(mailboxMessage.id.desc()).all()
     amountOfReceivedMessages=len(messagesCurrentUserReceived)
     amountOfSentMessages=len(messagesCurrentUserSent)
 

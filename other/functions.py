@@ -5,6 +5,7 @@ from flask_mail import Mail, Message
 from start import app
 from user.classes import User
 from other.classes import mailboxMessage
+from event.classes import Event
 import datetime
 
 mail = Mail(app)
@@ -18,8 +19,18 @@ def send_email(to, subject, template, **kwargs):
     return None
 
 
+def prepareListOfChoices():
+
+    allUsers = [('Wszyscy','Wszyscy')]
+    availableListOfUsers = prepareListOfUsers()
+    availableListOfEvents = crateAvailableListOfEvents()
+   
+    availableListOfChoices = allUsers + availableListOfEvents + availableListOfUsers
+    return availableListOfChoices
+
+
 def prepareListOfUsers():
-    # Creating list of users
+    #Creating list of users
     listOfUsers=User.query.all()
     listOfUsersMails = [(a.mail) for a in listOfUsers]
     listOfUsersNames = [(a.name) for a in listOfUsers]
@@ -33,17 +44,82 @@ def prepareListOfUsers():
         listOfUsersFullNames.append(fullName)
 
     # (mails, name & last name) 
-    availableListOfUsers = list(zip(listOfUsersMails, listOfUsersFullNames))
-    return availableListOfUsers
+    return list(zip(listOfUsersMails, listOfUsersFullNames))
+
+
+def crateAvailableListOfEvents():
+    # Creating list of events
+    listOfEvents=Event.query.all()
+    listOfEventsNameKey = []
+    listOfEventsNameValue = []
+
+    for event in listOfEvents:
+        key = event.name + ", ID:" + str(event.id)
+        value = "Uczestnicy wyzwania: " + event.name
+        listOfEventsNameKey.append(key)
+        listOfEventsNameValue.append(value)
+
+    return list(zip(listOfEventsNameKey, listOfEventsNameValue))
+
 
 def saveMessageInDB(form):
-    name=current_user.name
-    lastName=current_user.lastName
-    fullName=name+" "+lastName
-    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=fullName, receiver = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False )
+    
+    senderFullName=setSenderFullName()
+    receiverFullName=setReceiverFullName(form)
+
+    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
     db.session.add(newMessage)
     db.session.commit()
 
+
+def setSenderFullName():
+    senderName=current_user.name
+    senderLastName=current_user.lastName
+    return senderName + " " + senderLastName
+
+def setReceiverFullName(form):
+    receiverUser=User.query.filter(User.mail==form.receiverEmail.data).first()
+    receiverName=receiverUser.name
+    receiverLastName=receiverUser.lastName
+    return receiverName + " " + receiverLastName
+
+
+def saveMessageInDBforEvent(form):
+    senderFullName=setSenderFullName()
+    (eventName, id) = (form.receiverEmail.data).split(', ID:')
+    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = eventName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
+    db.session.add(newMessage)
+    db.session.commit()
+
+    event=Event.query.filter(Event.name==eventName).first()
+    for participant in event.participants:
+        receiverUser=User.query.filter(User.id==participant.user_name).first()
+        receiverMail=receiverUser.mail
+        receiverName=receiverUser.name
+        receiverLastName=receiverUser.lastName
+        receiverFullName=receiverName + " " + receiverLastName
+        newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+        db.session.add(newMessage)
+        db.session.commit()
+
+
+def saveMessageInDBforAll(form):
+    senderFullName=setSenderFullName()
+    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
+    db.session.add(newMessage)
+    db.session.commit()
+
+    users=User.query.all()
+    for user in users:
+        receiverMail=user.mail
+        receiverName=user.name
+        receiverLastName=user.lastName
+        receiverFullName=receiverName + " " + receiverLastName
+        newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+        db.session.add(newMessage)
+        db.session.commit()
+
+    
 def deleteMessagesFromDB(messagesToDelete):
 
     for messageID in messagesToDelete:

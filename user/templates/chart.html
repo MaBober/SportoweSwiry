@@ -1,0 +1,179 @@
+{% extends "pages//baseNew.html" %}
+
+{% block body_content %}
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/chart.css') }}">
+
+
+
+<div class="Dashboard-First-Row">
+    <div class="Dashboard-Main-Box">
+        <img src="static/img/icon-route.webp" class="icon-route">
+        <div class="Dashboard-Value-Main-Box">
+            <span class="Dashboard-Value-Title">Pokonany dystans</span>
+            <span class="Dashboard-Value">1162.43 km</span>
+        </div>
+    </div>
+</div>
+
+<div class="dashBoard">
+    <div class="Chart-Box" id="myChart">
+        <span class="Title-Box">Progress wydarzenia</span>
+    </div>
+    <div class="Event-Box">
+        <span class="Title-Box">Twoje wyzwania</span>
+        <div class="Info-Box"></div>
+    </div>
+</div>
+
+
+
+
+
+<script>  
+    var options = {
+        series: ['{{ d1}}','{{ d2}}', '{{ d3}}'],
+        chart: {
+        height: 'auto',
+        type: 'radialBar',
+    },
+    plotOptions: {
+        radialBar: {
+        offsetY: 0,
+        startAngle: 0,
+        endAngle: 270,
+        track: {
+          background: '#3a3a3a'
+        },
+        hollow: {
+            margin: 5,
+            size: '40%',
+            background: 'transparent',
+            image: undefined,
+        },
+        dataLabels: {
+            name: {
+                show: true,
+            },
+            value: {
+                show: true,
+                fontSize: '16px',
+                color: '#fff',
+            },
+            total: {
+                show: false,
+                label: 'TOTAL',
+                fontSize: '16px',
+                color: '#fff',
+            }
+        }
+        }
+    },
+    colors: ['#579956', '#21ce1e', '#9ff72cdd'],
+    labels: ['Wyzwanie', 'Tydzień', 'Skuteczność'],
+    legend: {
+        show: true,
+        floating: true,
+        fontSize: '16px',
+        position: 'left',
+        offsetX: 50,
+        offsetY: 20,
+        labels: {
+        useSeriesColors: true,
+        },
+        markers: {
+        size: 0
+        },
+        formatter: function(seriesName, opts) {
+        return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex] + "%"
+        },
+        itemMargin: {
+        vertical: 5
+        }
+    },
+    responsive: [{
+        breakpoint: 500,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 0,
+            offsetY: 10,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 0
+            }
+        }
+        }
+    },
+
+    {
+        breakpoint: 600,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 40,
+            offsetY: 10,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    
+        
+    {
+        breakpoint: 900,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 40,
+            offsetY: 30,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1200,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 20,
+            offsetY: 13,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1000,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 0,
+            offsetY: 5,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 2
+            }
+        }
+        }
+    }]
+    };
+
+    var myChart = new ApexCharts(document.querySelector("#myChart"), options);
+    myChart.render();
+</script> 
+
+{% endblock %}

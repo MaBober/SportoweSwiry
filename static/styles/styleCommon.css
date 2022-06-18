@@ -268,6 +268,66 @@ a.cookie-button-text {
   background-color: #000;
 }
 
+
+
+/* MAIN NAVBAR */
+
+
+nav {
+  background-color: #000 !important;
+  height: 39px;
+  width: 70%;
+  margin: auto;
+  margin-right: 0;
+  margin-top: 30px;
+  margin-right: 5%;
+}
+
+
+.add-activity {
+  width: 206px;
+  height: 46px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  /* margin: 0 450px 0 0; */
+  /* padding: 13px 12px; */
+  border-radius: 15px;
+  background-color: #579956;
+  position: relative;
+  margin-left: -60px;
+
+}
+
+img.icon-add-activity {
+  width: 29px;
+  height: 22px;
+  flex-grow: 0;
+  object-fit: contain;
+  text-align: center;
+  margin: auto;
+}
+
+.add-activity a {
+  text-align: left;
+  margin-top:auto;
+  margin-bottom: auto;
+  margin-right: 20px;
+  font-size: 16px;
+  color: #fff;
+}
+
+.nav-item a {
+  margin-top:auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+
+
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {
 
@@ -307,5 +367,53 @@ a.cookie-button-text {
     font-size: 13px;
     margin-right: 3px;
   }
+
+
+  /* MAIN NAVBAR */
+
+  /* .navbar-box {
+    width: 300px;
+} */
   
+}
+
+/* FOR SMALL SCREENS */
+@media(max-width: 1200px) {
+
+  /* MAIN NAVBAR */
+
+  nav {
+    background-color: transparent !important;
+    width: 50%;
+    margin: auto;
+    margin-right: 0;
+    margin-top: 50px;
+    margin-right: 5%;
+  }
+
+  .navbar-toggler
+  {
+      border: 2px solid white !important;
+      border-radius: 10px !important; 
+      margin-right: 10px;
+  }
+
+  .navbar-collapse {
+    background-color: #000;
+    border-radius: 15px;
+    border: 2px solid #579956 !important;
+  }
+
+  .add-activity {
+    margin-left: 0px;
+    margin-top:-2px;
+  
+  }
+
+  .nav-item a {
+    margin-left: 10px;
+  }
+
+
+
 }

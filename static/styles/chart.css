@@ -1,0 +1,152 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmail.webp") no-repeat center fixed;
+    background-size: cover;
+    background-color: #3a3a3a;
+    min-height: 100%;
+    position: relative;
+  }
+
+.dashBoard {
+    background-color: #3a3a3a;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 100%;
+    min-height: 100%;
+    margin-top: 200px;
+}
+
+.Chart-Box {
+    background-color: black;
+    /* display: flex; */
+    width: 45%;
+    border: solid 2px white;
+    max-width: 600px;
+    
+}
+
+
+.Event-Box {
+    background-color: black;
+    /* display: flex; */
+    width: 45%;
+    color: white;
+    border: solid 2px white;
+}
+
+.Title-Box {
+    width: 100%;
+    height: 34.7px;
+    font-family: Lato;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .Info-Box {
+    width: 80%;
+    height: 98px;
+    margin:auto;
+    /* margin: 2px 45px 35px 49px; */
+    padding: 20.7px 43px 18px 23px;
+    border: solid 2px #fff;
+    background-color: rgba(217, 217, 217, 0);
+  }
+
+  .Dashboard-First-Row {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top:100px;
+  }
+
+  .Dashboard-Main-Box {
+    width: 295px;
+    height: 91px;
+    /* margin: 0 20px 28px 0;
+    padding: 14px 39px 18px 16px; */
+    background-color: #000;
+    display: flex;
+    flex-direction: row;
+  }
+
+  img.icon-route {
+    width: 56px;
+    height: 56px;
+    margin: 0 25px 3px 0;
+    object-fit: contain;
+  }
+
+  .Dashboard-Value-Main-Box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .Dashboard-Value-Title {
+    width: 114px;
+    height: 17px;
+    margin: 0 0 6px 70px;
+    font-family: Lato;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #fff;
+  }
+
+
+  .Dashboard-Value {
+    width: 159px;
+    height: 36px;
+    margin: 6px 0 0 25px;
+    font-family: Lato;
+    font-size: 30px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #fff;
+  }
+
+
+
+/* FOR SMALL SCREENS */
+@media(max-width: 850px) {
+    .dashBoard {
+        flex-direction: column;
+        justify-content: center;
+        margin: auto;
+        margin-top: 200px;
+    }
+
+    .Chart-Box {
+        width: 90%;
+        margin: auto;
+        
+    }
+    
+    .Event-Box {
+        width: 90%;
+        margin: auto;
+        margin-top: 10px;
+    }
+
+    .Title-Box {
+        width: 90%;
+      }
+  
+}

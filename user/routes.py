@@ -693,8 +693,9 @@ def callbackConnect():
 
 
 
-# @user.route("/test", methods=['POST', 'GET'])
-# def test():
-
-#     form=UserForm()
-#     return render_template("NEWsendMessage.html", form=form)
+@user.route("/chart", methods=['POST', 'GET'])
+def test():
+    d1=30
+    d2=60
+    d3=100
+    return render_template("chart.html", d1=d1, d2=d2, d3=d3, menuMode="mainApp")

@@ -60,7 +60,35 @@
     text-align: center;
 }
 
+.Event-Box-Value-Title-Border {
+    margin: auto;
+    text-align: center;
+    border-right: 2px solid #fff;
+    border-left: 2px solid #fff;
+}
+
 .Event-Box-Value {
     margin: auto;
     text-align: center;
 }
+
+.Event-Box-Value-Border {
+    margin: auto;
+    text-align: center;
+    border-right: 2px solid #fff;
+    border-left: 2px solid #fff;
+}
+
+/* FOR SMALL SCREENS */
+@media(max-width: 850px) {
+
+    .Event-Box-Value-Title h5 {
+        font-size: 16px !important;
+    }
+
+    .Event-Box-Value-Title-Border h5 {
+        font-size: 16px !important;
+    }
+
+}
+

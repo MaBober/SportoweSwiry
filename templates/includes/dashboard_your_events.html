@@ -16,7 +16,7 @@
             {% if event.status == "Zapisy otwarte" or event.status == "W trakcie" %}
             <div class="row">
                 <div class="col-4 Event-Box-Value-Title"><h5>Tydzień</h5></div>
-                <div class="col-4 Event-Box-Value-Title"><h5>Przebyty dystans</h5></div>
+                <div class="col-4 Event-Box-Value-Title-Border"><h5>Przebyty dystans</h5></div>
                 <div class="col-4 Event-Box-Value-Title"><h5>Cel</h5></div>
             </div>
             <div class="row">
@@ -30,7 +30,7 @@
                 {% endif %}
 
                 {% if eventWeekDistance[event.id] < eventWeekTarget[event.id] %}
-                <div class="col-4 Event-Box-Value" style="color:rgb(146, 40, 7)"><b>{{eventWeekDistance[event.id]}} km</b></div>
+                <div class="col-4 Event-Box-Value-Border" style="color:rgb(146, 40, 7)"><b>{{eventWeekDistance[event.id]}} km</b></div>
                 {% endif %}
                 <div class="col-4 Event-Box-Value">{{eventWeekTarget[event.id]}} km</div>
             </div>

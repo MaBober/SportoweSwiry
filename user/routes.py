@@ -697,9 +697,7 @@ def callbackConnect():
 
 
 
-@user.route("/chart", methods=['POST', 'GET'])
+@user.route("/test", methods=['POST', 'GET'])
 def test():
-    d1=30
-    d2=60
-    d3=100
-    return render_template("chart.html", d1=d1, d2=d2, d3=d3, menuMode="mainApp")
+
+    return render_template("chart.html", menuMode="mainApp")

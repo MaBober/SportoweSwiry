@@ -326,6 +326,28 @@ img.icon-add-activity {
   margin-right: 20px;
 }
 
+.nav-item:hover {
+  background-color: #579956;
+  border-radius: 15px;
+}
+
+.Main-Menu-Message {
+  margin-right: 0;
+  width: 70px;
+}
+
+.Alert-Message {
+  /* position: relative; */
+  /* margin-right: 15px;  */
+  background-color: red; 
+  /* margin: auto;  */
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px; 
+  font-size: 16px;
+  margin-left: -20px;
+}
+
 
 
 /* FOR SMALL SCREENS */
@@ -405,7 +427,8 @@ img.icon-add-activity {
   }
 
   .nav-item a {
-    margin-left: 10px;
+    margin-left: 20px;
   }
+
 
 }

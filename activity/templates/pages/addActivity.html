@@ -2,8 +2,10 @@
 
 {% block body_content %}
 
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/addActivity.css') }}">
+
 <div class="container-xl px-4 mt-4">
-    <div class="card-header" style="background-color: rgba(224, 153, 94);">
+    <!-- <div class="card-header Add-Activity" style="background-color: rgba(224, 153, 94);">
         {% if mode == 'create' %}
         Dodaj nową aktywność
         {% endif %}
@@ -11,12 +13,22 @@
         {% if mode == 'edit' %}
         Edytuj aktywność
         {% endif %}
-    </div>
+    </div> -->
 
-    <hr class="mt-0 mb-4">
-    <div class="row justify-content-center">
-        <div class="col-md-1"></div>
-        <div class="col-md-4">
+    <!-- <hr class="mt-1 mb-4"> -->
+    <div class="row justify-content-center Add-Activity-Container">
+        
+        <div class="Add-Activity-Main-Box">
+
+            <div class="card-header Add-Activity-Title" style="background-color: rgba(224, 153, 94);">
+                {% if mode == 'create' %}
+                Dodaj nową aktywność
+                {% endif %}
+    
+                {% if mode == 'edit' %}
+                Edytuj aktywność
+                {% endif %}
+            </div>
 
             {% if mode == 'create' %}
             <form method ="post">
@@ -28,7 +40,7 @@
                 {{ form.csrf_token}}
             {% endif %}
 
-                <div class="mb-3">
+                <div class="mb-3 Add-Activity-Input">
                     <label class="small mb-1" for="date">{{ form.date.label }}:</label>
                     {{ form.date(class_="form-control") }}
                     <ul>
@@ -38,9 +50,9 @@
                     </ul>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 Add-Activity-Input">
                     <label class="small mb-1" for="activity">{{ form.activity.label }}:</label>
-                    {{ form.activity(class_="form-select") }}
+                    {{ form.activity(class_="form-control") }}
                     <ul>
                         {% for error in form.activity.errors %}
                             {{ error }}
@@ -48,7 +60,7 @@
                     </ul>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 Add-Activity-Input">
                     <label class="small mb-1" for="distance">{{ form.distance.label }}:</label>
                     {{ form.distance(class_="form-control") }}
                     <ul>
@@ -58,7 +70,7 @@
                     </ul>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 Add-Activity-Input">
                     <label class="small mb-1" for="time">{{ form.time.label }}:</label>
                     {{ form.time(class_="form-control") }}
                     <ul>
@@ -68,8 +80,7 @@
                     </ul>
                 </div>
 
-                <div class="d-grid gap-2 col-6 mx-auto">
-                    <button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">
+                    <button class="btn btn-dark btn-lg Main-Button" style="background-color: #182c07e8;" type="submit">
                         {% if mode == 'create' %}
                             Dodaj
                         {% endif %}
@@ -78,7 +89,6 @@
                             Zapisz
                         {% endif %}
                     </button>
-                </div>
             </form>
         </div>
         

@@ -24,22 +24,30 @@
         <ul class="nav navbar-nav">
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Panel uczestnika</a> 
+                <a class="nav-link" href="{{ url_for('user.basicDashboard') }}">Panel uczestnika</a> 
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Statystyki</a> 
+                <a class="nav-link" href="{{ url_for('activity.myActivities') }}">Statystyki</a> 
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="#">Wiadomości</a> 
+            <li class="nav-item sss">
+                <div class="row">
+                    <a class="nav-link Main-Menu-Message" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
+                    <a class="Alert-Message">
+                        {% if current_user.countNotReadedMessages()>0 %} 
+                            {{ current_user.countNotReadedMessages() }}
+                        {% endif %}
+                    </a>
+                </div>
             </li>
+
 
             <li class="nav-item dropdown" >
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Wyzwania</a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#">Twoje wyzwania</a></li>
-                    <li><a class="dropdown-item" href="#">Dostępne wyzwania</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('event.yourEvents', mode='ongoing') }}">Twoje wyzwania</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('event.exploreEvents') }}">Dostępne wyzwania</a></li>
                 </ul>
             </li>
 
@@ -71,7 +79,6 @@
                 {% endif %}
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li style="display: flex;"><a class="dropdown-item" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a> {% if current_user.countNotReadedMessages()>0 %} <p style="margin-right: 15px; background-color: red; margin: auto; padding-left: 10px; padding-right: 10px; border-radius: 5px; font-size: 18px;">{{ current_user.countNotReadedMessages() }}</p>{% endif %}</li>
                     <li><a class="dropdown-item" href="{{ url_for('user.settings') }}">Ustawienia konta</a></li>
                     <li><hr class="dropdown-divider"></li>
                     

@@ -8,7 +8,7 @@ body {
 
 
 .Static-Content {
-  background-color: #3a3a3a;
+  /* background-color: #3a3a3a; */
   width:  90%;
   margin: auto;
   margin-top:100px;
@@ -177,6 +177,7 @@ body {
     .Chart-Box {
         width: 100%;
         margin: auto;
+        margin-bottom: 10px;
         
     }
     

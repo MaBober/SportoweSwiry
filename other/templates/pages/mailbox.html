@@ -1,7 +1,7 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
+
 
 {% block body_content %}
-
 
 
     <!-- Send Message - Modal -->
@@ -15,60 +15,61 @@
 			<form action="#" method="post">
 				<div class="modal-body" id="idMessageModalBody">
 					{{ form.csrf_token }}
-						<div class="form-group">
-							<label class="form-label"> {{ form.receiverEmail.label }} </label>
-							{{ form.receiverEmail(class="form-select") }}
-							<ul>
-								{% for error in form.receiverEmail.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>
 
-						<div class="form-group">
-							<label class="form-label"> {{ form.subject.label }} </label>
-							{{ form.subject(class="form-control") }}
-							<ul>
-								{% for error in form.subject.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>
+					<div class="mb-3">
+						<label class="small mb-1" for="activity">{{ form.receiverEmail.label }}:</label>
+						{{ form.receiverEmail(class_="form-control") }}
+						<ul>
+							{% for error in form.receiverEmail.errors %}
+								{{ error }}
+							{% endfor %}
+						</ul>
+					</div>
 
-						<div class="form-group">
-							<label class="form-label"> {{ form.message.label }} </label>
-							{{ form.message(class="form-control") }}
-							<ul>
-								{% for error in form.message.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>
+					<div class="mb-3">
+						<label class="small mb-1" for="activity">{{ form.subject.label }}:</label>
+						{{ form.subject(class_="form-control") }}
+						<ul>
+							{% for error in form.subject.errors %}
+								{{ error }}
+							{% endfor %}
+						</ul>
+					</div>
 
-						<div class="form-group">
+					<div class="mb-3">
+						<label class="small mb-1" for="activity">{{ form.message.label }}:</label>
+						{{ form.message(class_="form-control") }}
+						<ul>
+							{% for error in form.message.errors %}
+								{{ error }}
+							{% endfor %}
+						</ul>
+					</div>
+
+						<div class="form-group Checkbox-Input">
 							<label class="form-label"> {{ form.sendByApp.label }} </label>
 							{{ form.sendByApp(class_="form-check-input", id="checkboxAppId") }}
-							<ul>
+							<!-- <ul>
 								{% for error in form.sendByApp.errors %}
 									{{ error }}
 								{% endfor %}
-							</ul>
+							</ul> -->
 						</div>
 
-						<div class="form-group">
+						<div class="form-group Checkbox-Input">
 							<label class="form-label"> {{ form.sendByEmail.label }} </label>
 							{{ form.sendByEmail(class_="form-check-input", id="checkboxEmailId") }}
-							<ul>
+							<!-- <ul>
 								{% for error in form.sendByEmail.errors %}
 									{{ error }}
 								{% endfor %}
-							</ul>
+							</ul> -->
 						</div>
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmWriteMessageForm">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-						<button type="submit" class="btn btn-dark" style="background-color: #182c07e8;" id="sendButtonId">Wyślij wiadomość</button>
+						<button type="submit" class="btn btn-dark" style="background-color: #579956;" id="sendButtonId">Wyślij wiadomość</button>
 					</form>
 				</div>
 			</form>
@@ -93,7 +94,7 @@
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmReadMessage">
-						<button type="submit" class="btn btn-dark" style="background-color: #182c07e8;">Oznacz jako przeczytana</button>
+						<button type="submit" class="btn btn-dark" style="background-color: #579956;">Oznacz jako przeczytana</button>
 					</form>
 				</div>
 
@@ -155,7 +156,8 @@
 
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<div class="container">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mailbox.css') }}">
+<div class="container Mailbox-Main-Box">
 <div class="row">
 	<!-- BEGIN INBOX -->
 	<div class="col-md-12">
@@ -264,44 +266,6 @@
 									</tr>
 									{% endif %}
 									
-
-
-										<!-- {% if message.messageReaded == 0 and actionName=='inbox' %}
-										<tr class="listOfMessages readMessageConfirm" 
-											data-bs-toggle="modal" data-bs-target="#readMessageModal"
-											data-desc="{{ message.message }}"
-											data-url="{{ url_for('other.changeStatusOfMessage', messageID=message.id) }}"
-											style="background-color: lightgray;">
-										{% else %}
-										<tr class="listOfMessages readMessageConfirm" 
-											data-bs-toggle="modal" data-bs-target="#readMessageModal"
-											data-desc="{{ message.message }}"
-											data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
-										{% endif %}
-
-										
-										<td class="action"><input type="checkbox" /></td>
-										<td class="action"><i class="fa fa-star-o"></i></td>
-										<td class="action"><i class="fa fa-bookmark-o"></i></td>
-										{% if message.messageReaded == 0 and actionName=='inbox' %}
-											
-												<td class="name"><a href="#" style="font-weight: 700; color:black;">{{ message.senderName }}</a></td>
-											
-												<td class="name"><a href="#" style="font-weight: 700; color:black;">{{ message.receiver }}</a></td>
-											
-											<td class="subject"><a href="#" style="font-weight: 700; color:black;">{{ message.subject }}</a></td>
-											<td class="time" style="font-weight: 700;">{{ message.date }}</td>
-										{% else %}
-											
-												<td class="name"><a href="#" style="font-weight: 400; color:black;">{{ message.senderName }}</a></td>
-											
-												<td class="name"><a href="#" style="font-weight: 400; color:black;">{{ message.receiver }}</a></td>
-											
-											<td class="subject"><a href="#" style="font-weight: 400; color:black;">{{ message.subject }}</a></td>
-											<td class="time" style="font-weight: 400;">{{ message.date }}</td>
-											</tr>
-										{% endif %} -->
-									
 									{% endfor %}
 								</tbody>
 							</table>
@@ -318,5 +282,6 @@
 	<!-- END INBOX -->
 </div>
 </div>
+<div class="padding"></div>
 
 {% endblock %}

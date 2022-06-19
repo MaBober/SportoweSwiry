@@ -45,10 +45,11 @@ body {
 
 .Main-Button {
     display: flex;
-    width: 80%;
+    width: 60%;
+    max-width: 399px;
     height: 56px;
     margin: auto !important;
-    border-radius: 5px;
+    border-radius: 15px;
     background-color: #579956 !important;
     margin-left: auto;
     margin-right: auto;

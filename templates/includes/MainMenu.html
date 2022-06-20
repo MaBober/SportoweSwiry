@@ -31,15 +31,13 @@
                 <a class="nav-link" href="{{ url_for('activity.myActivities') }}">Statystyki</a> 
             </li>
 
-            <li class="nav-item sss">
-                <div class="row">
-                    <a class="nav-link Main-Menu-Message" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
-                    <a class="Alert-Message">
-                        {% if current_user.countNotReadedMessages()>0 %} 
-                            {{ current_user.countNotReadedMessages() }}
-                        {% endif %}
-                    </a>
-                </div>
+            <li class="nav-item Main-Menu-Message">
+                <a class="nav-link Main-Menu-Message" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
+                <a class="Alert-Message">
+                    {% if current_user.countNotReadedMessages()>0 %} 
+                        {{ current_user.countNotReadedMessages() }}
+                    {% endif %}
+                </a>
             </li>
 
 

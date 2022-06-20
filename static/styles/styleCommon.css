@@ -332,20 +332,20 @@ img.icon-add-activity {
 }
 
 .Main-Menu-Message {
-  margin-right: 0;
-  width: 70px;
+  display: flex;
+  flex-direction: row;
 }
 
 .Alert-Message {
-  /* position: relative; */
-  /* margin-right: 15px;  */
+  position: absolute;
   background-color: red; 
-  /* margin: auto;  */
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
   border-radius: 5px; 
-  font-size: 16px;
-  margin-left: -20px;
+  font-size: 10px;
+  margin-left: 113px !important;
+  margin-top: 13px !important;
+  
 }
 
 

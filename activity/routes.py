@@ -1,5 +1,7 @@
+from configparser import ConverterMapping
 from itertools import count
 import re
+from ssl import ALERT_DESCRIPTION_UNSUPPORTED_CERTIFICATE
 from start import db
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
@@ -16,7 +18,7 @@ from pandas import json_normalize
 
 import pygal
 from pygal.style import Style
-import datetime
+import datetime as dt
 import math
 
 import urllib3
@@ -126,10 +128,10 @@ def addActivity():
         for event in userEvents:
 
             #Defines present week of event
-            days = abs(datetime.date.today() - event.start).days
+            days = abs(dt.date.today() - event.start).days
             week = math.ceil((days+1)/7) 
-            weekStart = event.start + datetime.timedelta(weeks=1*week-1)
-            weekEnd = event.start + datetime.timedelta(weeks=1*week-1, days=6)
+            weekStart = event.start + dt.timedelta(weeks=1*week-1)
+            weekEnd = event.start + dt.timedelta(weeks=1*week-1, days=6)
     
             activities=Activities.query.filter(Activities.userName == current_user.id).filter(Activities.date >= weekStart).filter(Activities.date <= weekEnd).all()
             if week <= event.lengthWeeks:
@@ -155,7 +157,7 @@ def addActivity():
             eventWeekTarget.update({event.id:target})
 
         return render_template("/pages/addActivity.html", title_prefix = "Dodaj aktywność", form=form, mode="create" , activities=activities, 
-                            today_7 = datetime.date.today() + datetime.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget)
+                            today_7 = dt.date.today() + dt.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget)
     
     else:
         return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")
@@ -173,7 +175,7 @@ def myActivities():
 
     if activities:
         sumDistance=0
-        sumTime = datetime.timedelta()
+        sumTime = dt.timedelta()
         timeList=[]
         amount=len(activities)
         averageDistance=0
@@ -186,7 +188,7 @@ def myActivities():
         #Sum of total time of activities
         for time in timeList:
             (h, m, s) = time.split(':')
-            d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+            d = dt.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
             sumTime += d
 
 
@@ -197,7 +199,7 @@ def myActivities():
         try:
             (h, m, s) = str(averageTime).split(':')
             (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
-            averageTime= datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
+            averageTime= dt.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
         except:
             print("Something went wrong")
 
@@ -222,14 +224,14 @@ def myActivities():
         pie_chart = pie_chart.render_data_uri()
 
 
-        today=datetime.date.today()
+        today=dt.date.today()
         dataList=[]
         dates=[]
 
         for dayActivity in range(10):
             distance=0
             for no in activities:
-                date=today-datetime.timedelta(days=dayActivity)
+                date=today-dt.timedelta(days=dayActivity)
                 if date==no.date:
                     distance=distance+no.distance
             dataList.append(distance)
@@ -268,14 +270,47 @@ def stravaLoginTEST():
 @login_required
 def stravaCallback():
 
-    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    if request.method == "GET":
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-    print(request.query_string)
+        access_token = getStravaAccessToken()
+        searchAfter = dt.datetime(2022,3,8,0,0).timestamp()
+        searchBefore = dt.datetime(2022,6,1,0,0).timestamp()
+
+        header = {'Authorization': 'Bearer ' + access_token}
+        param = {'per_page': 200, 'page': 1, 'after':searchAfter, 'before':searchBefore}
+        activites_url = "https://www.strava.com/api/v3/athlete/activities"
+        stravaActivities = requests.get(activites_url, headers=header, params=param).json()
+        
+        stravaActivities = json_normalize(stravaActivities)
+        stravaActivities = convertStravaData(stravaActivities)
+        
+
+        print(stravaActivities)
+
+    return redirect(url_for('other.hello'))
+
+
+@activity.route("/pandasTest",methods=['POST','GET'])
+@login_required
+def pandasTest():
+
+        activitiess=Activities.query.filter(Activities.userName == current_user.id)
+        #actPand = json_normalize(activitiess, )
+
+        actPand = pd.read_sql(activitiess.statement , db.engine, index_col='id')
+
+        print(actPand)
+
+        return redirect(url_for('other.hello'))
+
+
+
+def getStravaAccessToken():
+
     code = request.args['code']
-
     auth_url = "https://www.strava.com/oauth/token"
-    activites_url = "https://www.strava.com/api/v3/athlete/activities"
-
+    
     payload = {
     'client_id': "87931",
     'client_secret': 'a02f77e5eedb0784e84a5646e59072f300562e84',
@@ -285,37 +320,25 @@ def stravaCallback():
     }
 
     res = requests.post(auth_url, data=payload, verify=False)
-    print(res)
-    access_token = res.json()['access_token']
-    print(access_token)
-
-    searchdate = datetime.datetime(2022,1,1,0,0).timestamp()
-
-    header = {'Authorization': 'Bearer ' + access_token}
-    param = {'per_page': 200, 'page': 1, 'after':searchdate}
-    activities = requests.get(activites_url, headers=header, params=param).json()
-
-    #print(activities)
-    # print(activities[0]["name"])
-    # print(activities[0]["distance"])
-    # print(activities[0]["start_date_local"])
-    # print(activities[0]["id"])
-    # print(activities[0]["type"])
-
-    myActivities=Activities.query.filter(Activities.userName == current_user.id).all()
+    accessToken = res.json()['access_token']
     
-    activities = json_normalize(activities)
-   
+    return accessToken
+
+def convertStravaData(activitiesJSON):
+
+    #Defines columns to proceed
     columns = [
         "id",
-        "type",
         "start_date_local",
-        "distance"
+        "type",
+        "distance",
+        "elapsed_time"
     ]
     
-    activities = activities[columns]
+    activitiesJSON = activitiesJSON[columns]
 
     #Dodać wszystkie aktywności!
+    #Defines names relations
     acitivitieTypesDictionary = {
         "Run":"Bieg",
         "Trail Run" : "Bieg Trailowy",
@@ -323,11 +346,24 @@ def stravaCallback():
         "Ride":"Kolarstwo",
         "Workout":"Inne"
         }
+
+    #Defines columns names
+    columsDictionary = {
+        "id":"stravaID",
+        "start_date_local":"date",
+        "type":"activity",
+        'elapsed_time':"time"
+        }
+
+    activitiesJSON.rename(columns=columsDictionary, inplace=True)
     
-    activities["type"].replace(acitivitieTypesDictionary, inplace=True)
-    activities =  activities.loc[2, "distance"] + 100000
+    #Prepare data to match APP tables
+    activitiesJSON["activity"].replace(acitivitieTypesDictionary, inplace=True)
+    activitiesJSON['date'] = pd.to_datetime(activitiesJSON['date']).dt.date
+    activitiesJSON['distance'] = round(activitiesJSON['distance']/1000, 1)
+    activitiesJSON['time'] = pd.to_timedelta(activitiesJSON['time'], unit='s')
+    activitiesJSON['userName'] = current_user.id
 
-    activities.to_csv('strava.csv')
-    print(activities.head())
-
-    return redirect(url_for('other.hello'))
+    print (type(activitiesJSON))
+    
+    return activitiesJSON

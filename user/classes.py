@@ -36,7 +36,7 @@ class User(db.Model, UserMixin):
         return None
 
     def countNotReadedMessages(self):
-        notReadedMessages=mailboxMessage.query.filter(mailboxMessage.receiver == self.mail).filter(mailboxMessage.messageReaded == 0).all()
+        notReadedMessages=mailboxMessage.query.filter(mailboxMessage.receiver == self.mail).filter(mailboxMessage.messageReaded == 0).filter(mailboxMessage.multipleMessage == True).all()
         amountOfNotReadedMessages=len(notReadedMessages)
         return amountOfNotReadedMessages
 

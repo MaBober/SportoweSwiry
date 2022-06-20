@@ -96,7 +96,7 @@ def mailbox(actionName):
 
 
 
-    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).order_by(mailboxMessage.id.desc()).all()
+    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).filter(mailboxMessage.multipleMessage == True).order_by(mailboxMessage.id.desc()).all()
     messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).filter(mailboxMessage.multipleMessage == False).order_by(mailboxMessage.id.desc()).all()
     amountOfReceivedMessages=len(messagesCurrentUserReceived)
     amountOfSentMessages=len(messagesCurrentUserSent)

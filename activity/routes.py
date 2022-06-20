@@ -1,3 +1,4 @@
+from itertools import count
 import re
 from start import db
 from flask import Blueprint, render_template, redirect, url_for, flash, request
@@ -9,6 +10,9 @@ from event.functions import giveUserEvents
 
 import json
 import requests
+
+import pandas as pd
+from pandas import json_normalize
 
 import pygal
 from pygal.style import Style
@@ -285,12 +289,45 @@ def stravaCallback():
     access_token = res.json()['access_token']
     print(access_token)
 
+    searchdate = datetime.datetime(2022,1,1,0,0).timestamp()
+
     header = {'Authorization': 'Bearer ' + access_token}
-    param = {'per_page': 200, 'page': 1}
+    param = {'per_page': 200, 'page': 1, 'after':searchdate}
     activities = requests.get(activites_url, headers=header, params=param).json()
 
-    print(activities[0]["name"])
-    print(activities[0]["distance"])
-    print(activities[0]["start_date"])
+    #print(activities)
+    # print(activities[0]["name"])
+    # print(activities[0]["distance"])
+    # print(activities[0]["start_date_local"])
+    # print(activities[0]["id"])
+    # print(activities[0]["type"])
 
-    return 'ttt'
+    myActivities=Activities.query.filter(Activities.userName == current_user.id).all()
+    
+    activities = json_normalize(activities)
+   
+    columns = [
+        "id",
+        "type",
+        "start_date_local",
+        "distance"
+    ]
+    
+    activities = activities[columns]
+
+    #Dodać wszystkie aktywności!
+    acitivitieTypesDictionary = {
+        "Run":"Bieg",
+        "Trail Run" : "Bieg Trailowy",
+        "Walk":"Spacer",
+        "Ride":"Kolarstwo",
+        "Workout":"Inne"
+        }
+    
+    activities["type"].replace(acitivitieTypesDictionary, inplace=True)
+    activities =  activities.loc[2, "distance"] + 100000
+
+    activities.to_csv('strava.csv')
+    print(activities.head())
+
+    return redirect(url_for('other.hello'))

@@ -253,6 +253,20 @@ def myActivities():
     else:
         return redirect(url_for('other.hello'))
 
+
+@activity.route("/pandasTest",methods=['POST','GET'])
+@login_required
+def pandasTest():
+
+        activitiess=Activities.query.filter(Activities.userName == current_user.id)
+        #actPand = json_normalize(activitiess, )
+
+        actPand = pd.read_sql(activitiess.statement , db.engine, index_col='id')
+
+        print(actPand)
+
+        return redirect(url_for('other.hello'))
+
 @activity.route("/stravaTEST")
 @login_required
 def stravaTEST():
@@ -271,39 +285,23 @@ def stravaLoginTEST():
 def stravaCallback():
 
     if request.method == "GET":
+
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         access_token = getStravaAccessToken()
 
-        searchAfter = dt.datetime(2022,3,8,0,0).timestamp()
-        searchBefore = dt.datetime(2022,6,1,0,0).timestamp()
-        header = {'Authorization': 'Bearer ' + access_token}
-        param = {'per_page': 200, 'page': 1, 'after':searchAfter, 'before':searchBefore}
-        activites_url = "https://www.strava.com/api/v3/athlete/activities"
-        
-        stravaActivities = requests.get(activites_url, headers=header, params=param).json()
-        
+        lastStravaActivity = dt.datetime(2022,3,8,0,0).timestamp()
+
+        stravaActivities = getActivitiesFromStrava(access_token, lastStravaActivity)
         stravaActivities = json_normalize(stravaActivities)
         stravaActivities = convertStravaData(stravaActivities)
-        
 
-        print(stravaActivities)
+        addStravaActivitiesToDB (stravaActivities)
 
     return redirect(url_for('other.hello'))
 
 
-@activity.route("/pandasTest",methods=['POST','GET'])
-@login_required
-def pandasTest():
 
-        activitiess=Activities.query.filter(Activities.userName == current_user.id)
-        #actPand = json_normalize(activitiess, )
-
-        actPand = pd.read_sql(activitiess.statement , db.engine, index_col='id')
-
-        print(actPand)
-
-        return redirect(url_for('other.hello'))
 
 
 
@@ -324,6 +322,17 @@ def getStravaAccessToken():
     accessToken = res.json()['access_token']
     
     return accessToken
+
+
+def getActivitiesFromStrava(access_token, afterDate):
+
+    header = {'Authorization': 'Bearer ' + access_token}
+    param = {'per_page': 200, 'page': 1, 'after':afterDate}
+    activites_url = "https://www.strava.com/api/v3/athlete/activities"
+    
+    stravaActivities = requests.get(activites_url, headers=header, params=param).json()
+
+    return stravaActivities
 
 def convertStravaData(activitiesJSON):
 
@@ -362,7 +371,26 @@ def convertStravaData(activitiesJSON):
     activitiesJSON["activity"].replace(acitivitieTypesDictionary, inplace=True)
     activitiesJSON['date'] = pd.to_datetime(activitiesJSON['date']).dt.date
     activitiesJSON['distance'] = round(activitiesJSON['distance']/1000, 1)
-    activitiesJSON['time'] = pd.to_timedelta(activitiesJSON['time'], unit='s')
+    activitiesJSON['time'] = activitiesJSON['time'].apply(format_time)
     activitiesJSON['userName'] = current_user.id
     
     return activitiesJSON
+
+def format_time(x):
+
+    return str(dt.timedelta(seconds = x))
+
+
+def addStravaActivitiesToDB (activitiesFrame):
+
+    for index, singleActivity in activitiesFrame.iterrows() :
+
+        newActivity=Activities(date=singleActivity['date'], activity=singleActivity['activity'], distance=singleActivity['distance'], 
+                            time=singleActivity['time'], userName=current_user.id, stravaID = singleActivity['stravaID'])
+
+        # #adding new activity to datebase
+        db.session.add(newActivity)
+
+    db.session.commit()
+
+    return None

@@ -33,7 +33,11 @@
       {% include "includes/cookie_consent.html" %}
     </div>
     <header>
-      {% include "includes/headerWithoutMenu.html" %} 
+      {% if menuMode=="mainApp" %}
+        {% include "includes/MainMenu.html" %} 
+      {% else %}
+        {% include "includes/headerWithoutMenu.html" %} 
+      {% endif %}
 
     </header>
 

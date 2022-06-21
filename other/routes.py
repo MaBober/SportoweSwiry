@@ -8,7 +8,7 @@ from .forms import MessageForm,  AppMailForm, AppMailToRead
 from user.classes import User
 
 from other.classes import mailboxMessage
-from .functions import send_email, prepareListOfUsers, saveMessageInDB
+from .functions import send_email, prepareListOfChoices, saveMessageInDB, deleteMessagesFromDB, saveMessageInDBforEvent, saveMessageInDBforAll
 from datetime import datetime, timedelta
 
 
@@ -70,16 +70,34 @@ def mailbox(actionName):
     form=AppMailForm()
     readForm=AppMailToRead()
 
-    form.receiverEmail.choices = prepareListOfUsers()
+    form.receiverEmail.choices = prepareListOfChoices()
 
     if form.validate_on_submit():
 
-        saveMessageInDB(form)
-        flash("Wiadomość przesłana do: {}".format(form.receiverEmail.data))
+        if form.receiverEmail.data=="Wszyscy":
+            saveMessageInDBforAll(form)
+            flash("Wiadomość przesłana do wszystkich użytkowników aplikacji")
+        elif ("ID:" in form.receiverEmail.data):
+            saveMessageInDBforEvent(form)
+            (eventName, id) = (form.receiverEmail.data).split(', ID:')
+            flash("Wiadomość przesłana do uczestników wyzwania: {}".format(eventName))
+        else:
+            saveMessageInDB(form)
+            flash("Wiadomość przesłana do użytkownika: {}".format(form.receiverEmail.data))
+
+    elif request.method == 'POST':
+        messagesToDelete=request.form.getlist('checkboxesWithMessagesToDelete')
+        if not messagesToDelete:
+            flash("Brak zaznaczonych wiadomości do usunięcia")
+        else:
+            deleteMessagesFromDB(messagesToDelete)
+            flash ("Zaznaczone wiadomości zostały poprawnie usnięte")
+        return redirect(url_for('other.mailbox', actionName='inbox'))
 
 
-    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).order_by(mailboxMessage.id.desc()).all()
-    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).order_by(mailboxMessage.id.desc()).all()
+
+    messagesCurrentUserReceived=mailboxMessage.query.filter(mailboxMessage.receiver == current_user.mail).filter(mailboxMessage.multipleMessage == True).order_by(mailboxMessage.id.desc()).all()
+    messagesCurrentUserSent=mailboxMessage.query.filter(mailboxMessage.sender == current_user.mail).filter(mailboxMessage.multipleMessage == False).order_by(mailboxMessage.id.desc()).all()
     amountOfReceivedMessages=len(messagesCurrentUserReceived)
     amountOfSentMessages=len(messagesCurrentUserSent)
 
@@ -90,7 +108,7 @@ def mailbox(actionName):
 
 
     return render_template('/pages/mailbox.html', form=form, readForm=readForm, messagesCurrentUser=messagesCurrentUser, current_user=current_user, 
-            amountOfReceivedMessages=amountOfReceivedMessages, amountOfSentMessages=amountOfSentMessages, actionName=actionName)
+            amountOfReceivedMessages=amountOfReceivedMessages, amountOfSentMessages=amountOfSentMessages, actionName=actionName, menuMode="mainApp")
 
 @other.route("/acceptCookies", methods=['POST','GET'])
 def acceptCookies():
@@ -115,4 +133,11 @@ def privacyPolicy():
 @other.route("/test")
 def test():
 
+    flash("dupa")
     return render_template('/pages/messageSent.html', title_prefix = "Formularz kontaktowy" )
+
+
+@other.route("/changeMessageStatus/<messageID>", methods=['POST','GET'])
+def changeStatusOfMessage(messageID):
+    current_user.changeStatusOfMessage(messageID)
+    return redirect(url_for('other.mailbox', actionName='inbox'))

@@ -157,7 +157,7 @@ def addActivity():
             eventWeekTarget.update({event.id:target})
 
         return render_template("/pages/addActivity.html", title_prefix = "Dodaj aktywność", form=form, mode="create" , activities=activities, 
-                            today_7 = dt.date.today() + dt.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget)
+                            today_7 = dt.date.today() + dt.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp")
     
     else:
         return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")

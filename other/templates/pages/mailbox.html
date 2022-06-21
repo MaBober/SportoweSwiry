@@ -1,7 +1,7 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
+
 
 {% block body_content %}
-
 
 
     <!-- Send Message - Modal -->
@@ -15,60 +15,61 @@
 			<form action="#" method="post">
 				<div class="modal-body" id="idMessageModalBody">
 					{{ form.csrf_token }}
-						<div class="form-group">
-							<label class="form-label"> {{ form.receiverEmail.label }} </label>
-							{{ form.receiverEmail(class="form-select") }}
-							<ul>
-								{% for error in form.receiverEmail.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>
 
-						<div class="form-group">
-							<label class="form-label"> {{ form.subject.label }} </label>
-							{{ form.subject(class="form-control") }}
-							<ul>
-								{% for error in form.subject.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>
+					<div class="mb-3">
+						<label class="small mb-1" for="activity">{{ form.receiverEmail.label }}:</label>
+						{{ form.receiverEmail(class_="form-control") }}
+						<ul>
+							{% for error in form.receiverEmail.errors %}
+								{{ error }}
+							{% endfor %}
+						</ul>
+					</div>
 
-						<div class="form-group">
-							<label class="form-label"> {{ form.message.label }} </label>
-							{{ form.message(class="form-control") }}
-							<ul>
-								{% for error in form.message.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>
+					<div class="mb-3">
+						<label class="small mb-1" for="activity">{{ form.subject.label }}:</label>
+						{{ form.subject(class_="form-control") }}
+						<ul>
+							{% for error in form.subject.errors %}
+								{{ error }}
+							{% endfor %}
+						</ul>
+					</div>
 
-						<div class="form-group">
+					<div class="mb-3">
+						<label class="small mb-1" for="activity">{{ form.message.label }}:</label>
+						{{ form.message(class_="form-control") }}
+						<ul>
+							{% for error in form.message.errors %}
+								{{ error }}
+							{% endfor %}
+						</ul>
+					</div>
+
+						<div class="form-group Checkbox-Input">
 							<label class="form-label"> {{ form.sendByApp.label }} </label>
 							{{ form.sendByApp(class_="form-check-input", id="checkboxAppId") }}
-							<ul>
+							<!-- <ul>
 								{% for error in form.sendByApp.errors %}
 									{{ error }}
 								{% endfor %}
-							</ul>
+							</ul> -->
 						</div>
 
-						<div class="form-group">
+						<div class="form-group Checkbox-Input">
 							<label class="form-label"> {{ form.sendByEmail.label }} </label>
 							{{ form.sendByEmail(class_="form-check-input", id="checkboxEmailId") }}
-							<ul>
+							<!-- <ul>
 								{% for error in form.sendByEmail.errors %}
 									{{ error }}
 								{% endfor %}
-							</ul>
+							</ul> -->
 						</div>
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmWriteMessageForm">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-						<button type="submit" class="btn btn-dark" style="background-color: #182c07e8;" id="sendButtonId">Wyślij wiadomość</button>
+						<button type="submit" class="btn btn-dark" style="background-color: #579956;" id="sendButtonId">Wyślij wiadomość</button>
 					</form>
 				</div>
 			</form>
@@ -87,45 +88,16 @@
 				<h5 class="modal-title" id="exampleModalLabel">Treść wiadomości</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-			<form action="#" method="post">
+
 				<div class="modal-body" id="idReadMessageModalBody">
-					{{ readForm.csrf_token }}
-						<div class="form-group">
-							<label class="form-label"> Nadawca </label>
-							{{ readForm.sender(class="form-control") }}
-							<ul>
-								{% for error in readForm.sender.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>
-
-						<div class="form-group">
-							<label class="form-label"> {{ readForm.subject.label }} </label>
-							{{ readForm.subject(class="form-control") }}
-							<ul>
-								{% for error in readForm.subject.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>
-
-						<div class="form-group">
-							<label class="form-label"> {{ readForm.message.label }} </label>
-							{{ readForm.message(class="form-control") }}
-							<ul>
-								{% for error in readForm.message.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul>
-						</div>					
+					
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmReadMessage">
-						<button type="button" class="btn btn-dark" style="background-color: #182c07e8;" data-bs-dismiss="modal">Zamknij</button>
+						<button type="submit" class="btn btn-dark" style="background-color: #579956;">Oznacz jako przeczytana</button>
 					</form>
 				</div>
-			</form>
+
         </div>
         </div>
     </div>
@@ -184,7 +156,8 @@
 
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<div class="container">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mailbox.css') }}">
+<div class="container Mailbox-Main-Box">
 <div class="row">
 	<!-- BEGIN INBOX -->
 	<div class="col-md-12">
@@ -209,10 +182,10 @@
 							<ul class="nav nav-pills nav-stacked">
 								<li class="header">Katalogi</li>
 								<li class="{{ 'active' if actionName=='inbox' }}"><a href="{{ url_for('other.mailbox', actionName='inbox') }}"><i class="fa fa-inbox"></i> Odebrane ({{ amountOfReceivedMessages}})</a></li>
-								<li><a href="#"><i class="fa fa-star"></i> Oznaczone gwiazdką</a></li>
-								<li><a href="#"><i class="fa fa-bookmark"></i> Ważne</a></li>
+								<!-- <li><a href="#"><i class="fa fa-star"></i> Oznaczone gwiazdką</a></li>
+								<li><a href="#"><i class="fa fa-bookmark"></i> Ważne</a></li> -->
 								<li class="{{ 'active' if actionName=='sent' }}"><a href="{{ url_for('other.mailbox', actionName='sent') }}"><i class="fa fa-mail-forward"></i> Wysłane ({{ amountOfSentMessages }})</a></li>
-								<li><a href="#"><i class="fa fa-folder"></i> Kosz</a></li>
+								<!-- <li><a href="#"><i class="fa fa-folder"></i> Kosz</a></li> -->
 							</ul>
 
 						</div>
@@ -221,76 +194,84 @@
 					
 					<!-- BEGIN INBOX CONTENT -->
 					<div class="col-md-9">
-						<div class="row">
-							<div class="col-sm-6">
-								<label style="margin-right: 8px;" class="">
-									<div class="icheckbox_square-blue" style="position: relative;"><input type="checkbox" id="check-all" class="icheck" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
-								</label>
-								<div class="btn-group">
-									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-										Akcję <span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu" role="menu">
-										<li><a href="#">Mark as read</a></li>
-										<li><a href="#">Mark as unread</a></li>
-										<li><a href="#">Mark as important</a></li>
-										<li class="divider"></li>
-										<li><a href="#">Report spam</a></li>
-										<li><a href="#">Delete</a></li>
-									</ul>
-								</div>
-							</div>
-
-							<div class="col-md-6 search-form">
-								<form action="#" class="text-right">
-									<div class="input-group">
-										<input type="text" class="form-control input-sm" placeholder="Szukaj">
-										<span class="input-group-btn">
-                                            <button type="submit" name="search" class="btn_ btn-primary btn-sm search"><i class="fa fa-search"></i></button></span>
-									</div>			 
-								</form>
-							</div>
-						</div>
 						
 						<div class="padding"></div>
 						
+						<form method="POST" action ="{{ url_for('other.mailbox', actionName=actionName) }}">
+						<button type="submit" class="btn btn-dark btn-sm small-button">Usuń zaznaczone</button>
 						<div class="table-responsive">
 							<table class="table">
 								<tbody>
+									<tr>
+										<th>#</th>
+										<th>Nadawca</th>
+										<th>Adresat</th>
+										<th>Temat</th>
+										<th>Data</th>
+									</tr>
 									{% for message in messagesCurrentUser: %}
 
-									<tr class="listOfMessages readMessageConfirm" 
-										data-bs-toggle="modal" data-bs-target="#readMessageModal"
-										data-desc="{{ message.message }}"
-										data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
-
-									
-										<td class="action"><input type="checkbox" /></td>
-										<td class="action"><i class="fa fa-star-o"></i></td>
-										<td class="action"><i class="fa fa-bookmark-o"></i></td>
-										{% if actionName=='inbox': %}
-											<td class="name"><a href="#" style="font-weight: 400;">{{ message.sender }}</a></td>
-										{% else %}
-											<td class="name"><a href="#">{{ message.receiver }}</a></td>
-										{% endif %}
-										<td class="subject"><a href="#">{{ message.subject }}</a></td>
-										<td class="time">{{ message.date }}</td>
+									{% if message.messageReaded == 0 and actionName=='inbox' %}
+									<tr class="listOfMessages" style="background-color: lightgray;">
+										<td class="action"><input type="checkbox" value="{{ message.id }}" name="checkboxesWithMessagesToDelete"></td>
+										<td class="name">
+											<a href="#" style="font-weight: 700; color:black;" class="readMessageConfirm" 
+											data-bs-toggle="modal" data-bs-target="#readMessageModal"
+											data-desc="{{ message.message }}"
+											data-url="{{ url_for('other.changeStatusOfMessage', messageID=message.id) }}">
+											{{ message.senderName }}</a>
+										</td>
+										<td class="name">
+											<a href="#" style="font-weight: 700; color:black;" class="readMessageConfirm" 
+											data-bs-toggle="modal" data-bs-target="#readMessageModal"
+											data-desc="{{ message.message }}"
+											data-url="{{ url_for('other.changeStatusOfMessage', messageID=message.id) }}">
+											{{ message.receiverName }}</a>
+										</td>
+										<td class="subject">
+											<a href="#" style="font-weight: 700; color:black;" class="readMessageConfirm" 
+											data-bs-toggle="modal" data-bs-target="#readMessageModal"
+											data-desc="{{ message.message }}"
+											data-url="{{ url_for('other.changeStatusOfMessage', messageID=message.id) }}">
+											{{ message.subject }}</a>
+										</td>
+										<td class="time" style="font-weight: 700;">{{ message.date }}</td>
 									</tr>
+
+									{% else %}
+									<tr class="listOfMessages">
+										<td class="action"><input type="checkbox" value="{{ message.id }}" name="checkboxesWithMessagesToDelete"></td>
+										<td class="name">
+											<a href="#" style="font-weight: 400; color:black;" class="readMessageConfirm" 
+											data-bs-toggle="modal" data-bs-target="#readMessageModal"
+											data-desc="{{ message.message }}"
+											data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
+											{{ message.senderName }}</a>
+										</td>
+										<td class="name">
+											<a href="#" style="font-weight: 400; color:black;" class="readMessageConfirm" 
+											data-bs-toggle="modal" data-bs-target="#readMessageModal"
+											data-desc="{{ message.message }}"
+											data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
+											{{ message.receiverName }}</a>
+										</td>
+										<td class="subject">
+											<a href="#" style="font-weight: 400; color:black;" class="readMessageConfirm" 
+											data-bs-toggle="modal" data-bs-target="#readMessageModal"
+											data-desc="{{ message.message }}"
+											data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
+											{{ message.subject }}</a>
+										</td>
+										<td class="time" style="font-weight: 400;">{{ message.date }}</td>
+									</tr>
+									{% endif %}
 									
 									{% endfor %}
 								</tbody>
 							</table>
 						</div>
-
-						<ul class="pagination">
-							<li class="disabled"><a href="#">«</a></li>
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">»</a></li>
-						</ul>						
+						</form>
+					
 					</div>
 					<!-- END INBOX CONTENT -->
 					
@@ -301,5 +282,6 @@
 	<!-- END INBOX -->
 </div>
 </div>
+<div class="padding"></div>
 
 {% endblock %}

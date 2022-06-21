@@ -1,0 +1,38 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_FAQ.webp") no-repeat center fixed;
+    background-size: cover;
+    background-color: #3a3a3a;
+    min-height: 100%;
+  }
+
+.Small-Navbar {
+    width: 100%;
+    background-color: #000 !important;
+    border-radius: 0 !important;
+}
+
+.Small-Navbar a {
+    color: #fff !important;
+}
+
+.Small-Navbar a:hover {
+    background-color: #579956 !important;
+}
+
+.Settings-Main-Box {
+    width: 94%;
+    margin: auto;
+    margin-top: 80px !important;
+    padding-bottom: 94px;
+}
+
+.card-header {
+    background-color: #000 !important;
+    color: #fff;
+    border-radius: 0 !important;
+}
+
+.Single-Card-Box {
+    border: 0 !important;
+    border-radius: 0 !important;
+}

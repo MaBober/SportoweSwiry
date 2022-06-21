@@ -315,7 +315,7 @@ def settings():
 
         return redirect(url_for('user.settings'))
 
-    return render_template("accountSettings.html", title_prefix = "Ustawienia konta", form=form, avatarsPath=avatarsPath, avatarForm=avatarForm, current_user=current_user)
+    return render_template("accountSettings.html", title_prefix = "Ustawienia konta", form=form, avatarsPath=avatarsPath, avatarForm=avatarForm, current_user=current_user, menuMode="mainApp")
 
 @user.route("/passwordChange", methods=['POST','GET'])
 @login_required #This page needs to be login
@@ -336,7 +336,7 @@ def passwordChange():
         flash("Hasło zmienione. Zaloguj się ponownie")
         return redirect(url_for('user.logout'))
 
-    return render_template("passwordChange.html", title_prefix = "Prywatność", form=form)
+    return render_template("passwordChange.html", title_prefix = "Prywatność", form=form, menuMode="mainApp")
 
 
 @user.route("/basicDashboard")
@@ -436,14 +436,18 @@ def basicDashboard():
                 eventWeek.update({event.id:week})
                 eventWeekDistance.update({event.id:round(WeekDistance,2)})
                 eventWeekTarget.update({event.id:target})
+
+            d1=30
+            d2=60
+            d3=100
                 
-            return render_template('basicDashboard.html', activities=activities, title_prefix = "Dashboard", 
+            return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
                             sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, today_7 = datetime.date.today() + datetime.timedelta(days=-7),
-                            eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget)
+                            eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, d3=d3)
         
         else:
-            return render_template('basicDashboard.html', activities=activities, title_prefix = "Dashboard", 
-                            sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart)
+            return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
+                            sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3)
 
     else:
         flash("Nie posiadasz dodanych żadnych aktywności")
@@ -693,8 +697,7 @@ def callbackConnect():
 
 
 
-# @user.route("/test", methods=['POST', 'GET'])
-# def test():
+@user.route("/test", methods=['POST', 'GET'])
+def test():
 
-#     form=UserForm()
-#     return render_template("NEWsendMessage.html", form=form)
+    return render_template("chart.html", menuMode="mainApp")

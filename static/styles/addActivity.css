@@ -1,0 +1,90 @@
+body {
+    min-height: 100%;
+}
+
+.Add-Activity-Title {
+    background-color: #000 !important;
+    height: 41px;
+    flex-grow: 0;
+    font-family: Lato;
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 !important;
+    display: flex;
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+    width: 100% !important;
+
+}
+
+
+
+.Add-Activity-Main-Box {
+    background-color: #fff;
+    width: 40%;
+    margin-top: 50px;
+
+}
+
+.Add-Activity-Input {
+    margin-left: 20px;
+    margin-right: 20px;
+
+}
+
+.Event-Main-Box {
+    margin-top: 25px;
+}
+
+.Main-Button {
+    display: flex;
+    width: 60%;
+    max-width: 399px;
+    height: 56px;
+    margin: auto !important;
+    border-radius: 15px;
+    background-color: #579956 !important;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 2px #579956;
+    margin-bottom: 10px !important;
+    justify-content: center;
+  }
+
+
+.Main-Button:hover {
+    background-color: #000 !important;
+  }
+
+
+/* FOR SMALL SCREENS */
+@media(max-width: 850px) {
+
+    .Add-Activity-Main-Box {
+        background-color: #fff;
+        width: 90%;
+        margin-top: 40px;
+    
+    }
+
+    .Add-Activity-Container {
+        margin-bottom: 20px;
+    }
+
+    .Event-Main-Box {
+        margin-bottom: 100px !important;
+    }
+
+    .Main-Button {
+        width: 80%;
+      }
+    
+  
+}

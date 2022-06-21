@@ -274,12 +274,13 @@ def stravaCallback():
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         access_token = getStravaAccessToken()
+
         searchAfter = dt.datetime(2022,3,8,0,0).timestamp()
         searchBefore = dt.datetime(2022,6,1,0,0).timestamp()
-
         header = {'Authorization': 'Bearer ' + access_token}
         param = {'per_page': 200, 'page': 1, 'after':searchAfter, 'before':searchBefore}
         activites_url = "https://www.strava.com/api/v3/athlete/activities"
+        
         stravaActivities = requests.get(activites_url, headers=header, params=param).json()
         
         stravaActivities = json_normalize(stravaActivities)
@@ -363,7 +364,5 @@ def convertStravaData(activitiesJSON):
     activitiesJSON['distance'] = round(activitiesJSON['distance']/1000, 1)
     activitiesJSON['time'] = pd.to_timedelta(activitiesJSON['time'], unit='s')
     activitiesJSON['userName'] = current_user.id
-
-    print (type(activitiesJSON))
     
     return activitiesJSON

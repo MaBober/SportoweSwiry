@@ -1,10 +1,12 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
 
 {% block body_content %}
 
-<div class="container-xl px-4 mt-4">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/accountSettings.css') }}">
+
+<div class="container-xl px-4 mt-4 Settings-Main-Box">
     <!-- Account page navigation-->
-    <nav class="nav nav-borders rounded" style="background-color: rgba(224, 153, 94);">
+    <nav class="nav nav-borders rounded Small-Navbar" style="background-color: rgba(224, 153, 94);">
         <a class="nav-link active ms-0" href="{{ url_for('user.settings') }}"  style="color: #182c07e8;">Dane podstawowe</a>
         <a class="nav-link" href="{{ url_for('user.passwordChange') }}" style="color: #182c07e8;">Prywatność</a>
         <a class="nav-link" href="#" style="color: #182c07e8;">Inne</a>
@@ -14,7 +16,7 @@
     <div class="row">
         <div class="col-xl-4">
             <!-- Profile picture card-->
-            <div class="card mb-4 mb-xl-0">
+            <div class="card mb-4 mb-xl-0 Single-Card-Box">
                 <div class="card-header">Zdjęcie profilowe</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
@@ -51,7 +53,7 @@
         </div>
         <div class="col-xl-8">
             <!-- Account details card-->
-            <div class="card mb-4">
+            <div class="card mb-4 Single-Card-Box">
                 <div class="card-header">Szczegóły konta</div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">

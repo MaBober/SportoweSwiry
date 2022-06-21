@@ -36,3 +36,13 @@ body {
     border: 0 !important;
     border-radius: 0 !important;
 }
+
+.Account-Settings-Main-Button {
+    background-color: #579956 !important;
+    border: solid 2px #579956;
+}
+
+.Account-Settings-Main-Button:hover {
+    background-color: #000 !important;
+
+}

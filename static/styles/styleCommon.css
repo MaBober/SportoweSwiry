@@ -348,6 +348,16 @@ img.icon-add-activity {
   
 }
 
+.dropdown-item {
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.dropdown-item:hover {
+  background-color: #579956; 
+}
+
 
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {

@@ -10,6 +10,8 @@ from activity.forms import ActivityForm
 from event.classes import CoefficientsList, DistancesTable
 from event.functions import giveUserEvents
 
+from .strava import addStravaActivitiesToDB, getActivitiesFromStrava, getLastStravaActivityDate, getStravaAccessToken, convertStravaData
+
 import json
 import requests
 
@@ -113,7 +115,7 @@ def addActivity():
 
     if form.validate_on_submit():
 
-        newActivity=Activities(date=form.date.data, week=1, activity=form.activity.data, distance=form.distance.data, 
+        newActivity=Activities(date=form.date.data, activity=form.activity.data, distance=form.distance.data, 
                          time=form.time.data, userName=current_user.id)
 
         #adding new activity to datebase
@@ -283,114 +285,34 @@ def stravaLoginTEST():
 @activity.route("/strava-callback",methods=['POST','GET'])
 @login_required
 def stravaCallback():
+    print(request)
 
     if request.method == "GET":
 
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        try:
+            if request.args["scope"] == 'read,activity:read_all,profile:read_all':
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-        access_token = getStravaAccessToken()
+                access_token = getStravaAccessToken()
+                lastStravaActivity = getLastStravaActivityDate()
+                stravaActivities = getActivitiesFromStrava(access_token, lastStravaActivity)
+                stravaActivities = json_normalize(stravaActivities)
+                stravaActivities = convertStravaData(stravaActivities)
 
-        lastStravaActivity = dt.datetime(2022,3,8,0,0).timestamp()
+                addStravaActivitiesToDB (stravaActivities)
+                message = "Zsynchronizowano aktywności ze Strava!"
+            
+            else:
+                message = "Zaznacz proszę wszystkie wymagane zgody i spróbuj synchronizować ze Strava jeszcze raz."
 
-        stravaActivities = getActivitiesFromStrava(access_token, lastStravaActivity)
-        stravaActivities = json_normalize(stravaActivities)
-        stravaActivities = convertStravaData(stravaActivities)
+        except:
+            # if request.args['error'] == 'access_denied':
+            #     return redirect(url_for('other.hello'))
+                
+            # else:
+            message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
 
-        addStravaActivitiesToDB (stravaActivities)
-
+    flash(message)
     return redirect(url_for('other.hello'))
 
 
-
-
-
-
-def getStravaAccessToken():
-
-    code = request.args['code']
-    auth_url = "https://www.strava.com/oauth/token"
-    
-    payload = {
-    'client_id': "87931",
-    'client_secret': 'a02f77e5eedb0784e84a5646e59072f300562e84',
-    'code': code,
-    'grant_type': "authorization_code",
-    'f': 'json'
-    }
-
-    res = requests.post(auth_url, data=payload, verify=False)
-    accessToken = res.json()['access_token']
-    
-    return accessToken
-
-
-def getActivitiesFromStrava(access_token, afterDate):
-
-    header = {'Authorization': 'Bearer ' + access_token}
-    param = {'per_page': 200, 'page': 1, 'after':afterDate}
-    activites_url = "https://www.strava.com/api/v3/athlete/activities"
-    
-    stravaActivities = requests.get(activites_url, headers=header, params=param).json()
-
-    return stravaActivities
-
-def convertStravaData(activitiesJSON):
-
-    #Defines columns to proceed
-    columns = [
-        "id",
-        "start_date_local",
-        "type",
-        "distance",
-        "elapsed_time"
-    ]
-    
-    activitiesJSON = activitiesJSON[columns]
-
-    #Dodać wszystkie aktywności!
-    #Defines names relations
-    acitivitieTypesDictionary = {
-        "Run":"Bieg",
-        "Trail Run" : "Bieg Trailowy",
-        "Walk":"Spacer",
-        "Ride":"Kolarstwo",
-        "Workout":"Inne"
-        }
-
-    #Defines columns names
-    columsDictionary = {
-        "id":"stravaID",
-        "start_date_local":"date",
-        "type":"activity",
-        'elapsed_time':"time"
-        }
-
-    activitiesJSON.rename(columns=columsDictionary, inplace=True)
-    
-    #Prepare data to match APP tables
-    activitiesJSON["activity"].replace(acitivitieTypesDictionary, inplace=True)
-    activitiesJSON['date'] = pd.to_datetime(activitiesJSON['date']).dt.date
-    activitiesJSON['distance'] = round(activitiesJSON['distance']/1000, 1)
-    activitiesJSON['time'] = activitiesJSON['time'].apply(format_time)
-    activitiesJSON['userName'] = current_user.id
-    
-    return activitiesJSON
-
-def format_time(x):
-
-    return str(dt.timedelta(seconds = x))
-
-
-def addStravaActivitiesToDB (activitiesFrame):
-
-    for index, singleActivity in activitiesFrame.iterrows() :
-
-        newActivity=Activities(date=singleActivity['date'], activity=singleActivity['activity'], distance=singleActivity['distance'], 
-                            time=singleActivity['time'], userName=current_user.id, stravaID = singleActivity['stravaID'])
-
-        # #adding new activity to datebase
-        db.session.add(newActivity)
-
-    db.session.commit()
-
-    return None

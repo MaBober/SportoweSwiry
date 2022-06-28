@@ -306,11 +306,12 @@ def stravaCallback():
                 message = "Zaznacz proszę wszystkie wymagane zgody i spróbuj synchronizować ze Strava jeszcze raz."
 
         except:
-            # if request.args['error'] == 'access_denied':
-            #     return redirect(url_for('other.hello'))
-                
-            # else:
-            message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+            try:
+                if request.args['error'] == 'access_denied':
+                    return redirect(url_for('other.hello'))
+                    
+            except:
+                message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
 
     flash(message)
     return redirect(url_for('other.hello'))

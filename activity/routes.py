@@ -287,23 +287,29 @@ def stravaLoginTEST():
 def stravaCallback():
     print(request)
 
+    
     if request.method == "GET":
 
+
         try:
-            if request.args["scope"] == 'read,activity:read_all,profile:read_all':
-                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            if "error" not in request.args:
+                if request.args["scope"] == 'read,activity:read_all,profile:read_all':
+                    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-                access_token = getStravaAccessToken()
-                lastStravaActivity = getLastStravaActivityDate()
-                stravaActivities = getActivitiesFromStrava(access_token, lastStravaActivity)
-                stravaActivities = json_normalize(stravaActivities)
-                stravaActivities = convertStravaData(stravaActivities)
+                    access_token = getStravaAccessToken()
+                    lastStravaActivity = getLastStravaActivityDate()
+                    stravaActivities = getActivitiesFromStrava(access_token, lastStravaActivity)
+                    stravaActivities = json_normalize(stravaActivities)
+                    stravaActivities = convertStravaData(stravaActivities)
 
-                addStravaActivitiesToDB (stravaActivities)
-                message = "Zsynchronizowano aktywności ze Strava!"
-            
+                    addStravaActivitiesToDB (stravaActivities)
+                    message = "Zsynchronizowano aktywności ze Strava!"
+                
+                else:
+                    message = "Zaznacz proszę wszystkie wymagane zgody i spróbuj synchronizować ze Strava jeszcze raz."
+
             else:
-                message = "Zaznacz proszę wszystkie wymagane zgody i spróbuj synchronizować ze Strava jeszcze raz."
+                message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
 
         except:
             try:

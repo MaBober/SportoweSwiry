@@ -348,6 +348,16 @@ img.icon-add-activity {
   
 }
 
+.dropdown-item {
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.dropdown-item:hover {
+  background-color: #579956; 
+}
+
 
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {
@@ -517,7 +527,7 @@ img.icon-add-activity {
 
 }
 
-/* FOR SMALL SCREENS */
+/* FOR BIG SCREENS */
 @media (min-width: 1600px) {
 
   .nav-item a {
@@ -529,9 +539,17 @@ img.icon-add-activity {
     margin-left: 130px !important;
   }
 
+  .add-activity a {
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 10px !important;
+    margin-right: auto !important;
+  }
+
 }
 
-/* FOR SMALL SCREENS */
+/* FOR BIG SCREENS */
 @media (min-width: 1700px) {
 
   .nav-item a {

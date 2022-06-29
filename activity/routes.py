@@ -285,11 +285,8 @@ def stravaLoginTEST():
 @activity.route("/strava-callback",methods=['POST','GET'])
 @login_required
 def stravaCallback():
-    print(request)
-
     
     if request.method == "GET":
-
 
         try:
             if "error" not in request.args:
@@ -312,12 +309,12 @@ def stravaCallback():
                 message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
 
         except:
-            try:
-                if request.args['error'] == 'access_denied':
-                    return redirect(url_for('other.hello'))
+        #     try:
+        #         if request.args['error'] == 'access_denied':
+        #             return redirect(url_for('other.hello'))
                     
-            except:
-                message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+        #     except:
+            message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
 
     flash(message)
     return redirect(url_for('other.hello'))

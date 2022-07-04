@@ -121,16 +121,18 @@
             </div>
 
             <div class="row-social-connect">
-                <div class="container">
-                    <a class="btn btn-lg btn-social btn-facebook" href="{{ url_for('user.loginConnectFacebook') }}">
-                        <i class="fa fa-facebook fa-fw"></i> Połącz konto z Facebook
-                    </a>
-                </div>
-                <div class="container">
-                    <a class="btn btn-lg btn-social btn-google" href="#">
-                        <i class="fa fa-google fa-fw"></i> Połącz konto z Google
-                    </a>
-                </div>
+                <a class="Login-Social-Button" href="{{ url_for('user.loginConnectFacebook') }}">
+                    <img src="static/img/icon-Facebook.webp" class="icon-social-button">
+                    <span class="Login-Social-Font">
+                        Połącz konto z Facebook
+                    </span>
+                </a>
+                <a class="Login-Social-Button" href="#">
+                    <img src="static/img/icon-Google.webp" class="icon-social-button">
+                    <span class="Login-Social-Font">
+                        Połącz konto z Google
+                    </span>
+                </a>
             </div>
 
         </div>

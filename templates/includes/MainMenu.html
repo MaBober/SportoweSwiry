@@ -30,6 +30,16 @@
                 <a class="nav-link" href="{{ url_for('activity.myActivities') }}">Statystyki</a> 
             </li>
 
+
+            <li class="nav-item dropdown" >
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Wyzwania</a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ url_for('event.yourEvents', mode='ongoing') }}">Twoje wyzwania</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('event.exploreEvents') }}">Dostępne wyzwania</a></li>
+                </ul>
+            </li>
+
+
             <li class="nav-item Main-Menu-Message">
                 <a class="nav-link Main-Menu-Message" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
                 <a class="Alert-Message">
@@ -39,14 +49,6 @@
                 </a>
             </li>
 
-
-            <li class="nav-item dropdown" >
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Wyzwania</a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{{ url_for('event.yourEvents', mode='ongoing') }}">Twoje wyzwania</a></li>
-                    <li><a class="dropdown-item" href="{{ url_for('event.exploreEvents') }}">Dostępne wyzwania</a></li>
-                </ul>
-            </li>
 
             {% if current_user.isAdmin %}
                     <li class="nav-item dropdown" >
@@ -88,6 +90,16 @@
                     
                     </ul>
             </li>
+
+            <li class="nav-item User-Avatar">
+                {% if current_user.avatarCheck(avatarsPath): %}
+                        <img class="img-account-profile rounded-circle mb-2" src=" {{ '/static/avatars/{}'.format(current_user.id+'.jpg') }} " alt="" style="height: 25px; margin-top: 7px;"> 
+                     {% else: %}
+                        <!--<img src="{{ avatars.robohash((current_user.id) , size='100') }}">-->
+                        <img class="img-account-profile rounded-circle mb-2" src="/static/pictures/runner_logo.svg" alt="">
+                    {% endif %}
+            </li>
+                    
         </ul>
         </div> 
     </nav>

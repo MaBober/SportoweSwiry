@@ -349,7 +349,7 @@ def basicDashboard():
 
     activities=Activities.query.filter(Activities.userName == current_user.id).all()
 
-    #avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
+    avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
     if activities:
         sumDistance=0
@@ -448,11 +448,11 @@ def basicDashboard():
                 
             return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
                             sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, today_7 = datetime.date.today() + datetime.timedelta(days=-7),
-                            eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, d3=d3)
+                            eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
         
         else:
             return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
-                            sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3)
+                            sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
 
     else:
         flash("Nie posiadasz dodanych żadnych aktywności")

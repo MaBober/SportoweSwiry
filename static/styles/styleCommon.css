@@ -359,6 +359,11 @@ img.icon-add-activity {
 }
 
 
+.User-Avatar:hover {
+  background-color: transparent !important;
+}
+
+
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {
 

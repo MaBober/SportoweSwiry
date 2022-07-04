@@ -90,5 +90,11 @@
         font-size: 16px !important;
     }
 
+    .Event-Main-Box {
+        width: 90% !important;
+        max-width: 650px;
+        margin: auto;
+    }
+
 }
 

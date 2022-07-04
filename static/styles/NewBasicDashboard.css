@@ -19,7 +19,7 @@ body {
     /* background-color: #3a3a3a; */
     display: flex;
     flex-direction: row;
-    justify-content:flex-start;
+    justify-content: space-between;
     height: 100%;
     /* min-height: 100%; */
     width: 100%;
@@ -30,9 +30,10 @@ body {
 .Chart-Box {
     background-color: black;
     /* display: flex; */
-    width: 100%;
+    width: 49%;
     /* max-width: 500px; */
-    margin-right: 10px;
+    /* margin-right: 10px; */
+
     
 }
 
@@ -40,9 +41,9 @@ body {
 .Event-Info-Box {
     background-color: black;
     /* display: flex; */
-    width: 100%;
+    width: 49%;
     color: white;
-    margin: auto;
+    /* margin: auto; */
     height: 350px;
 }
 
@@ -181,7 +182,7 @@ body {
         
     }
     
-    .Event-Box {
+    .Event-Info-Box {
         width: 100%;
         margin: auto;
         margin-top: 10px;
@@ -195,4 +196,15 @@ body {
         width: 100%;
       }
   
+}
+
+
+
+/* FOR SMALL SCREENS */
+@media (min-width: 850px) and (max-width: 1400px) {
+
+  .Dashboard-Main-Box {
+    width: 49%;
+  }
+
 }

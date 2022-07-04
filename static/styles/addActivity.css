@@ -17,21 +17,17 @@ body {
     color: #fff;
     border-radius: 0 !important;
     display: flex;
-    margin: auto;
+    /* margin: auto; */
     text-align: center;
     justify-content: center;
     width: 100% !important;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 20px;
+    padding-top: 10px;
 
 }
 
-
-
-.Add-Activity-Main-Box {
-    background-color: #fff;
-    width: 40%;
-    margin-top: 50px;
-
-}
 
 .Add-Activity-Input {
     margin-left: 20px;
@@ -54,8 +50,47 @@ body {
     margin-left: auto;
     margin-right: auto;
     border: solid 2px #579956;
-    margin-bottom: 10px !important;
     justify-content: center;
+  }
+
+
+
+
+  .Login-Main-Box {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 21px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-color: #efefef;
+    margin-top: 50px;
+  }
+
+  .Login-Title {
+    width: 100%;
+    height: 61px;
+    flex-grow: 0;
+    background-color: #000;
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+
+  .Login-Title-Font {
+    /* width: 98px; */
+    height: 36px;
+    flex-grow: 0;
+    font-family: Lato;
+    font-size: 30px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    margin: auto;
+    text-decoration: none;
   }
 
 
@@ -67,12 +102,6 @@ body {
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {
 
-    .Add-Activity-Main-Box {
-        background-color: #fff;
-        width: 90%;
-        margin-top: 40px;
-    
-    }
 
     .Add-Activity-Container {
         margin-bottom: 20px;
@@ -85,6 +114,11 @@ body {
     .Main-Button {
         width: 80%;
       }
+
+    .Login-Main-Box {
+        width: 85%;
+        max-width: 650px;
+    }
     
   
 }

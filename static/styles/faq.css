@@ -42,10 +42,11 @@ body {
 
   .Question-Backgorund {
     width: 820px;
-
     margin-top: 10px;
     padding: 11px 10px 13px 10px;
-    opacity: 0.8;
+    opacity: 1;
+    border-width: 0px;
+    border-bottom: 0px;
     background-color: #000;
     justify-content: center;
     text-align: center;

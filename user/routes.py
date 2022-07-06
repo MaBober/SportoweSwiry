@@ -488,7 +488,7 @@ def loginGoogle():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/callback")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri=URL + "/callback")
 
 
     authorization_url, state = flow.authorization_url() 
@@ -505,7 +505,7 @@ def callbackGoogle():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/callback")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri=URL + "/callback")
 
 
 
@@ -699,7 +699,68 @@ def callbackConnect():
 
     return redirect(url_for('user.settings'))
 
+@user.route("/google-login-connect")
+def googleLoginConnect():
 
+    #Gogole
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    #GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
+    client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/googleConnectCallback")
+
+    authorization_url, state = flow.authorization_url() 
+    session["state"] = state   
+
+
+    return redirect(authorization_url)
+
+@user.route("/google-callback-connect", methods=['GET'])
+@login_required
+def googleConnectCallback():
+
+    #Gogole
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
+    client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/googleConnectCallback")
+
+
+    #Gets data from Google
+    flow.fetch_token(authorization_response=request.url)
+
+    if not session["state"] == request.args["state"]:
+        abort(500)
+
+    credentials = flow.credentials
+    request_session = requests.session()
+    cached_session = cachecontrol.CacheControl(request_session)
+    token_request = google.auth.transport.requests.Request(session=cached_session)
+
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials._id_token,
+        request=token_request,
+        audience=GOOGLE_CLIENT_ID
+    )
+
+    name = id_info.get("name")
+    email = id_info.get("email")
+
+    checkingExistUser=User.query.filter(User.mail == email).first()
+
+    if checkingExistUser:
+        flash("Konto gmail ({}) jest już wykorzystywane przez innego użytkownika. Użyj innego konta gmail".format(email))
+    else:
+        user=User.query.filter(User.id == current_user.id).first()
+        fullName=str(name).split(" ")
+        firstName=fullName[0]
+        lastName=fullName[1]
+        user.name=firstName
+        user.lastName=lastName
+        user.mail=email
+        db.session.commit()
+        flash("Twoje konto zostało połączone z kontem gmial: {} ({})".format(name,email))
+
+    return redirect(url_for('user.settings'))
 
 
 @user.route("/test", methods=['POST', 'GET'])

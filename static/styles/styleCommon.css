@@ -94,6 +94,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 .Create-Account-Button:hover {
@@ -114,11 +115,13 @@ body {
   opacity: 0.8;
   background-color: #000;
   bottom: 0;
+  flex-direction: row;
   /* margin-bottom: -94px; */
 }
 
 .Bartsch-Bober-Inc {
   height: 19px;
+  width: 30%;
   font-family: Lato;
   font-size: 16px;
   font-weight: normal;
@@ -126,13 +129,29 @@ body {
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
-  text-align: center;
+  text-align: left;
   color: #636363;
+  flex-direction: row;
 }
 
 .Footer-links {
   display: flex;
   flex-direction: row;
+}
+
+.Strava-logo{
+  position: absolute;
+  top: 10px;
+  height: 50px;
+  left: 240px;
+  width: 90px;
+  background-size: contain;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background-image: url("/static/img/api_logo_cptblWith_strava_stack_white.png");
+  background-repeat: no-repeat;
+  vertical-align: baseline
+  
 }
 
 .Footer-text {
@@ -403,8 +422,14 @@ img.icon-add-activity {
     font-size: 13px;
     margin-right: 3px;
   }
+
+  .Strava-logo{
+    left:190px;
+  }
+  
   
 }
+
 
 /* FOR SMALL SCREENS */
 @media(max-width: 1200px) {

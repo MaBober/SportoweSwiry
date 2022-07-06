@@ -455,8 +455,13 @@ def basicDashboard():
                             sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
 
     else:
-        flash("Nie posiadasz dodanych żadnych aktywności")
-        return render_template("pages/index.html", title_prefix = "Home")
+        pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
+        pie_chart.title = 'Różnorodność aktywności (w %)'
+        checkTable=[]
+        pie_chart = pie_chart.render_data_uri()
+        
+        return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
+                            sumDistance=0, sumTime=0, amount=0, pie_chart=pie_chart, menuMode="mainApp",  d1=0, d2=0, d3=0)
         
   
 @user.route("/rotateAvatarRight")

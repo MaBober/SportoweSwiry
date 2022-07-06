@@ -67,7 +67,7 @@ def exploreEvents():
 
     events=Event.query.filter(Event.status == "Zapisy otwarte").filter(Event.isPrivate == False).filter().all()
 
-    return render_template('/pages/explore_events.html', events=events, title_prefix = "Dostępne wyzwania" )
+    return render_template('/pages/explore_events.html', events=events, title_prefix = "Dostępne wyzwania", menuMode="mainApp" )
 
 
 @event.route("/join_event/<int:eventID>")

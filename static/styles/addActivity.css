@@ -60,10 +60,11 @@ body {
     width: 40%;
     display: flex;
     flex-direction: column;
-    padding: 0 0 21px;
+    padding: 0 0 11px;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     background-color: #efefef;
     margin-top: 50px;
+    margin-bottom: 70px;
   }
 
   .Login-Title {
@@ -102,7 +103,7 @@ body {
   .Strava-Button {
     width: 33%;
     height: 48px;
-    margin: 33px 0 0 0;
+    margin: 23px 0 0 0;
     margin-left: 33%;
     border-radius: 10px;
     background-image: url("/static/img/btn_strava_connectwith_light.png");
@@ -135,6 +136,7 @@ body {
     .Login-Main-Box {
         width: 85%;
         max-width: 650px;
+        margin-bottom: 0px;
     }
     
   

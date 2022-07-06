@@ -1,9 +1,10 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
 
 
    
 
 {% block body_content %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventsView.css') }}">
 
 
  <!-- Modal -->
@@ -44,14 +45,11 @@
 </script>
 
 
-<div class="container-xl px-4 mt-4">
-    <div class="card-header" style="background-color: rgba(224, 153, 94);">
-        <b>Dostępne wyzwania</b>
-    </div>
+<div class="container-xl px-4 mt-4 Settings-Main-Box">
+    <nav class="nav nav-borders rounded Small-Navbar" style="background-color: rgba(224, 153, 94);">
+        <p class="nav-link active ms-0" href="#"  style="color: white;">Dostępne wyzwania</p>
+    </nav>
 </div>
-
-
-</nav>
 
 
 <div class="container">

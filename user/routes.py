@@ -706,7 +706,7 @@ def googleLoginConnect():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     #GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/googleConnectCallback")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/google-callback-connect")
 
     authorization_url, state = flow.authorization_url() 
     session["state"] = state   
@@ -722,7 +722,7 @@ def googleConnectCallback():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/googleConnectCallback")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/google-callback-connect")
 
 
     #Gets data from Google

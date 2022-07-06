@@ -90,8 +90,6 @@ def modifyActivity(activityID):
 @login_required #This page needs to be login
 def addActivity():
 
-    avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
-
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
@@ -166,7 +164,7 @@ def addActivity():
                             today_7 = dt.date.today() + dt.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp")
     
     else:
-        return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność", avatarsPath=avatarsPath, menuMode="mainApp")
+        return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")
 
 
 
@@ -280,9 +278,9 @@ def stravaTEST():
 
     return render_template('/pages/stravaLOG.html')
 
-@activity.route("/stravaLoginTest")
+@activity.route("/stravaLogin")
 @login_required
-def stravaLoginTEST():
+def stravaLogin():
 
     return redirect('https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=http://test.sportoweswiry.atthost24.pl/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all')
 

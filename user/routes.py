@@ -342,7 +342,7 @@ def passwordChange():
 @user.route("/basicDashboard")
 @login_required #This page needs to be login
 def basicDashboard():
-
+    eventCount=2
     if current_user.is_authenticated and not current_user.confirmed:
        
         return redirect(url_for('user.unconfirmed'))
@@ -352,44 +352,45 @@ def basicDashboard():
     avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
     if activities:
-        sumDistance=0
+
+        # # sumDistance=0
         sumTime = datetime.timedelta()
-        timeList=[]
-        amount=len(activities)
+        # timeList=[]
+        
 
-        for activity in activities:
-            sumDistance=sumDistance+activity.distance
-            timeList.append(str(activity.time))
+        # for activity in activities:
+        #     sumDistance=sumDistance+activity.distance
+        #     timeList.append(str(activity.time))
 
-        #Sum of total time of activities
-        for time in timeList:
-            (h, m, s) = time.split(':')
-            d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-            sumTime += d
+        # #Sum of total time of activities
+        # for time in timeList:
+        #     (h, m, s) = time.split(':')
+        #     d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+        #     sumTime += d
 
-        try:
-            (h, m, s) = str(sumTime).split(':')
-            (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
-            sumTime= datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
-        except:
-            print("Something went wrong")
+        # try:
+        #     (h, m, s) = str(sumTime).split(':')
+        #     (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
+        #     sumTime= datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
+        # except:
+        #     print("Something went wrong")
 
-        sumDistance=round(sumDistance,2)
+        # sumDistance=round(sumDistance,2)
 
         #creating a pie chart
         pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
         pie_chart.title = 'Różnorodność aktywności (w %)'
         checkTable=[]
 
-        #calculation of the percentage of activity
-        for activityExternal in activities:
-            quantity=0
-            for activityInternal in activities:
-                if activityExternal.activity==activityInternal.activity and not activityExternal.activity in checkTable:
-                    quantity=quantity+1
-            if quantity>0:
-                pie_chart.add(activityExternal.activity, round((quantity/amount)*100,1))
-                checkTable.append(activityExternal.activity)
+        # #calculation of the percentage of activity
+        # for activityExternal in activities:
+        #     quantity=0
+        #     for activityInternal in activities:
+        #         if activityExternal.activity==activityInternal.activity and not activityExternal.activity in checkTable:
+        #             quantity=quantity+1
+        #     if quantity>0:
+        #         pie_chart.add(activityExternal.activity, round((quantity/amount)*100,1))
+        #         checkTable.append(activityExternal.activity)
         
         #Render a URL adress for chart
         pie_chart = pie_chart.render_data_uri()
@@ -405,6 +406,11 @@ def basicDashboard():
             eventWeek = {}
             eventWeekDistance = {}
             eventWeekTarget = {}
+            eventsDistanceSum = {}
+            eventsDistanceAverege = {}
+            eventsActivtiyTimeAverege = {}
+            evemnsActivityAmount = {}
+
 
             for event in userEvents:
 
@@ -422,7 +428,7 @@ def basicDashboard():
                     target = 0
 
                 WeekDistance = 0
-
+            
                 #Create dictionary which keeps calculated distance of activity
                 for position in activities:
                     coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
@@ -437,19 +443,76 @@ def basicDashboard():
                 eventWeekDistance.update({event.id:round(WeekDistance,2)})
                 eventWeekTarget.update({event.id:target})
 
+                #Defines summary distance of event
+                allEventActivities = Activities.query.filter(Activities.userName == current_user.id).filter(Activities.date>=event.start).filter(Activities.date <= event.end).all()
+                amount=len(allEventActivities)
+                sumDistanceForEvent = 0 
+                averageDistanceForEvent = 0
+
+                timeList=[]
+                for position in allEventActivities:
+                    coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
+                    if coef != None:
+                        if coef.constant == False:
+                            sumDistanceForEvent = sumDistanceForEvent + (coef.value*position.distance)
+                        else: 
+                            sumDistanceForEvent = sumDistanceForEvent + coef.value
+
+                    
+                    timeList.append(str(position.time))
+                    #Sum of total time of activities in event
+
+                sumTime = datetime.timedelta()
+                for time in timeList:
+                    (h, m, s) = time.split(':')
+                    d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                    sumTime += d
+
+                averageTime=(sumTime/amount)
+
+                try:
+                    (h, m, s) = str(averageTime).split(':')
+                    (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
+                    averageTime = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
+                except:
+                    print("Something went wrong")
+
+                sumDistanceForEvent = round(sumDistanceForEvent,0)
+                averageDistanceForEvent = sumDistanceForEvent/len(allEventActivities)
+                averageDistanceForEvent = round(averageDistanceForEvent, 2)
+                
+                eventsActivtiyTimeAverege.update({event.id:averageTime})
+                eventsDistanceSum.update({event.id:sumDistanceForEvent})
+                eventsDistanceAverege.update({event.id:averageDistanceForEvent})
+
             #DLa danego wydarzenia:
             #sumDistanceForEvent=...
             #averageDistanceForEvent=...
             #averageTimeOfActivitiesForEvent=...
             #AmountOfBeersObtained=...
-            d1=30
-            d2=60
+
+           
+            if eventWeek[userEvents[eventCount].id] <userEvents[eventCount].lengthWeeks:
+                d1= eventWeek[userEvents[eventCount].id] / userEvents[eventCount].lengthWeeks * 100
+                d1 = round(d1,0)
+            
+            else:
+                d1 = 100
+
+            if eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]:
+                d2 = eventWeekDistance[userEvents[eventCount].id] / eventWeekTarget[userEvents[eventCount].id] * 100
+                d2 = round(d2, 0)
+            
+            else:
+                d2=100
+            
             d3=100
                 
-            return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
-                            sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, today_7 = datetime.date.today() + datetime.timedelta(days=-7),
-                            eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
-        
+            return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", eventCount = eventCount, amount=amount,
+                            sumDistance=eventsDistanceSum, sumTime=sumTime,  pie_chart=pie_chart, today_7 = datetime.date.today() + datetime.timedelta(days=-7), averageDistance = eventsDistanceAverege,
+                            averegeTime = eventsActivtiyTimeAverege, eventsNames=eventNames, events=userEvents, eventWeek=eventWeek,
+                            eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
+                        
         else:
             return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
                             sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)

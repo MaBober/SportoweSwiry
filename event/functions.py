@@ -46,6 +46,7 @@ def passEventToDB(form, formDist):
         isPrivate = form.isPrivate.data,
         isSecret = form.isSecret.data,
         coefficientsSetName = form.coefficientsSetName.data,
+        maxUserAmount = 0,
         status = "Zapisy otwarte") 
 
 

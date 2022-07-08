@@ -1,0 +1,38 @@
+.Event-Main-Box {
+    border-radius: 0 !important;
+    border: 0px solid #000 !important;
+}
+
+.Event-Title-Box {
+    background-color: #000;
+    border-color: #000;
+    color: white;
+    border-radius: 0 !important;
+}
+
+.Event-Table-Box {
+    border-radius: 0 !important;
+    border: 0px solid #000 !important;
+    background-color: transparent !important;
+}
+
+
+.Event-Table-Title-Box {
+    background-color: #000;
+    border-color: #000;
+    color: white;
+    border-radius: 0 !important;
+    text-align: center;
+    font-size: 20px;
+}
+
+.Extra-Box {
+    margin-bottom: 60px;
+}
+
+
+.Statistics-Box {
+ margin-top: 30px;
+ padding-bottom: 50px;
+}
+

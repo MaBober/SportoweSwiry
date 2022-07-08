@@ -342,7 +342,7 @@ def passwordChange():
 @user.route("/basicDashboard")
 @login_required #This page needs to be login
 def basicDashboard():
-    eventCount=2
+    eventCount=1
     if current_user.is_authenticated and not current_user.confirmed:
        
         return redirect(url_for('user.unconfirmed'))
@@ -468,17 +468,23 @@ def basicDashboard():
                     d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
                     sumTime += d
 
-                averageTime=(sumTime/amount)
+                try:
+                    averageTime=(sumTime/amount)
+                except:
+                    print("Błąd w: averageTime=sumTime/amount")
 
                 try:
                     (h, m, s) = str(averageTime).split(':')
                     (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
                     averageTime = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
                 except:
-                    print("Something went wrong")
+                    print("Błąd w: averageTime.split(':')")
 
                 sumDistanceForEvent = round(sumDistanceForEvent,0)
-                averageDistanceForEvent = sumDistanceForEvent/len(allEventActivities)
+                try:
+                    averageDistanceForEvent = sumDistanceForEvent/len(allEventActivities)
+                except:
+                    print("Błąd w: averageDistanceForEvent = sumDistanceForEvent/len(allEventActivities)")
                 averageDistanceForEvent = round(averageDistanceForEvent, 2)
                 
                 eventsActivtiyTimeAverege.update({event.id:averageTime})
@@ -491,20 +497,35 @@ def basicDashboard():
             #averageTimeOfActivitiesForEvent=...
             #AmountOfBeersObtained=...
 
-           
-            if eventWeek[userEvents[eventCount].id] <userEvents[eventCount].lengthWeeks:
-                d1= eventWeek[userEvents[eventCount].id] / userEvents[eventCount].lengthWeeks * 100
-                d1 = round(d1,0)
-            
-            else:
-                d1 = 100
+            for a in eventWeek:
+                print(a)
 
-            if eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]:
-                d2 = eventWeekDistance[userEvents[eventCount].id] / eventWeekTarget[userEvents[eventCount].id] * 100
-                d2 = round(d2, 0)
-            
-            else:
-                d2=100
+            for b in userEvents:
+                print(b)
+
+            d1 = 100
+            try:
+                if eventWeek[userEvents[eventCount].id] < userEvents[eventCount].lengthWeeks:
+                    d1= eventWeek[userEvents[eventCount].id] / userEvents[eventCount].lengthWeeks * 100
+                    d1 = round(d1,0)
+                
+                else:
+                    d1 = 100
+            except:
+                    print("Błąd w: eventWeek[userEvents[eventCount].id] < userEvents[eventCount].lengthWeeks")
+
+
+
+            d2 = 100
+            try:
+                if eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]:
+                    d2 = eventWeekDistance[userEvents[eventCount].id] / eventWeekTarget[userEvents[eventCount].id] * 100
+                    d2 = round(d2, 0)
+                
+                else:
+                    d2=100
+            except:
+                    print("Błąd w: eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]")
             
             d3=100
                 
@@ -515,7 +536,7 @@ def basicDashboard():
                         
         else:
             return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
-                            sumDistance=sumDistance, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
+                            sumDistance=eventsDistanceSum, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
 
     else:
         pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)

@@ -1,0 +1,46 @@
+.Settings-Main-Box {
+    width: 94%;
+    margin: auto;
+    margin-top: 80px !important;
+}
+
+.Small-Navbar {
+    width: 100%;
+    background-color: #000 !important;
+    border-radius: 0 !important;
+}
+
+.Small-Navbar a:hover {
+    background-color: #579956;
+}
+
+.Title-Row {
+    background-color: #000 !important;
+    border-color: #000 !important;
+    color: white !important;
+}
+
+.Main-Box {
+    background-color: white !important;
+}
+
+.Main-Button {
+    background-color: #579956 !important;
+    border-color: #579956 !important;
+}
+
+.Main-Button:hover {
+    background-color: #000 !important;
+}
+
+
+.Details-Button {
+    background-color: #787878 !important;
+    border-color: #787878 !important;
+    color: white;
+}
+
+.Details-Button:hover {
+    background-color: #000 !important;
+    color: white;
+}

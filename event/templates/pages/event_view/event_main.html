@@ -1,7 +1,9 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
 
 {% block body_content %}
 {% include "/includes/event_menu.html" %}
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventView.css') }}">
 
 <div class="container-xl px-4 mt-4">
 
@@ -9,8 +11,8 @@
         <div class="col-xl-4">
 
             <!-- Event info card-->
-            <div class="card mb-4 mb-xl-0">
-                <div class="card-header">Szczegóły wyzwania</div>
+            <div class="card mb-4 mb-xl-0 Event-Main-Box">
+                <div class="card-header Event-Title-Box">Szczegóły wyzwania</div>
                 <div class="card-body">
                     <h6>Rozpoczęcie: {{event.start}}<br></h6>
                     <h6>Koniec: {{event.end}}</h6>
@@ -22,8 +24,8 @@
             <br>
    
             <!-- Your week card-->
-            <div class="card mb-4 mb-xl-0">
-                <div class="card-header">Aktualny tydzień</div>
+            <div class="card mb-4 mb-xl-0 Event-Main-Box">
+                <div class="card-header Event-Title-Box">Aktualny tydzień</div>
                 
                 <div class="card-body">
                     {% if event.status != "Zakończone" %}
@@ -57,8 +59,8 @@
         
         <div class="col-xl-8">
             <!-- Coeficient list card-->
-            <div class="card mb-4">
-                <div class="card-header">Współczynniki aktywności</div>
+            <div class="card mb-4 Event-Main-Box">
+                <div class="card-header Event-Title-Box">Współczynniki aktywności</div>
                 <div class="card-body">
                     <h5>Mnożniki</h5>
                     <div class="row">
@@ -99,11 +101,11 @@
 <br>
 <div class="container-xl px-4 mt-4">
     <div class="row justify-content-md-center">
-        <div class="col-md-12">
+        <div class="col-md-12 Extra-Box">
 
             <!-- Actiities summary -->
-            <div class="card mb-12 mb-xl-0">
-            <div class="card-header">Podsumowanie aktywności</div>
+            <div class="card mb-12 mb-xl-0 Event-Table-Box">
+            <div class="card-header Event-Table-Title-Box">Podsumowanie aktywności</div>
             <div class="card-body"> 
             <div class="table-responsive-md">
 

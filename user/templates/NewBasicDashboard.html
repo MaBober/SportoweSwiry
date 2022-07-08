@@ -12,21 +12,21 @@
             <img src="static/img/icon-route.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Pokonany dystans</span>
-                <span class="Dashboard-Value">{{sumDistance}} km</span>
+                <span class="Dashboard-Value">{{sumDistance[events[eventCount].id]}} km</span> 
             </div>
         </div>
         <div class="Dashboard-Main-Box">
             <img src="static/img/icon-average.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni dystans</span>
-                <span class="Dashboard-Value">442.43 km</span>
+                <span class="Dashboard-Value">{{averageDistance[events[eventCount].id]}}</span>
             </div>
         </div>
         <div class="Dashboard-Main-Box">
             <img src="static/img/icon-timeTime.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni czas aktywności</span>
-                <span class="Dashboard-Value">1:45:34</span>
+                <span class="Dashboard-Value">{{averegeTime[events[eventCount].id] }}</span>
             </div>
         </div>
         <div class="Dashboard-Main-Box">

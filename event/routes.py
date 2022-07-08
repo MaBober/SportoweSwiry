@@ -129,7 +129,7 @@ def yourEvents(mode):
     userEvents = giveUserEvents(current_user.id, mode)
 
     if userEvents != None:
-        return render_template('/pages/your_events.html', events=userEvents, title_prefix = "Twoje wyzwania", mode  = mode)
+        return render_template('/pages/your_events.html', events=userEvents, title_prefix = "Twoje wyzwania", mode  = mode, menuMode="mainApp")
 
     
     else:
@@ -253,7 +253,7 @@ def viewEvent(eventID):
         avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
         return render_template('/pages/event_view/event_main.html', event=event,avatarsPath=avatarsPath, weekDays=weekDays, title_prefix = event.name, eventUsers=eventUsers, eventData=eventData, targets=targets, usersAmount = len(eventUsers),
-                activitiesAmount = activitiesAmount, coefSet =coefSet, presentWeek=presentWeek, WeekDistance=round(WeekDistance,2), today = datetime.date.today())
+                activitiesAmount = activitiesAmount, coefSet =coefSet, presentWeek=presentWeek, WeekDistance=round(WeekDistance,2), today = datetime.date.today(), menuMode="mainApp", mode="eventView")
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")
         return redirect(url_for('event.exploreEvents'))
@@ -306,7 +306,7 @@ def eventActivities(eventID):
             else: 
                 calculatedDistance.update({position.id:coef.value})
 
-        return render_template('/pages/event_view/event_activities.html', activities=activities,calculatedDistance=calculatedDistance, event=event, title_prefix = "Aktywności wyzwania" )
+        return render_template('/pages/event_view/event_activities.html', activities=activities,calculatedDistance=calculatedDistance, event=event, title_prefix = "Aktywności wyzwania", menuMode="mainApp", mode="eventAvtivities")
         
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")
@@ -380,7 +380,7 @@ def eventStatistics(eventID):
         usersActivitiesAmount.sort(key=lambda x:x[0], reverse=True)
  
 
-        return render_template('/pages/event_view/event_statistics.html', event=event, title_prefix = event.name , usersDistances = usersDistances, usersAmount = len(eventParticipations), usersActivitiesAmount=usersActivitiesAmount)
+        return render_template('/pages/event_view/event_statistics.html', event=event, title_prefix = event.name , usersDistances = usersDistances, usersAmount = len(eventParticipations), usersActivitiesAmount=usersActivitiesAmount, menuMode="mainApp", mode="eventStatistics")
         
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")
@@ -402,7 +402,7 @@ def eventContestants(eventID):
         eventUsers = giveEventParticipants(event.id)
         avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
-        return render_template('/pages/event_view/event_contestants.html', event=event,avatarsPath=avatarsPath, eventUsers=eventUsers, title_prefix = event.name, current_user=current_user )
+        return render_template('/pages/event_view/event_contestants.html', event=event,avatarsPath=avatarsPath, eventUsers=eventUsers, title_prefix = event.name, current_user=current_user, menuMode="mainApp", mode="eventContestants" )
 
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")
@@ -517,7 +517,7 @@ def eventBeers(eventID):
 
         avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
-        return render_template('/pages/event_view/event_beers.html', event=event,avatarsPath=avatarsPath, eventUsers=eventUsers, title_prefix = event.name, current_user=current_user, beerToBuy=beerToBuy)
+        return render_template('/pages/event_view/event_beers.html', event=event,avatarsPath=avatarsPath, eventUsers=eventUsers, title_prefix = event.name, current_user=current_user, beerToBuy=beerToBuy, menuMode="mainApp", mode="eventBeers")
 
     else:
         flash("Nie bierzesz udziału w tym wyzwaniu!")

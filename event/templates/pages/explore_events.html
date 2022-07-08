@@ -4,7 +4,7 @@
    
 
 {% block body_content %}
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventsView.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventsList.css') }}">
 
 
  <!-- Modal -->
@@ -53,20 +53,17 @@
 
 
 <div class="container">
-    <div class="row row-cols-auto">
-    <div class="col-1"></div>
-    <div class="col-11">
-        <div class="row row-cols-auto">
+    <div class="row d-flex justify-content-cente">
             
             
             {% for event in events: %}
             
-            
+            <div class="col-md-1"></div>
             <div class="col-4">
                 <div class="row pt-3"></div>
 
-                <div class="row border bg-light"><h4><center>{{ event.name }}</center></h4></div>
-                <div class ="row border">
+                <div class="row border bg-light Title-Row"><h4><center>{{ event.name }}</center></h4></div>
+                <div class ="row border Main-Box">
                     <div class="col-9">
                         <div class="row pt-2"></div>
                         <h6><b>Początek: </b> {{event.start}}</h6>
@@ -76,20 +73,18 @@
                     
                     <div class="row">
                         <div class="p-2"> </div>
-                        <div class="col-1"></div>
-                        <div class="col-5"> <a href="{{ url_for('event.joinEvent', eventID=event.id )}}" type="button" class="btn btn-success" style="background-color: #182c07e8;">Zapisz się!</a></div>
-                        <div class="col-1"></div>
-                        <div class="col-5"> <a href="{{ url_for('event.eventPreview', eventID=event.id )}}" type="button" class="btn btn" style="background-color: rgba(224, 153, 94);">Szczegóły</a></div>
+                        <div class="col-2"></div>
+                        <div class="col-5"> <a href="{{ url_for('event.joinEvent', eventID=event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a></div>
+                        <div class="col-5"> <a href="{{ url_for('event.eventPreview', eventID=event.id )}}" type="button" class="btn btn Details-Button" style="background-color: rgba(224, 153, 94);">Szczegóły</a></div>
                         <div class="col-1"></div>
                         <div class="p-2"> </div>
                     </div>
                 </div>
                 
             </div>
-            <div class ="col-1"> </div>
+            <div class="col-md-1"></div>
             {% endfor %}
-        </div>
-    </div>
+
     </div>
 </div>
 

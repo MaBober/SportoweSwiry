@@ -8,8 +8,9 @@ from .forms import MessageForm,  AppMailForm, AppMailToRead
 from user.classes import User
 
 from other.classes import mailboxMessage
-from .functions import send_email, prepareListOfChoicesForAdmin, saveMessageInDB, deleteMessagesFromDB, saveMessageInDBforEvent, saveMessageInDBforAll, prepareListOfChoicesForNormalUser
+from .functions import send_email, prepareListOfChoicesForAdmin, saveMessageInDB, deleteMessagesFromDB, saveMessageInDBforEvent, saveMessageInDBforAll, prepareListOfChoicesForNormalUser, sendMessgaeFromContactFormToDB
 from datetime import datetime, timedelta
+import datetime
 
 
 other = Blueprint("other", __name__,
@@ -43,20 +44,32 @@ def sendMessage():
 
     if current_user.is_authenticated:
         form=MessageForm(name=current_user.name, lastName=current_user.lastName, mail=current_user.mail)
+        form.name.data = form.name.data+" "+form.lastName.data
     else:
         form=MessageForm()
-        form.lastName.data="X"
+        form.lastName.data="-"
 
 
     if form.validate_on_submit():
 
-        # for admin in admins:
-        send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.lastName.data, form.subject.data),'message', 
+
+        if current_user.is_authenticated:
+            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(current_user.name, current_user.lastName, form.subject.data),'message', 
+                        name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, message=form.message.data)
+        else:
+            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.lastName.data, form.subject.data),'message', 
                         name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, message=form.message.data)
 
+        admins = User.query.filter(User.isAdmin==True).all()
+        for admin in admins:
+            if current_user.is_authenticated:
+                newMessage = mailboxMessage(date=datetime.date.today(), sender=form.mail.data, senderName=current_user.name+" "+current_user.lastName, receiver = admin.mail, receiverName = admin.name+" "+admin.lastName, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, sendByApp = False, sendByEmail= True, messageReaded=False, multipleMessage=True)
+            else:
+                newMessage = mailboxMessage(date=datetime.date.today(), sender=form.mail.data, senderName=form.name.data, receiver = admin.mail, receiverName = admin.name+" "+admin.lastName, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, sendByApp = False, sendByEmail= True, messageReaded=False, multipleMessage=True)
+            sendMessgaeFromContactFormToDB(newMessage)
         
-        # flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")
-        return redirect(url_for('other.test'))
+        flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")
+        return redirect(url_for('other.contactFormResponse'))
 
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
 
@@ -133,10 +146,9 @@ def privacyPolicy():
 
 
 
-@other.route("/test")
-def test():
+@other.route("/contactFormResponse")
+def contactFormResponse():
 
-    flash("dupa")
     return render_template('/pages/messageSent.html', title_prefix = "Formularz kontaktowy" )
 
 

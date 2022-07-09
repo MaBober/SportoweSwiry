@@ -197,6 +197,11 @@ def saveMessageInDBforAll(form):
         db.session.add(newMessage)
         db.session.commit()
 
+
+def sendMessgaeFromContactFormToDB(newMessage):
+    db.session.add(newMessage)
+    db.session.commit()
+
     
 def deleteMessagesFromDB(messagesToDelete):
 

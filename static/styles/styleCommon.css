@@ -364,8 +364,15 @@ img.icon-add-activity {
   font-size: 10px;
   margin-left: 113px !important;
   margin-top: 13px !important;
+  text-decoration: none !important;
+  color: white;
   
 }
+
+.nav-link {
+  color: white;
+}
+
 
 .dropdown-item {
   margin-left: 0 !important;

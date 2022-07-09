@@ -168,6 +168,7 @@ body {
     margin: 0 7px 0 0;
     border: solid 1px #000;
     background-color: #efefef;
+    border-radius: 0 !important;
   }
 
   .Checkbox-Font {
@@ -187,6 +188,7 @@ body {
 
   .form-check-input:checked {
     accent-color: #579956;
+    background-color: #579956;
   }
 
   .Main-Button {

@@ -339,10 +339,19 @@ def passwordChange():
     return render_template("passwordChange.html", title_prefix = "Prywatność", form=form, menuMode="mainApp")
 
 
-@user.route("/basicDashboard")
+@user.route("/basicDashboard/")
 @login_required #This page needs to be login
 def basicDashboard():
-    eventCount=0
+
+    if 'eventCount' in request.args:
+        try:
+            eventCount = int(request.args['eventCount'])
+        except:
+            eventCount = 0
+    
+    else:
+        eventCount = 0
+
     if current_user.is_authenticated and not current_user.confirmed:
        
         return redirect(url_for('user.unconfirmed'))
@@ -396,7 +405,7 @@ def basicDashboard():
         pie_chart = pie_chart.render_data_uri()
 
         #Return list of user events
-        userEvents = giveUserEvents(current_user.id)
+        userEvents = giveUserEvents(current_user.id, 'ongoing')
 
         #Return array with data to event data to present
         if userEvents != None:
@@ -528,11 +537,22 @@ def basicDashboard():
                     print("Błąd w: eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]")
             
             d3=100
+
+
+            if eventCount == len(userEvents)-1:
+                nextEvent=0
+            else:
+                nextEvent = eventCount+1
+
+            if eventCount == 0:   
+                previousEvent = len(userEvents)-1
+            else:
+                previousEvent = eventCount-1
                 
-            return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", eventCount = eventCount, amount=amount,
+            return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", amount=amount,
                             sumDistance=eventsDistanceSum, sumTime=sumTime,  pie_chart=pie_chart, today_7 = datetime.date.today() + datetime.timedelta(days=-7), averageDistance = eventsDistanceAverege,
-                            averegeTime = eventsActivtiyTimeAverege, eventsNames=eventNames, events=userEvents, eventWeek=eventWeek,
-                            eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
+                            averegeTime = eventsActivtiyTimeAverege, eventsNames=eventNames, event=userEvents[eventCount], nextEvent = nextEvent, previousEvent= previousEvent, eventWeek=eventWeek,
+                            eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath, eventCount = eventCount)
                         
         else:
             return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 

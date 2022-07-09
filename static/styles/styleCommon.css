@@ -292,7 +292,7 @@ a.cookie-button-text {
 /* MAIN NAVBAR */
 
 
-nav {
+.MainNav {
   background-color: #000 !important;
   height: 39px;
   width: 70%;
@@ -436,7 +436,7 @@ img.icon-add-activity {
 
   /* MAIN NAVBAR */
 
-  nav {
+  .MainNav {
     background-color: transparent !important;
     width: 50%;
     margin: auto;

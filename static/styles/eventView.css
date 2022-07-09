@@ -36,3 +36,41 @@
  padding-bottom: 50px;
 }
 
+.Extra-Margin {
+    margin-bottom: 80px;
+}
+
+.Extra-Margin-Activities {
+    margin-bottom: 80px;
+}
+
+
+
+/* FOR SMALL SCREENS */
+@media(max-width: 850px) {
+
+    .Extra-Margin {
+        width: 95%;
+        margin: auto;
+        margin-bottom: 0px !important;
+    }
+
+    .Statistics-Box {
+        width: 95%;
+       }
+
+    .Extra-Margin-Activities {
+        width: 95%;
+        margin: auto;
+        margin-bottom: 100px;
+    }
+    
+    .Extra-Box {
+        width: 95%;
+        margin: auto;
+        margin-bottom: 60px;
+    }
+
+ 
+
+}

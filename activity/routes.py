@@ -90,6 +90,15 @@ def modifyActivity(activityID):
 @login_required #This page needs to be login
 def addActivity():
 
+    if 'eventCount' in request.args:
+        try:
+            eventCount = int(request.args['eventCount'])
+        except:
+            eventCount = 0
+    
+    else:
+        eventCount = 0
+
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
@@ -161,7 +170,7 @@ def addActivity():
             eventWeekTarget.update({event.id:target})
 
         return render_template("/pages/addActivity.html", title_prefix = "Dodaj aktywność", form=form, mode="create" , activities=activities, 
-                            today_7 = dt.date.today() + dt.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp")
+                            today_7 = dt.date.today() + dt.timedelta(days=-7), event=userEvents[eventCount], eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp")
     
     else:
         return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")

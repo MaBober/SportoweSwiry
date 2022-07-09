@@ -2,53 +2,53 @@
 
 <div class="card mb-4 Event-Main-Box">
     <div class="card-header Event-Title-Box" style="background-color: rgba(224, 153, 94);">Twoje wyzwania</div>
-    
-    <div class="card-body">
+    <div class="Event-Box-Row">
+        <div class="Arrow-Box-Left"><a href="{{ url_for('user.basicDashboard', eventCount=previousEvent)}}"><img src="/static/img/turn_left.webp"></a></div>
+        <div class="card-body">
 
-            <div class="row">
-                <div class="col-8">
-                    <h4>{{event.name}}</h4> 
+                <div class="row">
+                    <div class="col-8">
+                        <h4>{{event.name}}</h4> 
+                    </div>
                 </div>
 
-                <div class="col"><a href="{{ url_for('user.basicDashboard', eventCount=previousEvent)}}"><img src="/static/img/turn_left.webp" class="icon-Dashboard"></a></div>
-                <div class="col"><a href="{{ url_for('user.basicDashboard', eventCount=nextEvent)}}"><img src="/static/img/turn_right.webp" class="icon-Dashboard"></a></div>
-            </div>
-
-        
-        <div class="Event-Box">
-           
-            <div class="row">
-                <div class="col-4 Event-Box-Value-Title"><h5>Tydzień</h5></div>
-                <div class="col-4 Event-Box-Value-Title-Border"><h5>Przebyty dystans</h5></div>
-                <div class="col-4 Event-Box-Value-Title"><h5>Cel</h5></div>
-            </div>
-
-            <div class="row">
-                
-
-
-                <div class="col-4 Event-Box-Value">
-                    {{eventWeek[event.id]}} / {{event.lengthWeeks}} 
-
+            
+            <div class="Event-Box">
+            
+                <div class="row">
+                    <div class="col-4 Event-Box-Value-Title"><h5>Tydzień</h5></div>
+                    <div class="col-4 Event-Box-Value-Title-Border"><h5>Przebyty dystans</h5></div>
+                    <div class="col-4 Event-Box-Value-Title"><h5>Cel</h5></div>
                 </div>
-                {% if eventWeekDistance[event.id] >= eventWeekTarget[event.id] %}
-                <div class="col-4 Event-Box-Value" style="color:rgb(27, 80, 10)"><b>{{eventWeekDistance[event.id]}} km</b></div>
-                {% endif %}
 
-                {% if eventWeekDistance[event.id] < eventWeekTarget[event.id] %}
-                <div class="col-4 Event-Box-Value-Border" style="color:rgb(146, 40, 7)"><b>{{eventWeekDistance[event.id]}} km</b></div>
-                {% endif %}
-                
-                <div class="col-4 Event-Box-Value">{{eventWeekTarget[event.id]}} km</div>
+                <div class="row">
+                    
+
+
+                    <div class="col-4 Event-Box-Value">
+                        {{eventWeek[event.id]}} / {{event.lengthWeeks}} 
+
+                    </div>
+                    {% if eventWeekDistance[event.id] >= eventWeekTarget[event.id] %}
+                    <div class="col-4 Event-Box-Value" style="color:rgb(27, 80, 10)"><b>{{eventWeekDistance[event.id]}} km</b></div>
+                    {% endif %}
+
+                    {% if eventWeekDistance[event.id] < eventWeekTarget[event.id] %}
+                    <div class="col-4 Event-Box-Value-Border" style="color:rgb(146, 40, 7)"><b>{{eventWeekDistance[event.id]}} km</b></div>
+                    {% endif %}
+                    
+                    <div class="col-4 Event-Box-Value">{{eventWeekTarget[event.id]}} km</div>
+                </div>
+
+            </div>
+
+            <div class="col">
+                <a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">  Szczegóły  </a>
             </div>
 
         </div>
-
-         <div class="col">
-            <a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">  Szczegóły  </a>
-        </div>
-
-    </div>
+        <div class="Arrow-Box-Right"><a href="{{ url_for('user.basicDashboard', eventCount=nextEvent)}}"><img src="/static/img/turn_right.webp"></a></div>
+    </div>  
     
    
 </div>

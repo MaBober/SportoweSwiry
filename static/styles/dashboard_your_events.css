@@ -14,6 +14,23 @@
     border-radius: 0 !important;
 }
 
+.Event-Box-Row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.Arrow-Box-Left {
+    width: 2%;
+    margin: auto;
+    margin-left: 15px;
+}
+
+.Arrow-Box-Right {
+    width: 5%;
+    margin: auto;
+}
+
 .Event-Main-Box {
     border: 0 #000!important;
     border-radius: 0;
@@ -25,6 +42,7 @@
     padding: 5px;
     padding-top: 15px;
     padding-bottom: 15px;
+    border: 2px solid red;
 }
 
 .Details-Of-Event-Button {
@@ -93,6 +111,11 @@
     .Event-Main-Box {
         width: 90% !important;
         max-width: 650px;
+        margin: auto;
+    }
+
+    .Arrow-Box-Left {
+        width: 4%;
         margin: auto;
     }
 

@@ -342,7 +342,7 @@ def passwordChange():
 @user.route("/basicDashboard")
 @login_required #This page needs to be login
 def basicDashboard():
-    eventCount=1
+    eventCount=0
     if current_user.is_authenticated and not current_user.confirmed:
        
         return redirect(url_for('user.unconfirmed'))
@@ -543,6 +543,8 @@ def basicDashboard():
         pie_chart.title = 'Różnorodność aktywności (w %)'
         checkTable=[]
         pie_chart = pie_chart.render_data_uri()
+
+        print("dupa")
         
         return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
                             sumDistance=0, sumTime=0, amount=0, pie_chart=pie_chart, menuMode="mainApp",  d1=0, d2=0, d3=0)

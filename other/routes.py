@@ -8,7 +8,7 @@ from .forms import MessageForm,  AppMailForm, AppMailToRead
 from user.classes import User
 
 from other.classes import mailboxMessage
-from .functions import send_email, prepareListOfChoices, saveMessageInDB, deleteMessagesFromDB, saveMessageInDBforEvent, saveMessageInDBforAll
+from .functions import send_email, prepareListOfChoicesForAdmin, saveMessageInDB, deleteMessagesFromDB, saveMessageInDBforEvent, saveMessageInDBforAll, prepareListOfChoicesForNormalUser
 from datetime import datetime, timedelta
 
 
@@ -70,7 +70,10 @@ def mailbox(actionName):
     form=AppMailForm()
     readForm=AppMailToRead()
 
-    form.receiverEmail.choices = prepareListOfChoices()
+    if current_user.isAdmin == True:
+        form.receiverEmail.choices = prepareListOfChoicesForAdmin()
+    else:
+        form.receiverEmail.choices = prepareListOfChoicesForNormalUser()
 
     if form.validate_on_submit():
 

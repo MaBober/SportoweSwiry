@@ -19,13 +19,21 @@ def send_email(to, subject, template, **kwargs):
     return None
 
 
-def prepareListOfChoices():
+def prepareListOfChoicesForAdmin():
 
     allUsers = [('Wszyscy','Wszyscy')]
     availableListOfUsers = prepareListOfUsers()
     availableListOfEvents = crateAvailableListOfEvents()
    
     availableListOfChoices = allUsers + availableListOfEvents + availableListOfUsers
+    return availableListOfChoices
+
+def prepareListOfChoicesForNormalUser():
+
+    adminUser=prepareListOfAdmins()
+    currentUserEventsUsers=prepareListOfCurrentUserEventsUsers()
+    currentUserEventsSingleUsers=prepareListOfCurrentUserEventsSingleUsers()
+    availableListOfChoices=adminUser+currentUserEventsUsers+currentUserEventsSingleUsers
     return availableListOfChoices
 
 
@@ -46,6 +54,73 @@ def prepareListOfUsers():
     # (mails, name & last name) 
     return list(zip(listOfUsersMails, listOfUsersFullNames))
 
+def prepareListOfAdmins():
+    listOfAdmins=User.query.filter(User.isAdmin==True).all()
+
+    listOfAdminsMails = [(a.mail) for a in listOfAdmins]
+    listOfAdminsNames = [(a.name) for a in listOfAdmins]
+    listOfAdminsLastNames = [(a.lastName) for a in listOfAdmins]
+
+    tempTupleNameList=list(zip(listOfAdminsNames,listOfAdminsLastNames))
+    listOfAdminsFullNames = []
+
+    for name, lastName in tempTupleNameList:
+        fullName=name+" "+lastName
+        listOfAdminsFullNames.append(fullName)
+
+    return list(zip(listOfAdminsMails, listOfAdminsFullNames))
+
+def prepareListOfCurrentUserEventsUsers():
+    listOfEvents=Event.query.all()
+    listOfRealEvents=[]
+
+    for event in listOfEvents:
+        for participant in event.participants:
+            if participant.user_name==current_user.id:
+                listOfRealEvents.append(event.name)
+                break
+
+    listOfEventsNameKey = []
+    listOfEventsNameValue = []
+
+    for event in listOfRealEvents:
+        singleEvent=Event.query.filter(Event.name==event).first()
+        key = singleEvent.name + ", ID:" + str(singleEvent.id)
+        value = "Uczestnicy wyzwania: " + singleEvent.name
+        listOfEventsNameKey.append(key)
+        listOfEventsNameValue.append(value)
+    
+    return list(zip(listOfEventsNameKey, listOfEventsNameValue))
+
+def prepareListOfCurrentUserEventsSingleUsers():
+
+
+    listOfEvents=Event.query.all()
+    listOfRealEvents=[]
+
+    for event in listOfEvents:
+        for participant in event.participants:
+            if participant.user_name==current_user.id:
+                listOfRealEvents.append(event.name)
+                break
+
+    listOfAdmins=prepareListOfAdmins()
+    listOfMails = []
+    listOfFullNames = []
+
+    for singleEvent in listOfRealEvents:
+        event=Event.query.filter(Event.name==singleEvent).first()
+        for participant in event.participants:
+            receiverUser=User.query.filter(User.id==participant.user_name).first()
+            receiverMail=receiverUser.mail
+            receiverName=receiverUser.name
+            receiverLastName=receiverUser.lastName
+            receiverFullName=receiverName + " " + receiverLastName
+            if receiverMail is not current_user.mail and not receiverMail in listOfMails and not receiverMail in listOfAdmins[0] and not receiverMail in listOfAdmins[1] and not receiverMail in listOfAdmins[3]:
+                listOfMails.append(receiverMail)
+                listOfFullNames.append(receiverFullName)
+         
+    return list(zip(listOfMails, listOfFullNames))
 
 def crateAvailableListOfEvents():
     # Creating list of events

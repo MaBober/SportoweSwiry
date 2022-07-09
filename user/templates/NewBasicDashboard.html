@@ -8,36 +8,41 @@
 
 <div class="Static-Content">
     <div class="row Dashboard-First-Row">
+
         <div class="Dashboard-Main-Box">
-            <img src="static/img/icon-route.webp" class="icon-Dashboard">
+            <img src="/static/img/icon-route.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Pokonany dystans</span>
-                <span class="Dashboard-Value">{{sumDistance[events[eventCount].id]}} km</span> 
+                <span class="Dashboard-Value">{{sumDistance[event.id]}} km</span> 
             </div>
         </div>
+
         <div class="Dashboard-Main-Box">
-            <img src="static/img/icon-average.webp" class="icon-Dashboard">
+            <img src="/static/img/icon-average.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni dystans</span>
-                <span class="Dashboard-Value">{{averageDistance[events[eventCount].id]}}</span>
+                <span class="Dashboard-Value">{{averageDistance[event.id]}}</span>
             </div>
         </div>
+
         <div class="Dashboard-Main-Box">
-            <img src="static/img/icon-timeTime.webp" class="icon-Dashboard">
+            <img src="/static/img/icon-timeTime.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni czas aktywności</span>
-                <span class="Dashboard-Value">{{averegeTime[events[eventCount].id] }}</span>
+                <span class="Dashboard-Value">{{averegeTime[event.id]}}</span>
             </div>
         </div>
+
         <div class="Dashboard-Main-Box">
-            <img src="static/img/icon-beer.webp" class="icon-Dashboard">
+            <img src="/static/img/icon-beer.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Zdobytych piw</span>
                 <span class="Dashboard-Value-Beers">
-                    <a class="nav-link" href="{{ url_for('event.eventBeers', eventID=events[eventCount].id) }}" style="color: white;">Sprawdź tutaj!</a>
+                    <a class="nav-link" href="{{ url_for('event.eventBeers', eventID=event.id) }}" style="color: white;">Sprawdź tutaj!</a>
                 </span>
             </div>
         </div>
+
     </div>
 
     <div class="dashBoard">

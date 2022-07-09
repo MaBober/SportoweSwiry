@@ -4,23 +4,29 @@
     <div class="card-header Event-Title-Box" style="background-color: rgba(224, 153, 94);">Twoje wyzwania</div>
     
     <div class="card-body">
-        {% for event in events: %}
-        {% if today_7 < event.end %}
+
             <div class="row">
                 <div class="col-8">
                     <h4>{{event.name}}</h4> 
                 </div>
+
+                <div class="col"><a href="{{ url_for('user.basicDashboard', eventCount=previousEvent)}}"><img src="/static/img/turn_left.webp" class="icon-Dashboard"></a></div>
+                <div class="col"><a href="{{ url_for('user.basicDashboard', eventCount=nextEvent)}}"><img src="/static/img/turn_right.webp" class="icon-Dashboard"></a></div>
             </div>
 
+        
         <div class="Event-Box">
-            {% if event.status == "Zapisy otwarte" or event.status == "W trakcie" %}
+           
             <div class="row">
                 <div class="col-4 Event-Box-Value-Title"><h5>Tydzień</h5></div>
                 <div class="col-4 Event-Box-Value-Title-Border"><h5>Przebyty dystans</h5></div>
                 <div class="col-4 Event-Box-Value-Title"><h5>Cel</h5></div>
             </div>
+
             <div class="row">
                 
+
+
                 <div class="col-4 Event-Box-Value">
                     {{eventWeek[event.id]}} / {{event.lengthWeeks}} 
 
@@ -32,22 +38,16 @@
                 {% if eventWeekDistance[event.id] < eventWeekTarget[event.id] %}
                 <div class="col-4 Event-Box-Value-Border" style="color:rgb(146, 40, 7)"><b>{{eventWeekDistance[event.id]}} km</b></div>
                 {% endif %}
+                
                 <div class="col-4 Event-Box-Value">{{eventWeekTarget[event.id]}} km</div>
             </div>
-            {% endif %}
 
-            {% if event.status == "Zakończone" %}
-            <div class="row">
-                <div class="col-12"><h5>Wyzwanie zakończone!</h5></div>
-            </div> 
-            {% endif %}
-            </div>
+        </div>
 
-            <div class="col">
-                <a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">  Szczegóły  </a>
-            </div>
-        {% endif %}
-        {% endfor %}
+         <div class="col">
+            <a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">  Szczegóły  </a>
+        </div>
+
     </div>
     
    

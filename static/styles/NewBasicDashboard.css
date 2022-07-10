@@ -164,6 +164,7 @@ body {
 
   .Dashboard-Value-Beers:hover {
     background-color: #579956;
+    border-radius: 5px;
   }
 
 

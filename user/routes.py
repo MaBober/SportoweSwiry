@@ -315,7 +315,7 @@ def settings():
 
         return redirect(url_for('user.settings'))
 
-    return render_template("accountSettings.html", title_prefix = "Ustawienia konta", form=form, avatarsPath=avatarsPath, avatarForm=avatarForm, current_user=current_user, menuMode="mainApp")
+    return render_template("accountSettings.html", title_prefix = "Ustawienia konta", form=form, avatarsPath=avatarsPath, avatarForm=avatarForm, current_user=current_user, menuMode="mainApp", mode="settings")
 
 @user.route("/passwordChange", methods=['POST','GET'])
 @login_required #This page needs to be login
@@ -336,7 +336,7 @@ def passwordChange():
         flash("Hasło zmienione. Zaloguj się ponownie")
         return redirect(url_for('user.logout'))
 
-    return render_template("passwordChange.html", title_prefix = "Prywatność", form=form, menuMode="mainApp")
+    return render_template("passwordChange.html", title_prefix = "Prywatność", form=form, menuMode="mainApp", mode="passwordChange")
 
 
 @user.route("/basicDashboard/")

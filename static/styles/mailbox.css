@@ -19,6 +19,10 @@ body {
     border-radius: 15px;
 }
 
+.sendMessgaeButton:hover, .closeButton:hover {
+    background-color: #000 !important;
+}
+
 
 .form-group .Checkbox-Input {
     display: flex;
@@ -28,7 +32,14 @@ body {
     text-align: left;
     padding: 0;
     padding-left: 30px;
+
 }
+
+.form-check-input:checked {
+    accent-color: #579956;
+    background-color: #579956;
+    border-color: #579956;
+  }
 
 .form-label {
     display: auto;
@@ -83,6 +94,7 @@ body {
 .small-button {
     background-color: gray;
     margin-top: 10px;
+    border-color: gray;
 }
 
 .email {

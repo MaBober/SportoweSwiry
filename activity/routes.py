@@ -280,12 +280,6 @@ def pandasTest():
 
         return redirect(url_for('other.hello'))
 
-@activity.route("/stravaTEST")
-@login_required
-def stravaTEST():
-
-
-    return render_template('/pages/stravaLOG.html')
 
 @activity.route("/stravaLogin")
 @login_required

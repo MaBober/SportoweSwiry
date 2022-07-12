@@ -331,3 +331,17 @@ def stravaCallback():
     return redirect(url_for('other.hello'))
 
 
+
+
+
+@activity.route("/statistics")
+def statistics():
+
+    d1 = 10
+    d2 = 15
+    d3 = 25
+    d4 = 50
+
+    d=[10, 15, 25, 50]
+
+    return render_template('/pages/NewMyActivity.html', menuMode="mainApp", d1=d1, d2=d2, d3=d3, d4=d4, d=d)

@@ -556,7 +556,7 @@ def basicDashboard():
                         
         else:
             return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
-                            sumDistance=eventsDistanceSum, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath)
+                            sumDistance=eventsDistanceSum, sumTime=sumTime, amount=amount, pie_chart=pie_chart, menuMode="mainApp",  d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath, event=userEvents[eventCount])
 
     else:
         pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
@@ -567,7 +567,7 @@ def basicDashboard():
         print("dupa")
         
         return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
-                            sumDistance=0, sumTime=0, amount=0, pie_chart=pie_chart, menuMode="mainApp",  d1=0, d2=0, d3=0)
+                            sumDistance=0, sumTime=0, amount=0, pie_chart=pie_chart, menuMode="mainApp", event=[] , d1=0, d2=0, d3=0)
         
   
 @user.route("/rotateAvatarRight")

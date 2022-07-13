@@ -506,11 +506,11 @@ def basicDashboard():
             #averageTimeOfActivitiesForEvent=...
             #AmountOfBeersObtained=...
 
-            for a in eventWeek:
-                print(a)
+            # for a in eventWeek:
+            #     print(a)
 
-            for b in userEvents:
-                print(b)
+            # for b in userEvents:
+            #     print(b)
 
             d1 = 100
             try:
@@ -535,7 +535,13 @@ def basicDashboard():
                     d2=100
             except:
                     print("Błąd w: eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]")
+
+            # for week
             
+            #         target = DistancesTable.query.filter(DistancesTable.event_ID == event.id).filter(DistancesTable.week == week).first()
+            #         target = target.value
+
+
             d3=100
 
 

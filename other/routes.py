@@ -131,7 +131,7 @@ def acceptCookies():
 
     if request.method == 'POST':
 
-        expire_date = datetime.now() + timedelta(days=365)
+        expire_date = datetime.datetime.now() + datetime.timedelta(days=365)
         response = make_response(redirect(url_for('other.hello')))
         response.set_cookie(key='cookie_consent', value='true', expires=expire_date)
 
@@ -141,6 +141,7 @@ def acceptCookies():
 
 @other.route("/privacyPolicy")
 def privacyPolicy():
+    
 
     return render_template('/pages/privacyPolicy.html', title_prefix= "Polityka Prywatności")
 

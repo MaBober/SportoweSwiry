@@ -257,9 +257,9 @@ body {
   border-width: 0;
   background-color: #579956;
   text-align: center;
-  display: flex;
   justify-content: center;
   align-items: center;
+  text-decoration: none;
 }
 
 

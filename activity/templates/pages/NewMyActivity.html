@@ -1,0 +1,110 @@
+{% extends "pages//baseNew.html" %}
+
+{% block body_content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/myActivity.css') }}">
+
+
+<div class="Static-Content">
+    <div class="row Dashboard-First-Row">
+
+        <div class="Dashboard-Main-Box">
+            <img src="/static/img/icon-route.webp" class="icon-Dashboard">
+            <div class="Dashboard-Value-Main-Box">
+                <span class="Dashboard-Value-Title">Pokonany dystans</span>
+                <span class="Dashboard-Value">123 km</span> 
+            </div>
+        </div>
+
+        <div class="Dashboard-Main-Box">
+            <img src="/static/img/icon-average.webp" class="icon-Dashboard">
+            <div class="Dashboard-Value-Main-Box">
+                <span class="Dashboard-Value-Title">Średni dystans</span>
+                <span class="Dashboard-Value">34</span>
+            </div>
+        </div>
+
+        <div class="Dashboard-Main-Box">
+            <img src="/static/img/icon-timeTime.webp" class="icon-Dashboard">
+            <div class="Dashboard-Value-Main-Box">
+                <span class="Dashboard-Value-Title">Średni czas aktywności</span>
+                <span class="Dashboard-Value">1:03:56</span>
+            </div>
+        </div>
+
+        <div class="Dashboard-Main-Box">
+            <img src="/static/img/icon-beer.webp" class="icon-Dashboard">
+            <div class="Dashboard-Value-Main-Box">
+                <span class="Dashboard-Value-Title">Zdobytych piw</span>
+                <span class="Dashboard-Value-Beers">
+                    <a class="nav-link" href="#" style="color: white;">Sprawdź tutaj!</a>
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="dashBoard">
+        <div class="Chart-Box">
+            <span class="Title-Box">Różnorodność aktywności</span>
+            <canvas id="doughnut-chart" class="Chart"></canvas>
+        </div>
+        <div class="col-xl-6 Chart-Box">
+            <span class="Title-Box">Ostatnie aktywności</span>
+            <canvas id="bar-chart" class="Chart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    new Chart(document.getElementById("doughnut-chart"), {
+        type: 'doughnut',
+        data: {
+        labels: ["Africa", "Asia", "Europe", "Latin America"],
+        datasets: [
+            {
+            label: "Population (millions)",
+            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+            data: {{ d | safe }}
+            }
+        ]
+        },
+        options: {
+        title: {
+            display: false,
+            text: 'Różnorodność aktywności'
+        }
+        }
+    });
+</script>
+
+
+
+<script>
+    new Chart(document.getElementById("bar-chart"), {
+    type: 'bar',
+    data: {
+      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+      datasets: [
+        {
+          label: "Population (millions)",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: [2478,5267,734,784,433]
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Predicted world population (millions) in 2050'
+      }
+    }
+});
+</script>
+
+
+{% endblock %}

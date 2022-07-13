@@ -1,0 +1,236 @@
+body {
+    /* background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_dashboard.webp") no-repeat center fixed; */
+    background-size: cover;
+    background-color: #3a3a3a;
+    min-height: 100%;
+    position: relative;
+  }
+
+
+.Static-Content {
+  /* background-color: #3a3a3a; */
+  width:  90%;
+  margin: auto;
+  margin-top:100px;
+
+}
+
+.dashBoard {
+    /* background-color: #3a3a3a; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+    /* min-height: 100%; */
+    width: 100%;
+    /* margin-top: 200px; */
+    margin: auto;
+}
+
+.Chart-Box {
+    background-color: black;
+    /* display: flex; */
+    width: 49%;
+    /* max-width: 500px; */
+    /* margin-right: 10px; */
+
+    
+}
+
+.Chart {
+    max-height: 300px;
+}
+
+
+.Event-Info-Box {
+    background-color: black;
+    /* display: flex; */
+    width: 49%;
+    color: white;
+    /* margin: auto; */
+    height: 350px;
+}
+
+
+.Event-Main-Box {
+  border: 0 #000!important;
+  border-radius: 0;
+  width: 100%;
+}
+
+.Title-Box {
+    width: 100%;
+    height: 35px;
+    font-family: Lato;
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .Info-Box {
+    width: 80%;
+    height: 98px;
+    margin:auto;
+    /* margin: 2px 45px 35px 49px; */
+    padding: 20.7px 43px 18px 23px;
+    border: solid 2px #fff;
+    background-color: rgba(217, 217, 217, 0);
+  }
+
+  .Dashboard-First-Row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .Dashboard-Main-Box {
+    width: 295px;
+    height: 91px;
+    /* margin: 0 20px 28px 0;
+    padding: 14px 39px 18px 16px; */
+    background-color: #000;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+  }
+
+  img.icon-Dashboard {
+    width: 56px;
+    height: 56px;
+    /* margin: 0 25px 3px 0; */
+    object-fit: contain;
+    margin: auto;
+  }
+
+  .Dashboard-Value-Main-Box {
+    display: flex;
+    flex-direction: column;
+    margin:auto;
+  }
+
+  .Dashboard-Value-Title {
+    width: 160px;
+    height: 17px;
+    /* margin: 0 0 6px 70px; */
+    font-family: Lato;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: right;
+    color: #fff;
+  }
+
+
+  .Dashboard-Value {
+    width: 160px;
+    height: 36px;
+    /* margin: 6px 0 0 25px; */
+    font-family: Lato;
+    font-size: 30px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: right;
+    color: #fff;
+  }
+
+
+  .Dashboard-Value-Beers {
+    width: 160px;
+    height: 36px;
+    /* margin: 6px 0 0 25px; */
+    font-family: Lato;
+    font-size: 24px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: right;
+    color: #fff;
+  }
+
+  .Dashboard-Value-Beers:hover {
+    background-color: #579956;
+    border-radius: 5px;
+  }
+
+
+  .Event-Box {
+    border: 2px solid #fff !important;
+    padding: 5px;
+    width: 100%;
+}
+
+.Event-Main-Box {
+  border: 0 #000!important;
+  border-radius: 0;
+  background-color: #000;
+}
+
+.Details-Of-Event-Button {
+
+  background-color: #fff !important;
+
+}
+
+
+
+
+/* FOR SMALL SCREENS */
+@media(max-width: 850px) {
+    .dashBoard {
+        flex-direction: column;
+        justify-content: center;
+        margin: auto;
+    }
+
+    .Chart-Box {
+        width: 100%;
+        margin: auto;
+        margin-bottom: 10px;
+        
+    }
+    
+    .Event-Info-Box {
+        width: 100%;
+        margin: auto;
+        margin-top: 10px;
+    }
+
+    .Title-Box {
+        width: 100%;
+      }
+
+      .Dashboard-Main-Box {
+        width: 100%;
+      }
+  
+}
+
+
+
+/* FOR SMALL SCREENS */
+@media (min-width: 850px) and (max-width: 1400px) {
+
+  .Dashboard-Main-Box {
+    width: 49%;
+  }
+
+}

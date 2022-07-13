@@ -218,9 +218,6 @@ def myActivities():
 
         sumDistance=round(sumDistance,2)
 
-        #creating a pie chart
-        pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
-        pie_chart.title = 'Różnorodność aktywności (w %)'
         checkTable=[]
 
         kindOfActivities=[]
@@ -233,19 +230,10 @@ def myActivities():
                 if activityExternal.activity==activityInternal.activity and not activityExternal.activity in checkTable:
                     quantity=quantity+1
             if quantity>0:
-                pie_chart.add(activityExternal.activity, round((quantity/amount)*100,1))
                 kindOfActivities.append(activityExternal.activity)
                 percentsOfActivities.append(round((quantity/amount)*100,1))
                 checkTable.append(activityExternal.activity)
         
-
-        # kindOfActivities=["Bieganie", "Plywanie", "Kolarstwo", "Squash"]
-        # percentsOfActivities=[10, 15, 25, 50]
-        
-        
-        #Render a URL adress for chart
-        pie_chart = pie_chart.render_data_uri()
-
 
         today=dt.date.today()
         dataList=[]
@@ -260,20 +248,10 @@ def myActivities():
             dataList.append(distance)
             dates.append(str(date))
 
-        customStyle = Style(colors=["#30839f"])
-        line_chart = pygal.Bar(fill=True, x_label_rotation=45, style=customStyle)
-        line_chart.x_labels = map(str, dates)
-        line_chart.add('Dystans [km]', dataList)
-
-
-        #Render a URL adress for chart
-        line_chart = line_chart.render_data_uri()
-
         
 
-
         return render_template('/pages/NewMyActivity.html', activities=activities, title_prefix = "Moje aktywności", 
-                                sumDistance=sumDistance, averageDistance=averageDistance, averageTime=averageTime, pie_chart=pie_chart, line_chart=line_chart, percentsOfActivities=percentsOfActivities, kindOfActivities=kindOfActivities, dates=dates, dataList=dataList, menuMode="mainApp")
+                                sumDistance=sumDistance, averageDistance=averageDistance, averageTime=averageTime, percentsOfActivities=percentsOfActivities, kindOfActivities=kindOfActivities, dates=dates, dataList=dataList, menuMode="mainApp")
         
     else:
         return redirect(url_for('other.hello'))

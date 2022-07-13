@@ -2,6 +2,24 @@
     width: 94%;
     margin: auto;
     margin-top: 80px !important;
+    
+}
+
+.event-box {
+    width: 35%;
+    background-color: white;
+    margin-top: 20px;
+    margin-bottom: 60px;
+    padding-bottom: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 70px;
+    margin-left: 70px;
+
+    position: relative;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    justify-content: center;
+
 }
 
 .Small-Navbar {
@@ -18,15 +36,26 @@
     background-color: #000 !important;
     border-color: #000 !important;
     color: white !important;
+    width: 100%;
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 7px;
 }
 
 .Main-Box {
     background-color: white !important;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: flex;
+    
 }
 
 .Main-Button {
     background-color: #579956 !important;
     border-color: #579956 !important;
+    margin-bottom: 15px;
 }
 
 .Main-Button:hover {
@@ -43,4 +72,21 @@
 .Details-Button:hover {
     background-color: #000 !important;
     color: white;
+}
+
+/* FOR SMALL SCREENS */
+@media(max-width: 990px) {
+
+    .event-box {
+        width: 75%;
+        background-color: white;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        padding-left: 0;
+        padding-right: 0;
+        margin-right: 70px;
+        margin-left: 70px;
+    
+    }
 }

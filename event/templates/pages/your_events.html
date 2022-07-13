@@ -70,10 +70,11 @@
 
 <div class="container">
 
-    <div class="row" style="margin-bottom: 60px;" >
+    <div class="row" >
         {% for event in events: %}
 
         <div class="event-box">
+
             <div class = "Title-Row"><h3>{{ event.name }}</h3></div>
             <div class = "Main-Box">
 
@@ -85,9 +86,7 @@
 
                     </div>
 
-
-
-                    <div class="col" style="padding-right:10%">
+                    <div class="col" style="padding-right:5%; padding-left: 5%;">
                         <div class = 'row'>
                             <a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn Main-Button" style="color:white">Szczegóły</a>
                         </div>
@@ -96,17 +95,16 @@
                             <a type="button" class="btn btn-danger btn delete-confirm"
                             data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                             data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?">
-                            Opuść wyzwanie</a>
+                            Opuść</a>
                         </div>  
                          {% endif %}
 
                     </div>
-
                 </div>
             </div> 
         {% endfor %}
+
     </div>
-    
 </div>
 
 {% endblock %}

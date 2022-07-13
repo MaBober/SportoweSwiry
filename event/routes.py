@@ -16,6 +16,10 @@ from urllib.parse import unquote
 
 import os
 
+from other.classes import mailboxMessage
+from other.functions import sendMessgaeFromContactFormToDB
+import datetime
+
 
 event = Blueprint("event", __name__,
     template_folder='templates')
@@ -86,6 +90,28 @@ def joinEvent(eventID):
 
             addUserToEvent(current_user.id, eventID)
             send_email(current_user.mail, "Witaj w wyzwaniu {}".format(event.name),'welcome', event=event)
+
+            message = '''
+            Czołem  {} {}!,
+
+            Witaj w wyzwaniu sportowym {}!
+
+            Data rozpoczęcia: {}
+            Długość: {} tygodni
+
+            Życzymy samych sukcesów i wielu pokonanych kilometrów.
+
+            Ubieraj buty i zaczynaj zabawę już dziś! ;)
+
+            Pozdrawiamy,
+
+            Administracja Sportowych Świrów
+            '''.format(current_user.name, current_user.lastName, event.name, event.start, event.lengthWeeks)
+
+            newMessage = mailboxMessage(date=datetime.date.today(), sender="Sportowe Świry", senderName="Sportowe Świry", receiver = current_user.mail, receiverName = current_user.name+" "+current_user.lastName, subject = "Witaj w wyzwaniu: "+event.name, message = message, sendByApp = True, sendByEmail= False, messageReaded=False, multipleMessage=True)
+            sendMessgaeFromContactFormToDB(newMessage)
+
+
             flash("Zapisano do wyzwania " + event.name + "!")
             return redirect(url_for('event.viewEvent', eventID = eventID))
 

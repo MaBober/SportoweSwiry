@@ -391,6 +391,10 @@ img.icon-add-activity {
   background-color: transparent !important;
 }
 
+.clear {
+   clear: both; height: 30px;
+   }
+
 
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {

@@ -15,3 +15,17 @@
 .eventMenu-Navbar a:active {
     background-color: transparent;
 }
+
+
+.Main-Button {
+    background-color: #579956 !important;
+    border-color: #579956 !important;
+    margin-bottom: 15px;
+    font-size: x-large;
+    width: 100%;
+    align-self: center;
+}
+
+.Main-Button:hover {
+    background-color: #000 !important;
+}

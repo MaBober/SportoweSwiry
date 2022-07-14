@@ -1,13 +1,21 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
 
 
 {% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/about.css') }}">
 
-<div class="container-xl px-4 mt-4">
 
+<div class="Static-Content">
+    <div class="Title-About-Us">Regulamin</div>
+    <div class="About-Us-Box">
+      <div class="About-Us-Text">
+        <span class="About-Us-Font">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ac dui lacus. Mauris eget lacus magna. Nulla sapien nunc, egestas ac commodo vitae, ornare sit amet purus. Sed vehicula odio id venenatis accumsan. Nam vestibulum, mi vitae ultrices tempor, est nisl convallis orci, eget sollicitudin libero nisi in dui.
+        </span>
+      </div>
+    </div>
 </div>
-
-<div class="container">
 
 </div>
 

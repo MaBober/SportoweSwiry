@@ -2,8 +2,12 @@
 
 <div class="card mb-4 Event-Main-Box">
     <div class="card-header Event-Title-Box" style="background-color: rgba(224, 153, 94);">Twoje wyzwania</div>
+    {% if event != [] : %}
     <div class="Event-Box-Row">
+      
+        {% if eventAmount !=1 %}
         <div class="Arrow-Box-Left"><a href="{{ url_for('user.basicDashboard', eventCount=previousEvent)}}"><img src="/static/img/turn_left.webp"></a></div>
+        {% endif %}
         <div class="card-body">
 
                 <div class="row">
@@ -41,15 +45,26 @@
                 </div>
 
             </div>
+            
 
             <div class="col">
                 <a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">  Szczegóły  </a>
             </div>
 
+
         </div>
+        {% if eventAmount != 1%}
         <div class="Arrow-Box-Right"><a href="{{ url_for('user.basicDashboard', eventCount=nextEvent)}}"><img src="/static/img/turn_right.webp"></a></div>
+        {% endif %}
+       
     </div>  
-    
+    {% else: %}
+    <div class="Event-Box-Row">
+        <span class="Dashboard-Value" style="text-align:center;">---</span> 
+    </div>
+    {% endif %}
+
+
    
 </div>
 

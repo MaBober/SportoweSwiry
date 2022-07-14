@@ -437,10 +437,17 @@ img.icon-add-activity {
   }
 
   .Strava-logo{
-    left:190px;
+    left:195px;
   }
   
   
+}
+
+/* FOR VERY SMALL SCREENS */
+@media(max-width: 500px) {
+  .Strava-logo{
+    left:140px;
+  }
 }
 
 

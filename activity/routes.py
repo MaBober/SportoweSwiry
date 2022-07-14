@@ -70,7 +70,18 @@ def modifyActivity(activityID):
                         time=activity.time)
 
     form.activity.choices= availableActivityTypes          
-    
+
+
+
+    #Return list of user events
+    userEvents = giveUserEvents(current_user.id)
+    activities=Activities.query.filter(Activities.userName == current_user.id).all()
+    #Return array with data to event data to present
+
+    eventNames = {}
+    eventWeek = {}
+    eventWeekDistance = {}
+    eventWeekTarget = {}
 
     if form.validate_on_submit():
 
@@ -83,21 +94,52 @@ def modifyActivity(activityID):
         flash('Zmodyfikowano aktywność: {}'.format(form.activity.data))
         return redirect(url_for('activity.myActivities'))
 
-    return render_template("/pages/addActivity.html", title_prefix = "Modyfikuj aktywność", form=form, mode="edit", activityID=activity.id)
+
+    if userEvents != None:
+
+        for event in userEvents:
+
+            #Defines present week of event
+            days = abs(dt.date.today() - event.start).days
+            week = math.ceil((days+1)/7) 
+            weekStart = event.start + dt.timedelta(weeks=1*week-1)
+            weekEnd = event.start + dt.timedelta(weeks=1*week-1, days=6)
+    
+            activities=Activities.query.filter(Activities.userName == current_user.id).filter(Activities.date >= weekStart).filter(Activities.date <= weekEnd).all()
+            if week <= event.lengthWeeks:
+                target = DistancesTable.query.filter(DistancesTable.event_ID == event.id).filter(DistancesTable.week == week).first()
+                target = target.value
+            else:
+                target = 0
+
+            WeekDistance = 0
+
+            #Create dictionary which keeps calculated distance of activity
+            for position in activities:
+                coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
+                if coef != None:
+                    if coef.constant == False:
+                        WeekDistance = WeekDistance + (coef.value*position.distance)
+                    else: 
+                        WeekDistance = WeekDistance + coef.value
+
+            eventNames.update({event.id:event.name})
+            eventWeek.update({event.id:week})
+            eventWeekDistance.update({event.id:round(WeekDistance,2)})
+            eventWeekTarget.update({event.id:target})
+
+        return render_template("/pages/addActivity.html", title_prefix = "Dodaj aktywność", form=form, mode="create" , activities=activities, 
+                                today_7 = dt.date.today() + dt.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp")
+        
+    else:
+        return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")
+
 
 
 @activity.route("/addActivity", methods=['POST','GET'])
 @login_required #This page needs to be login
 def addActivity():
 
-    if 'eventCount' in request.args:
-        try:
-            eventCount = int(request.args['eventCount'])
-        except:
-            eventCount = 0
-    
-    else:
-        eventCount = 0
 
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
@@ -170,7 +212,7 @@ def addActivity():
             eventWeekTarget.update({event.id:target})
 
         return render_template("/pages/addActivity.html", title_prefix = "Dodaj aktywność", form=form, mode="create" , activities=activities, 
-                            today_7 = dt.date.today() + dt.timedelta(days=-7), event=userEvents[eventCount], eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp")
+                            today_7 = dt.date.today() + dt.timedelta(days=-7), eventsNames=eventNames, events=userEvents, eventWeek=eventWeek, eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp")
     
     else:
         return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")
@@ -184,7 +226,7 @@ def myActivities():
     if current_user.is_authenticated and not current_user.confirmed:
         return redirect(url_for('user.unconfirmed'))
 
-    activities=Activities.query.filter(Activities.userName == current_user.id).all()
+    activities=Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).all()
 
     if activities:
         sumDistance=0

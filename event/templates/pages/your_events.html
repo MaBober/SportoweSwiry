@@ -94,7 +94,8 @@
                         <div class = 'row'>
                             <a type="button" class="btn btn-danger btn delete-confirm"
                             data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                            data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?">
+                            data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?"
+                            data-url="{{ url_for('event.leaveEvent', eventID=event.id )}}">
                             Opuść</a>
                         </div>  
                          {% endif %}

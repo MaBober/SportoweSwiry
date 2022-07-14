@@ -5,7 +5,9 @@
     {% if event != [] : %}
     <div class="Event-Box-Row">
       
+        {% if eventAmount !=1 %}
         <div class="Arrow-Box-Left"><a href="{{ url_for('user.basicDashboard', eventCount=previousEvent)}}"><img src="/static/img/turn_left.webp"></a></div>
+        {% endif %}
         <div class="card-body">
 
                 <div class="row">
@@ -51,7 +53,9 @@
 
 
         </div>
+        {% if eventAmount != 1%}
         <div class="Arrow-Box-Right"><a href="{{ url_for('user.basicDashboard', eventCount=nextEvent)}}"><img src="/static/img/turn_right.webp"></a></div>
+        {% endif %}
        
     </div>  
     {% else: %}

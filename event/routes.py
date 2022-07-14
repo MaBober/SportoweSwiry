@@ -144,7 +144,7 @@ def leaveEvent(eventID):
     elif isParticipating == None:
         flash("Nie jesteś zapisany na to wyzwanie!")
 
-    return redirect(url_for('exploreEvents'))
+    return redirect(url_for('event.exploreEvents'))
 
 
 
@@ -350,7 +350,7 @@ def eventPreview(eventID):
     coefSet = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).all()
     weekTargets = DistancesTable.query.filter(DistancesTable.event_ID == event.id).all()
 
-    return render_template('/pages/event_view/event_preview.html', event=event, title_prefix = event.name , usersAmount = len(eventUsers), coefSet =coefSet, weekTargets=weekTargets) 
+    return render_template('/pages/event_view/event_preview.html', event=event, title_prefix = event.name , usersAmount = len(eventUsers), coefSet =coefSet, weekTargets=weekTargets, menuMode="mainApp",) 
 
 
 

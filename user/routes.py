@@ -362,45 +362,12 @@ def basicDashboard():
 
     if activities:
 
-        # # sumDistance=0
         sumTime = datetime.timedelta()
-        # timeList=[]
-        
-
-        # for activity in activities:
-        #     sumDistance=sumDistance+activity.distance
-        #     timeList.append(str(activity.time))
-
-        # #Sum of total time of activities
-        # for time in timeList:
-        #     (h, m, s) = time.split(':')
-        #     d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-        #     sumTime += d
-
-        # try:
-        #     (h, m, s) = str(sumTime).split(':')
-        #     (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
-        #     sumTime= datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
-        # except:
-        #     print("Something went wrong")
-
-        # sumDistance=round(sumDistance,2)
 
         #creating a pie chart
         pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
         pie_chart.title = 'Różnorodność aktywności (w %)'
-        checkTable=[]
 
-        # #calculation of the percentage of activity
-        # for activityExternal in activities:
-        #     quantity=0
-        #     for activityInternal in activities:
-        #         if activityExternal.activity==activityInternal.activity and not activityExternal.activity in checkTable:
-        #             quantity=quantity+1
-        #     if quantity>0:
-        #         pie_chart.add(activityExternal.activity, round((quantity/amount)*100,1))
-        #         checkTable.append(activityExternal.activity)
-        
         #Render a URL adress for chart
         pie_chart = pie_chart.render_data_uri()
 
@@ -410,7 +377,6 @@ def basicDashboard():
         #Return array with data to event data to present
         if userEvents != None:
 
-
             eventNames = {}
             eventWeek = {}
             eventWeekDistance = {}
@@ -418,8 +384,6 @@ def basicDashboard():
             eventsDistanceSum = {}
             eventsDistanceAverege = {}
             eventsActivtiyTimeAverege = {}
-            evemnsActivityAmount = {}
-
 
             for event in userEvents:
 
@@ -500,18 +464,6 @@ def basicDashboard():
                 eventsDistanceSum.update({event.id:sumDistanceForEvent})
                 eventsDistanceAverege.update({event.id:averageDistanceForEvent})
 
-            #DLa danego wydarzenia:
-            #sumDistanceForEvent=...
-            #averageDistanceForEvent=...
-            #averageTimeOfActivitiesForEvent=...
-            #AmountOfBeersObtained=...
-
-            # for a in eventWeek:
-            #     print(a)
-
-            # for b in userEvents:
-            #     print(b)
-
             d1 = 100
             try:
                 if eventWeek[userEvents[eventCount].id] < userEvents[eventCount].lengthWeeks:
@@ -524,7 +476,6 @@ def basicDashboard():
                     print("Błąd w: eventWeek[userEvents[eventCount].id] < userEvents[eventCount].lengthWeeks")
 
 
-
             d2 = 100
             try:
                 if eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]:
@@ -535,14 +486,6 @@ def basicDashboard():
                     d2=100
             except:
                     print("Błąd w: eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]")
-
-            # for week
-            
-            #         target = DistancesTable.query.filter(DistancesTable.event_ID == event.id).filter(DistancesTable.week == week).first()
-            #         target = target.value
-
-
-            d3=100
 
 
             if eventCount == len(userEvents)-1:
@@ -558,7 +501,7 @@ def basicDashboard():
             return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", amount=amount,
                             sumDistance=eventsDistanceSum, sumTime=sumTime,  pie_chart=pie_chart, today_7 = datetime.date.today() + datetime.timedelta(days=-7), averageDistance = eventsDistanceAverege,
                             averegeTime = eventsActivtiyTimeAverege, eventsNames=eventNames, event=userEvents[eventCount], nextEvent = nextEvent, previousEvent= previousEvent, eventWeek=eventWeek,
-                            eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, d3=d3, avatarsPath=avatarsPath, eventCount = eventCount)
+                            eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, avatarsPath=avatarsPath, eventCount = eventCount, eventAmount = len(userEvents))
                         
         else:
             return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
@@ -569,8 +512,6 @@ def basicDashboard():
         pie_chart.title = 'Różnorodność aktywności (w %)'
         checkTable=[]
         pie_chart = pie_chart.render_data_uri()
-
-        print("dupa")
         
         return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
                             sumDistance=0, sumTime=0, amount=0, pie_chart=pie_chart, menuMode="mainApp", event=[] , d1=0, d2=0, d3=0)

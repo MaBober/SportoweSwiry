@@ -108,17 +108,24 @@ def prepareListOfCurrentUserEventsSingleUsers():
     listOfMails = []
     listOfFullNames = []
 
-    for singleEvent in listOfRealEvents:
-        event=Event.query.filter(Event.name==singleEvent).first()
-        for participant in event.participants:
-            receiverUser=User.query.filter(User.id==participant.user_name).first()
-            receiverMail=receiverUser.mail
-            receiverName=receiverUser.name
-            receiverLastName=receiverUser.lastName
-            receiverFullName=receiverName + " " + receiverLastName
-            if receiverMail is not current_user.mail and not receiverMail in listOfMails and not receiverMail in listOfAdmins[0] and not receiverMail in listOfAdmins[1] and not receiverMail in listOfAdmins[3]:
-                listOfMails.append(receiverMail)
-                listOfFullNames.append(receiverFullName)
+
+    try:
+
+        for singleEvent in listOfRealEvents:
+            event=Event.query.filter(Event.name==singleEvent).first()
+            for participant in event.participants:
+                receiverUser=User.query.filter(User.id==participant.user_name).first()
+                receiverMail=receiverUser.mail
+                receiverName=receiverUser.name
+                receiverLastName=receiverUser.lastName
+                receiverFullName=receiverName + " " + receiverLastName
+                if receiverMail is not current_user.mail and not receiverMail in listOfMails and not receiverMail in listOfAdmins[0] and not receiverMail in listOfAdmins[1] and not receiverMail in listOfAdmins[3]:
+                    listOfMails.append(receiverMail)
+                    listOfFullNames.append(receiverFullName)
+                
+
+    except:
+        print("Somethink went wrong!")
          
     return list(zip(listOfMails, listOfFullNames))
 

@@ -6,6 +6,45 @@
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/myActivity.css') }}">
 
 
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Usuwanie rekordu danych</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="idDeleteModalBody">
+        ...
+        </div>
+        <div class="modal-footer">
+            <form action="" method="GET" id="confirmDeleteForm">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <button type="submit" class="btn btn-danger">Usuń aktywność</button>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script> 
+    $(document).ready(function () { 
+        // For A Delete Record Popup 
+        // This function is applied to all elements with class ending with ".delete-confirm" 
+        $('.delete-confirm').click(function () { 
+            // get attributes of the found element 
+            var desc = $(this).attr('data-desc'); 
+            var url = $(this).attr('data-url'); 
+            // the #... designates id of an element - change the text in the modal window 
+            $('#idDeleteModalBody').text(desc); 
+            $("#confirmDeleteForm").attr("action", url); 
+        }); 
+    }); 
+</script>
+
+
 <div class="Static-Content">
     <div class="row Dashboard-First-Row">
 
@@ -13,7 +52,7 @@
             <img src="/static/img/icon-route.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Pokonany dystans</span>
-                <span class="Dashboard-Value">123 km</span> 
+                <span class="Dashboard-Value">{{sumDistance}} km</span> 
             </div>
         </div>
 
@@ -21,7 +60,7 @@
             <img src="/static/img/icon-average.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni dystans</span>
-                <span class="Dashboard-Value">34</span>
+                <span class="Dashboard-Value">{{averageDistance}} km</span>
             </div>
         </div>
 
@@ -29,17 +68,15 @@
             <img src="/static/img/icon-timeTime.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni czas aktywności</span>
-                <span class="Dashboard-Value">1:03:56</span>
+                <span class="Dashboard-Value">{{averageTime}}</span>
             </div>
         </div>
 
         <div class="Dashboard-Main-Box">
             <img src="/static/img/icon-beer.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
-                <span class="Dashboard-Value-Title">Zdobytych piw</span>
-                <span class="Dashboard-Value-Beers">
-                    <a class="nav-link" href="#" style="color: white;">Sprawdź tutaj!</a>
-                </span>
+                <span class="Dashboard-Value-Title">Ilość aktywności</span>
+                <span class="Dashboard-Value">56</span>
             </div>
         </div>
 
@@ -51,8 +88,50 @@
             <canvas id="doughnut-chart" class="Chart"></canvas>
         </div>
         <div class="col-xl-6 Chart-Box">
-            <span class="Title-Box">Ostatnie aktywności</span>
+            <span class="Title-Box">Aktywności ostatnich 10 dni</span>
             <canvas id="bar-chart" class="Chart"></canvas>
+        </div>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
+            <div class="table-responsive-md">
+                <table class="table table-sm table-dark table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Aktywność</th>
+                        <th scope="col">Dystans</th>
+                        <th scope="col">Czas</th>
+                        <th scope="col">Operacje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in activities: %}
+                        <tr>
+                            <td scope="row">{{loop.index}}</td>
+                            <td>{{activity.date}}</td>
+                            <td>{{activity.activity}}</td>
+                            <td>{{activity.distance}}</td>
+                            <td>{{activity.time}}</td>
+                            <td>
+                                <!-- <a href="{{ url_for('activity.modifyActivity', activityID=activity.id )}}" class="btn btn-warning btn-sm" role="button">Edytuj</a> -->
+                                <a href="{{ url_for('activity.modifyActivity', activityID=activity.id )}}" role="button"><img src="static/img/icon-edit.webp" class="edit-button"></a>
+                                <!-- Button trigger modal -->
+                                <a type="button" class="delete-confirm" 
+                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                    data-desc="{{ 'Napewno chcesz usunać aktywność: {} ({} km)?'.format(activity.activity, activity.distance) }}"
+                                    data-url="{{ url_for('activity.deleteActivity', activityID=activity.id )}}">
+                                    <img src="static/img/icon-delete.webp" class="delete-button">
+                                </a>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -60,15 +139,20 @@
 
 
 <script>
+
+    var donut_labels = {{ kindOfActivities | safe }}
+    var donut_data = {{ percentsOfActivities | safe }}
+
     new Chart(document.getElementById("doughnut-chart"), {
         type: 'doughnut',
         data: {
-        labels: ["Africa", "Asia", "Europe", "Latin America"],
+        labels: donut_labels,
         datasets: [
             {
-            label: "Population (millions)",
-            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-            data: {{ d | safe }}
+            // backgroundColor: ["#579956", "#8CFA14", "#337507","#38AB68","#4A9972","#677866", "#03721C"], "#9ff72cdd
+            backgroundColor: ["#03721C", "#579956", "#0d734b", "#395144", "#00603a", "#404040", "#0c1812", "#9ff72cdd"],
+            labels: ["Rodzaj aktwyności"],
+            data: donut_data
             }
         ]
         },
@@ -76,6 +160,18 @@
         title: {
             display: false,
             text: 'Różnorodność aktywności'
+        },
+        elements: {
+            arc: {
+                borderWidth: 0
+                }
+        },
+        
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom'
+            }
         }
         }
     });
@@ -84,27 +180,33 @@
 
 
 <script>
+
+    var bar_labels = {{ dates | safe }}
+    var bar_data = {{ dataList | safe }}
+
     new Chart(document.getElementById("bar-chart"), {
     type: 'bar',
     data: {
-      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+      labels: bar_labels,
       datasets: [
         {
-          label: "Population (millions)",
-          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-          data: [2478,5267,734,784,433]
+          label: "Dystans [km]",
+          backgroundColor: ["#579956"],
+          data: bar_data
         }
       ]
     },
     options: {
       legend: { display: false },
       title: {
-        display: true,
-        text: 'Predicted world population (millions) in 2050'
+        display: false,
+        text: 'Liczba aktywności w ostatnich 10 dniach'
       }
+      
     }
 });
 </script>
+
 
 
 {% endblock %}

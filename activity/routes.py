@@ -218,10 +218,10 @@ def myActivities():
 
         sumDistance=round(sumDistance,2)
 
-        #creating a pie chart
-        pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
-        pie_chart.title = 'Różnorodność aktywności (w %)'
         checkTable=[]
+
+        kindOfActivities=[]
+        percentsOfActivities=[]
 
         #calculation of the percentage of activity
         for activityExternal in activities:
@@ -230,12 +230,10 @@ def myActivities():
                 if activityExternal.activity==activityInternal.activity and not activityExternal.activity in checkTable:
                     quantity=quantity+1
             if quantity>0:
-                pie_chart.add(activityExternal.activity, round((quantity/amount)*100,1))
+                kindOfActivities.append(activityExternal.activity)
+                percentsOfActivities.append(round((quantity/amount)*100,1))
                 checkTable.append(activityExternal.activity)
         
-        #Render a URL adress for chart
-        pie_chart = pie_chart.render_data_uri()
-
 
         today=dt.date.today()
         dataList=[]
@@ -248,20 +246,12 @@ def myActivities():
                 if date==no.date:
                     distance=distance+no.distance
             dataList.append(distance)
-            dates.append(date)
+            dates.append(str(date))
 
-        customStyle = Style(colors=["#30839f"])
-        line_chart = pygal.Bar(fill=True, x_label_rotation=45, style=customStyle)
-        line_chart.x_labels = map(str, dates)
-        line_chart.add('Dystans [km]', dataList)
+        
 
-
-        #Render a URL adress for chart
-        line_chart = line_chart.render_data_uri()
-
-
-        return render_template('/pages/myActivities.html', activities=activities, title_prefix = "Moje aktywności", 
-                                sumDistance=sumDistance, averageDistance=averageDistance, averageTime=averageTime, pie_chart=pie_chart, line_chart=line_chart)
+        return render_template('/pages/NewMyActivity.html', activities=activities, title_prefix = "Moje aktywności", 
+                                sumDistance=sumDistance, averageDistance=averageDistance, averageTime=averageTime, percentsOfActivities=percentsOfActivities, kindOfActivities=kindOfActivities, dates=dates, dataList=dataList, menuMode="mainApp")
         
     else:
         return redirect(url_for('other.hello'))
@@ -325,17 +315,3 @@ def stravaCallback():
     return redirect(url_for('other.hello'))
 
 
-
-
-
-@activity.route("/statistics")
-def statistics():
-
-    d1 = 10
-    d2 = 15
-    d3 = 25
-    d4 = 50
-
-    d=[10, 15, 25, 50]
-
-    return render_template('/pages/NewMyActivity.html', menuMode="mainApp", d1=d1, d2=d2, d3=d3, d4=d4, d=d)

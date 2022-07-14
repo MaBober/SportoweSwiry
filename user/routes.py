@@ -64,7 +64,7 @@ FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 
-URL = "https://test.sportoweswiry.atthost24.pl"
+URL = "https://sportoweswiry.com.pl"
 
 FB_SCOPE = ["email"]
 
@@ -546,7 +546,7 @@ def loginGoogle():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/callback")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/callback")
 
 
     authorization_url, state = flow.authorization_url() 
@@ -563,7 +563,7 @@ def callbackGoogle():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri= "http://test.sportoweswiry.atthost24.pl/callback")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri= "https://sportoweswiry.com.pl/callback")
 
 
 
@@ -764,7 +764,7 @@ def googleLoginConnect():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     #GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/google-callback-connect")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/google-callback-connect")
 
     authorization_url, state = flow.authorization_url() 
     session["state"] = state   
@@ -780,7 +780,7 @@ def googleConnectCallback():
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="http://test.sportoweswiry.atthost24.pl/google-callback-connect")
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/google-callback-connect")
 
 
     #Gets data from Google

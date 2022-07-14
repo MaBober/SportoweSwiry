@@ -317,7 +317,7 @@ def pandasTest():
 @login_required
 def stravaLogin():
 
-    return redirect('https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=http://test.sportoweswiry.atthost24.pl/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all')
+    return redirect('https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=https://sportoweswiry.com.pl/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all')
 
 @activity.route("/strava-callback",methods=['POST','GET'])
 @login_required

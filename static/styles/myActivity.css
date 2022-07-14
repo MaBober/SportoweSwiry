@@ -190,6 +190,23 @@ body {
 
 }
 
+.edit-button {
+  /* background-image: url("/static/img/icon-edit.webp"); */
+  width: 18px;
+  height: 18px;
+  flex-grow: 0;
+  /* margin: 3px 9px 3px 162px; */
+  object-fit: contain;
+}
+
+.delete-button {
+  width: 24px;
+  height: 24px;
+  flex-grow: 0;
+  margin: 0 0 0 9px;
+  object-fit: contain;
+}
+
 
 
 

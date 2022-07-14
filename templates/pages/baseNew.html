@@ -31,7 +31,20 @@
   </head>
 
   <body>
-        <div class="d-flex justify-content-center cookie">
+
+    
+    <div class="container" >
+
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert" style="z-index: 5; position: relative;">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <div class="d-flex justify-content-center cookie">
       {% include "includes/cookie_consent.html" %}
     </div>
     <header>
@@ -45,23 +58,14 @@
 
 
 
-    <div class="container" >
 
-      {% for message in get_flashed_messages() %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>{{ message }}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endfor %}
-
-    </div>
 
     
     {% block body_content %}
     
     {% endblock %}
   
-
+    <div class="clear"></div>
     <footer>
       {% include "includes/footer.html" %} 
     </footer>

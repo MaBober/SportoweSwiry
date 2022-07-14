@@ -257,9 +257,9 @@ body {
   border-width: 0;
   background-color: #579956;
   text-align: center;
-  display: flex;
   justify-content: center;
   align-items: center;
+  text-decoration: none;
 }
 
 
@@ -391,6 +391,10 @@ img.icon-add-activity {
   background-color: transparent !important;
 }
 
+.clear {
+   clear: both; height: 60px;
+   }
+
 
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {
@@ -433,10 +437,17 @@ img.icon-add-activity {
   }
 
   .Strava-logo{
-    left:190px;
+    left:195px;
   }
   
   
+}
+
+/* FOR VERY SMALL SCREENS */
+@media(max-width: 500px) {
+  .Strava-logo{
+    left:140px;
+  }
 }
 
 

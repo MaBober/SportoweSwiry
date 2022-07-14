@@ -19,6 +19,7 @@ def getLastStravaActivityDate():
             lastStravaActivitity = dt.datetime(2022,1,1,0,0).timestamp()
         
         else:
+            lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
             lastStravaActivitity = dt.datetime(lastStravaActivitity.date.year, lastStravaActivitity.date.month, lastStravaActivitity.date.day,0,0).timestamp()
 
         return lastStravaActivitity

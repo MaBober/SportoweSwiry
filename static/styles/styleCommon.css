@@ -187,7 +187,7 @@ body {
   z-index: 1;
   bottom: 0;
   max-width: 1300px;
-  min-width: 500px;
+  min-width: 300px;
   margin-top: 17px;
   margin-bottom: 10px;
   width: 80%;
@@ -520,6 +520,12 @@ img.icon-add-activity {
 
   .nav-item a {
     margin-left: 20px;
+  }
+
+  .cookie-box{
+
+    width: 60%;
+  
   }
 
 

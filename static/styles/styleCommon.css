@@ -458,7 +458,7 @@ img.icon-add-activity {
 
   .MainNav {
     background-color: transparent !important;
-    /* width: 50%; */
+    width: 50% !important;
     margin: auto;
     margin-right: 0;
     margin-top: 50px;

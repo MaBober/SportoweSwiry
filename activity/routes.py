@@ -293,7 +293,7 @@ def myActivities():
         
 
         return render_template('/pages/NewMyActivity.html', activities=activities, title_prefix = "Moje aktywności", 
-                                sumDistance=sumDistance, averageDistance=averageDistance, averageTime=averageTime, percentsOfActivities=percentsOfActivities, kindOfActivities=kindOfActivities, dates=dates, dataList=dataList, menuMode="mainApp")
+                                sumDistance=sumDistance, averageDistance=averageDistance, averageTime=averageTime, activitiesAmount = len(activities), percentsOfActivities=percentsOfActivities, kindOfActivities=kindOfActivities, dates=dates, dataList=dataList, menuMode="mainApp")
         
     else:
         return redirect(url_for('other.hello'))

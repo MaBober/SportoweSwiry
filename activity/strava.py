@@ -16,13 +16,14 @@ def getLastStravaActivityDate():
         lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).filter(Activities.stravaID != None).order_by(Activities.date.desc()).first()
         
         if lastStravaActivitity == None:
-            lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
+            lastActivitity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
+            lastStravaActivitityDate = dt.datetime(lastActivitity.date.year, lastActivitity.date.month, lastActivitity.date.day,0,0).timestamp()
         
         else:
-            lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
-            lastStravaActivitity = dt.datetime(lastStravaActivitity.date.year, lastStravaActivitity.date.month, lastStravaActivitity.date.day,0,0).timestamp()
+            lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).filter(Activities.stravaID != None).order_by(Activities.date.desc()).first()
+            lastStravaActivitityDate = dt.datetime(lastStravaActivitity.date.year, lastStravaActivitity.date.month, lastStravaActivitity.date.day,0,0).timestamp()
 
-        return lastStravaActivitity
+        return lastStravaActivitityDate
 
         # if lastStravaActivitity == None:
         #     lastActivity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()

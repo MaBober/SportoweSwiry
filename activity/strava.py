@@ -16,13 +16,21 @@ def getLastStravaActivityDate():
         lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).filter(Activities.stravaID != None).order_by(Activities.date.desc()).first()
         
         if lastStravaActivitity == None:
-            lastStravaActivitity = dt.datetime(2022,1,1,0,0).timestamp()
+            lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
         
         else:
             lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
             lastStravaActivitity = dt.datetime(lastStravaActivitity.date.year, lastStravaActivitity.date.month, lastStravaActivitity.date.day,0,0).timestamp()
 
         return lastStravaActivitity
+
+        # if lastStravaActivitity == None:
+        #     lastActivity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
+        #     lastStravaActivitity = dt.datetime(lastActivity.date.year, lastActivity.date.month, lastActivity.date.day,0,0).timestamp()
+        
+        # else:
+            
+        #     lastStravaActivitity = dt.datetime(lastStravaActivitity.date.year, lastStravaActivitity.date.month, lastStravaActivitity.date.day,0,0).timestamp()
 
 def getStravaAccessToken():
 

@@ -219,6 +219,8 @@ def giveUserEvents(userID, eventStatus="all"):
     elif eventStatus == "finished":
         userEvents = Event.query.filter(Event.id.in_(userEventsNames)).filter(Event.status=="Zakończone").all()
 
+    if userEvents == []:
+        return None
 
     return userEvents
 

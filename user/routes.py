@@ -34,6 +34,8 @@ from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
 
+from user_agents import parse
+
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -234,6 +236,12 @@ def deleteUser(userName):
 
 @user.route("/login", methods=['POST', 'GET'])
 def login():
+
+
+    
+    ua_string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246'
+    user_agent = parse(ua_string)
+    flash (user_agent.browser)
 
     logForm=LoginForm()
     if logForm.validate_on_submit():

@@ -127,6 +127,7 @@ def addStravaActivitiesToDB (activitiesFrame):
             #Check if simlat activity wasn't addded manualy
             if Activities.query.\
                 filter(Activities.date == singleActivity['date']).\
+                filter(Activities.userName == current_user.id).\
                 filter(Activities.activity == singleActivity['activity'] ).\
                 filter(Activities.distance > singleActivity['distance'] -0.5).\
                 filter(Activities.distance < singleActivity['distance'] +0.5).first() == None:

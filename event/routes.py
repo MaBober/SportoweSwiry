@@ -154,7 +154,7 @@ def yourEvents(mode):
 
     userEvents = giveUserEvents(current_user.id, mode)
 
-    if userEvents != None:
+    if giveUserEvents(current_user.id, 'all') != None:
         return render_template('/pages/your_events.html', events=userEvents, title_prefix = "Twoje wyzwania", mode  = mode, menuMode="mainApp")
 
     

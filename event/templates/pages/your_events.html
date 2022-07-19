@@ -44,7 +44,7 @@
 <div class="container-xl px-4 mt-4 Settings-Main-Box">
     <nav class="nav nav-borders rounded Small-Navbar" style="background-color: rgba(224, 153, 94);">
 
-        <span class="nav-link"  style="color: #579956;"><b>Twoje wydarzenia</b></span> 
+        <span class="nav-link"  style="color: #579956;"><b>Twoje wyzwania</b></span> 
 
         {% if mode=='ongoing': %}
             <a class="nav-link " href="{{ url_for('event.yourEvents', mode='ongoing') }}"  style="color: white; background-color: #579956;">Aktualne</a>
@@ -69,7 +69,7 @@
 
 
 <div class="container">
-
+    {% if events != None %}
     <div class="row" >
         {% for event in events: %}
 
@@ -104,8 +104,8 @@
                 </div>
             </div> 
         {% endfor %}
-
     </div>
+    {% endif %}
 </div>
 
 {% endblock %}

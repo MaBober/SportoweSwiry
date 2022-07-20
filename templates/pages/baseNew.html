@@ -31,22 +31,31 @@
   </head>
 
   <body>
+    <!-- Flash messeges -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category,message in messages %}
 
-    
-    <div class="container" >
+          <div class="row alert alert-dismissible fade show flash flash-{{ category }}" role="alert">
+            <div class="col-1" style="align-content: right;"></div>
+            <div class="col-10">
+              <span class=" flash-text">{{ message }}</span>
+            </div>
+            <div class="col-1" >
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
 
-      {% for message in get_flashed_messages() %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert" style="z-index: 5; position: relative;">
-        <strong>{{ message }}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endfor %}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
 
-    </div>
-
+    <!-- Cookie information -->
     <div class="d-flex justify-content-center cookie">
       {% include "includes/cookie_consent.html" %}
     </div>
+
+
     <header>
       {% if menuMode=="mainApp" %}
         {% include "includes/MainMenu.html" %} 

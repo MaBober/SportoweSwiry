@@ -174,7 +174,7 @@ def addActivity():
         #adding new activity to datebase
         db.session.add(newActivity)
         db.session.commit()
-        flash("Poprawnie dodano nową aktywność")
+        flash("Poprawnie dodano nową aktywność", 'success')
         return  redirect(url_for('activity.addActivity'))
 
 

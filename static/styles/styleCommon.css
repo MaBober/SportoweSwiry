@@ -291,16 +291,10 @@ a.cookie-button-text {
 
 /* MAIN NAVBAR */
 
-
 .MainNav {
-  background-color: #000 !important;
+  background-color: transparent !important;
   height: 39px;
-  width: 100%;
-  /* margin: auto; */
-  /* margin-right: 0; */
-  /**/
   margin-top: 30px;
-  margin-right: 5%;
   padding:0;
 }
 
@@ -310,17 +304,13 @@ a.cookie-button-text {
   height: 46px;
   display: flex;
   flex-direction: row;
-  /* justify-content: flex-start; */
-  /* align-items: flex-start; */
   gap: 10px;
-  /* margin: 0 450px 0 0; */
-  /* padding: 13px 12px; */
   border-radius: 15px;
   background-color: #579956;
   position: relative;
-  /* margin-left: -60px; */
-
+  margin-right: -3px;
 }
+
 
 img.icon-add-activity {
   width: 29px;
@@ -338,6 +328,11 @@ img.icon-add-activity {
   margin-right: 20px;
   font-size: 16px;
   color: #fff;
+}
+
+.Background-Line {
+  background-color: #000;
+  margin-right: 5%;
 }
 
 
@@ -511,11 +506,7 @@ img.icon-add-activity {
 
   .MainNav {
     background-color: transparent !important;
-    width: 50% !important;
-    margin: auto;
-    margin-right: 0;
     margin-top: 50px;
-    margin-right: 5%;
   }
 
   .navbar-dark .navbar-toggler-icon 
@@ -595,10 +586,6 @@ img.icon-add-activity {
     justify-content: right !important;
   }
 
-  .MainNav {
-    width: 70% !important;
-  }
-
   .Alert-Message {
     position: absolute;
     background-color: red; 
@@ -623,10 +610,6 @@ img.icon-add-activity {
     margin-left: 10px;
     margin-right: 10px !important;
     font-size: 14px;
-  }
-
-  .MainNav {
-    width: 70% !important;
   }
 
   .Alert-Message {

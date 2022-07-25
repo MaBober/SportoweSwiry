@@ -295,9 +295,9 @@ a.cookie-button-text {
 .MainNav {
   background-color: #000 !important;
   height: 39px;
-  /* width: 70%; */
-  margin: auto;
-  margin-right: 0;
+  width: 100%;
+  /* margin: auto; */
+  /* margin-right: 0; */
   margin-top: 30px;
   margin-right: 5%;
   padding:0;
@@ -309,15 +309,15 @@ a.cookie-button-text {
   height: 46px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
+  /* justify-content: flex-start; */
+  /* align-items: flex-start; */
   gap: 10px;
   /* margin: 0 450px 0 0; */
   /* padding: 13px 12px; */
   border-radius: 15px;
   background-color: #579956;
   position: relative;
-  margin-left: -60px;
+  /* margin-left: -60px; */
 
 }
 

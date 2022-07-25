@@ -229,7 +229,7 @@ def deleteUser(userName):
         db.session.commit()
         flash("Użytkownik {} {} został usunięty z bazy danych".format(userToDelete.name, userToDelete.lastName))
     else:
-        flash("Nie można usunąć użytkownika {} {}".format(userToDelete.name, userToDelete.lastName))
+        flash("Nie można usunąć użytkownika {} {}".format(userToDelete.name, userToDelete.lastName),'danger')
 
     return redirect(url_for('user.listOfUsers'))
 
@@ -260,7 +260,7 @@ def login():
                 flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
                 return redirect(next)
             else:
-                flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
+                flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName),"success")
 
             return redirect(url_for('user.basicDashboard'))
         else:

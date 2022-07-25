@@ -396,6 +396,58 @@ img.icon-add-activity {
    }
 
 
+.flash {
+  padding: 7px 0px 7px 0px;
+  margin-right: 0;
+  align-content: center;
+  text-align: center;
+  height: 40px;
+  position: relative;
+  z-index: 4;
+  border-radius: 0%;
+  vertical-align: middle;
+
+}
+
+.flash-success{
+  background-color: rgba(170, 203, 166, 0.75);
+
+}
+
+.flash-message{
+  background-color: rgba(202, 220, 172, 0.753);
+
+}
+
+.flash-danger{
+  background-color: rgba(221, 124, 111, 0.75);
+
+}
+
+.alert-dismissible .btn-close {
+    height: auto;
+    width: auto;
+    right: unset;
+    right: 5%;
+    
+}
+
+.flash-text{
+
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #000;
+
+}
+
+
+
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {
 

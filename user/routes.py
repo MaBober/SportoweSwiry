@@ -237,12 +237,6 @@ def deleteUser(userName):
 @user.route("/login", methods=['POST', 'GET'])
 def login():
 
-
-    
-    ua_string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246'
-    user_agent = parse(ua_string)
-    flash (user_agent.browser)
-
     logForm=LoginForm()
     if logForm.validate_on_submit():
         user=User.query.filter(User.id == logForm.name.data).first() #if login=userName
@@ -550,6 +544,10 @@ def rotateAvatarLeft():
 @user.route("/google-login")
 def loginGoogle():
 
+    if "FB_IAB" in request.headers.get('User-Agent'):
+        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
+        return redirect(url_for('user.login'))
+
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
@@ -649,10 +647,15 @@ def callbackGoogle():
 
 @user.route("/fb-login")
 def loginFacebook():
-	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
-	authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
 
-	return flask.redirect(authorization_url)
+    if "FB_IAB" in request.headers.get('User-Agent'):
+        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
+        return redirect(url_for('user.login'))
+
+    facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
+    authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
+
+    return flask.redirect(authorization_url)
 
 
 @user.route("/fb-callback", methods=['GET'])
@@ -723,10 +726,15 @@ def callback():
 
 @user.route("/fb-login-connect")
 def loginConnectFacebook():
-	facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback-connect", scope=FB_SCOPE)
-	authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
 
-	return flask.redirect(authorization_url)
+    if "FB_IAB" in request.headers.get('User-Agent'):
+        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
+        return redirect(url_for('user.login'))
+
+    facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback-connect", scope=FB_SCOPE)
+    authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
+
+    return flask.redirect(authorization_url)
 
 
 @user.route("/fb-callback-connect", methods=['GET'])
@@ -767,6 +775,10 @@ def callbackConnect():
 
 @user.route("/google-login-connect")
 def googleLoginConnect():
+
+    if "FB_IAB" in request.headers.get('User-Agent'):
+        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
+        return redirect(url_for('user.login'))
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"

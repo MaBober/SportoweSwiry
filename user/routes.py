@@ -55,7 +55,7 @@ FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 URL = "https://sportoweswiry.com.pl"
 FB_SCOPE = ["email"]
-GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
 
 oauth = OAuth(app)
 

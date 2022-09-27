@@ -60,8 +60,10 @@ user = Blueprint("user", __name__,
 #FB_CLIENT_SECRET = '3eedc4e349acba2f950088efe790ce77'
 
 #SportoweSwiry (2)
-FB_CLIENT_ID = '427488192540443'
-FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
+# FB_CLIENT_ID = '427488192540443'
+
+FB_CLIENT_ID = os.environ.get('FB_CLIENT_ID')
+FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_ID')
 
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"

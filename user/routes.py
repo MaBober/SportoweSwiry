@@ -42,8 +42,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 avatars = Avatars(app)
 
-
-
 loginManager=LoginManager(app) #Instancy for Login Manager
 loginManager.login_view = 'user.login' #Redirect to login for restricted pages
 loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zawartości"
@@ -72,8 +70,6 @@ def isSafeUrl(target):
     ref_url = urlparse(request.host_url) 
     test_url = urlparse(urljoin(request.host_url, target)) 
     return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
-
-
 
 @user.route("/createUser", methods=['POST', 'GET'])
 def createAccount():

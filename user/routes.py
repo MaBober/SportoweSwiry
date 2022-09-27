@@ -37,6 +37,8 @@ import google.auth.transport.requests
 from user_agents import parse
 
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 
 avatars = Avatars(app)
 
@@ -60,16 +62,19 @@ user = Blueprint("user", __name__,
 #SportoweSwiry (2)
 # FB_CLIENT_ID = '427488192540443'
 
-OAUTHLIB_INSECURE_TRANSPORT = os.environ.get('OAUTHLIB_INSECURE_TRANSPORT')
 FB_CLIENT_ID = os.environ.get('FB_CLIENT_ID')
-FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_SECRET')
-FB_AUTHORIZATION_BASE_URL = os.environ.get('FB_AUTHORIZATION_BASE_URL')
-FB_TOKEN_URL = os.environ.get('FB_TOKEN_URL')
-URL = os.environ.get('URL')
-FB_SCOPE = os.environ.get('FB_SCOPE')
+FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
 
+FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
+FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
+
+URL = "https://sportoweswiry.com.pl"
+
+FB_SCOPE = ["email"]
 
 oauth = OAuth(app)
+
+
 
 #Function which can connect user with good ID (for logging)
 @loginManager.user_loader

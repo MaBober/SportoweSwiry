@@ -2,7 +2,7 @@
 static/avatars
 
 #Configuration file - > To avoid changing between test and production version
-config.py
+# config.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -42,6 +42,8 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 avatars = Avatars(app)
 
+
+
 loginManager=LoginManager(app) #Instancy for Login Manager
 loginManager.login_view = 'user.login' #Redirect to login for restricted pages
 loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zawartości"
@@ -49,15 +51,29 @@ loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zaw
 user = Blueprint("user", __name__,
     template_folder='templates')
 
+#SportoweSwiry
+#FB_CLIENT_ID = '1201203197289242'
+#FB_CLIENT_SECRET = '90116a2987ba2a3dfce1b7c72064cf6f'
+
+#SportoweSwiryTest
+#FB_CLIENT_ID = '405719734491130'
+#FB_CLIENT_SECRET = '3eedc4e349acba2f950088efe790ce77'
+
+#SportoweSwiry (2)
+# FB_CLIENT_ID = '427488192540443'
+
 FB_CLIENT_ID = os.environ.get('FB_CLIENT_ID')
-FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_SECRET')
+FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_ID')
+
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
+
 URL = "https://sportoweswiry.com.pl"
+
 FB_SCOPE = ["email"]
-GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
 
 oauth = OAuth(app)
+
 
 
 #Function which can connect user with good ID (for logging)
@@ -70,6 +86,8 @@ def isSafeUrl(target):
     ref_url = urlparse(request.host_url) 
     test_url = urlparse(urljoin(request.host_url, target)) 
     return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
+
 
 @user.route("/createUser", methods=['POST', 'GET'])
 def createAccount():
@@ -534,6 +552,7 @@ def loginGoogle():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/callback")
 
@@ -550,6 +569,7 @@ def callbackGoogle():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri= "https://sportoweswiry.com.pl/callback")
 
@@ -764,6 +784,7 @@ def googleLoginConnect():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    #GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/google-callback-connect")
 
@@ -779,6 +800,7 @@ def googleConnectCallback():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    GOOGLE_CLIENT_ID = '1038815102985-ijajop9lhj2djsoua450a1orfpsm463h.apps.googleusercontent.com'
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/google-callback-connect")
 

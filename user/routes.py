@@ -51,29 +51,14 @@ loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zaw
 user = Blueprint("user", __name__,
     template_folder='templates')
 
-#SportoweSwiry
-#FB_CLIENT_ID = '1201203197289242'
-#FB_CLIENT_SECRET = '90116a2987ba2a3dfce1b7c72064cf6f'
-
-#SportoweSwiryTest
-#FB_CLIENT_ID = '405719734491130'
-#FB_CLIENT_SECRET = '3eedc4e349acba2f950088efe790ce77'
-
-#SportoweSwiry (2)
-# FB_CLIENT_ID = '427488192540443'
-
 FB_CLIENT_ID = os.environ.get('FB_CLIENT_ID')
-FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
-
+FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_SECRET')
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
-
 URL = "https://sportoweswiry.com.pl"
-
 FB_SCOPE = ["email"]
 
 oauth = OAuth(app)
-
 
 
 #Function which can connect user with good ID (for logging)

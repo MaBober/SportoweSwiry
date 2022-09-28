@@ -51,6 +51,7 @@ class User(db.Model, UserMixin):
         sufix = 0
 
         id = self.name[0:3] + self.lastName[0:3] + str(sufix)
+        id = self.removeAccents()
         user=User.query.filter(User.id == id).first()
 
         while user != None:

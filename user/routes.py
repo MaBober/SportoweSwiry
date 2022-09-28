@@ -616,7 +616,7 @@ def callbackGoogle():
 
     return redirect(url_for('other.hello'))
 
-@login_from_messenger_check
+
 @user.route("/fb-login")
 def loginFacebook():
 

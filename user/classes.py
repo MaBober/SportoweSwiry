@@ -1,12 +1,13 @@
-import datetime
+
 from start import db, app
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 import hashlib
 import binascii
 from flask import current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import os
-import string
+from werkzeug.utils import secure_filename
+from PIL import Image
 from other.classes import mailboxMessage
 
 class User(db.Model, UserMixin):
@@ -106,6 +107,7 @@ class User(db.Model, UserMixin):
         path=os.path.join(path, filename)
         return os.path.isfile(path)
 
+
     @staticmethod
     def reset_password(token, new_password):
         s = Serializer(current_app.config['SECRET_KEY'])
@@ -124,5 +126,14 @@ class User(db.Model, UserMixin):
 
         db.session.add(user)
         return True
+
+    @staticmethod
+    def rotateAvatar(angle):
+        filename = secure_filename(current_user.id + '.jpg')
+        avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+        rotatedAvatar = avatar.rotate(angle, expand=True)
+        rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+        return True
+    
 
     

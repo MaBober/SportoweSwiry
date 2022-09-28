@@ -695,6 +695,7 @@ def callback():
 @user.route("/fb-login-connect")
 def loginConnectFacebook():
 
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback-connect", scope=FB_SCOPE)
     authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
 

@@ -11,6 +11,7 @@ from event.functions import giveUserEvents
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
 from other.functions import send_email
 from .functions import SaveAvatarFromFacebook, PasswordGenerator, account_confirmation_check, login_from_messenger_check
+from .functions import createStandardAccount, createAccountFromSocialMedia
 
 from werkzeug.utils import secure_filename
 import datetime
@@ -38,6 +39,7 @@ from user_agents import parse
 
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+app.config['AVATARS_SAVE_PATH'] = os.path.join(app.static_folder, 'avatars')
 
 avatars = Avatars(app)
 
@@ -82,38 +84,17 @@ def isSafeUrl(target):
 def createAccount():
     
     form=UserForm()
-    tempAdmin=form.isAdmin.data
-    tempAvatar=form.avatar.data
     #Delete of not necessary inputs
     del form.isAdmin
     del form.avatar
     del form.id
 
-    #CreateUser.CreateUser()
-
     if form.validate_on_submit():
-        #Rewriting data from the form
-        newUser=User(name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, 
-                    id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data, isAdmin=tempAdmin, avatar=tempAvatar)
-
-
-        #Generatin new user ID
-        newUser.id = newUser.generate_ID()
-        newUser.id = newUser.removeAccents()
-
-
-        #Hash of password       
-        newUser.password=newUser.hash_password()
-
-        #adding admins to datebase 
-        db.session.add(newUser)
-        db.session.commit()
-
+        newUser = createStandardAccount(form)
         token = newUser.generate_confirmation_token()
         send_email(newUser.mail, 'Potwierdź swoje konto','confirm', user=newUser, token=token)
-
         login_user(newUser)
-        flash("Nowe konto zostało utworzone a na Twój adres e-mail wysłano prośbę o potwierdzenie konta ;)")
+        flash("Nowe konto zostało utworzone a na Twój adres e-mail wysłano prośbę o potwierdzenie konta.")
         return redirect(url_for('other.hello'))
 
     return render_template('NewUserForm.html', form=form, title_prefix = "Nowe konto")
@@ -291,6 +272,7 @@ def settings():
 
         if avatar.format=='jpg':
             filename = secure_filename(current_user.id + '.jpg')
+            print(app.root_path, app.config['AVATARS_SAVE_PATH'], filename)
             avatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
             flash("Zdjęcie profilowe zostało poprawnie przesłane na serwer")
         else:
@@ -505,22 +487,14 @@ def basicDashboard():
 @login_required #This page needs to be login
 def rotateAvatarRight():
 
-    filename = secure_filename(current_user.id + '.jpg')
-    avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-    angle = -90
-    rotatedAvatar = avatar.rotate(angle, expand=True)
-    rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+    current_user.rotateAvatar(angle=-90)
     return redirect(url_for('user.settings'))
 
 @user.route("/rotateAvatarLeft")
 @login_required #This page needs to be login
 def rotateAvatarLeft():
 
-    filename = secure_filename(current_user.id + '.jpg')
-    avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-    angle = 90
-    rotatedAvatar = avatar.rotate(angle, expand=True)
-    rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+    current_user.rotateAvatar(angle=90)
     return redirect(url_for('user.settings'))
 
 @login_from_messenger_check
@@ -592,19 +566,21 @@ def callbackGoogle():
         firstName=fullName[0]
         lastName=fullName[1]
 
-        newUser=User(name=firstName, lastName=lastName, mail=email, 
-                    id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
+        createAccountFromSocialMedia(firstName, lastName, email)
 
-        #Generatin new user ID
-        newUser.id = newUser.generate_ID()
-        newUser.id = newUser.removeAccents()
+        # newUser=User(name=firstName, lastName=lastName, mail=email, 
+        #             id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
 
-        #Hash of password       
-        newUser.password=newUser.hash_password()
+        # #Generatin new user ID
+        # newUser.id = newUser.generate_ID()
+        # newUser.id = newUser.removeAccents()
 
-        #adding admins to datebase 
-        db.session.add(newUser)
-        db.session.commit()
+        # #Hash of password       
+        # newUser.password=newUser.hash_password()
+
+        # #adding admins to datebase 
+        # db.session.add(newUser)
+        # db.session.commit()
 
         user=User.query.filter(User.mail == email).first()
         login_user(user, remember=True)
@@ -670,19 +646,21 @@ def callback():
         firstName=fullName[0]
         lastName=fullName[1]
 
-        newUser=User(name=firstName, lastName=lastName, mail=email, 
-                    id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByFB=True)
+        createAccountFromSocialMedia(firstName, lastName, email)
 
-        #Generatin new user ID
-        newUser.id = newUser.generate_ID()
-        newUser.id = newUser.removeAccents()
+        # newUser=User(name=firstName, lastName=lastName, mail=email, 
+        #             id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByFB=True)
 
-        #Hash of password       
-        newUser.password=newUser.hash_password()
+        # #Generatin new user ID
+        # newUser.id = newUser.generate_ID()
+        # newUser.id = newUser.removeAccents()
 
-        #adding admins to datebase 
-        db.session.add(newUser)
-        db.session.commit()
+        # #Hash of password       
+        # newUser.password=newUser.hash_password()
+
+        # #adding admins to datebase 
+        # db.session.add(newUser)
+        # db.session.commit()
 
         user=User.query.filter(User.mail == email).first()
         login_user(user, remember=True)

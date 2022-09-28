@@ -48,15 +48,18 @@ loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zaw
 user = Blueprint("user", __name__,
     template_folder='templates')
 
-# FB_CLIENT_ID = os.environ.get('FB_CLIENT_ID')
-FB_CLIENT_ID = '427488192540443'
-# FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_ID')
-FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
+
+# FB_CLIENT_ID = '427488192540443'
+# FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
+
+
+FB_CLIENT_ID = os.environ.get('FB_CLIENT_ID')
+FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_ID')
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 URL = "https://sportoweswiry.com.pl"
 FB_SCOPE = ["email"]
-GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID ')
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 
 oauth = OAuth(app)
 
@@ -619,10 +622,10 @@ def callbackGoogle():
     return redirect(url_for('other.hello'))
 
 
+@login_from_messenger_check
 @user.route("/fb-login")
 def loginFacebook():
 
-    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
     authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
 

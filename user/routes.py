@@ -94,7 +94,7 @@ def createAccount():
     if form.validate_on_submit():
         #Rewriting data from the form
         newUser=User(name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, 
-                    id='x', password=form.password.data, isAdmin=tempAdmin, avatar=tempAvatar)
+                    id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data, isAdmin=tempAdmin, avatar=tempAvatar)
 
 
         #Generatin new user ID

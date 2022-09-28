@@ -1,5 +1,8 @@
 from start import app
+from flask import redirect, url_for
+from flask_login import current_user
 from werkzeug.utils import secure_filename
+from functools import wraps
 import urllib.request
 import os
 from PIL import Image
@@ -30,3 +33,16 @@ def PasswordGenerator():
 
     password="".join(password)
     return password
+
+def account_confirmation_check(initial_function):
+    @wraps(initial_function)
+    def wrapped_function(*args, **kwargs):
+
+        if current_user.is_authenticated and not current_user.confirmed:
+            return redirect(url_for('user.unconfirmed'))
+
+        else:
+            # wrapped_route = initial_function(*args, **kwargs)
+            return initial_function(*args, **kwargs)
+        
+    return wrapped_function

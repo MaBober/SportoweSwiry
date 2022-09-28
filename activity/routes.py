@@ -11,6 +11,7 @@ from activity.classes import Activities
 from activity.forms import ActivityForm
 from event.classes import CoefficientsList, DistancesTable
 from event.functions import giveUserEvents
+from user.functions import account_confirmation_check
 
 from .strava import addStravaActivitiesToDB, getActivitiesFromStrava, getLastStravaActivityDate, getStravaAccessToken, convertStravaData
 
@@ -34,11 +35,9 @@ activity = Blueprint("activity", __name__,
 
 
 @activity.route('/deleteActivity/<int:activityID>')
+@account_confirmation_check
 @login_required #This page needs to be login
 def deleteActivity(activityID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     activityToDelete=Activities.query.filter(Activities.id == activityID).first()
     db.session.delete(activityToDelete)
@@ -50,11 +49,9 @@ def deleteActivity(activityID):
 
 
 @activity.route("/modifyActivity/<int:activityID>", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def modifyActivity(activityID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
  
     activity = Activities.query.filter(Activities.id == activityID).first()
 
@@ -135,14 +132,10 @@ def modifyActivity(activityID):
         return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")
 
 
-
 @activity.route("/addActivity", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def addActivity():
-
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     form=ActivityForm()
 
@@ -218,13 +211,11 @@ def addActivity():
         return render_template('/pages/addActivity.html', form=form, mode="create", title_prefix = "Dodaj aktywność")
 
 
-
 @activity.route("/myActivities")
+@account_confirmation_check
 @login_required #This page needs to be login
 def myActivities():
 
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     activities=Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).all()
 

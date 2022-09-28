@@ -10,7 +10,7 @@ from event.classes import CoefficientsList, DistancesTable
 from event.functions import giveUserEvents
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
 from other.functions import send_email
-from .functions import SaveAvatarFromFacebook, PasswordGenerator, account_confirmation_check
+from .functions import SaveAvatarFromFacebook, PasswordGenerator, account_confirmation_check, login_from_messenger_check
 
 from werkzeug.utils import secure_filename
 import datetime
@@ -518,12 +518,9 @@ def rotateAvatarLeft():
     rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
     return redirect(url_for('user.settings'))
 
+@login_from_messenger_check
 @user.route("/google-login")
 def loginGoogle():
-
-    if "FB_IAB" in request.headers.get('User-Agent'):
-        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
-        return redirect(url_for('user.login'))
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -619,13 +616,9 @@ def callbackGoogle():
 
     return redirect(url_for('other.hello'))
 
-
+@login_from_messenger_check
 @user.route("/fb-login")
 def loginFacebook():
-
-    if "FB_IAB" in request.headers.get('User-Agent'):
-        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
-        return redirect(url_for('user.login'))
 
     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
     authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
@@ -698,13 +691,9 @@ def callback():
 
         return redirect(url_for('user.basicDashboard'))
 
-
+@login_from_messenger_check
 @user.route("/fb-login-connect")
 def loginConnectFacebook():
-
-    if "FB_IAB" in request.headers.get('User-Agent'):
-        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
-        return redirect(url_for('user.login'))
 
     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback-connect", scope=FB_SCOPE)
     authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
@@ -748,12 +737,9 @@ def callbackConnect():
 
     return redirect(url_for('user.settings'))
 
+@login_from_messenger_check
 @user.route("/google-login-connect")
 def googleLoginConnect():
-
-    if "FB_IAB" in request.headers.get('User-Agent'):
-        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
-        return redirect(url_for('user.login'))
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"

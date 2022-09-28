@@ -1,5 +1,5 @@
 from start import app
-from flask import redirect, url_for
+from flask import redirect, url_for, request, flash
 from flask_login import current_user
 from werkzeug.utils import secure_filename
 from functools import wraps
@@ -42,7 +42,17 @@ def account_confirmation_check(initial_function):
             return redirect(url_for('user.unconfirmed'))
 
         else:
-            # wrapped_route = initial_function(*args, **kwargs)
             return initial_function(*args, **kwargs)
-        
+    return wrapped_function
+
+
+def login_from_messenger_check(initial_function):
+    @wraps(initial_function)
+    def wrapped_function(*args, **kwargs):
+
+        if "FB_IAB" in request.headers.get('User-Agent'):
+            flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
+            return redirect(url_for('user.login'))
+		
+        return initial_function(*args, **kwargs)
     return wrapped_function

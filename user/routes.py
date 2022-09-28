@@ -621,10 +621,12 @@ def callbackGoogle():
 
     return redirect(url_for('other.hello'))
 
-
-@login_from_messenger_check
 @user.route("/fb-login")
 def loginFacebook():
+
+    if "FB_IAB" in request.headers.get('User-Agent'):
+        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
+        return redirect(url_for('user.login'))
 
     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
     authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)

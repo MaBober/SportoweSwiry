@@ -10,7 +10,7 @@ from event.classes import CoefficientsList, DistancesTable
 from event.functions import giveUserEvents
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
 from other.functions import send_email
-from .functions import SaveAvatarFromFacebook, PasswordGenerator
+from .functions import SaveAvatarFromFacebook, PasswordGenerator, account_confirmation_check
 
 from werkzeug.utils import secure_filename
 import datetime
@@ -182,11 +182,9 @@ def resetPassword(token):
 
 
 @user.route("/listOfUsers")
+@account_confirmation_check
 @login_required #This page needs to be login
 def listOfUsers():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -199,11 +197,9 @@ def listOfUsers():
 
 
 @user.route('/deleteUser/<userName>')
+@account_confirmation_check
 @login_required #This page needs to be login
 def deleteUser(userName):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej akcji")
@@ -257,11 +253,9 @@ def logout():
 
 
 @user.route("/settingsUser", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def settings():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
@@ -306,11 +300,10 @@ def settings():
     return render_template("accountSettings.html", title_prefix = "Ustawienia konta", form=form, avatarsPath=avatarsPath, avatarForm=avatarForm, current_user=current_user, menuMode="mainApp", mode="settings")
 
 @user.route("/passwordChange", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def passwordChange():
 
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     form=NewPasswordForm(id=current_user.id)
 
@@ -328,6 +321,7 @@ def passwordChange():
 
 
 @user.route("/basicDashboard/")
+@account_confirmation_check
 @login_required #This page needs to be login
 def basicDashboard():
 
@@ -340,9 +334,6 @@ def basicDashboard():
     else:
         eventCount = 0
 
-    if current_user.is_authenticated and not current_user.confirmed:
-       
-        return redirect(url_for('user.unconfirmed'))
 
     activities=Activities.query.filter(Activities.userName == current_user.id).all()
 
@@ -822,8 +813,3 @@ def googleConnectCallback():
 
     return redirect(url_for('user.settings'))
 
-
-@user.route("/test", methods=['POST', 'GET'])
-def test():
-
-    return render_template("chart.html", menuMode="mainApp")

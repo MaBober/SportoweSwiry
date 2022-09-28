@@ -10,6 +10,7 @@ from .classes import CoefficientsList, Event, Participation, User, DistancesTabl
 from .forms import CoeficientsForm, DistancesForm, EventForm, NewCoeficientsSetForm
 from flask_login import login_required, current_user
 from .functions import passEventToDB, addUserToEvent, deleteEvent, changeEvent, giveUserEvents, giveEventParticipants, deleteUserFromEvent
+from user.functions import account_confirmation_check
 from activity.classes import Activities
 from other.functions import send_email
 from urllib.parse import unquote
@@ -29,11 +30,9 @@ eventStatusOptions = ['Zapisy otwarte', 'W trakcie', 'Zakończone']
 
 
 @event.route("/new_coeficients_table", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def createCoeficientsTable():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -63,11 +62,9 @@ def createCoeficientsTable():
     
 
 @event.route("/explore_events")
+@account_confirmation_check
 @login_required #This page needs to be login
 def exploreEvents():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     events=Event.query.filter(Event.status == "Zapisy otwarte").filter(Event.isPrivate == False).filter().all()
 
@@ -75,11 +72,9 @@ def exploreEvents():
 
 
 @event.route("/join_event/<int:eventID>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def joinEvent(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
     
     event = Event.query.filter(Event.id == eventID).first()
 
@@ -125,7 +120,6 @@ def joinEvent(eventID):
         return redirect(url_for('event.exploreEvents'))
 
 
-
 @event.route("/leave_event/<int:eventID>")
 @login_required
 def leaveEvent(eventID):
@@ -147,7 +141,6 @@ def leaveEvent(eventID):
     return redirect(url_for('event.exploreEvents'))
 
 
-
 @event.route("/your_events/<mode>")
 @login_required #This page needs to be login
 def yourEvents(mode):
@@ -165,11 +158,9 @@ def yourEvents(mode):
 ###############################
 
 @event.route("/view_events/<int:eventID>")
+@account_confirmation_check
 @login_required
 def viewEvent(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -284,13 +275,10 @@ def viewEvent(eventID):
         flash("Nie bierzesz udziału w tym wyzwaniu!")
         return redirect(url_for('event.exploreEvents'))
 
-
 @event.route("/event_activities/<int:eventID>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def eventActivities(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -339,11 +327,9 @@ def eventActivities(eventID):
         return redirect(url_for('event.exploreEvents'))
 
 @event.route("/event_preview/<int:eventID>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def eventPreview(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     event = Event.query.filter(Event.id == eventID).first()
     eventUsers = giveEventParticipants(event.id)
@@ -353,13 +339,10 @@ def eventPreview(eventID):
     return render_template('/pages/event_view/event_preview.html', event=event, title_prefix = event.name , usersAmount = len(eventUsers), coefSet =coefSet, weekTargets=weekTargets, menuMode="mainApp",) 
 
 
-
 @event.route("/event_statistics/<int:eventID>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def eventStatistics(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -412,13 +395,10 @@ def eventStatistics(eventID):
         flash("Nie bierzesz udziału w tym wyzwaniu!")
         return redirect(url_for('exploreEvents'))
 
-
 @event.route("/event_contestants/<int:eventID>")
+@account_confirmation_check
 @login_required
 def eventContestants(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -435,11 +415,9 @@ def eventContestants(eventID):
         return redirect(url_for('event.exploreEvents'))
 
 @event.route("/event_beers/<int:eventID>")
+@account_confirmation_check
 @login_required
 def eventBeers(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     isParticipating = Participation.query.filter(Participation.user_name == current_user.id).filter(Participation.event_id == eventID).first()
 
@@ -551,11 +529,9 @@ def eventBeers(eventID):
 
 
 @event.route("/new_event", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def createEvent():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -591,11 +567,9 @@ def createEvent():
 
 
 @event.route("/admin_event_list")
+@account_confirmation_check
 @login_required #This page needs to be login
 def adminListOfEvents():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -603,8 +577,6 @@ def adminListOfEvents():
 
     events=Event.query.all()
     return render_template('/pages/admin_events.html', events=events, title_prefix = "Lista wyzwań")
-
-
     
 
 @event.route("/admin_delete_contestant/<int:eventID>/<userID>")
@@ -626,13 +598,10 @@ def adminDeleteContestant(eventID, userID):
     return redirect(url_for('eventContestants', eventID=eventID))
 
 
-
 @event.route("/delete_event/<int:eventID>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def adminDeleteEvent(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -647,13 +616,10 @@ def adminDeleteEvent(eventID):
     return redirect(url_for('event.adminListOfEvents'))
 
 
-
 @event.route("/modify_event/<int:eventID>", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def adminModifyEvent(eventID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -710,11 +676,9 @@ def adminModifyEvent(eventID):
 
 
 @event.route("/listOfCoefficients")
+@account_confirmation_check
 @login_required #This page needs to be login
 def listOfCoefficients():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -728,13 +692,11 @@ def listOfCoefficients():
     return render_template('/pages/listOfCoefficients.html', coefficients=coefficients, title_prefix = "Lista współczynników", names=names)
 
 @event.route("/coefficientsSetView/<setName>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def coefficientsSetView(setName):
 
     correctedSetName = unquote(setName)
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -744,12 +706,11 @@ def coefficientsSetView(setName):
     return render_template('/pages/coeficientSet_edit.html', title_prefix = correctedSetName, name=correctedSetName, CoefficientsSet=coefficientsSet)
 
 @event.route("/deleteCoeficientsSet/<setName>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def deleteCoefficientsSet(setName):
 
     correctedSetName = unquote(setName)
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -770,11 +731,9 @@ def deleteCoefficientsSet(setName):
 
 
 @event.route("/deleteCoeficientSport/<int:coeficientID>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def deleteCoeficientSport(coeficientID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -787,11 +746,9 @@ def deleteCoeficientSport(coeficientID):
     return redirect(url_for('event.coefficientsSetView', setName=positionToDelete.setName))
 
 @event.route("/modifyCoeficientSport/<int:coeficientID>", methods=['POST', 'GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def modifyCoeficientSport(coeficientID):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej zawartości")
@@ -817,11 +774,9 @@ def modifyCoeficientSport(coeficientID):
 
 
 @event.route('/addNewSport/', methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def addNewSport():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if not current_user.isAdmin:
         flash("Nie masz uprawnień do tej akcji")

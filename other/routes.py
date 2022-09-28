@@ -9,6 +9,7 @@ from user.classes import User
 
 from other.classes import mailboxMessage
 from .functions import send_email, prepareListOfChoicesForAdmin, saveMessageInDB, deleteMessagesFromDB, saveMessageInDBforEvent, saveMessageInDBforAll, prepareListOfChoicesForNormalUser, sendMessgaeFromContactFormToDB
+from user.functions import account_confirmation_check
 from datetime import datetime, timedelta
 import datetime
 
@@ -16,12 +17,9 @@ import datetime
 other = Blueprint("other", __name__,
     template_folder='templates')
 
-
+@account_confirmation_check
 @other.route("/")
 def hello():
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     if current_user.is_authenticated:
         return redirect(url_for('user.basicDashboard'))
@@ -74,11 +72,9 @@ def sendMessage():
     return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
 
 @other.route("/mailbox/<actionName>", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def mailbox(actionName):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
 
     form=AppMailForm()
     readForm=AppMailToRead()
@@ -142,16 +138,12 @@ def acceptCookies():
 @other.route("/privacyPolicy")
 def privacyPolicy():
     
-
     return render_template('/pages/privacyPolicy.html', title_prefix= "Polityka Prywatności")
-
-
 
 @other.route("/contactFormResponse")
 def contactFormResponse():
 
     return render_template('/pages/messageSent.html', title_prefix = "Formularz kontaktowy" )
-
 
 @other.route("/changeMessageStatus/<messageID>", methods=['POST','GET'])
 def changeStatusOfMessage(messageID):

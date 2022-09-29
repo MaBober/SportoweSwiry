@@ -39,7 +39,6 @@ from user_agents import parse
 from config import Config
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-# app.config['AVATARS_SAVE_PATH'] = os.path.join(app.static_folder, 'avatars')
 
 avatars = Avatars(app)
 
@@ -49,11 +48,6 @@ loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zaw
 
 user = Blueprint("user", __name__,
     template_folder='templates')
-
-
-# FB_CLIENT_ID = '427488192540443'
-# FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
-
 
 FB_CLIENT_ID = Config.FB_CLIENT_ID
 FB_CLIENT_SECRET = Config.FB_CLIENT_SECRET
@@ -568,20 +562,6 @@ def callbackGoogle():
 
         createAccountFromSocialMedia(firstName, lastName, email)
 
-        # newUser=User(name=firstName, lastName=lastName, mail=email, 
-        #             id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
-
-        # #Generatin new user ID
-        # newUser.id = newUser.generate_ID()
-        # newUser.id = newUser.removeAccents()
-
-        # #Hash of password       
-        # newUser.password=newUser.hash_password()
-
-        # #adding admins to datebase 
-        # db.session.add(newUser)
-        # db.session.commit()
-
         user=User.query.filter(User.mail == email).first()
         login_user(user, remember=True)
 
@@ -597,12 +577,9 @@ def callbackGoogle():
 
     return redirect(url_for('other.hello'))
 
+@login_from_messenger_check
 @user.route("/fb-login")
 def loginFacebook():
-
-    if "FB_IAB" in request.headers.get('User-Agent'):
-        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger")
-        return redirect(url_for('user.login'))
 
     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
     authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
@@ -647,20 +624,6 @@ def callback():
         lastName=fullName[1]
 
         createAccountFromSocialMedia(firstName, lastName, email)
-
-        # newUser=User(name=firstName, lastName=lastName, mail=email, 
-        #             id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByFB=True)
-
-        # #Generatin new user ID
-        # newUser.id = newUser.generate_ID()
-        # newUser.id = newUser.removeAccents()
-
-        # #Hash of password       
-        # newUser.password=newUser.hash_password()
-
-        # #adding admins to datebase 
-        # db.session.add(newUser)
-        # db.session.commit()
 
         user=User.query.filter(User.mail == email).first()
         login_user(user, remember=True)

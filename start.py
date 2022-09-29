@@ -14,19 +14,7 @@ def create_app():
     app.config.from_object(Config)
     migrate = Migrate(app, db)
 
-
-    # app.config['SECRET_KEY'] ='SportoweSwiry22'
-
-    # app.config['MAIL_SERVER']='sportoweswiry.atthost24.pl'
-    # app.config['MAIL_PORT'] = 465
-    # app.config['MAIL_USERNAME'] = 'admin@sportoweswiry.atthost24.pl'
-    # app.config['MAIL_PASSWORD'] = 'BiegoweSwiry22'
-    # app.config['MAIL_USE_TLS'] = False
-    # app.config['MAIL_USE_SSL'] = True
-    # app.config['MAIL_DEFAULT_SENDER'] = 'Sportowe Świry <admin@sportoweswiry.atthost24.pl>'
-
     app.config['AVATARS_SAVE_PATH'] = os.path.join(app.static_folder, 'avatars')
-    # app.config['FLASK_APP']='main'
 
     db.init_app(app)
     migrate.init_app(app, db)

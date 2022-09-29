@@ -58,7 +58,7 @@ def createStandardAccount(form):
 def createAccountFromSocialMedia(firstName, lastName, email):
     
         newUser=User(name=firstName, lastName=lastName, mail=email, 
-                    id='x', password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
+                    id=firstName[0:3]+lastName[0:3], password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
 
         #Generatin new user ID
         newUser.id = newUser.generate_ID()

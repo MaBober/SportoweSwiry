@@ -36,10 +36,10 @@ from pip._vendor import cachecontrol
 import google.auth.transport.requests
 
 from user_agents import parse
-
+from config import Config
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-app.config['AVATARS_SAVE_PATH'] = os.path.join(app.static_folder, 'avatars')
+# app.config['AVATARS_SAVE_PATH'] = os.path.join(app.static_folder, 'avatars')
 
 avatars = Avatars(app)
 
@@ -55,13 +55,13 @@ user = Blueprint("user", __name__,
 # FB_CLIENT_SECRET = '1be908a75d832de15065167023567373'
 
 
-FB_CLIENT_ID = os.environ.get('FB_CLIENT_ID')
-FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_ID')
+FB_CLIENT_ID = Config.FB_CLIENT_ID
+FB_CLIENT_SECRET = Config.FB_CLIENT_SECRET
 FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 URL = "https://sportoweswiry.com.pl"
 FB_SCOPE = ["email"]
-GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_ID = Config.GOOGLE_CLIENT_ID
 
 oauth = OAuth(app)
 

@@ -16,15 +16,17 @@ import string
 
 def standard_login(user, remember=True):
     login_user(user, remember)
-    check_next_url(current_user)
+    check_next_url()
     return None
 
-def is_safe_url(target): 
-    ref_url = urlparse(request.host_url) 
-    test_url = urlparse(urljoin(request.host_url, target)) 
-    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+def login_from_facebook(user, picture_url, remember=True):
+    login_user(user, remember)
+    save_avatar_from_facebook(picture_url)
+    check_next_url()
+    return None
 
-def check_next_url(current_user):
+
+def check_next_url():
     next = request.args.get('next')
     if next and is_safe_url(next):
         flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
@@ -33,9 +35,14 @@ def check_next_url(current_user):
         flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
     return None
 
+def is_safe_url(target): 
+    ref_url = urlparse(request.host_url) 
+    test_url = urlparse(urljoin(request.host_url, target)) 
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
-def SaveAvatarFromFacebook(picture_url, id):
-    filename = secure_filename(id + '.jpg')
+
+def save_avatar_from_facebook(picture_url):
+    filename = secure_filename(current_user.id + '.jpg')
     urllib.request.urlretrieve(picture_url, os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
     return True
 
@@ -57,6 +64,7 @@ def createStandardAccount(form):
         db.session.commit()
 
         return newUser
+
 
 def createAccountFromSocialMedia(firstName, lastName, email):
     

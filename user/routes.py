@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort
+from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort, json
 from start import app, db
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse, urljoin
@@ -51,7 +51,29 @@ FB_AUTHORIZATION_BASE_URL = "https://www.facebook.com/dialog/oauth"
 FB_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
 URL = "https://sportoweswiry.com.pl"
 FB_SCOPE = ["email"]
+
 GOOGLE_CLIENT_ID = Config.GOOGLE_CLIENT_ID
+GOOGLE_PROJECT_ID = Config.GOOGLE_PROJECT_ID
+GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
+TOKEN_URI = "https://oauth2.googleapis.com/token"
+AUTH_PROVIDER_X509_CERT_URL = "https://www.googleapis.com/oauth2/v1/certs"
+CLIENT_SECRET = Config.CLIENT_SECRET
+REDIRECT_URI_MAIN = "https://test.sportoweswiry.atthost24.pl/google_callback"
+REDIRECT_URI_LOCAL = "http://127.0.0.1:5000/google_callback"
+
+google_data = ({
+    "web":{
+        "client_id": GOOGLE_CLIENT_ID,
+        "project_id": GOOGLE_PROJECT_ID,
+        "auth_uri": GOOGLE_AUTH_URI,
+        "token_uri": TOKEN_URI,
+        "auth_provider_x509_cert_url": AUTH_PROVIDER_X509_CERT_URL,
+        "client_secret": CLIENT_SECRET,
+        "redirect_uris":[REDIRECT_URI_MAIN, REDIRECT_URI_LOCAL]
+    }
+})
+
+client_secrets_file =  json.dumps(google_data)
 
 oauth = OAuth(app)
 
@@ -482,7 +504,7 @@ def loginGoogle():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+    # client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/callback")
 
 
@@ -498,7 +520,7 @@ def callbackGoogle():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+    # client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri= "https://sportoweswiry.com.pl/callback")
 
     #Gets data from Google
@@ -631,7 +653,7 @@ def googleLoginConnect():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+    # client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/google-callback-connect")
 
     authorization_url, state = flow.authorization_url() 
@@ -646,7 +668,7 @@ def googleConnectCallback():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+    # client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/google-callback-connect")
 
 

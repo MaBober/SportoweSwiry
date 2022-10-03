@@ -26,3 +26,5 @@ class Config:
     FB_CLIENT_ID = os.environ.get('FB_CLIENT_ID')
     FB_CLIENT_SECRET = os.environ.get('FB_CLIENT_SECRET')
     GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+    GOOGLE_PROJECT_ID = os.environ.get('GOOGLE_PROJECT_ID')
+    CLIENT_SECRET = os.environ.get('CLIENT_SECRET')

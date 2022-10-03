@@ -1,6 +1,10 @@
 from start import app, db
 from flask import redirect, url_for, request, flash
-from flask_login import current_user
+from flask_login import current_user, login_user
+
+from .classes import User
+
+from urllib.parse import urlparse, urljoin
 from werkzeug.utils import secure_filename
 from functools import wraps
 import urllib.request
@@ -8,33 +12,32 @@ import os
 from PIL import Image
 import random
 import string
-from .classes import User
-from other.functions import send_email
+
+
+def standard_login(user, remember=True):
+    login_user(user, remember)
+    check_next_url(current_user)
+    return None
+
+def is_safe_url(target): 
+    ref_url = urlparse(request.host_url) 
+    test_url = urlparse(urljoin(request.host_url, target)) 
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
+def check_next_url(current_user):
+    next = request.args.get('next')
+    if next and is_safe_url(next):
+        flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
+        return redirect(next)
+    else:
+        flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
+    return None
 
 
 def SaveAvatarFromFacebook(picture_url, id):
     filename = secure_filename(id + '.jpg')
     urllib.request.urlretrieve(picture_url, os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
     return True
-
-def PasswordGenerator():
-    characters=[]
-    Letters=string.ascii_letters
-    Numbers=string.digits
-    SpecialSigns=string.punctuation
-    
-    characters.append(Letters)
-    characters.append(Numbers)
-    characters.append(SpecialSigns)
-    characters="".join(characters)
-
-    password=[]
-    for i in range (8):
-        position=random.randint(0,len(characters)-1)
-        password.append(characters[position])
-
-    password="".join(password)
-    return password
 
 
 def createStandardAccount(form):
@@ -72,6 +75,25 @@ def createAccountFromSocialMedia(firstName, lastName, email):
         db.session.commit()
 
         return True
+
+def PasswordGenerator():
+    characters=[]
+    Letters=string.ascii_letters
+    Numbers=string.digits
+    SpecialSigns=string.punctuation
+    
+    characters.append(Letters)
+    characters.append(Numbers)
+    characters.append(SpecialSigns)
+    characters="".join(characters)
+
+    password=[]
+    for i in range (8):
+        position=random.randint(0,len(characters)-1)
+        password.append(characters[position])
+
+    password="".join(password)
+    return password
 
 
 def account_confirmation_check(initial_function):

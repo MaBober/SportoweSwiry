@@ -10,8 +10,8 @@ from event.classes import CoefficientsList, DistancesTable
 from event.functions import giveUserEvents
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
 from other.functions import send_email
-from .functions import SaveAvatarFromFacebook, PasswordGenerator, account_confirmation_check, login_from_messenger_check
-from .functions import createStandardAccount, createAccountFromSocialMedia
+from .functions import SaveAvatarFromFacebook, account_confirmation_check, login_from_messenger_check
+from .functions import createStandardAccount, createAccountFromSocialMedia, standard_login
 
 from werkzeug.utils import secure_filename
 import datetime
@@ -20,14 +20,12 @@ import pygal
 from PIL import Image
 from flask_avatars import Avatars
 
-from authlib.integrations.flask_client import OAuth
-
-import flask
+#Google and Facebook authorization
 import requests_oauthlib
 from requests_oauthlib.compliance_fixes import facebook_compliance_fix
+from authlib.integrations.flask_client import OAuth
+import flask
 import os 
-
-#Google login
 import requests
 import pathlib
 from google.oauth2 import id_token
@@ -208,16 +206,7 @@ def login():
         verify=User.verify_password(user.password, logForm.password.data)
 
         if user != None and verify:
-            login_user(user, remember=logForm.remember.data)
-
-            #Checking if next page is exist and if it is safe
-            next = request.args.get('next')
-            if next and isSafeUrl(next):
-                flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
-                return redirect(next)
-            else:
-                flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName),"success")
-
+            standard_login(user, remember=logForm.remember.data)
             return redirect(url_for('user.basicDashboard'))
         else:
             flash("Nie udało się zalogować. Podaj pawidłowe hasło")

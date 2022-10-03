@@ -11,7 +11,7 @@ from event.functions import giveUserEvents
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
 from other.functions import send_email
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
-from .functions import createStandardAccount, createAccountFromSocialMedia, standard_login, login_from_facebook
+from .functions import create_standard_account, create_account_from_social_media, standard_login, login_from_facebook
 
 from werkzeug.utils import secure_filename
 import datetime
@@ -80,7 +80,7 @@ def createAccount():
     del form.id
 
     if form.validate_on_submit():
-        newUser = createStandardAccount(form)
+        newUser = create_standard_account(form)
         token = newUser.generate_confirmation_token()
         send_email(newUser.mail, 'Potwierdź swoje konto','confirm', user=newUser, token=token)
         login_user(newUser)
@@ -524,41 +524,17 @@ def callbackGoogle():
     #Login user to APP
     user=User.query.filter(User.mail == email).first()
     if user != None:
-            standard_login(user, remember=True)
-            # login_user(user, remember=True)
-
-            # next = request.args.get('next')
-            # if next and isSafeUrl(next):
-            #     flash("Jesteś zalogowany jako: {}".format(name))
-            #     return redirect(next)
-            # else:
-            #     flash("Jesteś zalogowany jako: {}".format(name))
-
-            return redirect(url_for('user.basicDashboard'))
+        standard_login(user, remember=True)
+        return redirect(url_for('user.basicDashboard'))
 
     else:
         fullName=str(name).split(" ")
         firstName=fullName[0]
         lastName=fullName[1]
 
-        createAccountFromSocialMedia(firstName, lastName, email)
-
+        create_account_from_social_media(firstName, lastName, email)
         user=User.query.filter(User.mail == email).first()
-
         standard_login(user, remember=True)
-
-        # login_user(user, remember=True)
-
-
-        # #SaveAvatarFromFacebook(picture_url, current_user.id)
-
-        # #Checking if next page is exist and if it is safe
-        # next = request.args.get('next')
-        # if next and isSafeUrl(next):
-        #     flash("Jesteś zalogowany jako: {}".format(name))
-        #     return redirect(next)
-        # else:
-        #     flash("Jesteś zalogowany jako: {}".format(name))
 
     return redirect(url_for('other.hello'))
 
@@ -590,45 +566,16 @@ def callback():
     
     user=User.query.filter(User.mail == email).first()
     if user != None:
-
             login_from_facebook(user, picture_url, remember=True)
-
-            # login_user(user, remember=True)
-
-            # save_avatar_from_facebook(picture_url, current_user.id)
-
-            # #Checking if next page is exist and if it is safe
-            # next = request.args.get('next')
-            # if next and isSafeUrl(next):
-            #     flash("Jesteś zalogowany jako: {}".format(name))
-            #     return redirect(next)
-            # else:
-            #     flash("Jesteś zalogowany jako: {}".format(name))
-
             return redirect(url_for('user.basicDashboard'))
     else:
         fullName=str(name).split(" ")
         firstName=fullName[0]
         lastName=fullName[1]
 
-        createAccountFromSocialMedia(firstName, lastName, email)
-
+        create_account_from_social_media(firstName, lastName, email)
         user=User.query.filter(User.mail == email).first()
-
         login_from_facebook(user, picture_url, remember=True)
-
-        # login_user(user, remember=True)
-
-        # save_avatar_from_facebook(picture_url, current_user.id)
-
-        # #Checking if next page is exist and if it is safe
-        # next = request.args.get('next')
-        # if next and isSafeUrl(next):
-        #     flash("Jesteś zalogowany jako: {}".format(name))
-        #     return redirect(next)
-        # else:
-        #     flash("Jesteś zalogowany jako: {}".format(name))
-
         return redirect(url_for('user.basicDashboard'))
 
 @login_from_messenger_check

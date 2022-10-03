@@ -47,7 +47,7 @@ def save_avatar_from_facebook(picture_url):
     return True
 
 
-def createStandardAccount(form):
+def create_standard_account(form):
         #Rewriting data from the form
         newUser=User(name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, 
                     id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data)
@@ -66,10 +66,10 @@ def createStandardAccount(form):
         return newUser
 
 
-def createAccountFromSocialMedia(firstName, lastName, email):
+def create_account_from_social_media(firstName, lastName, email):
     
         newUser=User(name=firstName, lastName=lastName, mail=email, 
-                    id=firstName[0:3]+lastName[0:3], password=PasswordGenerator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
+                    id=firstName[0:3]+lastName[0:3], password=password_generator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
 
         #Generatin new user ID
         newUser.id = newUser.generate_ID()
@@ -84,7 +84,7 @@ def createAccountFromSocialMedia(firstName, lastName, email):
 
         return True
 
-def PasswordGenerator():
+def password_generator():
     characters=[]
     Letters=string.ascii_letters
     Numbers=string.digits

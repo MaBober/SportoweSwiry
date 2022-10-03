@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash , redirect, url_for, request, current_app, session, abort
+from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort
 from start import app, db
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse, urljoin
@@ -10,8 +10,8 @@ from event.classes import CoefficientsList, DistancesTable
 from event.functions import giveUserEvents
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
 from other.functions import send_email
-from .functions import SaveAvatarFromFacebook, account_confirmation_check, login_from_messenger_check
-from .functions import createStandardAccount, createAccountFromSocialMedia, standard_login
+from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
+from .functions import createStandardAccount, createAccountFromSocialMedia, standard_login, login_from_facebook
 
 from werkzeug.utils import secure_filename
 import datetime
@@ -25,7 +25,6 @@ import requests_oauthlib
 from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 from authlib.integrations.flask_client import OAuth
 import flask
-import os 
 import requests
 import pathlib
 from google.oauth2 import id_token
@@ -33,7 +32,6 @@ from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
 
-from user_agents import parse
 from config import Config
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -248,9 +246,7 @@ def settings():
         #Upload a new avatar photo
 
         file = avatarForm.image.data
-        #image = Image.open(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
         avatar = Image.open(file)
-        #avatar = rawAvatar.resize((60, 60))
         avatar.thumbnail((60,60))
 
         if avatar.format=='jpg':
@@ -505,8 +501,6 @@ def callbackGoogle():
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
     flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets_file, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri= "https://sportoweswiry.com.pl/callback")
 
-
-
     #Gets data from Google
     flow.fetch_token(authorization_response=request.url)
 
@@ -530,17 +524,15 @@ def callbackGoogle():
     #Login user to APP
     user=User.query.filter(User.mail == email).first()
     if user != None:
-            login_user(user, remember=True)
+            standard_login(user, remember=True)
+            # login_user(user, remember=True)
 
-            #SaveAvatarFromFacebook(picture_url, current_user.id)
-
-            #Checking if next page is exist and if it is safe
-            next = request.args.get('next')
-            if next and isSafeUrl(next):
-                flash("Jesteś zalogowany jako: {}".format(name))
-                return redirect(next)
-            else:
-                flash("Jesteś zalogowany jako: {}".format(name))
+            # next = request.args.get('next')
+            # if next and isSafeUrl(next):
+            #     flash("Jesteś zalogowany jako: {}".format(name))
+            #     return redirect(next)
+            # else:
+            #     flash("Jesteś zalogowany jako: {}".format(name))
 
             return redirect(url_for('user.basicDashboard'))
 
@@ -552,17 +544,21 @@ def callbackGoogle():
         createAccountFromSocialMedia(firstName, lastName, email)
 
         user=User.query.filter(User.mail == email).first()
-        login_user(user, remember=True)
 
-        #SaveAvatarFromFacebook(picture_url, current_user.id)
+        standard_login(user, remember=True)
 
-        #Checking if next page is exist and if it is safe
-        next = request.args.get('next')
-        if next and isSafeUrl(next):
-            flash("Jesteś zalogowany jako: {}".format(name))
-            return redirect(next)
-        else:
-            flash("Jesteś zalogowany jako: {}".format(name))
+        # login_user(user, remember=True)
+
+
+        # #SaveAvatarFromFacebook(picture_url, current_user.id)
+
+        # #Checking if next page is exist and if it is safe
+        # next = request.args.get('next')
+        # if next and isSafeUrl(next):
+        #     flash("Jesteś zalogowany jako: {}".format(name))
+        #     return redirect(next)
+        # else:
+        #     flash("Jesteś zalogowany jako: {}".format(name))
 
     return redirect(url_for('other.hello'))
 
@@ -594,17 +590,20 @@ def callback():
     
     user=User.query.filter(User.mail == email).first()
     if user != None:
-            login_user(user, remember=True)
 
-            SaveAvatarFromFacebook(picture_url, current_user.id)
+            login_from_facebook(user, picture_url, remember=True)
 
-            #Checking if next page is exist and if it is safe
-            next = request.args.get('next')
-            if next and isSafeUrl(next):
-                flash("Jesteś zalogowany jako: {}".format(name))
-                return redirect(next)
-            else:
-                flash("Jesteś zalogowany jako: {}".format(name))
+            # login_user(user, remember=True)
+
+            # save_avatar_from_facebook(picture_url, current_user.id)
+
+            # #Checking if next page is exist and if it is safe
+            # next = request.args.get('next')
+            # if next and isSafeUrl(next):
+            #     flash("Jesteś zalogowany jako: {}".format(name))
+            #     return redirect(next)
+            # else:
+            #     flash("Jesteś zalogowany jako: {}".format(name))
 
             return redirect(url_for('user.basicDashboard'))
     else:
@@ -615,17 +614,20 @@ def callback():
         createAccountFromSocialMedia(firstName, lastName, email)
 
         user=User.query.filter(User.mail == email).first()
-        login_user(user, remember=True)
 
-        SaveAvatarFromFacebook(picture_url, current_user.id)
+        login_from_facebook(user, picture_url, remember=True)
 
-        #Checking if next page is exist and if it is safe
-        next = request.args.get('next')
-        if next and isSafeUrl(next):
-            flash("Jesteś zalogowany jako: {}".format(name))
-            return redirect(next)
-        else:
-            flash("Jesteś zalogowany jako: {}".format(name))
+        # login_user(user, remember=True)
+
+        # save_avatar_from_facebook(picture_url, current_user.id)
+
+        # #Checking if next page is exist and if it is safe
+        # next = request.args.get('next')
+        # if next and isSafeUrl(next):
+        #     flash("Jesteś zalogowany jako: {}".format(name))
+        #     return redirect(next)
+        # else:
+        #     flash("Jesteś zalogowany jako: {}".format(name))
 
         return redirect(url_for('user.basicDashboard'))
 
@@ -670,7 +672,7 @@ def callbackConnect():
         user.lastName=lastName
         user.mail=email
         db.session.commit()
-        SaveAvatarFromFacebook(picture_url, current_user.id)
+        save_avatar_from_facebook(picture_url, current_user.id)
         flash("Twoje konto zostało połączone z kontem na facebooku: {} ({})".format(name,email))
 
 

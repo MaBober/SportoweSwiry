@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_migrate import Migrate
 from config import Config
+from werkzeug.exceptions import HTTPException
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -23,17 +24,15 @@ def create_app():
 
 app = create_app()
 
+@app.errorhandler(404)
+def page_not_found(error):
+   return render_template('/pages/errors/404.html'), 404
 
 
-# @app.errorhandler(404)
-# def page_not_found(error):
-#    return render_template('/pages/errors/404.html'), 404
+@app.errorhandler(Exception)
+def handle_exception(error):
 
+   if isinstance(error, HTTPException):
+       return error
 
-# @app.errorhandler(Exception)
-# def handle_exception(error):
-
-#    if isinstance(error, HTTPException):
-#        return error
-
-#    return render_template("/pages/errors/500_generic.html", error=error), 500
+   return render_template("/pages/errors/500_generic.html", error=error), 500

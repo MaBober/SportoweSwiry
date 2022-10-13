@@ -47,21 +47,21 @@
         <span class="nav-link"  style="color: #579956;"><b>Twoje wyzwania</b></span> 
 
         {% if mode=='ongoing': %}
-            <a class="nav-link " href="{{ url_for('event.yourEvents', mode='ongoing') }}"  style="color: white; background-color: #579956;">Aktualne</a>
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='ongoing') }}"  style="color: white; background-color: #579956;">Aktualne</a>
         {% else %}
-            <a class="nav-link " href="{{ url_for('event.yourEvents', mode='ongoing') }}"  style="color: white;">Aktualne</a>
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='ongoing') }}"  style="color: white;">Aktualne</a>
         {% endif %}
 
         {% if mode=='finished': %}
-            <a class="nav-link " href="{{ url_for('event.yourEvents', mode='finished') }}"  style="color: white; background-color: #579956;">Zakończone</a>
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='finished') }}"  style="color: white; background-color: #579956;">Zakończone</a>
         {% else %}
-            <a class="nav-link " href="{{ url_for('event.yourEvents', mode='finished') }}"  style="color: white;">Zakończone</a>
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='finished') }}"  style="color: white;">Zakończone</a>
         {% endif %}
 
         {% if mode=='all': %}
-            <a class="nav-link " href="{{ url_for('event.yourEvents', mode='all') }}"  style="color: white; background-color: #579956;">Wszystkie</a>
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='all') }}"  style="color: white; background-color: #579956;">Wszystkie</a>
         {% else %}
-            <a class="nav-link " href="{{ url_for('event.yourEvents', mode='all') }}"  style="color: white;">Wszystkie</a>
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='all') }}"  style="color: white;">Wszystkie</a>
         {% endif %}
 
     </nav>
@@ -88,14 +88,14 @@
 
                     <div class="col" style="padding-right:5%; padding-left: 5%;">
                         <div class = 'row'>
-                            <a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn Main-Button" style="color:white">Szczegóły</a>
+                            <a href="{{ url_for('event.event_main', event_id=event.id )}}" type="button" class="btn Main-Button" style="color:white">Szczegóły</a>
                         </div>
                         {% if event.status == "Zapisy otwarte"%}
                         <div class = 'row'>
                             <a type="button" class="btn btn-danger btn delete-confirm"
                             data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                             data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?"
-                            data-url="{{ url_for('event.leaveEvent', eventID=event.id )}}">
+                            data-url="{{ url_for('event.leave_event', event_id = event.id )}}">
                             Opuść</a>
                         </div>  
                          {% endif %}

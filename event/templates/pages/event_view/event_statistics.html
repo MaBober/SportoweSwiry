@@ -15,8 +15,7 @@
                 <div class="card-header Event-Title-Box ">Największy łączny dystans aktywności</div>
                 <div class="card-body">
 
-                    {% for position in range(0,usersAmount): %}
-                        
+                    {% for position in range(0,users_amount): %}
                     <div class="row">
                         <div class="col-2">
                             {% if loop.index==1 %}
@@ -28,13 +27,13 @@
                             {% endif %}
                         </div>
                         <div class="col-10">
-                            
-                            <b>{{usersDistances[position][1]}}</b> {{usersDistances[position][0]}} km
+                            <b>{{highest_distance.index[position][1]}} {{highest_distance.index[position][2]}}</b> {{highest_distance['calculated_distance'][position]}} km
                         </div>
                     </div>
 
                     <br>
                     {% endfor %}
+                    
                 </div>
             </div>
             <br>
@@ -47,26 +46,26 @@
                 <div class="card-header Event-Title-Box ">Największa liczba aktywności</div>
                 <div class="card-body">
 
-                    {% for position in range(0,usersAmount): %}
-                        
-                            <div class="row">
-                                <div class="col-2">
-                                    {% if loop.index==1 %}
-                                    <img src="/static/pictures/gold_medal.svg" alt="" width="40" height="34">
-                                    {% elif loop.index==2 %}
-                                    <img src="/static/pictures/silver_medal.svg" alt="" width="40" height="34">
-                                    {% elif loop.index==3 %}
-                                    <img src="/static/pictures/bronze_medal.svg" alt="" width="40" height="34">
-                                    {% endif %}
-                                </div>
-                                <div class="col-8">
-                                    
-                                    <b>{{usersActivitiesAmount[position][1]}}</b> {{usersActivitiesAmount[position][0]}}
-                                </div>
-                            </div>
+                    {% for position in range(0,users_amount): %}
+                    <div class="row">
+                        <div class="col-2">
+                            {% if loop.index==1 %}
+                            <img src="/static/pictures/gold_medal.svg" alt="" width="40" height="34">
+                            {% elif loop.index==2 %}
+                            <img src="/static/pictures/silver_medal.svg" alt="" width="40" height="34">
+                            {% elif loop.index==3 %}
+                            <img src="/static/pictures/bronze_medal.svg" alt="" width="40" height="34">
+                            {% endif %}
+                        </div>
+                        <div class="col-8">
+                            
+                            <b>{{most_activites.index[position][1]}} {{most_activites.index[position][2]}}</b> {{most_activites['value'][position]}}
+                        </div>
+                    </div>
 
-                            <br>
-                    {% endfor %}
+                    <br>
+            {% endfor %}
+                    
                 </div>
             </div>
             <br>

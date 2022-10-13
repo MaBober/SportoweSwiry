@@ -1,6 +1,6 @@
 
     {% if current_user.id %}
-        <a href="{{ url_for('user.basicDashboard') }}"><img src="/static/img/icon-logo 1.svg" class="Logo-Main"></a>
+        <a href="{{ url_for('user.dashboard') }}"><img src="/static/img/icon-logo 1.svg" class="Logo-Main"></a>
     {% else %}
         <a href="{{ url_for('other.hello') }}"><img src="/static/img/icon-logo 1.svg" class="Logo-Main"></a>
     {% endif %}
@@ -24,25 +24,25 @@
 
                 <li class="nav-item add-activity">
                     <img src="/static/img/icon-Add.webp" class="icon-add-activity">
-                    <a class="nav-link" href="{{ url_for('activity.addActivity') }}">Dodaj aktywność</a>
+                    <a class="nav-link" href="{{ url_for('activity.add_activity') }}">Dodaj aktywność</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav Background-Line">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('user.basicDashboard') }}">Panel uczestnika</a> 
+                    <a class="nav-link" href="{{ url_for('user.dashboard') }}">Panel uczestnika</a> 
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('activity.myActivities') }}">Statystyki</a> 
+                    <a class="nav-link" href="{{ url_for('activity.my_activities') }}">Statystyki</a> 
                 </li>
 
 
                 <li class="nav-item dropdown" >
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Wyzwania</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ url_for('event.yourEvents', mode='ongoing') }}">Twoje wyzwania</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('event.exploreEvents') }}">Dostępne wyzwania</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('event.your_events', mode='ongoing') }}">Twoje wyzwania</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('event.explore_events') }}">Dostępne wyzwania</a></li>
                     </ul>
                 </li>
 
@@ -57,16 +57,14 @@
                 </li>
 
 
-                {% if current_user.isAdmin %}
+                {% if current_user.is_admin %}
                         <li class="nav-item dropdown" >
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ url_for('user.listOfUsers') }}">Użytkownicy</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('user.createAccount') }}">Stwórz konto</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('event.adminListOfEvents') }}">Wyzwania</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('event.listOfCoefficients') }}">Zestawy współczynników</a></li> 
-                            <li><a class="dropdown-item" href="{{ url_for('event.createCoeficientsTable') }}">Nowa tabela współczynników</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('event.createEvent') }}">Nowe wyzwanie</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user.list_of_users') }}">Użytkownicy</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user.create_account') }}">Stwórz konto</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('event.admin_list_of_events') }}">Wyzwania</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('event.admin_list_of_sports') }}">Sporty</a></li>
                             </ul>
                         </li>
                 {% endif %}

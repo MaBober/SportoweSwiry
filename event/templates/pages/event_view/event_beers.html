@@ -25,16 +25,11 @@
                         {% for user in eventUsers: %}
                         <tr>
                             <td scope="row">{{loop.index}}</td>
-                            <td>             
-                            {% if user.avatarCheck(avatarsPath): %}
-                            <img src=" {{ '/static/avatars/{}'.format(user.id+'.jpg') }} " width="40"> 
-                            {% else: %}
-    
-                            <img src="/static/pictures/runner_logo.svg" width="40">
-                            {% endif %}
-                            {{user.id}}
-                            <td scope="row">{{beerToBuy[loop.index-1][0]}}</td>
-                            <td scope="row">{{beerToBuy[loop.index-1][1]}}</td>
+                            <td>
+                                <b><img src="{{ eventUsers[user].give_avatar_path() }} " width="40">     {{eventUsers[user].name}} {{eventUsers[user].last_name}} </b>
+                            </td>
+                            <td scope="row">{{beers_to_recive[user]}}</td>
+                            <td scope="row">{{beerToBuy[user]}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

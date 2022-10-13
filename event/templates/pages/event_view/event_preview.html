@@ -10,34 +10,32 @@
     
     <nav class="nav nav-borders rounded eventMenu-Navbar" style="background-color: rgba(224, 153, 94);">
         <span class="nav-link"  style="color: #579956;"><b>{{event.name}}</b></span> 
-
     </nav>
-
 </div>
 
-
 <div class="container-xl px-4 mt-4">
-
     <div class="row">
         <div class="col-xl-4">
-
             <!-- Event info card-->
             <div class="card mb-4 mb-xl-0 Event-Main-Box">
-                <div class="card-header Event-Title-Box">Szczegóły wyzwania</div>
+                <div class="card-header Event-Title-Box">
+                    Szczegóły wyzwania
+                </div>
                 <div class="card-body">
                     <h6>Start: {{event.start}}<br></h6>
                     <h6>Koniec: {{event.end}}</h6>
-                    <h6>Długość: {{event.lengthWeeks}} tygodni</h6>
+                    <h6>Długość: {{event.length_weeks}} tygodni</h6>
                     <h6>Ilość ucztstników: {{usersAmount}} </h6>
 
 
                 </div>
             </div>
             <br>
-            <div class="col-12"> <a href="{{ url_for('event.joinEvent', eventID=event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a></div>
+            <div class="col-12">
+                 <a href="{{ url_for('event.join_event', event_id=event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a>
+            </div>
             
         </div>
-
 
         
         <div class="col-xl-8">
@@ -47,15 +45,15 @@
                 <div class="card-body" style="padding-left: 35px; padding-right: 35px; padding-bottom: 35px;">
                     <div class="row">
                    
-                        {% for weekTarget in weekTargets: %}
-                        {% if loop.index <= event.lengthWeeks  %}
-                        <div class="col-md-3 border px-4">
+                        {% for index, week in event.week_targets.iterrows(): %}
+                            {% if loop.index <= event.length_weeks  %}
+                                <div class="col-md-3 border px-4">
+                                    
+                                    <b> Tydzień {{loop.index}}</b><br>
+                                    {{ week['target'] }} km
                             
-                        <b> Tydzień {{loop.index}}</b><br>
-                        {{ weekTarget.value }} km
-                        
-                        </div>
-                        {% endif %}
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -65,44 +63,41 @@
                 <div class="card-header Event-Title-Box">Współczynniki aktywności</div>
                 <div class="card-body" style="padding-left: 35px; padding-right: 35px; padding-bottom: 35px;">
                     <h5>Mnożniki</h5>
+
                     <div class="row">
                    
-                    {% for coef in coefSet: %}
-                    {% if coef.constant != True %}
-                    <div class="col-md-3 border px-4">
-                        
-                       <b> {{coef.activityName}}</b><br>
-                            1km x {{coef.value}} 
-                    
-                    </div>
+                    {% for index, sport in coefSet.iterrows(): %}
+                    {% if sport['is_constant'] != True %}
+
+                        <div class="col-md-3 border px-4">
+                            <b> {{sport['name']}}</b>
+                            <br>
+                            1km x {{sport['value']}} 
+                        </div>
                     {% endif %}
                     {% endfor %}
+
                     </div>
+
                     <hr noshade size="4" align="right" width="80%">
                     <h5>Stałe wartości</h5>
+
                     <div class="row">
-                        {% for coef in coefSet: %}
-                        {% if coef.constant == True %}
+                        {% for index, sport in coefSet.iterrows(): %}
+                        {% if sport['is_constant'] == True %}
                         <div class="col-md-3 border px-4">
                         
-                            <b> {{coef.activityName}}</b><br>
-                            {{coef.value}}  km
+                            <b> {{sport['name']}}</b><br>
+                            {{sport['value']}}  km
                         
                         </div>
                         {% endif %}
                         {% endfor %}
-                        </div>
-                    
-
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<br>
-
-
 </div>
 
 

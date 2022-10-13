@@ -50,6 +50,7 @@ def getActivitiesFromStrava(access_token, afterDate):
 
     return stravaActivities
 
+#TODO rebuild activities dictionary
 def convertStravaData(activitiesJSON):
 
     #Defines columns to proceed

@@ -254,7 +254,7 @@ def settings():
 
     form = UserForm(userName = current_user.id,
                     name = current_user.name,
-                    last_name = current_user.last_name,
+                    lastName = current_user.last_name,
                     mail = current_user.mail)
 
     avatarForm = UploadAvatarForm()
@@ -268,7 +268,7 @@ def settings():
         #update name and last name in date base
         actualUser = User.query.filter(User.name == current_user.name).first()
         actualUser.name = form.name.data
-        actualUser.last_name = form.last_name.data
+        actualUser.last_name = form.lastName.data
         db.session.commit()
 
         flash('Dane zmienione poprawnie')

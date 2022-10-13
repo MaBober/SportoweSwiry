@@ -34,12 +34,8 @@
                 <div class="card-header">Zdjęcie profilowe</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-                    {% if current_user.avatarCheck(avatarsPath): %}
-                        <img class="img-account-profile rounded-circle mb-2" src=" {{ '/static/avatars/{}'.format(current_user.id+'.jpg') }} " alt=""> 
-                     {% else: %}
-                        <!--<img src="{{ avatars.robohash((current_user.id) , size='100') }}">-->
-                        <img class="img-account-profile rounded-circle mb-2" src="/static/pictures/runner_logo.svg" alt="">
-                    {% endif %}
+                    <img class="img-account-profile rounded-circle mb-2" src=""{{current_user.give_avatar_path() }}" alt=""> 
+
                     
                     <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">

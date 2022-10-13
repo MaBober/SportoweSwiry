@@ -4,7 +4,7 @@
 
 <div class="container-xl px-4 mt-4">
     <div class="card-header" style="background-color: rgba(224, 153, 94);">
-        <b>Lista wszystkich wyzwań</b>
+        <b>Lista sportów w bazie danych</b>
     </div>
 </div>
 
@@ -55,34 +55,27 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nazwa</th>
-                            <th scope="col">Administrator</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Początek</th>
-                            <th scope="col">Długość</th>
-                            <th scope="col">Koniec</th>
-                            <th scope="col">Wydarzenie prywatne</th>
-                            <th scope="col">Operacje</th>
+                            <th scope="col">Kategoria</th>
+                            <th scope="col">Domyślny współczynnik</th>
+                            <th scope="col">Domyślnie stała?</th>
+                            <th scope="col">Akcje</th>
                         </tr>
                         </thead>
                         <tbody>
-                            {% for event in events: %}
+                            {% for sport in sports: %}
                             <tr>
                                 <td scope="row">{{loop.index}}</td>
-                                <td>{{event.name}}</td>
-                                <td>{{event.admin_id}}</td>
-                                <td>{{event.status}}</td>
-                                <td>{{event.start}}</td>
-                                <td>{{event.length_weeks}} tygodni</td>
-                                <td>{{event.end}}</td>
-                                <td >{{event.is_private}}</td>
+                                <td>{{sport.name}}</td>
+                                <td>{{sport.category}}</td>
+                                <td>{{sport.default_coefficient}}</td>
+                                <td>{{sport.default_is_constant}}</td>
                                 <td>
                                     <!-- Button trigger modal -->
-                                    <a href="{{ url_for('event.event_main', event_id = event.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Podgląd  </a></div>
-                                    <a href="{{ url_for('event.admin_modify_event', event_id = event.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Modyfikuj  </a></div>
+                                    <a href="{{ url_for('event.modify_sport_in_base', sport_id = sport.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Modyfikuj  </a></div>
                                     <a type="button" class="btn btn-danger btn-sm delete-confirm" 
                                         data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                                        data-desc="{{ 'Napewno chcesz usunać wyzwania: {}?'.format(event.name) }}"
-                                        data-url="{{ url_for('event.admin_delete_event', event_id = event.id )}}">
+                                        data-desc="{{ 'Napewno chcesz usunać wyzwania: {}?'.format(sport.name) }}"
+                                        data-url="{{ url_for('event.delete_sport_from_base', sport_id = sport.id )}}">
                                         Usuń
                                     </a>
                                 </td>
@@ -90,12 +83,15 @@
                             {% endfor %}
                         </tbody>
                     </table>
+
                     <div class="row justify-content-left">
-                        <div class="col-3"><a href="{{ url_for('event.create_event')}}" class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">
-                            Dodaj nowe wyzwanie
-                        </a></div>
-                        
+                        <div class="col-3">
+                            <a href="{{ url_for('event.add_new_sport_to_base')}}" class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">
+                            Dodaj nowy sport
+                            </a>
+                        </div>
                     </div>
+                    
                 </div>
             </div>
         </div>

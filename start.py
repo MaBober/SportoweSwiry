@@ -25,9 +25,9 @@ app = create_app()
 
 
 
-@app.errorhandler(404)
-def page_not_found(error):
-   return render_template('/pages/errors/404.html'), 404
+# @app.errorhandler(404)
+# def page_not_found(error):
+#    return render_template('/pages/errors/404.html'), 404
 
 
 # @app.errorhandler(Exception)

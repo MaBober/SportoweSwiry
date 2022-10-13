@@ -22,14 +22,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                        {% for activity in activities: %}
+                        {% for index, activity in activities.iterrows(): %}
                         <tr>
                             <td scope="row">{{loop.index}}</td>
-                            <td>{{activity.userName}}</td>
+                            <td>{{activity['name']}} {{activity['last_name']}}</td>
                             <td>{{activity.date}}</td>
-                            <td>{{activity.activity}}</td>
+                            <td>{{activity.name_sport}}</td>
                             <td>{{activity.distance}}</td>
-                            <td>{{calculatedDistance[activity.id]}}</td>
+                            <td>{{activity.calculated_distance}}</td>
                             <td>{{activity.time}}</td>
                         </tr>
                         {% endfor %}

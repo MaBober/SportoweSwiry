@@ -1,3 +1,5 @@
+import pandas as pd
+import pygal
 
 from start import db, app
 from flask_login import UserMixin, current_user
@@ -6,40 +8,44 @@ import binascii
 from flask import current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import os
+
 from werkzeug.utils import secure_filename
 from PIL import Image
-from other.classes import mailboxMessage
+from other.classes import MailboxMessage
+from event.classes import Event
+
 
 class User(db.Model, UserMixin):
+
     id = db.Column(db.String(50), unique=True, nullable=False , primary_key=True)
     name = db.Column(db.String(50))
-    lastName = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
     mail = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(500), nullable=False)
-    isAdmin = db.Column(db.Boolean)
-    avatar = db.Column(db.LargeBinary)
+    is_admin = db.Column(db.Boolean)
     confirmed = db.Column(db.Boolean, default=False)
-    readMessage = db.Column(db.Boolean, default=False)
 
-    isAddedByGoogle = db.Column(db.Boolean, default=False)
-    isAddedByFB = db.Column(db.Boolean, default=False)
+    is_added_by_google = db.Column(db.Boolean, default=False)
+    is_added_by_fb = db.Column(db.Boolean, default=False)
 
-    events = db.relationship('Participation', backref='User', lazy='dynamic')
-    activities = db.relationship('Activities', backref='User', lazy='dynamic')
+    event_admin = db.relationship('Event', backref='admin', lazy='dynamic')
+    events = db.relationship('Participation', backref='user', lazy='dynamic')
+    activities = db.relationship('Activities', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return '<User %r>' % self.id
 
     def changeStatusOfMessage(self,id):
-        messageFromInBox=mailboxMessage.query.filter(mailboxMessage.id == id).first()
-        messageFromInBox.messageReaded=1
+        messageFromInBox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
+        messageFromInBox.messageReaded = 1
         db.session.commit()
         return None
 
     def countNotReadedMessages(self):
-        notReadedMessages=mailboxMessage.query.filter(mailboxMessage.receiver == self.mail).filter(mailboxMessage.messageReaded == 0).filter(mailboxMessage.multipleMessage == True).all()
+        notReadedMessages=MailboxMessage.query.filter(MailboxMessage.receiver == self.mail).filter(MailboxMessage.messageReaded == 0).filter(MailboxMessage.multipleMessage == True).all()
         amountOfNotReadedMessages=len(notReadedMessages)
         return amountOfNotReadedMessages
+
 
     def removeAccents(self):
         strange='ŮôῡΒძěἊἦëĐᾇόἶἧзвŅῑἼźἓŉἐÿἈΌἢὶЁϋυŕŽŎŃğûλВὦėἜŤŨîᾪĝžἙâᾣÚκὔჯᾏᾢĠфĞὝŲŊŁČῐЙῤŌὭŏყἀхῦЧĎὍОуνἱῺèᾒῘᾘὨШūლἚύсÁóĒἍŷöὄЗὤἥბĔõὅῥŋБщἝξĢюᾫაπჟῸდΓÕűřἅгἰშΨńģὌΥÒᾬÏἴქὀῖὣᾙῶŠὟὁἵÖἕΕῨčᾈķЭτἻůᾕἫжΩᾶŇᾁἣჩαἄἹΖеУŹἃἠᾞåᾄГΠКíōĪὮϊὂᾱიżŦИὙἮὖÛĮἳφᾖἋΎΰῩŚἷРῈĲἁéὃσňİΙῠΚĸὛΪᾝᾯψÄᾭêὠÀღЫĩĈμΆᾌἨÑἑïოĵÃŒŸζჭᾼőΣŻçųøΤΑËņĭῙŘАдὗპŰἤცᾓήἯΐÎეὊὼΘЖᾜὢĚἩħĂыῳὧďТΗἺĬὰὡὬὫÇЩᾧñῢĻᾅÆßшδòÂчῌᾃΉᾑΦÍīМƒÜἒĴἿťᾴĶÊΊȘῃΟúχΔὋŴćŔῴῆЦЮΝΛῪŢὯнῬũãáἽĕᾗნᾳἆᾥйᾡὒსᾎĆрĀüСὕÅýფᾺῲšŵкἎἇὑЛვёἂΏθĘэᾋΧĉᾐĤὐὴιăąäὺÈФĺῇἘſგŜæῼῄĊἏØÉПяწДĿᾮἭĜХῂᾦωთĦлðὩზკίᾂᾆἪпἸиᾠώᾀŪāоÙἉἾρаđἌΞļÔβĖÝᾔĨНŀęᾤÓцЕĽŞὈÞუтΈέıàᾍἛśìŶŬȚĳῧῊᾟάεŖᾨᾉςΡმᾊᾸįᾚὥηᾛġÐὓłγľмþᾹἲἔбċῗჰხοἬŗŐἡὲῷῚΫŭᾩὸùᾷĹēრЯĄὉὪῒᾲΜᾰÌœĥტ'
@@ -51,14 +57,14 @@ class User(db.Model, UserMixin):
 
         sufix = 0
 
-        id = self.name[0:3] + self.lastName[0:3] + str(sufix)
+        id = self.name[0:3] + self.last_name[0:3] + str(sufix)
         id = self.removeAccents()
         user=User.query.filter(User.id == id).first()
 
         while user != None:
             sufix +=1
             print(sufix)
-            id = self.name[0:3] + self.lastName[0:3] + str(sufix)
+            id = self.name[0:3] + self.last_name[0:3] + str(sufix)
             user=User.query.filter(User.id == id).first()
 
         return id
@@ -106,7 +112,20 @@ class User(db.Model, UserMixin):
         filename=self.id+'.jpg'
         path=os.path.join(path, filename)
         return os.path.isfile(path)
+        
+        
+    def give_avatar_path(self):
+        avatars_location = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
+        if self.avatarCheck(avatars_location):
+
+            avatar_path = '/static/avatars/{}'.format(self.id+'.jpg')
+            return avatar_path
+
+        else:
+            
+            avatar_path = "/static/pictures/runner_logo.svg"
+            return avatar_path
 
     @staticmethod
     def reset_password(token, new_password):
@@ -134,6 +153,151 @@ class User(db.Model, UserMixin):
         rotatedAvatar = avatar.rotate(angle, expand=True)
         rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
         return True
-    
+
+    @property
+    def all_events(self):
+
+        from event.classes import Participation, Event
+
+        user_events = Participation.query.filter(Participation.user_id == self.id)
+        user_events = pd.read_sql(user_events.statement, db.engine, index_col='event_id')
+
+        user_events_ids = user_events.index.values.tolist()
+        user_events = Event.query.filter(Event.id.in_(user_events_ids))
+
+        return user_events
+
+    @property
+    def current_events(self):
+
+        from event.classes import Event
+        current_events = self.all_events.filter(Event.status == "W trakcie")
+
+        return current_events
+
+    @property
+    def finished_events(self):
+
+        from event.classes import Event
+        finished_events = self.all_events.filter(Event.status == "Zakończone")
+
+        return finished_events
 
     
+
+class DashboardPage:
+
+    user_distance_sum = "---"
+    average_time = "---"
+    average_distance_for_event = '---'
+    beers_recived_in_event = '---'
+    
+
+    def __init__(self, requested_event = None) -> None:
+        
+        self.event = self.define_event_to_present(requested_event)
+
+        if self.event != None:
+            summary =  self.event.give_user_overall_summary(current_user.id)
+
+            self.user_distance_sum = summary['user_distance_sum']
+            self.average_time = summary['average_time']
+            self.average_distance_for_event = summary['average_distance_for_event']
+
+            all_event_activities = self.event.give_all_event_activities(calculated_values = True)
+            split_list = self.event.give_overall_weekly_summary(all_event_activities)
+
+            self.event_week_distance =  split_list[self.event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
+            print("!!!!!!")
+
+            beers_summary = self.event.give_beers_summary(split_list)
+            self.beers_recived_in_event = beers_summary['beers_to_recive'][current_user.id]
+            
+            self.generete_charts()
+            self.define_next_previous_events()
+        
+        else:
+            self.user_distance_sum = '---'
+            self.average_time = '---'
+            self.average_distance_for_event = '---'
+            self.event_week_distance = '---'
+            self.beers_recived_in_event = '---'
+
+
+    def define_event_to_present(self, requested_event):
+
+        from event.classes import Event, Participation
+
+        self.user_events = current_user.current_events.all()
+
+        if self.user_events != []:
+            if 'event_id' in requested_event:
+                try:
+                    event_id = int(requested_event['event_id'])
+                    event = Event.query.filter(Event.id == event_id).first()
+
+                except:
+                    event_id = 0
+                    event = self.user_events[0]
+            
+            else:
+                event_id = 0
+                event = self.user_events[0]
+
+            return event
+        
+        else:
+            return None
+
+
+    def generete_charts(self):
+
+        #creating a pie chart
+        self.pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
+        self.pie_chart.title = 'Różnorodność aktywności (w %)'
+
+        #Render a URL adress for chart
+        self.pie_chart = self.pie_chart.render_data_uri()
+        try:
+            if self.event.current_week < self.event.length_weeks:
+                self.d1 = self.event.current_week / self.event.length_weeks * 100
+                self.d1 = round(self.d1,0)
+            
+            else:
+                self.d1 = 100
+        except:
+                print("self.event.current_week < self.event.length_weeks")
+
+        try:
+
+            if self.event_week_distance < self.event.current_week_target:
+                self.d2 = self.event_week_distance / self.event.current_week_target * 100
+                self.d2 = round(self.d2, 0)
+            
+            else:
+                self.d2=100
+        except:
+                print("self.event_week_distance < self.current_week_target")
+
+        return None
+
+
+    def define_next_previous_events(self):
+        
+        active_events_ids = []
+        for event in self.user_events:
+            active_events_ids.append(event.id)
+
+        ## Defines next / previous event to display
+        if active_events_ids.index(self.event.id) == len(active_events_ids)-1:
+            self.next_event = active_events_ids[0]
+        else:
+            self.next_event = active_events_ids[active_events_ids.index(self.event.id) + 1]
+
+        if active_events_ids.index(self.event.id) == 0:   
+            self.previous_event = active_events_ids[len(active_events_ids)-1]
+
+        else:
+            self.previous_event = active_events_ids[active_events_ids.index(self.event.id) -1]
+
+        return None

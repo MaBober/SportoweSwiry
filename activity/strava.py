@@ -1,4 +1,3 @@
-
 from start import db
 from flask import request
 from flask_login import current_user
@@ -7,9 +6,6 @@ from activity.classes import Activities
 import requests
 import pandas as pd
 import datetime as dt
-
-
-from urllib.parse import urlparse, parse_qs
 
 def getLastStravaActivityDate():
 
@@ -24,14 +20,6 @@ def getLastStravaActivityDate():
             lastStravaActivitityDate = dt.datetime(lastStravaActivitity.date.year, lastStravaActivitity.date.month, lastStravaActivitity.date.day,0,0).timestamp()
 
         return lastStravaActivitityDate
-
-        # if lastStravaActivitity == None:
-        #     lastActivity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
-        #     lastStravaActivitity = dt.datetime(lastActivity.date.year, lastActivity.date.month, lastActivity.date.day,0,0).timestamp()
-        
-        # else:
-            
-        #     lastStravaActivitity = dt.datetime(lastStravaActivitity.date.year, lastStravaActivitity.date.month, lastStravaActivitity.date.day,0,0).timestamp()
 
 def getStravaAccessToken():
 

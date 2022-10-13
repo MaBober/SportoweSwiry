@@ -22,7 +22,7 @@
                 </div>
             </div>
             <br>
-   
+            {% if usersAmount !=0 %}
             <!-- Your week card-->
             <div class="card mb-4 mb-xl-0 Event-Main-Box">
                 <div class="card-header Event-Title-Box">Aktualny tydzień</div>
@@ -35,16 +35,20 @@
                         <div class="col-4"><h5>Cel</h5></div>
                     </div>
                     <div class="row">
-                        <div class="col-4">{{presentWeek}} / {{event.lengthWeeks}}</div>
-                        {% if WeekDistance >= targets[presentWeek-1].value %}
-                            <div class="col-4" style="color:rgb(27, 80, 10)"><b>{{WeekDistance}} km</b></div>
-                        {% endif %}
+                        <div class="col-4">{{event.current_week}} / {{event.length_weeks}}</div>
+                        {% if processed_data[event.current_week-1].loc['total','calculated_distance'].loc[current_user.id][0] >= event.week_targets.iloc[event.current_week-1]['target'] %}
+                            <div class="col-4" style="color:rgb(27, 80, 10)">
+                                <b> {{ processed_data[event.current_week-1].loc['total','calculated_distance'].loc[current_user.id][0] }} km</b>
+                            </div>
             
-                        {% if WeekDistance < targets[presentWeek-1].value  %}
-                            <div class="col-4" style="color:rgb(146, 40, 7)"><b>{{WeekDistance}} km</b></div>
+                        {% else  %}
+                            <div class="col-4" style="color:rgb(146, 40, 7)">
+                                <b> {{ processed_data[event.current_week-1].loc['total','calculated_distance'].loc[current_user.id][0] }} km</b>
+                            </div>
+
                         {% endif %}
 
-                    <div class="col-4">{{targets[presentWeek-1].value}} km</div>
+                    <div class="col-4">{{event.week_targets.iloc[event.current_week-1]['target'] }} km</div>
                     
                 </div>
                 {% else %}
@@ -52,6 +56,7 @@
                 {% endif %}
                 </div>
             </div>
+            {% endif %}
         </div>
 
         
@@ -61,35 +66,37 @@
                 <div class="card-header Event-Title-Box">Współczynniki aktywności</div>
                 <div class="card-body" style="padding-left: 35px; padding-right: 35px; padding-bottom: 35px;">
                     <h5>Mnożniki</h5>
+
                     <div class="row">
                    
-                    {% for coef in coefSet: %}
-                    {% if coef.constant != True %}
-                    <div class="col-md-3 border">
-                        
-                       <b> {{coef.activityName}}</b><br>
-                            1km x {{coef.value}} 
-                    
-                    </div>
+                    {% for index, sport in coefSet.iterrows(): %}
+                    {% if sport['is_constant'] != True %}
+
+                        <div class="col-md-3 border">
+                            <b> {{sport['name']}}</b>
+                            <br>
+                            1km x {{sport['value']}} 
+                        </div>
                     {% endif %}
                     {% endfor %}
+
                     </div>
+
                     <hr noshade size="4" align="right" width="80%">
                     <h5>Stałe wartości</h5>
+
                     <div class="row">
-                        {% for coef in coefSet: %}
-                        {% if coef.constant == True %}
+                        {% for index, sport in coefSet.iterrows(): %}
+                        {% if sport['is_constant'] == True %}
                         <div class="col-md-3 border">
                         
-                            <b> {{coef.activityName}}</b><br>
-                            {{coef.value}}  km
+                            <b> {{sport['name']}}</b><br>
+                            {{sport['value']}}  km
                         
                         </div>
                         {% endif %}
                         {% endfor %}
-                        </div>
-                    
-
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,78 +104,72 @@
 </div>
 
 <br>
+{% if usersAmount !=0 %}
 <div class="container-xl px-4 mt-4">
     <div class="row justify-content-md-center">
         <div class="col-md-12 Extra-Box">
 
             <!-- Actiities summary -->
             <div class="card mb-12 mb-xl-0 Event-Table-Box">
-            <div class="card-header Event-Table-Title-Box">Podsumowanie aktywności</div>
-            <div class="card-body"> 
-            <div class="table-responsive-md Table-Box">
+                <div class="card-header Event-Table-Title-Box">Podsumowanie aktywności</div>
+                    <div class="card-body"> 
+                        <div class="table-responsive-md Table-Box">
 
-                {% for week in range(event.lengthWeeks): %}
-                <table class="table table-sm table-secondary table-striped table-hover" style="border-radius: 50px;">
-                    <thead>
-                    <tr>
-                        <th scope="col">Tydzień {{week+1}}</th>
-                        {% for user in eventUsers: %}
-                        <th scope="col">
-                            {% if user.avatarCheck(avatarsPath): %}
-                            <img src=" {{ '/static/avatars/{}'.format(user.id+'.jpg') }} " width="40"> 
-                            {% else: %}
-                             <!--<img src="{{ avatars.robohash((user.id) , size='100') }}">-->
-                            <img src="/static/pictures/runner_logo.svg" width="40">
-                            {% endif %}
-                            <br>{{user.name}} 
-                            <br>{{user.lastName}} 
-                        </th>
-                        {% endfor %}
+                            {% for week in processed_data: %}
+                            <table class="table table-sm table-secondary table-striped table-hover" style="border-radius: 50px;">
+                                <thead>
+                                    <tr>
+                                        <td><b>Tydzień {{loop.index}}</b></td>
 
-                    </tr>
-                    </thead>
+                                        {% for user in range(0, usersAmount) %}
+                                            <td><b><img src="{{ eventUsers[week.columns[user][1]].give_avatar_path() }} " width="40"> <br> 
 
-                    <tbody>
-                        {% for day in weekDays[week]: %}
-                        <tr>
+                                                {{ week.columns[user][2] }} 
+                                                {{ week.columns[user][3] }} </b> </td>
 
-                            <td>{{day[0]}}</td>
-                                {% for i in eventUsers: %}
-                                <td>{{eventData[week][loop.index-1][day[1]]}} km</td>
-                                {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                                        {% endfor %}
 
-                    <thead>
-                        <tr>
-                            <th scope="col">Cel: {{targets[week].value}} km</th>
-                            {% for user in eventUsers: %}
-                            {% if eventData[week][loop.index-1][7] >= targets[week].value %}
-                            <th scope="col" style="background-color: rgb(111, 245, 111);">{{eventData[week][loop.index-1][7]}} km</th>
-                            {% endif %}
+                                    </tr>
+                                </thead>
 
-                            {% if eventData[week][loop.index-1][7] < targets[week].value %}
-                            <th scope="col" style="background-color: rgb(245, 73, 11);">{{eventData[week][loop.index-1][7]}} km</th>
-                            {% endif %}
+                                <tbody>
+                                    {% for day in range(0,7): %}
+                                    <tr>
+                                        <td>{{ week.index[day]}}</td>
+                                        {% for user in range(0,usersAmount) %}
+                                            <td>{{  week.iloc[day][user] }} km</td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+
+                                    <tr>
+                                        <th scope="col" style="width:120px">Cel: {{ event.week_targets['target'][loop.index - 1] }} km </th>
+
+                                        {% for user in range(0,usersAmount) %}
+
+                                            {% if week.loc['target_done'][user]  %}
+                                            <th scope="col" style="background-color: rgb(111, 245, 111);">
+                                            {% else %}
+                                            <th scope="col" style="background-color: rgb(245, 73, 11);">
+                                            {% endif %}
+                                            
+                                            {{ week.loc['total'][user] }} km 
+
+                                            </th>
+
+                                        {% endfor %}
+                                    </tr>
+                                </tbody>
+                            </table>
                             {% endfor %}
-    
-                        </tr>
-                    </thead>
 
-
-                </table>
-                {% endfor %}
-
-
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-
+{% endif %}
 
 {% endblock %}

@@ -1,22 +1,25 @@
-from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort, json
+import csv
 from start import app, db
+from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort
+
+
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse, urljoin
+from sqlalchemy.exc import SQLAlchemyError
 import os
 
-from .classes import User
-from activity.classes import Activities
-from event.classes import CoefficientsList, DistancesTable
-from event.functions import giveUserEvents
+
+from .classes import User, DashboardPage
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
-from other.functions import send_email
+from other.functions import account_confirmation_check, send_email
+import functools
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
 from .functions import create_standard_account, create_account_from_social_media, standard_login, login_from_facebook
 
 from werkzeug.utils import secure_filename
-import datetime
+import datetime as dt
 import math
-import pygal
+
 from PIL import Image
 from flask_avatars import Avatars
 
@@ -26,7 +29,6 @@ from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 from authlib.integrations.flask_client import OAuth
 import flask
 import requests
-import pathlib
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
@@ -90,11 +92,11 @@ def isSafeUrl(target):
 
 
 @user.route("/createUser", methods=['POST', 'GET'])
-def createAccount():
+def create_account():
     
     form=UserForm()
     #Delete of not necessary inputs
-    del form.isAdmin
+    del form.is_admin
     del form.avatar
     del form.id
 
@@ -179,56 +181,63 @@ def resetPassword(token):
 @user.route("/listOfUsers")
 @account_confirmation_check
 @login_required #This page needs to be login
-def listOfUsers():
+def list_of_users():
 
-    if not current_user.isAdmin:
+    if not current_user.is_admin:
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
-
     users=User.query.all()
-    return render_template('listOfUsers.html', avatarsPath=avatarsPath, users=users, title_prefix = "Lista użytkowników")
+    return render_template('listOfUsers.html',
+                    users=users,
+                    title_prefix = "Lista użytkowników")
 
 
-@user.route('/deleteUser/<userName>')
+@user.route('/deleteUser/<user_id>')
 @account_confirmation_check
 @login_required #This page needs to be login
-def deleteUser(userName):
+def delete_user(user_id):
 
-    if not current_user.isAdmin:
+    if not current_user.is_admin:
         flash("Nie masz uprawnień do tej akcji")
         return redirect(url_for('other.hello'))
 
-    userToDelete=User.query.filter(User.id == userName).first()
-    if not userToDelete.isAdmin:
-        db.session.delete(userToDelete)
-        db.session.commit()
-        flash("Użytkownik {} {} został usunięty z bazy danych".format(userToDelete.name, userToDelete.lastName))
-    else:
-        flash("Nie można usunąć użytkownika {} {}".format(userToDelete.name, userToDelete.lastName),'danger')
+    userToDelete=User.query.filter(User.id == user_id).first()
+    if not userToDelete.is_admin:
+        try:
+            db.session.delete(userToDelete)
+            db.session.commit()
+            flash("Użytkownik {} {} został usunięty z bazy danych".format(userToDelete.name, userToDelete.last_name))
 
-    return redirect(url_for('user.listOfUsers'))
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            flash("Nie można usunąć użytkownika {} {}".format(userToDelete.name, userToDelete.last_name),'danger')
+    else:
+        flash("Nie można usunąć użytkownika {} {}".format(userToDelete.name, userToDelete.last_name),'danger')
+
+    return redirect(url_for('user.list_of_users'))
 
 
 @user.route("/login", methods=['POST', 'GET'])
 def login():
 
-    logForm=LoginForm()
+    logForm = LoginForm()
     if logForm.validate_on_submit():
-        user=User.query.filter(User.id == logForm.name.data).first() #if login=userName
+        user = User.query.filter(User.id == logForm.name.data).first() #if login=userName
         if not user:
-            user=User.query.filter(User.mail == logForm.name.data).first() #if login=mail
+            user = User.query.filter(User.mail == logForm.name.data).first() #if login=mail
 
-        verify=User.verify_password(user.password, logForm.password.data)
+        verify = User.verify_password(user.password, logForm.password.data)
 
         if user != None and verify:
             standard_login(user, remember=logForm.remember.data)
-            return redirect(url_for('user.basicDashboard'))
+            return redirect(url_for('user.dashboard'))
         else:
             flash("Nie udało się zalogować. Podaj pawidłowe hasło")
 
-    return render_template('login.html', logForm=logForm, title_prefix = "Zaloguj")
+    return render_template('login.html',
+                    logForm=logForm,
+                    title_prefix = "Zaloguj")
 
 
 @user.route("/logout")
@@ -243,24 +252,28 @@ def logout():
 @login_required #This page needs to be login
 def settings():
 
-    avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
+    form = UserForm(userName = current_user.id,
+                    name = current_user.name,
+                    last_name = current_user.last_name,
+                    mail = current_user.mail)
 
-    form=UserForm(userName=current_user.id, name=current_user.name, lastName=current_user.lastName, mail=current_user.mail)
-    avatarForm=UploadAvatarForm()
+    avatarForm = UploadAvatarForm()
+
     del form.password
     del form.verifyPassword
     del form.id
     del form.mail
+
     if not avatarForm.image.data and form.validate_on_submit():
         #update name and last name in date base
-        actualUser=User.query.filter(User.name == current_user.name).first()
-        actualUser.name=form.name.data
-        actualUser.lastName=form.lastName.data
+        actualUser = User.query.filter(User.name == current_user.name).first()
+        actualUser.name = form.name.data
+        actualUser.last_name = form.last_name.data
         db.session.commit()
+
         flash('Dane zmienione poprawnie')
         return redirect(url_for('user.settings'))
 
-    
     if avatarForm.validate_on_submit():
         #Upload a new avatar photo
 
@@ -282,13 +295,18 @@ def settings():
 
         return redirect(url_for('user.settings'))
 
-    return render_template("accountSettings.html", title_prefix = "Ustawienia konta", form=form, avatarsPath=avatarsPath, avatarForm=avatarForm, current_user=current_user, menuMode="mainApp", mode="settings")
+    return render_template("accountSettings.html",
+                    title_prefix = "Ustawienia konta",
+                    form = form,
+                    avatarForm = avatarForm,
+                    menuMode = "mainApp",
+                    mode = "settings")
+
 
 @user.route("/passwordChange", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def passwordChange():
-
 
     form=NewPasswordForm(id=current_user.id)
 
@@ -302,198 +320,41 @@ def passwordChange():
         flash("Hasło zmienione. Zaloguj się ponownie")
         return redirect(url_for('user.logout'))
 
-    return render_template("passwordChange.html", title_prefix = "Prywatność", form=form, menuMode="mainApp", mode="passwordChange")
+    return render_template("passwordChange.html",
+                    title_prefix = "Prywatność",
+                    form = form,
+                    menuMode = "mainApp",
+                    mode = "passwordChange")
 
 
-@user.route("/basicDashboard/")
+@user.route("/dashboard/")
 @account_confirmation_check
 @login_required #This page needs to be login
-def basicDashboard():
+def dashboard():
 
-    if 'eventCount' in request.args:
-        try:
-            eventCount = int(request.args['eventCount'])
-        except:
-            eventCount = 0
-    
-    else:
-        eventCount = 0
+    dashboard = DashboardPage(request.args)
+    print(dashboard.event)
 
-
-    activities=Activities.query.filter(Activities.userName == current_user.id).all()
-
-    avatarsPath = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
-
-    if activities:
-
-        sumTime = datetime.timedelta()
-
-        #creating a pie chart
-        pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
-        pie_chart.title = 'Różnorodność aktywności (w %)'
-
-        #Render a URL adress for chart
-        pie_chart = pie_chart.render_data_uri()
-
-        #Return list of user events
-        userEvents = giveUserEvents(current_user.id, 'ongoing')
-
-        #Return array with data to event data to present
-        if userEvents != None:
-
-            eventNames = {}
-            eventWeek = {}
-            eventWeekDistance = {}
-            eventWeekTarget = {}
-            eventsDistanceSum = {}
-            eventsDistanceAverege = {}
-            eventsActivtiyTimeAverege = {}
-
-            for event in userEvents:
-
-                #Defines present week of event
-                days = abs(datetime.date.today() - event.start).days
-                week = math.ceil((days+1)/7) 
-                weekStart = event.start + datetime.timedelta(weeks=1*week-1)
-                weekEnd = event.start + datetime.timedelta(weeks=1*week-1, days=6)
-     
-                activities=Activities.query.filter(Activities.userName == current_user.id).filter(Activities.date >= weekStart).filter(Activities.date <= weekEnd).all()
-                if week <= event.lengthWeeks:
-                    target = DistancesTable.query.filter(DistancesTable.event_ID == event.id).filter(DistancesTable.week == week).first()
-                    target = target.value
-                else:
-                    target = 0
-
-                WeekDistance = 0
-            
-                #Create dictionary which keeps calculated distance of activity
-                for position in activities:
-                    coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
-                    if coef != None:
-                        if coef.constant == False:
-                            WeekDistance = WeekDistance + (coef.value*position.distance)
-                        else: 
-                            WeekDistance = WeekDistance + coef.value
-
-                eventNames.update({event.id:event.name})
-                eventWeek.update({event.id:week})
-                eventWeekDistance.update({event.id:round(WeekDistance,2)})
-                eventWeekTarget.update({event.id:target})
-
-                #Defines summary distance of event
-                allEventActivities = Activities.query.filter(Activities.userName == current_user.id).filter(Activities.date>=event.start).filter(Activities.date <= event.end).all()
-                amount=len(allEventActivities)
-                sumDistanceForEvent = 0 
-                averageDistanceForEvent = 0
-
-                timeList=[]
-                for position in allEventActivities:
-                    coef = CoefficientsList.query.filter(CoefficientsList.setName == event.coefficientsSetName).filter(CoefficientsList.activityName == position.activity).first()
-                    if coef != None:
-                        if coef.constant == False:
-                            sumDistanceForEvent = sumDistanceForEvent + (coef.value*position.distance)
-                        else: 
-                            sumDistanceForEvent = sumDistanceForEvent + coef.value
-
-                    
-                    timeList.append(str(position.time))
-                    #Sum of total time of activities in event
-
-                sumTime = datetime.timedelta()
-                for time in timeList:
-                    (h, m, s) = time.split(':')
-                    d = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-                    sumTime += d
-
-                try:
-                    averageTime=(sumTime/amount)
-                except:
-                    print("Błąd w: averageTime=sumTime/amount")
-
-                try:
-                    (h, m, s) = str(averageTime).split(':')
-                    (s1, s2)=s.split(".") #s1-seconds, s2-miliseconds
-                    averageTime = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s1))
-                except:
-                    print("Błąd w: averageTime.split(':')")
-
-                sumDistanceForEvent = round(sumDistanceForEvent,0)
-                try:
-                    averageDistanceForEvent = sumDistanceForEvent/len(allEventActivities)
-                except:
-                    print("Błąd w: averageDistanceForEvent = sumDistanceForEvent/len(allEventActivities)")
-                averageDistanceForEvent = round(averageDistanceForEvent, 2)
-                
-                eventsActivtiyTimeAverege.update({event.id:averageTime})
-                eventsDistanceSum.update({event.id:sumDistanceForEvent})
-                eventsDistanceAverege.update({event.id:averageDistanceForEvent})
-
-            d1 = 100
-            try:
-                if eventWeek[userEvents[eventCount].id] < userEvents[eventCount].lengthWeeks:
-                    d1= eventWeek[userEvents[eventCount].id] / userEvents[eventCount].lengthWeeks * 100
-                    d1 = round(d1,0)
-                
-                else:
-                    d1 = 100
-            except:
-                    print("Błąd w: eventWeek[userEvents[eventCount].id] < userEvents[eventCount].lengthWeeks")
-
-
-            d2 = 100
-            try:
-                if eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]:
-                    d2 = eventWeekDistance[userEvents[eventCount].id] / eventWeekTarget[userEvents[eventCount].id] * 100
-                    d2 = round(d2, 0)
-                
-                else:
-                    d2=100
-            except:
-                    print("Błąd w: eventWeekDistance[userEvents[eventCount].id] < eventWeekTarget[userEvents[eventCount].id]")
-
-
-            if eventCount == len(userEvents)-1:
-                nextEvent=0
-            else:
-                nextEvent = eventCount+1
-
-            if eventCount == 0:   
-                previousEvent = len(userEvents)-1
-            else:
-                previousEvent = eventCount-1
-                
-            return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", amount=amount,
-                            sumDistance=eventsDistanceSum, sumTime=sumTime,  pie_chart=pie_chart, today_7 = datetime.date.today() + datetime.timedelta(days=-7), averageDistance = eventsDistanceAverege,
-                            averegeTime = eventsActivtiyTimeAverege, eventsNames=eventNames, event=userEvents[eventCount], nextEvent = nextEvent, previousEvent= previousEvent, eventWeek=eventWeek,
-                            eventWeekDistance=eventWeekDistance, eventWeekTarget=eventWeekTarget, menuMode="mainApp", d1=d1, d2=d2, avatarsPath=avatarsPath, eventCount = eventCount, eventAmount = len(userEvents))
-                        
-        else:
-            return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
-                            event=[], pie_chart=pie_chart, menuMode="mainApp",  d1=0, d2=0, d3=0, avatarsPath=avatarsPath)
-
-    else:
-        pie_chart = pygal.Pie(inner_radius=.4, width=500, height=400)
-        pie_chart.title = 'Różnorodność aktywności (w %)'
-        checkTable=[]
-        pie_chart = pie_chart.render_data_uri()
-        
-        return render_template('NewBasicDashboard.html', activities=activities, title_prefix = "Dashboard", 
-                            sumDistance=0, sumTime=0, amount=0, pie_chart=pie_chart, menuMode="mainApp", event=[] , d1=0, d2=0, d3=0)
+    return render_template('dashboard.html',
+                    dashboard = dashboard,
+                    menuMode = "mainApp")     
         
   
 @user.route("/rotateAvatarRight")
 @login_required #This page needs to be login
 def rotateAvatarRight():
 
-    current_user.rotateAvatar(angle=-90)
+    current_user.rotateAvatar(angle = -90)
     return redirect(url_for('user.settings'))
+
 
 @user.route("/rotateAvatarLeft")
 @login_required #This page needs to be login
 def rotateAvatarLeft():
 
-    current_user.rotateAvatar(angle=90)
+    current_user.rotateAvatar(angle = 90)
     return redirect(url_for('user.settings'))
+
 
 @login_from_messenger_check
 @user.route("/google-login")
@@ -501,11 +362,12 @@ def loginGoogle():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    flow = Flow.from_client_config(client_config=google_client_config, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/callback")
+    flow = Flow.from_client_config(client_config = google_client_config,
+                                    scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+                                    redirect_uri="https://sportoweswiry.com.pl/callback")
 
     authorization_url, state = flow.authorization_url() 
     session["state"] = state   
-    #flash(session["google_id"])
 
     return redirect(authorization_url)
 
@@ -515,7 +377,9 @@ def callbackGoogle():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    flow = Flow.from_client_config(client_config=google_client_config, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/callback")
+    flow = Flow.from_client_config(client_config=google_client_config,
+                                    scopes=["https://www.googleapis.com/auth/userinfo.profile","https://www.googleapis.com/auth/userinfo.email", "openid"],
+                                    redirect_uri="https://sportoweswiry.com.pl/callback")
     
     #Gets data from Google
     flow.fetch_token(authorization_response=request.url)
@@ -529,10 +393,9 @@ def callbackGoogle():
     token_request = google.auth.transport.requests.Request(session=cached_session)
 
     id_info = id_token.verify_oauth2_token(
-        id_token=credentials._id_token,
-        request=token_request,
-        audience=GOOGLE_CLIENT_ID
-    )
+                        id_token = credentials._id_token,
+                        request = token_request,
+                        audience = GOOGLE_CLIENT_ID)
 
     name = id_info.get("name")
     email = id_info.get("email")
@@ -541,18 +404,19 @@ def callbackGoogle():
     user=User.query.filter(User.mail == email).first()
     if user != None:
         standard_login(user, remember=True)
-        return redirect(url_for('user.basicDashboard'))
+        return redirect(url_for('user.dashboard'))
 
     else:
-        fullName=str(name).split(" ")
-        firstName=fullName[0]
-        lastName=fullName[1]
+        fullName = str(name).split(" ")
+        firstName = fullName[0]
+        last_name = fullName[1]
 
-        create_account_from_social_media(firstName, lastName, email)
+        create_account_from_social_media(firstName, last_name, email)
         user=User.query.filter(User.mail == email).first()
         standard_login(user, remember=True)
 
     return redirect(url_for('other.hello'))
+
 
 @login_from_messenger_check
 @user.route("/fb-login")
@@ -580,19 +444,20 @@ def callback():
     name = facebook_user_data["name"]
     picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
     
-    user=User.query.filter(User.mail == email).first()
+    user = User.query.filter(User.mail == email).first()
     if user != None:
             login_from_facebook(user, picture_url, remember=True)
-            return redirect(url_for('user.basicDashboard'))
+            return redirect(url_for('user.dashboard'))
     else:
-        fullName=str(name).split(" ")
-        firstName=fullName[0]
-        lastName=fullName[1]
+        fullName = str(name).split(" ")
+        firstName = fullName[0]
+        last_name = fullName[1]
 
-        create_account_from_social_media(firstName, lastName, email)
-        user=User.query.filter(User.mail == email).first()
+        create_account_from_social_media(firstName, last_name, email)
+        user = User.query.filter(User.mail == email).first()
         login_from_facebook(user, picture_url, remember=True)
-        return redirect(url_for('user.basicDashboard'))
+        return redirect(url_for('user.dashboard'))
+
 
 @login_from_messenger_check
 @user.route("/fb-login-connect")
@@ -613,7 +478,7 @@ def callbackConnect():
 	# we need to apply a fix for Facebook here
     facebook = facebook_compliance_fix(facebook)
 
-    facebook.fetch_token(FB_TOKEN_URL, client_secret=FB_CLIENT_SECRET, authorization_response=flask.request.url)
+    facebook.fetch_token(FB_TOKEN_URL, client_secret = FB_CLIENT_SECRET, authorization_response = flask.request.url)
 
 	# Fetch a protected resource, i.e. user profile, via Graph API
     facebook_user_data = facebook.get("https://graph.facebook.com/me?fields=id,name,email,picture{url}").json()
@@ -627,19 +492,19 @@ def callbackConnect():
     if checkingExistUser:
         flash("Konto facebook ({}) jest już wykorzystywane przez innego użytkownika. Użyj innego konta facebook".format(email))
     else:
-        user=User.query.filter(User.id == current_user.id).first()
-        fullName=str(name).split(" ")
-        firstName=fullName[0]
-        lastName=fullName[1]
-        user.name=firstName
-        user.lastName=lastName
-        user.mail=email
+        user = User.query.filter(User.id == current_user.id).first()
+        fullName = str(name).split(" ")
+        firstName = fullName[0]
+        last_name = fullName[1]
+        user.name = firstName
+        user.last_name = last_name
+        user.mail = email
         db.session.commit()
         save_avatar_from_facebook(picture_url, current_user.id)
         flash("Twoje konto zostało połączone z kontem na facebooku: {} ({})".format(name,email))
 
-
     return redirect(url_for('user.settings'))
+
 
 @login_from_messenger_check
 @user.route("/google-login-connect")
@@ -647,13 +512,15 @@ def googleLoginConnect():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    flow = Flow.from_client_config(client_config=google_client_config, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/callback")
+    flow = Flow.from_client_config(client_config = google_client_config,
+                                    scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+                                    redirect_uri="https://sportoweswiry.com.pl/callback")
     
     authorization_url, state = flow.authorization_url() 
     session["state"] = state   
 
-
     return redirect(authorization_url)
+
 
 @user.route("/google-callback-connect", methods=['GET'])
 @login_required
@@ -661,7 +528,9 @@ def googleConnectCallback():
 
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-    flow = Flow.from_client_config(client_config=google_client_config, scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],redirect_uri="https://sportoweswiry.com.pl/callback")
+    flow = Flow.from_client_config(client_config = google_client_config,
+                                    scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+                                    redirect_uri="https://sportoweswiry.com.pl/callback")
     
     #Gets data from Google
     flow.fetch_token(authorization_response=request.url)
@@ -675,28 +544,75 @@ def googleConnectCallback():
     token_request = google.auth.transport.requests.Request(session=cached_session)
 
     id_info = id_token.verify_oauth2_token(
-        id_token=credentials._id_token,
-        request=token_request,
-        audience=GOOGLE_CLIENT_ID
-    )
+                                    id_token=credentials._id_token,
+                                    request=token_request,
+                                    audience=GOOGLE_CLIENT_ID)
 
     name = id_info.get("name")
     email = id_info.get("email")
 
-    checkingExistUser=User.query.filter(User.mail == email).first()
+    checkingExistUser = User.query.filter(User.mail == email).first()
 
     if checkingExistUser:
         flash("Konto gmail ({}) jest już wykorzystywane przez innego użytkownika. Użyj innego konta gmail".format(email))
     else:
-        user=User.query.filter(User.id == current_user.id).first()
-        fullName=str(name).split(" ")
-        firstName=fullName[0]
-        lastName=fullName[1]
-        user.name=firstName
-        user.lastName=lastName
-        user.mail=email
+        user = User.query.filter(User.id == current_user.id).first()
+        fullName = str(name).split(" ")
+        firstName = fullName[0]
+        last_name = fullName[1]
+        user.name = firstName
+        user.last_name = last_name
+        user.mail = email
         db.session.commit()
         flash("Twoje konto zostało połączone z kontem gmial: {} ({})".format(name,email))
 
     return redirect(url_for('user.settings'))
+
+
+@user.route('/copy_users')
+def copy_users():
+
+    copy_users_from_csv('user.csv')
+
+    return redirect(url_for('other.hello'))
+
+
+def copy_users_from_csv(file_path):
+
+    with open(file_path, encoding="utf8") as user_file:
+        a = csv.DictReader(user_file)
+        for row in a:
+
+            if row["isAddedByGoogle"] == 'NULL' or row["isAddedByGoogle"] == '0':
+                row["isAddedByGoogle"] = False
+            else:
+                row["isAddedByGoogle"] = True
+
+            if row["isAddedByFB"] == 'NULL' or row["isAddedByFB"] == '0':
+                row["isAddedByFB"] = False
+            else:
+                row["isAddedByFB"] = True
+
+            if row["isAdmin"] == '0':
+                row["isAdmin"] = False
+            else:
+                row["isAdmin"] = True
+
+            if row["confirmed"] == '1':
+                row["confirmed"] = True
+
+            newUser = User(id = row["id"], name = row["name"], last_name = row["lastName"], mail=row["mail"], 
+            password = row["password"], is_admin=row["isAdmin"], confirmed = row["confirmed"], is_added_by_google = row["isAddedByGoogle"], is_added_by_fb = row["isAddedByFB"] )
+
+            try:
+
+                db.session.add(newUser)
+                db.session.commit()
+
+            except:
+                print('Error', row['id'])
+
+    return True
+    
+
 

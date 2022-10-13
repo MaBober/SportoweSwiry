@@ -1,4 +1,3 @@
-from turtle import left, right
 from types import NoneType
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from start import db

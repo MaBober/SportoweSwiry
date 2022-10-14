@@ -96,7 +96,7 @@ def create_account():
     
     form=UserForm()
     #Delete of not necessary inputs
-    del form.is_admin
+    del form.isAdmin
     del form.avatar
     del form.id
 

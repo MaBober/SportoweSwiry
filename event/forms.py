@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, BooleanField, DecimalField, DateField, IntegerField, SelectField
-from wtforms.validators import DataRequired, NumberRange,NumberRange
+from wtforms.fields import StringField, BooleanField, DecimalField, DateField, IntegerField, SelectField, TextAreaField
+from wtforms.validators import DataRequired, NumberRange,NumberRange, Length
 
 
 class EventForm(FlaskForm):
@@ -10,8 +10,10 @@ class EventForm(FlaskForm):
     length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 0, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
     adminID = SelectField("Administrator wyzwania", validators = [NumberRange(min= 0, message = "Podaj proszę liczbę nie ujemną!")], default = 1, choices = [])
     isPrivate = BooleanField("Wydarzenie prywatne")
+    password=StringField("Hasło", validators=[DataRequired("Pole nie może być puste"), Length(min=5, message="Hasło nie może być krótsze niż 5 znaków")])
     isSecret = BooleanField("Wydarenie ukryte")
     status = SelectField("Status wyzwania", validators=[NumberRange(min=0, message="Wybierz pozycję z listy!")], default=1, choices=[])
+    description = TextAreaField("Opis wyzwania")
 
     #coefficientsTable_id = IntegerField("ID tablicy ze wspołczynnikami", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
     coefficientsSetName = SelectField("ID tablicy ze wspołczynnikami", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1, choices=[])

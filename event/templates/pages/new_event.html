@@ -1,14 +1,22 @@
-{% extends "pages//base.html" %}
+{% extends "pages//baseNew.html" %}
+
+
+   
 
 {% block body_content %}
-<div class="container-xl px-4 mt-4">
-    <div class="card-header" style="background-color: rgba(224, 153, 94);">
-        <b>Dodaj nowe wyzwanie</b>
-    </div>
-</div>
-<br>
-{% include "includes/new_event_form.html" %}
 
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/event_new.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleCommon.css') }}">
+
+<div class="container-xl px-4 mt-4 Settings-Main-Box">
+    <nav class="nav nav-borders rounded Small-Navbar">
+        <span class="nav-link"  style="color: #579956;"><b>Stwórz nowe wyzwanie</b></span>
+    </nav>
+</div>
+
+
+{% include "includes/new_event_form.html" %}
+<div class="clear"></div>
 
 
 {% endblock %}

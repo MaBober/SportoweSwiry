@@ -5,18 +5,20 @@ from wtforms.validators import DataRequired, NumberRange,NumberRange, Length
 
 class EventForm(FlaskForm):
 
-    name = StringField("Nazwa")
-    start = DateField("Data rozpoczęcia")
+    name = StringField("Nazwa", validators=[DataRequired("Pole nie może być puste")],)
+    start = DateField("Data rozpoczęcia", validators=[DataRequired("Pole nie może być puste")])
     length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 0, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
-    adminID = SelectField("Administrator wyzwania", validators = [NumberRange(min= 0, message = "Podaj proszę liczbę nie ujemną!")], default = 1, choices = [])
     isPrivate = BooleanField("Wydarzenie prywatne")
-    password=StringField("Hasło", validators=[DataRequired("Pole nie może być puste"), Length(min=5, message="Hasło nie może być krótsze niż 5 znaków")])
+    password=StringField("Hasło")
     isSecret = BooleanField("Wydarenie ukryte")
     status = SelectField("Status wyzwania", validators=[NumberRange(min=0, message="Wybierz pozycję z listy!")], default=1, choices=[])
     description = TextAreaField("Opis wyzwania")
+    max_users = IntegerField("Maksymalna ilośc uczestników", validators = [NumberRange(min = 0, max= 25, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
 
-    #coefficientsTable_id = IntegerField("ID tablicy ze wspołczynnikami", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
-    coefficientsSetName = SelectField("ID tablicy ze wspołczynnikami", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1, choices=[])
+class EventPassword(FlaskForm):
+
+    password = StringField("Hasło", validators=[DataRequired("Pole nie może być puste")],)
+
 
 class CoeficientsForm(FlaskForm):
 

@@ -23,6 +23,7 @@ class Event(db.Model):
     is_secret = db.Column(db.Boolean, nullable=False)
     password = db.Column(db.String(50))
     max_user_amount = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String(300))
 
     participants = db.relationship('Participation', backref='event', lazy='dynamic')
     distance_set = db.relationship('DistancesTable', backref='event', lazy='dynamic')
@@ -39,17 +40,21 @@ class Event(db.Model):
         self.name = form.name.data
         self.start = form.start.data
         self.length_weeks = form.length.data
-        self.admin_id = form.adminID.data
+        self.admin_id = current_user.id
         self.is_private = form.isPrivate.data
         self.is_secret = form.isSecret.data
-        self.max_user_amount = 0
+        self.max_user_amount = form.max_users.data
+        self.password = form.password.data
+        self.description = form.description.data
         self.status = "Zapisy otwarte"
 
         db.session.add(self)
         db.session.commit()
         
         DistancesTable.pass_distances_to_db(distances_form, self.id)
-    
+
+        self.add_partcipant(current_user)
+
         return True
 
 
@@ -199,6 +204,15 @@ class Event(db.Model):
         current_event_week_target = self.week_targets[self.week_targets['week'] == self.current_week]['target'].values[0]
 
         return current_event_week_target
+
+    @property
+    def is_full(self):
+
+        if len(self.participants.all()) >= self.max_user_amount:
+            return True
+        
+        else:
+            return False
 
     def give_overall_weekly_summary(self, activites_list):
 
@@ -364,6 +378,65 @@ class Event(db.Model):
         db.session.commit()
 
         return None
+
+
+    def add_partcipant(self, user, password = ''):
+
+        is_participating = Participation.query.filter(Participation.user_id == user.id).filter(Participation.event_id == self.id).first()
+
+        if self.status != "Zapisy otwarte":
+            message == "Wyzwanie {self.name} już się rozpoczęło, nie możesz się do niego dopisać!"
+            return False, message
+
+        if is_participating is not None:
+            message = "Już jesteś zapisny/a na to wyzwanie!"
+            return False , message
+
+        if self.is_private and password != self.password:
+            message = "Podałeś/aś złe hasło do wyzwania. Spróbuj jeszcze raz!"
+            return False, message
+
+        if self.is_full:
+            message = "Do tego wyzwania zapisała się już maksymalna ilość uczestników!"
+            return False, message
+
+        from other.functions import send_email
+
+        send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'welcome', event=self)
+
+        message = '''
+        Czołem  {} {}!,
+
+        Witaj w wyzwaniu sportowym {}!
+
+        Data rozpoczęcia: {}
+        Długość: {} tygodni
+
+        Życzymy samych sukcesów i wielu pokonanych kilometrów.
+
+        Ubieraj buty i zaczynaj zabawę już dziś! ;)
+
+        Pozdrawiamy,
+
+        Administracja Sportowych Świrów
+        '''.format(current_user.self, current_user.last_name, self.name, self.start, self.length_weeks)
+
+        # newMessage = MailboxMessage(date=datetime.date.today(), sender="Sportowe Świry", senderName="Sportowe Świry", receiver = current_user.mail,
+        # receiverName = current_user.name+" "+current_user.lastName, subject = "Witaj w wyzwaniu: " + event.name, message = message, sendByApp = True,
+        # sendByEmail= False, messageReaded=False, multipleMessage=True)
+        # sendMessgaeFromContactFormToDB(newMessage)
+
+
+        participation = Participation(user_id = user.id, event_id = self.id)
+        db.session.add(participation)
+        db.session.commit()
+
+        message = "Zapisano do wyzwania " + self.name + "!"
+
+        return True, message
+        
+  
+
     
 
         

@@ -1,15 +1,13 @@
 import datetime as dt
 import csv
-from tabnanny import check
-
 
 from flask_login import login_required, current_user
 from start import db, app
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 
 from .classes import *
-from .forms import CoeficientsForm, DistancesForm, EventForm, NewSportToEventForm
-from .functions import add_user_to_event, delete_user_from_event
+from .forms import CoeficientsForm, DistancesForm, EventForm, NewSportToEventForm, EventPassword
+from .functions import delete_user_from_event
 from activity.classes import Activities, Sport
 from other.functions import send_email, account_confirmation_check
 from user.functions import account_confirmation_check#, send_email
@@ -24,68 +22,44 @@ event = Blueprint("event", __name__,
 
 
 @account_confirmation_check
-@event.route("/explore_events")
+@event.route("/explore_events/")
 @account_confirmation_check
 @login_required #This page needs to be login
 def explore_events():
 
-    events=Event.query.filter(Event.status == "Zapisy otwarte").filter(Event.is_private == False).filter().all()
+    password_form = EventPassword()
+
+    events=Event.query.filter(Event.status == "Zapisy otwarte").all()
+
 
     return render_template('/pages/explore_events.html',
                         events=events,
                         title_prefix = "Dostępne wyzwania",
-                        menuMode="mainApp" )
+                        menuMode="mainApp",
+                        form=password_form )
 
 
 @account_confirmation_check
-@event.route("/join_event/<int:event_id>")
+@event.route("/join_event/<int:event_id>", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def join_event(event_id):
     
+    password = ''
+    if request.method == 'POST':
+        password = request.form['password']
+
     event = Event.query.filter(Event.id == event_id).first()
+        
+    added_to_db, flash_message  = event.add_partcipant(user = current_user, password = password)
+    flash(flash_message)
 
-    if event.status == "Zapisy otwarte":
-        # Check is user isn't signed already
-        is_participating = Participation.query.filter(Participation.user_id == current_user.id).filter(Participation.event_id == event_id).first()
-        if is_participating == None:
-
-            add_user_to_event(current_user.id, event_id)
-            send_email(current_user.mail, "Witaj w wyzwaniu {}".format(event.name),'welcome', event=event)
-
-            message = '''
-            Czołem  {} {}!,
-
-            Witaj w wyzwaniu sportowym {}!
-
-            Data rozpoczęcia: {}
-            Długość: {} tygodni
-
-            Życzymy samych sukcesów i wielu pokonanych kilometrów.
-
-            Ubieraj buty i zaczynaj zabawę już dziś! ;)
-
-            Pozdrawiamy,
-
-            Administracja Sportowych Świrów
-            '''.format(current_user.name, current_user.last_name, event.name, event.start, event.length_weeks)
-
-            # newMessage = MailboxMessage(date=datetime.date.today(), sender="Sportowe Świry", senderName="Sportowe Świry", receiver = current_user.mail,
-            # receiverName = current_user.name+" "+current_user.lastName, subject = "Witaj w wyzwaniu: " + event.name, message = message, sendByApp = True,
-            # sendByEmail= False, messageReaded=False, multipleMessage=True)
-            # sendMessgaeFromContactFormToDB(newMessage)
-
-            flash("Zapisano do wyzwania " + event.name + "!")
-            return redirect(url_for('event.event_main', event_id = event_id))
-
-        else:
-            flash("Już jesteś zapisny/a na to wyzwanie!")
-
-        return redirect(url_for('event.explore_events'))
-
+    if added_to_db:
+        return redirect(url_for('event.event_main', event_id = event_id))
+    
     else:
-        flash('Wyzwanie "{}" już się rozpoczęło, nie możesz się do niego dopisać!'.format(event.name))
         return redirect(url_for('event.explore_events'))
+
 
 
 @event.route("/leave_event/<int:event_id>")
@@ -121,7 +95,7 @@ def your_events(mode):
         user_events = current_user.finished_events
 
     if current_user.all_events != None:
-        current_user.query.filter(Event.status == mode).all()
+    
         return render_template('/pages/your_events.html',
                         events = user_events,
                         title_prefix = "Twoje wyzwania",
@@ -322,19 +296,14 @@ def event_beers(event_id):
 @login_required
 def create_event():
 
-    if not current_user.is_admin:
-        flash("Nie masz uprawnień do tej zawartości")
-        return redirect(url_for('other.hello'))
 
     event_form = EventForm()
     distances_form = DistancesForm()
 
     del event_form.status
 
-    #Creating list of available admins (for form)
-    admins = User.query.filter(User.is_admin == True).all()
-    adminIDs = [(a.id, a.name) for a in admins]
-    event_form.adminID.choices=adminIDs
+    # TODO : Implement code to check how many active event user have created.
+
 
     if event_form.validate_on_submit and distances_form.validate_on_submit():
 
@@ -350,6 +319,7 @@ def create_event():
                     title_prefix = "Nowe wydarzenie",
                     form = event_form,
                     formDist = distances_form,
+                    menuMode="mainApp",
                     mode = "create")
 
 

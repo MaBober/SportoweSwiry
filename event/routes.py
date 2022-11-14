@@ -22,7 +22,7 @@ event = Blueprint("event", __name__,
 
 
 @account_confirmation_check
-@event.route("/explore_events/")
+@event.route("/explore_events")
 @account_confirmation_check
 @login_required #This page needs to be login
 def explore_events():
@@ -51,7 +51,7 @@ def join_event(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
         
-    added_to_db, flash_message  = event.add_partcipant(user = current_user, password = password)
+    added_to_db, flash_message  = event.add_partcipant(user = current_user, provided_password = password)
     flash(flash_message)
 
     if added_to_db:

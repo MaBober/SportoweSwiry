@@ -146,7 +146,7 @@ class Event(db.Model):
                 event_participants = []
             
             return event_participants
-
+        
         elif scope == "Full":
             event_participants = pd.read_sql(f'SELECT * FROM user WHERE id in {tuple(self.give_all_event_users_ids())} ', db.engine, index_col = 'id' ) 
 

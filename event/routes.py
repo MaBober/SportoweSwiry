@@ -183,6 +183,8 @@ def event_activities(event_id):
 def event_preview(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
+    password_form = EventPassword()
+
 
     event_participants = event.give_all_event_users()
     event_coefficinets_set = event.give_all_event_activities_types(mode = "All")
@@ -190,9 +192,9 @@ def event_preview(event_id):
     return render_template('/pages/event_view/event_preview.html',
                     event = event,
                     title_prefix = event.name,
-                    usersAmount = len(event_participants),
                     coefSet = event_coefficinets_set,
-                    menuMode="mainApp") 
+                    menuMode="mainApp",
+                    form=password_form) 
 
 
 @account_confirmation_check
@@ -296,31 +298,34 @@ def event_beers(event_id):
 @login_required
 def create_event():
 
+    print(current_user.event_admin)
+    print(len(Event.query.filter(Event.status != "Zakończone").filter(Event.admin_id == current_user.id).all()))
 
     event_form = EventForm()
     distances_form = DistancesForm()
 
     del event_form.status
 
-    # TODO : Implement code to check how many active event user have created.
+    if len(Event.query.filter(Event.status != "Zakończone").filter(Event.admin_id == current_user.id).all()) <3:
+        if event_form.validate_on_submit and distances_form.validate_on_submit():
 
+            new_event = Event()
+            new_event.add_to_db(event_form, distances_form)
 
-    if event_form.validate_on_submit and distances_form.validate_on_submit():
+            CoefficientsList.create_coeffciet_set_with_default_values(new_event)
+        
+            flash('Stworzono wydarzenie "{}"!'.format(new_event.name))
+            return redirect(url_for('event.event_main', event_id = new_event.id))
 
-        new_event = Event()
-        new_event.add_to_db(event_form, distances_form)
-
-        CoefficientsList.create_coeffciet_set_with_default_values(new_event)
-    
-        flash('Stworzono wydarzenie "{}"!'.format(new_event.name))
-        return redirect(url_for('other.hello'))
-
-    return render_template("/pages/new_event.html",
-                    title_prefix = "Nowe wydarzenie",
-                    form = event_form,
-                    formDist = distances_form,
-                    menuMode="mainApp",
-                    mode = "create")
+        return render_template("/pages/new_event.html",
+                        title_prefix = "Nowe wydarzenie",
+                        form = event_form,
+                        formDist = distances_form,
+                        menuMode="mainApp",
+                        mode = "create")
+    else: 
+            flash('Jesteś już administratorem 3 trwających wyzwań. W tym momencie nie możesz stworzyć kolejnych!', 'danger')
+            return redirect(url_for('other.hello'))
 
 
 @account_confirmation_check

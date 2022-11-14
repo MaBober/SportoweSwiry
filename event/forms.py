@@ -17,7 +17,7 @@ class EventForm(FlaskForm):
 
 class EventPassword(FlaskForm):
 
-    password = StringField("Hasło", validators=[DataRequired("Pole nie może być puste")],)
+    password = StringField("Hasło")
 
 
 class CoeficientsForm(FlaskForm):

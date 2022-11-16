@@ -235,7 +235,10 @@ class Event(db.Model):
     @property
     def current_week_target(self):
 
-        current_event_week_target = self.week_targets[self.week_targets['week'] == self.current_week]['target'].values[0]
+        if self.status in ['2','3','4']:
+            current_event_week_target = self.week_targets[self.week_targets['week'] == self.current_week]['target'].values[0]
+        else:
+            return 0
 
         return current_event_week_target
 

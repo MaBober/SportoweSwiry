@@ -49,7 +49,7 @@ class Event(db.Model):
         self.password = form.password.data
         self.password = self.hash_password()
         self.description = form.description.data
-        self.status = "Zapisy otwarte"
+        self.status = 1
 
         db.session.add(self)
         db.session.commit()
@@ -84,6 +84,17 @@ class Event(db.Model):
     @property
     def end(self):
         return self.start + dt.timedelta(weeks = self.length_weeks)
+
+    @property
+    def status_description(self):
+
+        statuses = {"1" : "Zapisy otwarte",
+                    "2" : "Pierwszy tydzień",
+                    "3" : "W trakcie",
+                    "4" : "Ostatni tydzień",
+                    "5" : "Wyzwanie zakończone"}
+
+        return statuses[self.status]
 
     def give_all_event_activities(self, calculated_values = False, user = 'all'):
 
@@ -264,6 +275,8 @@ class Event(db.Model):
 
         # ADD TOTAL WEEK AND TARGET ROWS
         def check_target(row, week_number):
+            
+   
             if row == 0 and self.week_targets['target'][week_number-1] !=0 :
                 return False
             elif row == 0 and self.week_targets['target'][week_number-1] == 0:
@@ -279,7 +292,11 @@ class Event(db.Model):
                 for user in self.give_all_event_users("Objects"):
                     single_week['calculated_distance', user.id, user.name, user.last_name ] = 0
                 single_week.loc['total'] = 0
-                single_week.loc['target_done'] = single_week.loc['total'].apply(check_target,  week_number=(index))
+
+                if self.status != '1':
+                    single_week.loc['target_done'] = single_week.loc['total'].apply(check_target,  week_number=(index))
+                else:
+                    single_week.loc['target_done'] = False
                 
             else:
                 single_week.loc['total'] = single_week.sum()
@@ -412,7 +429,7 @@ class Event(db.Model):
 
         is_participating = Participation.query.filter(Participation.user_id == user.id).filter(Participation.event_id == self.id).first()
 
-        if self.status != "Zapisy otwarte":
+        if self.status not in ['1','2']:
             message == "Wyzwanie {self.name} już się rozpoczęło, nie możesz się do niego dopisać!"
             return False, message
 
@@ -467,6 +484,13 @@ class Event(db.Model):
 
         return True, message
         
+    def is_participant(self, user):
+
+        if Participation.query.filter(Participation.event_id == self.id).filter(Participation.user_id == user.id).first() is None:
+            return False
+            
+        else:
+            return True
   
 
     

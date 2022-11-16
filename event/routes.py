@@ -29,7 +29,7 @@ def explore_events():
 
     password_form = EventPassword()
 
-    events=Event.query.filter(Event.status == "Zapisy otwarte").all()
+    events=Event.query.filter(Event.status == '1').all()
 
 
     return render_template('/pages/explore_events.html',
@@ -297,9 +297,6 @@ def event_beers(event_id):
 @account_confirmation_check
 @login_required
 def create_event():
-
-    print(current_user.event_admin)
-    print(len(Event.query.filter(Event.status != "Zakończone").filter(Event.admin_id == current_user.id).all()))
 
     event_form = EventForm()
     distances_form = DistancesForm()

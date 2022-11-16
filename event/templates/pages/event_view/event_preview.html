@@ -6,6 +6,25 @@
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventMenu.css') }}">
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventView.css') }}">
 
+
+ <!-- Modal -->
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script> 
+     $(document).ready(function () { 
+         // For A Delete Record Popup 
+         // This function is applied to all elements with class ending with ".delete-confirm" 
+         $('.delete-confirm').click(function () { 
+             // get attributes of the found element 
+             var desc = $(this).attr('data-desc'); 
+             var url = $(this).attr('data-url'); 
+             // the #... designates id of an element - change the text in the modal window 
+             $("#confirmDeleteForm").attr("action", url); 
+         }); 
+     }); 
+ </script>
+
+
 <div class="container-xl px-4 mt-4 eventMenu-Main-Box">
     
     <nav class="nav nav-borders rounded eventMenu-Navbar" style="background-color: rgba(224, 153, 94);">
@@ -22,19 +41,67 @@
                     Szczegóły wyzwania
                 </div>
                 <div class="card-body">
-                    <h6>Start: {{event.start}}<br></h6>
-                    <h6>Koniec: {{event.end}}</h6>
-                    <h6>Długość: {{event.length_weeks}} tygodni</h6>
-                    <h6>Ilość ucztstników: {{usersAmount}} </h6>
+                    <h6><b>Start:</b> {{event.start}}<br></h6>
+                    <h6><b>Koniec:</b> {{event.end}}</h6>
+                    <h6><b>Długość:</b> {{event.length_weeks}} tygodni</h6>
+                    <h6><b>Ilość uczestników: </b> {{ event.give_all_event_users()|length }} / {{event.max_user_amount}}</h6>
+                    <h6><b>Administrator:</b> {{event.admin.name}} {{event.admin.last_name}}</h6>
+                    {% if event.desription != '' %}
+                    <h6>{{event.description}} </h6>
+                    {% endif %}
 
 
                 </div>
             </div>
             <br>
             <div class="col-12">
-                 <a href="{{ url_for('event.join_event', event_id=event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a>
+
+                {% if event.is_private %}
+                <a type="button" class="btn btn-success Main-Button delete-confirm"
+                data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                data-desc='WWWW ',
+                data-url="{{ url_for('event.join_event', event_id = event.id )}}">
+                Zapisz się!</a>
+
+                {% else %}
+                <a href="{{ url_for('event.join_event', event_id = event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a>
+                {% endif %}
+
             </div>
             
+
+
+
+
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Podaj hasło</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="idDeleteModalBody">
+                            Wyzwanie jest prywatne. Podaj proszę hasło:
+                    <form method ="post" action="" id="confirmDeleteForm">
+                            {{ form.password(class_="form-control form-control-sm" ) }}
+                        </div>
+                        <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Zapisz się!</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
         </div>
 
         

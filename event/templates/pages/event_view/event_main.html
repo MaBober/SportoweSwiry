@@ -14,11 +14,14 @@
             <div class="card mb-4 mb-xl-0 Event-Main-Box">
                 <div class="card-header Event-Title-Box">Szczegóły wyzwania</div>
                 <div class="card-body">
-                    <h6>Rozpoczęcie: {{event.start}}<br></h6>
-                    <h6>Koniec: {{event.end}}</h6>
-                    <h6>Ilość ucztstników: {{usersAmount}} </h6>
-                    <h6>Zapisanych aktywności: {{activitiesAmount}}</h6>
-
+                    <h6><b>Start:</b> {{event.start}}<br></h6>
+                    <h6><b>Koniec:</b> {{event.end}}</h6>
+                    <h6><b>Długość:</b> {{event.length_weeks}} tygodni</h6>
+                    <h6><b>Ilość uczestników: </b> {{ event.give_all_event_users()|length }} / {{event.max_user_amount}}</h6>
+                    <h6><b>Administrator:</b> {{event.admin.name}} {{event.admin.last_name}}</h6>
+                    {% if event.desription != '' %}
+                    <h6>{{event.description}} </h6>
+                    {% endif %}
                 </div>
             </div>
             <br>

@@ -171,7 +171,7 @@ class User(db.Model, UserMixin):
     def current_events(self):
 
         from event.classes import Event
-        current_events = self.all_events.filter(Event.status == "W trakcie")
+        current_events = self.all_events.filter(Event.status != "5")
 
         return current_events
 
@@ -179,7 +179,7 @@ class User(db.Model, UserMixin):
     def finished_events(self):
 
         from event.classes import Event
-        finished_events = self.all_events.filter(Event.status == "Zakończone")
+        finished_events = self.all_events.filter(Event.status == "5")
 
         return finished_events
 

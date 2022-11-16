@@ -28,6 +28,7 @@
             {% if usersAmount !=0 %}
             <!-- Your week card-->
             <div class="card mb-4 mb-xl-0 Event-Main-Box">
+                {% if event.is_participant(current_user) %}
                 <div class="card-header Event-Title-Box">Aktualny tydzień</div>
                 
                 <div class="card-body">
@@ -58,6 +59,7 @@
                    <h5> Wyzwanie zakończone!</h5>
                 {% endif %}
                 </div>
+                {% endif %}
             </div>
             {% endif %}
         </div>

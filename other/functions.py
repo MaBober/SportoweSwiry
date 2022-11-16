@@ -1,10 +1,11 @@
+import imp
 from start import db
 from flask_login import current_user
 from flask import render_template, current_app, request, flash
 from flask_mail import Mail, Message
 from start import app
 from user.classes import User
-from other.classes import mailboxMessage
+from .classes import MailboxMessage
 from event.classes import Event
 import datetime
 
@@ -42,13 +43,13 @@ def prepareListOfUsers():
     listOfUsers=User.query.all()
     listOfUsersMails = [(a.mail) for a in listOfUsers]
     listOfUsersNames = [(a.name) for a in listOfUsers]
-    listOfUsersLastNames = [(a.lastName) for a in listOfUsers]
+    listOfUsersLastNames = [(a.last_name) for a in listOfUsers]
 
     tempTupleNameList=list(zip(listOfUsersNames,listOfUsersLastNames))
     listOfUsersFullNames = []
 
-    for name, lastName in tempTupleNameList:
-        fullName=name+" "+lastName
+    for name, last_name in tempTupleNameList:
+        fullName=name+" "+last_name
         listOfUsersFullNames.append(fullName)
 
     # (mails, name & last name) 
@@ -149,30 +150,30 @@ def saveMessageInDB(form):
     senderFullName=setSenderFullName()
     receiverFullName=setReceiverFullName(form)
 
-    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
+    newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
     db.session.add(newMessage)
     db.session.commit()
-    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+    newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
     db.session.add(newMessage)
     db.session.commit()
 
 
 def setSenderFullName():
     senderName=current_user.name
-    senderLastName=current_user.lastName
+    senderLastName=current_user.last_name
     return senderName + " " + senderLastName
 
 def setReceiverFullName(form):
     receiverUser=User.query.filter(User.mail==form.receiverEmail.data).first()
     receiverName=receiverUser.name
-    receiverLastName=receiverUser.lastName
+    receiverLastName=receiverUser.last_name
     return receiverName + " " + receiverLastName
 
 
 def saveMessageInDBforEvent(form):
     senderFullName=setSenderFullName()
     (eventName, id) = (form.receiverEmail.data).split(', ID:')
-    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = eventName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
+    newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = eventName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
     db.session.add(newMessage)
     db.session.commit()
 
@@ -183,14 +184,14 @@ def saveMessageInDBforEvent(form):
         receiverName=receiverUser.name
         receiverLastName=receiverUser.lastName
         receiverFullName=receiverName + " " + receiverLastName
-        newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+        newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
         db.session.add(newMessage)
         db.session.commit()
 
 
 def saveMessageInDBforAll(form):
     senderFullName=setSenderFullName()
-    newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
+    newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
     db.session.add(newMessage)
     db.session.commit()
 
@@ -200,7 +201,7 @@ def saveMessageInDBforAll(form):
         receiverName=user.name
         receiverLastName=user.lastName
         receiverFullName=receiverName + " " + receiverLastName
-        newMessage = mailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+        newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
         db.session.add(newMessage)
         db.session.commit()
 
@@ -213,7 +214,7 @@ def sendMessgaeFromContactFormToDB(newMessage):
 def deleteMessagesFromDB(messagesToDelete):
 
     for messageID in messagesToDelete:
-        messageToDelete=mailboxMessage.query.filter(mailboxMessage.id == messageID).first()
+        messageToDelete=MailboxMessage.query.filter(MailboxMessage.id == messageID).first()
         db.session.delete(messageToDelete)
         db.session.commit()
     return None
@@ -223,3 +224,17 @@ def cookies_check():
     value = request.cookies.get('cookie_consent')
     return dict(cookies_check = value == 'true')
 
+
+
+def account_confirmation_check(initial_function):
+
+    def wrapped_function(*args, **kwargs):
+
+        if current_user.is_authenticated and not current_user.confirmed:
+            return redirect(url_for('user.unconfirmed'))
+
+        else:
+            wrapped_route = initial_function(*args, **kwargs)
+            return wrapped_function
+        
+    return wrapped_function

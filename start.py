@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_migrate import Migrate
 from config import Config
+from werkzeug.exceptions import HTTPException
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -22,8 +23,6 @@ def create_app():
     return app
 
 app = create_app()
-
-
 
 @app.errorhandler(404)
 def page_not_found(error):

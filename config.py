@@ -1,10 +1,11 @@
-
 import os
 from dotenv import load_dotenv
 from pathlib import Path
 
 base_dir = Path(__file__).resolve().parent
 env_file = base_dir / '.env'
+print("JJJ")
+print(env_file)
 load_dotenv(env_file)
 
 

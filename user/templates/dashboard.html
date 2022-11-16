@@ -13,11 +13,7 @@
             <img src="/static/img/icon-route.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Pokonany dystans</span>
-                {% if event != [] : %}
-                <span class="Dashboard-Value">{{sumDistance[event.id]}} km</span> 
-                {% else: %}
-                <span class="Dashboard-Value">---</span> 
-                {% endif %}
+                <span class="Dashboard-Value">{{dashboard.user_distance_sum}} km</span> 
             </div>
         </div>
 
@@ -25,11 +21,7 @@
             <img src="/static/img/icon-average.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni dystans</span>
-                {% if event != [] : %}
-                <span class="Dashboard-Value">{{averageDistance[event.id]}}</span>
-                {% else: %}
-                <span class="Dashboard-Value">---</span> 
-                {% endif %}
+                <span class="Dashboard-Value">{{dashboard.average_distance_for_event}}</span>
             </div>
         </div>
 
@@ -37,11 +29,7 @@
             <img src="/static/img/icon-timeTime.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni czas aktywności</span>
-                {% if event != [] : %}
-                <span class="Dashboard-Value">{{averegeTime[event.id]}}</span>
-                {% else: %}
-                <span class="Dashboard-Value">---</span> 
-                {% endif %}
+                <span class="Dashboard-Value">{{dashboard.average_time}}</span>
             </div>
         </div>
 
@@ -49,29 +37,26 @@
             <img src="/static/img/icon-beer.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Zdobytych piw</span>
-                {% if event != [] : %}
-                <span class="Dashboard-Value-Beers">
-                    <a class="nav-link" href="{{ url_for('event.eventBeers', eventID=event.id) }}" style="color: white;">Sprawdź tutaj!</a>
-                </span>
-                {% else: %}
-                <span class="Dashboard-Value">---</span> 
-                {% endif %}
+                <span class="Dashboard-Value">{{dashboard.beers_recived_in_event}}</span>
             </div>
         </div>
 
     </div>
 
     <div class="dashBoard">
-        <div class="Chart-Box">
-            <span class="Title-Box">Postęp wyzwania</span>
-            <div id="myChart"></div>
-        </div>
-        <div class="col-xl-6 Event-Info-Box">
+
+        <div class="Event-Info-Box">
             <!-- Your events details-->
 
             {% include "includes/dashboard_your_events.html" %}
 
         </div>
+
+        <div class="Chart-Box">
+            <span class="Title-Box">Postęp wyzwania</span>
+            <div id="myChart"></div>
+        </div>
+
     </div>
 </div>
 
@@ -81,7 +66,7 @@
 
 <script>  
     var options = {
-        series: ['{{ d1}}','{{ d2}}'],
+        series: ['{{ dashboard.d1}}','{{ dashboard.d2}}'],
         chart: {
         height: '315px',
         type: 'radialBar',

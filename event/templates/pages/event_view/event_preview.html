@@ -6,38 +6,103 @@
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventMenu.css') }}">
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventView.css') }}">
 
+
+ <!-- Modal -->
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script> 
+     $(document).ready(function () { 
+         // For A Delete Record Popup 
+         // This function is applied to all elements with class ending with ".delete-confirm" 
+         $('.delete-confirm').click(function () { 
+             // get attributes of the found element 
+             var desc = $(this).attr('data-desc'); 
+             var url = $(this).attr('data-url'); 
+             // the #... designates id of an element - change the text in the modal window 
+             $("#confirmDeleteForm").attr("action", url); 
+         }); 
+     }); 
+ </script>
+
+
 <div class="container-xl px-4 mt-4 eventMenu-Main-Box">
     
     <nav class="nav nav-borders rounded eventMenu-Navbar" style="background-color: rgba(224, 153, 94);">
         <span class="nav-link"  style="color: #579956;"><b>{{event.name}}</b></span> 
-
     </nav>
-
 </div>
 
-
 <div class="container-xl px-4 mt-4">
-
     <div class="row">
         <div class="col-xl-4">
-
             <!-- Event info card-->
             <div class="card mb-4 mb-xl-0 Event-Main-Box">
-                <div class="card-header Event-Title-Box">Szczegóły wyzwania</div>
+                <div class="card-header Event-Title-Box">
+                    Szczegóły wyzwania
+                </div>
                 <div class="card-body">
-                    <h6>Start: {{event.start}}<br></h6>
-                    <h6>Koniec: {{event.end}}</h6>
-                    <h6>Długość: {{event.lengthWeeks}} tygodni</h6>
-                    <h6>Ilość ucztstników: {{usersAmount}} </h6>
+                    <h6><b>Start:</b> {{event.start}}<br></h6>
+                    <h6><b>Koniec:</b> {{event.end}}</h6>
+                    <h6><b>Długość:</b> {{event.length_weeks}} tygodni</h6>
+                    <h6><b>Ilość uczestników: </b> {{ event.give_all_event_users()|length }} / {{event.max_user_amount}}</h6>
+                    <h6><b>Administrator:</b> {{event.admin.name}} {{event.admin.last_name}}</h6>
+                    {% if event.desription != '' %}
+                    <h6>{{event.description}} </h6>
+                    {% endif %}
 
 
                 </div>
             </div>
             <br>
-            <div class="col-12"> <a href="{{ url_for('event.joinEvent', eventID=event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a></div>
-            
-        </div>
+            <div class="col-12">
 
+                {% if event.is_private %}
+                <a type="button" class="btn btn-success Main-Button delete-confirm"
+                data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                data-desc='WWWW ',
+                data-url="{{ url_for('event.join_event', event_id = event.id )}}">
+                Zapisz się!</a>
+
+                {% else %}
+                <a href="{{ url_for('event.join_event', event_id = event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a>
+                {% endif %}
+
+            </div>
+            
+
+
+
+
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Podaj hasło</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="idDeleteModalBody">
+                            Wyzwanie jest prywatne. Podaj proszę hasło:
+                    <form method ="post" action="" id="confirmDeleteForm">
+                            {{ form.password(class_="form-control form-control-sm" ) }}
+                        </div>
+                        <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Zapisz się!</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+        </div>
 
         
         <div class="col-xl-8">
@@ -47,15 +112,15 @@
                 <div class="card-body" style="padding-left: 35px; padding-right: 35px; padding-bottom: 35px;">
                     <div class="row">
                    
-                        {% for weekTarget in weekTargets: %}
-                        {% if loop.index <= event.lengthWeeks  %}
-                        <div class="col-md-3 border px-4">
+                        {% for index, week in event.week_targets.iterrows(): %}
+                            {% if loop.index <= event.length_weeks  %}
+                                <div class="col-md-3 border px-4">
+                                    
+                                    <b> Tydzień {{loop.index}}</b><br>
+                                    {{ week['target'] }} km
                             
-                        <b> Tydzień {{loop.index}}</b><br>
-                        {{ weekTarget.value }} km
-                        
-                        </div>
-                        {% endif %}
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
@@ -65,44 +130,41 @@
                 <div class="card-header Event-Title-Box">Współczynniki aktywności</div>
                 <div class="card-body" style="padding-left: 35px; padding-right: 35px; padding-bottom: 35px;">
                     <h5>Mnożniki</h5>
+
                     <div class="row">
                    
-                    {% for coef in coefSet: %}
-                    {% if coef.constant != True %}
-                    <div class="col-md-3 border px-4">
-                        
-                       <b> {{coef.activityName}}</b><br>
-                            1km x {{coef.value}} 
-                    
-                    </div>
+                    {% for index, sport in coefSet.iterrows(): %}
+                    {% if sport['is_constant'] != True %}
+
+                        <div class="col-md-3 border px-4">
+                            <b> {{sport['name']}}</b>
+                            <br>
+                            1km x {{sport['value']}} 
+                        </div>
                     {% endif %}
                     {% endfor %}
+
                     </div>
+
                     <hr noshade size="4" align="right" width="80%">
                     <h5>Stałe wartości</h5>
+
                     <div class="row">
-                        {% for coef in coefSet: %}
-                        {% if coef.constant == True %}
+                        {% for index, sport in coefSet.iterrows(): %}
+                        {% if sport['is_constant'] == True %}
                         <div class="col-md-3 border px-4">
                         
-                            <b> {{coef.activityName}}</b><br>
-                            {{coef.value}}  km
+                            <b> {{sport['name']}}</b><br>
+                            {{sport['value']}}  km
                         
                         </div>
                         {% endif %}
                         {% endfor %}
-                        </div>
-                    
-
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<br>
-
-
 </div>
 
 

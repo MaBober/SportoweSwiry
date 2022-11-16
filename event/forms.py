@@ -1,35 +1,36 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, BooleanField, DecimalField, DateField, IntegerField, SelectField
-from wtforms.validators import DataRequired, NumberRange,NumberRange
+from wtforms.fields import StringField, BooleanField, DecimalField, DateField, IntegerField, SelectField, TextAreaField
+from wtforms.validators import DataRequired, NumberRange,NumberRange, Length
 
 
 class EventForm(FlaskForm):
 
-    name = StringField("Nazwa")
-
-    start = DateField("Data rozpoczęcia")
-    length = IntegerField("Długość w tygodniach", validators=[NumberRange(min=0, max=15, message="Podaj proszę liczbę nie ujemną!")], default=10)
-
-    #adminID = IntegerField("ID administratora", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
-    adminID = SelectField("Administrator wyzwania", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1, choices=[])
-
-    isPrivate =BooleanField("Wydarzenie prywatne")
+    name = StringField("Nazwa", validators=[DataRequired("Pole nie może być puste")],)
+    start = DateField("Data rozpoczęcia", validators=[DataRequired("Pole nie może być puste")])
+    length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 0, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
+    isPrivate = BooleanField("Wydarzenie prywatne")
+    password=StringField("Hasło")
     isSecret = BooleanField("Wydarenie ukryte")
     status = SelectField("Status wyzwania", validators=[NumberRange(min=0, message="Wybierz pozycję z listy!")], default=1, choices=[])
+    description = TextAreaField("Opis wyzwania")
+    max_users = IntegerField("Maksymalna ilośc uczestników", validators = [NumberRange(min = 0, max= 25, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
 
-    #coefficientsTable_id = IntegerField("ID tablicy ze wspołczynnikami", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
-    coefficientsSetName = SelectField("ID tablicy ze wspołczynnikami", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1, choices=[])
+class EventPassword(FlaskForm):
+
+    password = StringField("Hasło")
+
 
 class CoeficientsForm(FlaskForm):
 
-    setName = StringField("Nazwa zestawu współczynników", validators=[DataRequired("Pole nie może być puste")])
-    activityName = StringField("Nazwa aktywności", validators=[DataRequired("Pole nie może być puste")])
-    constant = BooleanField("Stała wartość?", default=False)
+    event_name = StringField("Wyzwanie", validators=[DataRequired("Pole nie może być puste")])
+    activity_name = StringField("Nazwa aktywności", validators=[DataRequired("Pole nie może być puste")])
+    is_constant = BooleanField("Stała wartość?", default=False)
     value = DecimalField("Współczynnik", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
-    
-class NewCoeficientsSetForm(FlaskForm):
 
-    setName = StringField("Nazwa zestawu współczynników", validators=[DataRequired("Pole nie może być puste")])
+class NewSportToEventForm(FlaskForm):
+    
+    activity_type = SelectField("Wybierz sport", validators=[NumberRange(min=0, message="Wybierz pozycję z listy!")], default=1, choices=[])
+
 
 class DistancesForm(FlaskForm):
 

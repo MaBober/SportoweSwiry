@@ -1,25 +1,25 @@
-<form method ="post" action="{{ url_for('event.modifyCoeficientSport', coeficientID = coeficientID  ) }}">
+<form method ="post" action="{{ url_for('event.modify_coefficient', event_id = event_id, activity_type_id = activity_type_id  ) }}">
     {{ form.csrf_token}}
 
     <div class="row justify-content-left px-4">
         
 
-        <div class="col-md-8"><label class="form-label"><b>{{ form.setName.label()}}</b></label> 
-            <br>{{ form.setName.data}} 
+        <div class="col-md-8"><label class="form-label"><b>{{ form.event_name.label()}}</b></label> 
+            <br>{{ form.event_name.data}} 
         </div> 
           
         <div class="row pt-3"></div>
-        <div class="col-md-8"><label class="form-label"><b>{{ form.activityName.label()}}</b></label> 
-            <br>{{ form.activityName.data}} 
+        <div class="col-md-8"><label class="form-label"><b>{{ form.activity_name.label()}}</b></label> 
+            <br>{{ form.activity_name.data}} 
         </div>
 
         <div class="row pt-3"></div>
-        <div class="col-md-4"><label class="form-label"><b>{{ form.activityName.label()}}</b></label> 
+        <div class="col-md-4"><label class="form-label"><b>{{ form.activity_name.label()}}</b></label> 
             <br>{{ form.value(class_="form-control form-control-sm" ) }} 
         </div>
 
-        <div class="col-md-4"><label class="form-label"><b>{{ form.constant.label()}}</b></label> 
-            <br>{{ form.constant(class="form-check-input") }} 
+        <div class="col-md-4"><label class="form-label"><b>{{ form.is_constant.label()}}</b></label> 
+            <br>{{ form.is_constant(class="form-check-input") }} 
         </div>
 
     <div class="row pt-3"></div>

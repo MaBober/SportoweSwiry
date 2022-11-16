@@ -29,10 +29,10 @@ def login_from_facebook(user, picture_url, remember=True):
 def check_next_url():
     next = request.args.get('next')
     if next and is_safe_url(next):
-        flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
+        flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name))
         return redirect(next)
     else:
-        flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.lastName))
+        flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name))
     return None
 
 def is_safe_url(target): 
@@ -49,7 +49,7 @@ def save_avatar_from_facebook(picture_url):
 
 def create_standard_account(form):
         #Rewriting data from the form
-        newUser=User(name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, 
+        newUser=User(name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, 
                     id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data)
 
         #Generatin new user ID
@@ -66,10 +66,10 @@ def create_standard_account(form):
         return newUser
 
 
-def create_account_from_social_media(firstName, lastName, email):
+def create_account_from_social_media(first_name, last_name, email):
     
-        newUser=User(name=firstName, lastName=lastName, mail=email, 
-                    id=firstName[0:3]+lastName[0:3], password=password_generator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
+        newUser=User(name=first_name, last_name=last_name, mail=email, 
+                    id=first_name[0:3]+last_name[0:3], password=password_generator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
 
         #Generatin new user ID
         newUser.id = newUser.generate_ID()

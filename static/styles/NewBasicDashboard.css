@@ -16,35 +16,28 @@ body {
 }
 
 .dashBoard {
-    /* background-color: #3a3a3a; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     height: 100%;
-    /* min-height: 100%; */
     width: 100%;
-    /* margin-top: 200px; */
     margin: auto;
 }
 
 .Chart-Box {
     background-color: black;
-    /* display: flex; */
     width: 49%;
-    /* max-width: 500px; */
-    /* margin-right: 10px; */
-
+    height: 350px;
     
 }
 
 
 .Event-Info-Box {
     background-color: black;
-    /* display: flex; */
     width: 49%;
     color: white;
-    /* margin: auto; */
     height: 350px;
+    margin-bottom: 10px;
 }
 
 
@@ -75,6 +68,7 @@ body {
     width: 80%;
     height: 98px;
     margin:auto;
+
     /* margin: 2px 45px 35px 49px; */
     padding: 20.7px 43px 18px 23px;
     border: solid 2px #fff;
@@ -188,7 +182,6 @@ body {
 
 
 
-
 /* FOR SMALL SCREENS */
 @media(max-width: 850px) {
     .dashBoard {
@@ -206,7 +199,6 @@ body {
     
     .Event-Info-Box {
         width: 100%;
-        margin: auto;
         margin-top: 10px;
     }
 

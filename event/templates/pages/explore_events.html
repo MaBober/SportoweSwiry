@@ -8,24 +8,7 @@
 
 
  <!-- Modal -->
- <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">www}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="idDeleteModalBody">
-        </div>
-        <div class="modal-footer">
-            <form action="" method="GET" id="confirmDeleteForm">
-                <button type="submit" class="btn" style="background-color: rgba(224, 153, 94); color:white">Zapisz się!</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-            </form>
-        </div>
-    </div>
-    </div>
-</div>
+
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -38,7 +21,6 @@
             var desc = $(this).attr('data-desc'); 
             var url = $(this).attr('data-url'); 
             // the #... designates id of an element - change the text in the modal window 
-            $('#idDeleteModalBody').text(desc); 
             $("#confirmDeleteForm").attr("action", url); 
         }); 
     }); 
@@ -59,7 +41,14 @@
             
             <div class="event-box">
 
-                <div class="Title-Row"><h3>{{ event.name }}</h3></div>
+                <div class="Title-Row">
+                    <h3>
+                        {{ event.name }}
+                        {% if event.is_private %}
+                         <img src="/static/pictures/lock.svg" alt="Wyzwanie prywatne" width="20" height="30" title="Wyzwanie prywatne">
+                        {% endif %}
+                    </h3>
+                </div>
                 <div class ="Main-Box">
 
                     <div class="col-7">
@@ -68,18 +57,57 @@
                         <h6><b>Start: </b> {{event.start}}</h6>
                         <h6><b>Koniec: </b> {{event.end}}</h6> 
                         <h6><b>Długość: </b> {{event.length_weeks}} tygodni</h6> 
+                        <h6><b>Ilość uczestników: </b> {{ event.give_all_event_users()|length }} / {{event.max_user_amount}}</h6>
+                        
 
                     </div>
                     
                     <div class="col" style="padding-right:5%; padding-left: 5%;">
+
+                       
                         <div class = 'row'>
+                            {% if event.is_private %}
+                                <a type="button" class="btn btn-success Main-Button delete-confirm"
+                                data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                data-desc='WWWW ',
+                                data-url="{{ url_for('event.join_event', event_id = event.id )}}">
+                                Zapisz się!</a>
+
+                            {% else %}
                             <a href="{{ url_for('event.join_event', event_id = event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a>
+                            {% endif %}
                         </div>
+
+                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Podaj hasło</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="idDeleteModalBody">
+                                        Wyzwanie jest prywatne. Podaj proszę hasło:
+                                <form method ="post" action="" id="confirmDeleteForm">
+                                        {{ form.password(class_="form-control form-control-sm" ) }}
+                                    </div>
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Zapisz się!</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                                </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class = 'row'>
                             <a href="{{ url_for('event.event_preview', event_id = event.id )}}" type="button" class="btn btn Details-Button" style="background-color: rgba(224, 153, 94);">Szczegóły</a>
                         </div>
                     </div>
                 </div>
+                {% if event.desription != '' %}
+                <div class ="Main-Box"><h6>{{event.description}} </h6></div>
+                {% endif %}
             </div>
             {% endfor %}
 

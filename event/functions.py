@@ -8,13 +8,6 @@ def delete_user_from_event(positionID, eventID):
     db.session.delete(position)
     db.session.commit()
 
-def add_user_to_event(user_id, eventID):
-
-    participation = Participation(user_id = user_id, event_id = eventID)
-    db.session.add(participation)
-    db.session.commit()
-
-    return None
 
 
 

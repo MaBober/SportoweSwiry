@@ -1,4 +1,6 @@
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import current_user
+import hashlib
+import binascii
 from start import db
 import datetime as dt
 import pandas as pd
@@ -21,8 +23,9 @@ class Event(db.Model):
     status = db.Column(db.String(50), nullable=False)
     is_private = db.Column(db.Boolean, nullable=False)
     is_secret = db.Column(db.Boolean, nullable=False)
-    password = db.Column(db.String(50))
+    password = db.Column(db.String(500))
     max_user_amount = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String(300))
 
     participants = db.relationship('Participation', backref='event', lazy='dynamic')
     distance_set = db.relationship('DistancesTable', backref='event', lazy='dynamic')
@@ -39,18 +42,43 @@ class Event(db.Model):
         self.name = form.name.data
         self.start = form.start.data
         self.length_weeks = form.length.data
-        self.admin_id = form.adminID.data
+        self.admin_id = current_user.id
         self.is_private = form.isPrivate.data
         self.is_secret = form.isSecret.data
-        self.max_user_amount = 0
+        self.max_user_amount = form.max_users.data
+        self.password = form.password.data
+        self.password = self.hash_password()
+        self.description = form.description.data
         self.status = "Zapisy otwarte"
 
         db.session.add(self)
         db.session.commit()
         
         DistancesTable.pass_distances_to_db(distances_form, self.id)
-    
+
+        self.add_partcipant(current_user)
+
         return True
+        
+    def hash_password(self):
+        """Hash a password for storing."""
+        # the value generated using os.urandom(60)
+        os_urandom_static = b"ID_\x12p:\x8d\xe7&\xcb\xf0=H1\xc1\x16\xac\xe5BX\xd7\xd6j\xe3i\x11\xbe\xaa\x05\xccc\xc2\xe8K\xcf\xf1\xac\x9bFy(\xfbn.`\xe9\xcd\xdd'\xdf`~vm\xae\xf2\x93WD\x04"
+        #os_urandom_static = b"ID_\x12p:\x8d\xe7&\xcb\xf0=H1"
+        salt = hashlib.sha256(os_urandom_static).hexdigest().encode('ascii')
+        pwdhash = hashlib.pbkdf2_hmac('sha512', self.password.encode('utf-8'), salt, 100000)
+        pwdhash = binascii.hexlify(pwdhash)
+        return (salt + pwdhash).decode('ascii') 
+
+
+    def verify_password(stored_password, provided_password):
+        """Verify a stored password against one provided by user"""
+        salt = stored_password[:64]
+        stored_password = stored_password[64:]
+        pwdhash = hashlib.pbkdf2_hmac('sha512', provided_password.encode('utf-8'),
+        salt.encode('ascii'), 100000)
+        pwdhash = binascii.hexlify(pwdhash).decode('ascii')
+        return pwdhash == stored_password
 
 
     @property
@@ -118,7 +146,7 @@ class Event(db.Model):
                 event_participants = []
             
             return event_participants
-
+        
         elif scope == "Full":
             event_participants = pd.read_sql(f'SELECT * FROM user WHERE id in {tuple(self.give_all_event_users_ids())} ', db.engine, index_col = 'id' ) 
 
@@ -199,6 +227,15 @@ class Event(db.Model):
         current_event_week_target = self.week_targets[self.week_targets['week'] == self.current_week]['target'].values[0]
 
         return current_event_week_target
+
+    @property
+    def is_full(self):
+
+        if len(self.participants.all()) >= self.max_user_amount:
+            return True
+        
+        else:
+            return False
 
     def give_overall_weekly_summary(self, activites_list):
 
@@ -347,7 +384,6 @@ class Event(db.Model):
 
     def delete(self):
         
-        
         distances = DistancesTable.query.filter(DistancesTable.event_id == self.id).all()
 
         for distance in distances:
@@ -364,6 +400,69 @@ class Event(db.Model):
         db.session.commit()
 
         return None
+
+
+    def add_partcipant(self, user, provided_password = ''):
+
+        is_participating = Participation.query.filter(Participation.user_id == user.id).filter(Participation.event_id == self.id).first()
+
+        if self.status != "Zapisy otwarte":
+            message == "Wyzwanie {self.name} już się rozpoczęło, nie możesz się do niego dopisać!"
+            return False, message
+
+        event_password = self.password
+        verify = Event.verify_password(event_password, provided_password)
+
+        if self.is_private and verify is not True:
+            message = "Podałeś/aś złe hasło do wyzwania. Spróbuj jeszcze raz!"
+            return False, message
+
+        if is_participating is not None:
+            message = "Już jesteś zapisny/a na to wyzwanie!"
+            return False , message
+
+
+        if self.is_full:
+            message = "Do tego wyzwania zapisała się już maksymalna ilość uczestników!"
+            return False, message
+
+        from other.functions import send_email
+
+        send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'welcome', event=self)
+
+        message = '''
+        Czołem  {} {}!,
+
+        Witaj w wyzwaniu sportowym {}!
+
+        Data rozpoczęcia: {}
+        Długość: {} tygodni
+
+        Życzymy samych sukcesów i wielu pokonanych kilometrów.
+
+        Ubieraj buty i zaczynaj zabawę już dziś! ;)
+
+        Pozdrawiamy,
+
+        Administracja Sportowych Świrów
+        '''.format(current_user.name, current_user.last_name, self.name, self.start, self.length_weeks)
+
+        # newMessage = MailboxMessage(date=datetime.date.today(), sender="Sportowe Świry", senderName="Sportowe Świry", receiver = current_user.mail,
+        # receiverName = current_user.name+" "+current_user.lastName, subject = "Witaj w wyzwaniu: " + event.name, message = message, sendByApp = True,
+        # sendByEmail= False, messageReaded=False, multipleMessage=True)
+        # sendMessgaeFromContactFormToDB(newMessage)
+
+
+        participation = Participation(user_id = user.id, event_id = self.id)
+        db.session.add(participation)
+        db.session.commit()
+
+        message = "Zapisano do wyzwania " + self.name + "!"
+
+        return True, message
+        
+  
+
     
 
         

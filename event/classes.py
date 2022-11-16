@@ -396,6 +396,12 @@ class Event(db.Model):
             db.session.delete(coefficient)
             db.session.commit()
 
+        partcipants = Participation.query.filter(Participation.event_id == self.id).all()
+
+        for participant in partcipants:
+            db.session.delete(participant)
+            db.session.commit()
+
         db.session.delete(self)
         db.session.commit()
 

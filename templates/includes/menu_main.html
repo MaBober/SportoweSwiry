@@ -2,7 +2,7 @@
     <nav class="navbar sticky-top  navbar-expand-lg navbar-dark rounded" style="background-color: #182c07e8;">
       <div class="container-fluid">
         {% if current_user.id %}
-        <a class="navbar-brand" href="{{ url_for('user.basicDashboard') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
+        <a class="navbar-brand" href="{{ url_for('user.dashboard') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
         {% else %}
         <a class="navbar-brand" href="{{ url_for('other.hello') }}"><img src="/static/pictures/runner_logo.svg" alt="" width="40" height="34"></a>
         {% endif %}
@@ -13,35 +13,31 @@
         <div class="collapse navbar-collapse" id="navbarsExample09">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link rounded border" href="{{ url_for('activity.addActivity') }}">DODAJ AKTYWNOŚĆ</a>
+              <a class="nav-link rounded border" href="{{ url_for('activity.add_activity') }}">DODAJ AKTYWNOŚĆ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('activity.myActivities') }}">Twoje aktywności</a> 
+              <a class="nav-link" href="{{ url_for('activity.my_activities') }}">Twoje aktywności</a> 
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-bs-toggle="dropdown" aria-expanded="false">Wyzwania</a>
               <ul class="dropdown-menu" aria-labelledby="dropdown09">
-                <li><a class="dropdown-item" href="{{ url_for('event.yourEvents', mode='ongoing') }}">Twoje wyzwania</a></li>
-                <li><a class="dropdown-item" href="{{ url_for('event.exploreEvents') }}">Dostępne wyzwania</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('event.your_events', mode='ongoing') }}">Twoje wyzwania</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('event.explore_events') }}">Dostępne wyzwania</a></li>
                 
               </ul>
             </li>
           </ul>
           
           <ul class="nav navbar-nav flex-row justify-content-md-center justify-content-start flex-nowrap">
-            {% if current_user.isAdmin %}
+            {% if current_user.is_admin %}
             <li class="nav-item dropdown" >
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Admin
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="{{ url_for('user.listOfUsers') }}">Użytkownicy</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('user.createAccount') }}">Stwórz konto</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('event.adminListOfEvents') }}">Wyzwania</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('event.listOfCoefficients') }}">Zestawy współczynników</a></li> 
-                  <li><a class="dropdown-item" href="{{ url_for('event.createCoeficientsTable') }}">Nowa tabela współczynników</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('event.createEvent') }}">Nowe wyzwanie</a></li>
-                </ul>
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{{ url_for('user.list_of_users') }}">Użytkownicy</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('user.create_account') }}">Stwórz konto</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('event.admin_list_of_events') }}">Wyzwania</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('event.admin_list_of_sports') }}">Sporty</a></li>
+              </ul>
               </li>
               {% endif %}
           </ul>

@@ -1,0 +1,173 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+<div class="container-xl px-4 mt-4">
+    <div class="card-header" style="background-color: rgba(224, 153, 94);">Szczegółowe wyniki sportowe dla: {{current_user.name}} {{current_user.lastName}}</div>
+
+    <hr class="mt-0 mb-4">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <!-- Billing card 1-->
+                <div class="card h-100 border-start-lg border-start-primary">
+                    <div class="card-body">
+                        <div class="small text-muted">Dystans pokonany</div>
+                        <div class="h3">{{sumDistance}} km</div>
+                        <a class="text-arrow-icon small" href="#jumper">
+                            Zobacz szczegóły
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <!-- Billing card 2-->
+                <div class="card h-100 border-start-lg border-start-secondary">
+                    <div class="card-body">
+                        <div class="small text-muted">Średni dystans aktywności</div>
+                        <div class="h3">{{averageDistance}} km</div>
+                        <a class="text-arrow-icon small text-secondary" href="#jumper">
+                            Zobacz szczegóły
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <!-- Billing card 3-->
+                <div class="card h-100 border-start-lg border-start-success">
+                    <div class="card-body">
+                        <div class="small text-muted">Średni czas aktywności</div>
+                        <div class="h3 d-flex align-items-center">{{averageTime}}</div>
+                        <a class="text-arrow-icon small text-success" href="#jumper">
+                            Zobacz szczegóły
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <hr class="mt-0 mb-4">
+        <div class="row">
+            <div class="col-lg-6 mb-6">
+                <!-- Billing card 1-->
+                <div class="card h-100 border-start-lg border-start-primary">
+                    <div class="card-body">
+                        <div class="card-header" style="background-color: rgba(224, 153, 94);">Przegląd aktywności</div>
+                        <div align="center">
+                            <div>
+                                <div id="chart">
+                                    <embed type="image/svg+xml" src= {{ pie_chart|safe }} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-6">
+                <!-- Billing card 2-->
+                <div class="card h-100 border-start-lg border-start-secondary">
+                    <div class="card-body">
+                        <div class="card-header" style="background-color: rgba(224, 153, 94);">Aktywności ostatnich 10 dni</div>
+                        <div align="center">
+                            <div>
+                                <div id="chart">
+                                    <embed type="image/svg+xml" src= {{ line_chart|safe }} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Usuwanie rekordu danych</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="idDeleteModalBody">
+                ...
+                </div>
+                <div class="modal-footer">
+                    <form action="" method="GET" id="confirmDeleteForm">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-danger">Usuń aktywność</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script> 
+            $(document).ready(function () { 
+                // For A Delete Record Popup 
+                // This function is applied to all elements with class ending with ".delete-confirm" 
+                $('.delete-confirm').click(function () { 
+                    // get attributes of the found element 
+                    var desc = $(this).attr('data-desc'); 
+                    var url = $(this).attr('data-url'); 
+                    // the #... designates id of an element - change the text in the modal window 
+                    $('#idDeleteModalBody').text(desc); 
+                    $("#confirmDeleteForm").attr("action", url); 
+                }); 
+            }); 
+        </script>
+
+
+        <a id="jumper"></a>
+        <div class="card-header" style="background-color: rgba(224, 153, 94);">Lista wszystkich aktywności:</div>
+
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-md-10">
+                    <div class="table-responsive-md">
+                        <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Aktywność</th>
+                                <th scope="col">Dystans</th>
+                                <th scope="col">Czas</th>
+                                <th scope="col">Operacje</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for activity in activities: %}
+                                <tr>
+                                    <td scope="row">{{loop.index}}</td>
+                                    <td>{{activity.date}}</td>
+                                    <td>{{activity.activity}}</td>
+                                    <td>{{activity.distance}}</td>
+                                    <td>{{activity.time}}</td>
+                                    <td>
+                                        <a href="{{ url_for('activity.modifyActivity', activityID=activity.id )}}" class="btn btn-warning btn-sm" role="button">Edytuj</a>
+                                        <!-- Button trigger modal -->
+                                        <a type="button" class="btn btn-danger btn-sm delete-confirm" 
+                                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                            data-desc="{{ 'Napewno chcesz usunać aktywność: {} ({} km)?'.format(activity.activity, activity.distance) }}"
+                                            data-url="{{ url_for('activity.deleteActivity', activityID=activity.id )}}">
+                                            Usuń
+                                        </a>
+    
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+{% endblock %}

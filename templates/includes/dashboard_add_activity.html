@@ -5,7 +5,6 @@
     
     <div class="card-body">
         {% for event in events: %}
-        {% if today_7 < event.end %}
             <div class="row">
                 <div class="col-8">
                     <h4>{{event.name}}</h4> 
@@ -22,17 +21,17 @@
             <div class="row">
                 
                 <div class="col-4 Event-Box-Value">
-                    {{eventWeek[event.id]}} / {{event.lengthWeeks}} 
+                    {{event.current_week}} / {{event.length_weeks}} 
 
                 </div>
-                {% if eventWeekDistance[event.id] >= eventWeekTarget[event.id] %}
-                <div class="col-4 Event-Box-Value" style="color:rgb(27, 80, 10)"><b>{{eventWeekDistance[event.id]}} km</b></div>
+                {% if event.event_week_distance >= event.current_week_target %}
+                <div class="col-4 Event-Box-Value" style="color:rgb(27, 80, 10)"><b>{{event.event_week_distance}} km</b></div>
                 {% endif %}
 
-                {% if eventWeekDistance[event.id] < eventWeekTarget[event.id] %}
-                <div class="col-4 Event-Box-Value-Border" style="color:rgb(146, 40, 7)"><b>{{eventWeekDistance[event.id]}} km</b></div>
+                {% if event.event_week_distance < event.current_week_target %}
+                <div class="col-4 Event-Box-Value-Border" style="color:rgb(146, 40, 7)"><b>{{event.event_week_distance}} km</b></div>
                 {% endif %}
-                <div class="col-4 Event-Box-Value">{{eventWeekTarget[event.id]}} km</div>
+                <div class="col-4 Event-Box-Value">{{event.current_week_target}} km</div>
             </div>
             {% endif %}
 
@@ -44,9 +43,9 @@
             </div>
 
             <div class="col">
-                <a href="{{ url_for('event.viewEvent', eventID=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">  Szczegóły  </a>
+                <a href="{{ url_for('event.event_main', event_id=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">  Szczegóły  </a>
             </div>
-        {% endif %}
+
         {% endfor %}
     </div>
     

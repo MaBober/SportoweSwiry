@@ -6,37 +6,37 @@
         <span class="nav-link"  style="color: #579956;"><b>{{event.name}}</b></span> 
 
         {% if mode=='eventView': %}
-            <a class="nav-link" href="{{ url_for('event.viewEvent', eventID=event.id)}}"  style="color: white; background-color: #579956;">Strona Główna</a>
+            <a class="nav-link" href="{{ url_for('event.event_main', event_id=event.id)}}"  style="color: white; background-color: #579956;">Strona Główna</a>
         {% else %}
-            <a class="nav-link" href="{{ url_for('event.viewEvent', eventID=event.id)}}"  style="color: white;">Strona Główna</a>
+            <a class="nav-link" href="{{ url_for('event.event_main', event_id=event.id)}}"  style="color: white;">Strona Główna</a>
         {% endif %}
 
         
         {% if mode=='eventContestants': %}
-            <a class="nav-link" href="{{ url_for('event.eventContestants', eventID=event.id)}}" style="color: white; background-color: #579956;">Uczestnicy</a>
+            <a class="nav-link" href="{{ url_for('event.event_contestants', event_id=event.id)}}" style="color: white; background-color: #579956;">Uczestnicy</a>
         {% else %}
-            <a class="nav-link" href="{{ url_for('event.eventContestants', eventID=event.id)}}" style="color: white;">Uczestnicy</a>
+            <a class="nav-link" href="{{ url_for('event.event_contestants', event_id=event.id)}}" style="color: white;">Uczestnicy</a>
         {% endif %}
 
         
         {% if mode=='eventAvtivities': %}
-            <a class="nav-link" href="{{ url_for('event.eventActivities', eventID=event.id) }}" style="color: white; background-color: #579956;">Aktywności</a>
+            <a class="nav-link" href="{{ url_for('event.event_activities', event_id=event.id) }}" style="color: white; background-color: #579956;">Aktywności</a>
         {% else %}
-            <a class="nav-link" href="{{ url_for('event.eventActivities', eventID=event.id) }}" style="color: white;">Aktywności</a>
+            <a class="nav-link" href="{{ url_for('event.event_activities', event_id=event.id) }}" style="color: white;">Aktywności</a>
         {% endif %}
 
 
         {% if mode=='eventStatistics': %}
-            <a class="nav-link" href="{{ url_for('event.eventStatistics', eventID=event.id) }}" style="color: white; background-color: #579956;">Statystyki</a>
+            <a class="nav-link" href="{{ url_for('event.event_statistics', event_id=event.id) }}" style="color: white; background-color: #579956;">Statystyki</a>
         {% else %}
-            <a class="nav-link" href="{{ url_for('event.eventStatistics', eventID=event.id) }}" style="color: white;">Statystyki</a>
+            <a class="nav-link" href="{{ url_for('event.event_statistics', event_id=event.id) }}" style="color: white;">Statystyki</a>
         {% endif %}
 
         
         {% if mode=='eventBeers': %}
-            <a class="nav-link" href="{{ url_for('event.eventBeers', eventID=event.id) }}" style="color: white; background-color: #579956;">Piwa!</a>
+            <a class="nav-link" href="{{ url_for('event.event_beers', event_id=event.id) }}" style="color: white; background-color: #579956;">Piwa!</a>
         {% else %}
-            <a class="nav-link" href="{{ url_for('event.eventBeers', eventID=event.id) }}" style="color: white;">Piwa!</a>
+            <a class="nav-link" href="{{ url_for('event.event_beers', event_id=event.id) }}" style="color: white;">Piwa!</a>
         {% endif %}
         
     </nav>

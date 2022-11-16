@@ -83,7 +83,7 @@ class Event(db.Model):
 
     @property
     def end(self):
-        return self.start + dt.timedelta(weeks = self.length_weeks)
+        return self.start + dt.timedelta(weeks = self.length_weeks, days=-1)
 
     @property
     def status_description(self):

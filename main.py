@@ -9,11 +9,13 @@ from user.routes import user
 from other.routes import other
 from event.routes import event
 from activity.routes import activity
+from cron.routes import cron
 
 app.register_blueprint(user)
 app.register_blueprint(other)
 app.register_blueprint(event)
 app.register_blueprint(activity)
+app.register_blueprint(cron)
 
 from user.classes import User
 

@@ -305,7 +305,7 @@ class Event(db.Model):
         activities_pivot = activities_pivot.sort_values('date')
 
         # SPLIT PIVOT TABLES FOR WEEK SUB-TABLES
-        split_list =  np.array_split(activities_pivot, 10)
+        split_list =  np.array_split(activities_pivot, self.length_weeks)
 
         # ADD TOTAL WEEK AND TARGET ROWS
         def check_target(row, week_number):

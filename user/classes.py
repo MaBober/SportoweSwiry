@@ -171,7 +171,7 @@ class User(db.Model, UserMixin):
     def current_events(self):
 
         from event.classes import Event
-        current_events = self.all_events.filter(Event.status == "W trakcie")
+        current_events = self.all_events.filter(Event.status != "5")
 
         return current_events
 
@@ -179,7 +179,7 @@ class User(db.Model, UserMixin):
     def finished_events(self):
 
         from event.classes import Event
-        finished_events = self.all_events.filter(Event.status == "Zakończone")
+        finished_events = self.all_events.filter(Event.status.in_(['4','5']))
 
         return finished_events
 
@@ -208,10 +208,12 @@ class DashboardPage:
             split_list = self.event.give_overall_weekly_summary(all_event_activities)
 
             self.event_week_distance =  split_list[self.event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
-            print("!!!!!!")
 
-            beers_summary = self.event.give_beers_summary(split_list)
-            self.beers_recived_in_event = beers_summary['beers_to_recive'][current_user.id]
+            if self.event.status != '0':
+                beers_summary = self.event.give_beers_summary(split_list)
+                self.beers_recived_in_event = beers_summary['beers_to_recive'][current_user.id]
+            else:
+                self.beers_recived_in_event = '---'
             
             self.generete_charts()
             self.define_next_previous_events()
@@ -229,6 +231,7 @@ class DashboardPage:
         from event.classes import Event, Participation
 
         self.user_events = current_user.current_events.all()
+        print(self.user_events)
 
         if self.user_events != []:
             if 'event_id' in requested_event:

@@ -44,12 +44,12 @@ class Event(db.Model):
         self.length_weeks = form.length.data
         self.admin_id = current_user.id
         self.is_private = form.isPrivate.data
-        self.is_secret = form.isSecret.data
+        self.is_secret = False
         self.max_user_amount = form.max_users.data
         self.password = form.password.data
         self.password = self.hash_password()
         self.description = form.description.data
-        self.status = "Zapisy otwarte"
+        self.status = 0
 
         db.session.add(self)
         db.session.commit()
@@ -83,7 +83,49 @@ class Event(db.Model):
 
     @property
     def end(self):
-        return self.start + dt.timedelta(weeks = self.length_weeks)
+        return self.start + dt.timedelta(weeks = self.length_weeks, days=-1)
+
+    @property
+    def status_description(self):
+
+        statuses = {"0" : "Zapisy otwarte",
+                    "1" : "Pierwszy tydzień",
+                    "2" : "W trakcie",
+                    "3" : "Ostatni tydzień",
+                    "4" : "Wyzwanie zakończone",
+                    "5" : "Wyzwanie archiwalne"}
+
+        return statuses[self.status]
+
+    def update_status(self):
+
+        if self.start > dt.date.today():
+            #log.append((self.name, "Nie rozpoczęło się 0"))
+            self.status = '0'
+
+        elif self.start <= dt.date.today() and self.start + dt.timedelta(7) > dt.date.today():
+            #log.append((self.name, "Pierwszy tydzień 1"))
+            self.status = '1'
+
+        elif self.start + dt.timedelta(7) <= dt.date.today() and self.end + dt.timedelta(-6) > dt.date.today():
+            #self.append((self.name, "W trakcie 2"))
+            self.status = '2'
+
+        elif self.end + dt.timedelta(-6) <= dt.date.today() and dt.date.today() <= self.end:
+            #log.append((self.name, "Ostatni tydzień 3"))
+            self.status = '3'
+
+        elif self.end < dt.date.today() and dt.date.today() <= self.end + dt.timedelta(7):
+            #log.append((event.name, "Tydzień po 4"))
+            self.status = '4'
+
+        else:
+           # log.append((event.name, "zakończone! 5"))
+            self.status = '5'
+
+        db.session.commit()
+
+        return None
 
     def give_all_event_activities(self, calculated_values = False, user = 'all'):
 
@@ -224,7 +266,10 @@ class Event(db.Model):
     @property
     def current_week_target(self):
 
-        current_event_week_target = self.week_targets[self.week_targets['week'] == self.current_week]['target'].values[0]
+        if self.status in ['1','2','3']:
+            current_event_week_target = self.week_targets[self.week_targets['week'] == self.current_week]['target'].values[0]
+        else:
+            return 0
 
         return current_event_week_target
 
@@ -260,10 +305,12 @@ class Event(db.Model):
         activities_pivot = activities_pivot.sort_values('date')
 
         # SPLIT PIVOT TABLES FOR WEEK SUB-TABLES
-        split_list =  np.array_split(activities_pivot, 10)
+        split_list =  np.array_split(activities_pivot, self.length_weeks)
 
         # ADD TOTAL WEEK AND TARGET ROWS
         def check_target(row, week_number):
+            
+   
             if row == 0 and self.week_targets['target'][week_number-1] !=0 :
                 return False
             elif row == 0 and self.week_targets['target'][week_number-1] == 0:
@@ -279,7 +326,11 @@ class Event(db.Model):
                 for user in self.give_all_event_users("Objects"):
                     single_week['calculated_distance', user.id, user.name, user.last_name ] = 0
                 single_week.loc['total'] = 0
-                single_week.loc['target_done'] = single_week.loc['total'].apply(check_target,  week_number=(index))
+
+                if self.status != '0':
+                    single_week.loc['target_done'] = single_week.loc['total'].apply(check_target,  week_number=(index))
+                else:
+                    single_week.loc['target_done'] = False
                 
             else:
                 single_week.loc['total'] = single_week.sum()
@@ -373,10 +424,13 @@ class Event(db.Model):
         self.name = form.name.data
         self.start = form.start.data
         self.length_weeks = form.length.data
-        self.admin_id = form.adminID.data
         self.is_private = form.isPrivate.data
-        self.is_secret = form.isSecret.data
-        self.status = form.status.data
+        self.description = form.description.data
+        self.password = form.password.data
+        self.password = self.hash_password()
+        self.max_user_amount  = form.max_users.data
+
+        self.update_status()
 
         db.session.commit()
 
@@ -396,6 +450,12 @@ class Event(db.Model):
             db.session.delete(coefficient)
             db.session.commit()
 
+        partcipants = Participation.query.filter(Participation.event_id == self.id).all()
+
+        for participant in partcipants:
+            db.session.delete(participant)
+            db.session.commit()
+
         db.session.delete(self)
         db.session.commit()
 
@@ -406,7 +466,7 @@ class Event(db.Model):
 
         is_participating = Participation.query.filter(Participation.user_id == user.id).filter(Participation.event_id == self.id).first()
 
-        if self.status != "Zapisy otwarte":
+        if self.status not in ['0','1']:
             message == "Wyzwanie {self.name} już się rozpoczęło, nie możesz się do niego dopisać!"
             return False, message
 
@@ -461,6 +521,13 @@ class Event(db.Model):
 
         return True, message
         
+    def is_participant(self, user):
+
+        if Participation.query.filter(Participation.event_id == self.id).filter(Participation.user_id == user.id).first() is None:
+            return False
+            
+        else:
+            return True
   
 
     

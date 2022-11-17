@@ -29,7 +29,7 @@ def explore_events():
 
     password_form = EventPassword()
 
-    events=Event.query.filter(Event.status == "Zapisy otwarte").all()
+    events=Event.query.filter(Event.status.in_(['0','1'])).all()
 
 
     return render_template('/pages/explore_events.html',
@@ -69,13 +69,13 @@ def leave_event(event_id):
 
     # Check is user isn't signed already
     is_participating = Participation.query.filter(Participation.user_id == current_user.id).filter(Participation.event_id == event_id).first()
-    if is_participating != None and event.status == "Zapisy otwarte":
+    if is_participating != None and event.status == "0":
 
         delete_user_from_event(is_participating.user_id, event_id)
         flash("Wypisano się z wyzwania " + event.name + "!")
 
-    elif is_participating != None and event.status != "Zapisy otwarte":
-        flash("Nie możesz się wypisać z tego wyzwania, gdyż zapisy na nie zostały zamknięte!")
+    elif is_participating != None and event.status != "0":
+        flash("Nie możesz się wypisać z rozpoczętego wyzwania!")
     
     elif is_participating == None:
         flash("Nie jesteś zapisany na to wyzwanie!")
@@ -298,15 +298,11 @@ def event_beers(event_id):
 @login_required
 def create_event():
 
-    print(current_user.event_admin)
-    print(len(Event.query.filter(Event.status != "Zakończone").filter(Event.admin_id == current_user.id).all()))
-
     event_form = EventForm()
     distances_form = DistancesForm()
 
-    del event_form.status
+    if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) <3:
 
-    if len(Event.query.filter(Event.status != "Zakończone").filter(Event.admin_id == current_user.id).all()) <3:
         if event_form.validate_on_submit and distances_form.validate_on_submit():
 
             new_event = Event()
@@ -401,19 +397,22 @@ def admin_delete_event(event_id):
 @login_required #This page needs to be login
 def admin_modify_event(event_id):
 
-    if not current_user.is_admin:
-        flash("Nie masz uprawnień do tej zawartości")
+    event = Event.query.filter(Event.id == event_id).first()
+
+
+    if not current_user.is_admin and event.admin_id != current_user.id:
+        flash("Nie masz uprawnień do tej zawartości!")
         return redirect(url_for('other.hello'))
     
-    event = Event.query.filter(Event.id == event_id).first()
     
     distance_set = DistancesTable.query.filter(DistancesTable.event_id == event.id).all()
 
     form = EventForm(name = event.name,
             start = event.start,
             length = event.length_weeks,
-            status = event.status,
-            coefficientsSetName = "---")
+            isPrivate = event.is_private,
+            description = event.description,
+            max_users = event.max_user_amount)
 
     formDist = DistancesForm(w1 = distance_set[0].target,
     w2 = distance_set[1].target,
@@ -434,13 +433,6 @@ def admin_modify_event(event_id):
     new_sport_form = NewSportToEventForm()
     new_sport_form.activity_type.choices = Sport.all_sports()
 
-    #Creating list of available admins (for form)
-    admins=User.query.filter(User.is_admin == True).all()
-    admin_ids = [(a.id, a.name) for a in admins]
-    form.adminID.choices=admin_ids
-
-    form.status.choices = Event.status_options
-
     coefficientsSet = CoefficientsList.query.filter(CoefficientsList.event_id == event.id).all()
 
     if form.validate_on_submit and formDist.validate_on_submit():
@@ -449,7 +441,7 @@ def admin_modify_event(event_id):
         event.modify(form, formDist)
     
         flash('Zmodyfikowano wydarzenie form"{}"!'.format(form.name.data))
-        return redirect(url_for('event.admin_list_of_events'))
+        return redirect(url_for('event.admin_modify_event', event_id = event.id))
 
     return render_template("/pages/modify_event.html",
                     title_prefix = "Modfyfikuj wydarzenie",
@@ -457,7 +449,8 @@ def admin_modify_event(event_id):
                     formDist = formDist,
                     new_sport_form = new_sport_form,
                     mode = "edit",
-                    event_id = event.id,
+                    event = event,
+                    menuMode="mainApp",
                     CoefficientsSet = coefficientsSet)
 
 
@@ -495,9 +488,10 @@ def add_new_sport_to_event(event_id):
 @login_required #This page needs to be login
 def delete_coefficient(event_id, activity_type_id):
 
+    event = Event.query.filter(Event.id == event_id).first()
 
-    if not current_user.is_admin:
-        flash("Nie masz uprawnień do tej zawartości")
+    if not current_user.is_admin and event.admin_id != current_user.id:
+        flash("Nie masz uprawnień do tej zawartości!")
         return redirect(url_for('other.hello'))
 
     positionToDelete = CoefficientsList.query.filter(CoefficientsList.event_id == event_id).filter(CoefficientsList.activity_type_id == activity_type_id).first()
@@ -535,6 +529,7 @@ def modify_coefficient(event_id, activity_type_id):
     return render_template("/pages/modify_coeficients.html",
                     title_prefix = "Nowa tabela współczynników",
                     form = form,
+                    menuMode="mainApp",
                     event_id = event_id,
                     activity_type_id = activity_type_id)
 

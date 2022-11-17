@@ -10,9 +10,9 @@
                     <h4>{{event.name}}</h4> 
                 </div>
             </div>
-
+            
         <div class="Event-Box" style="border-color: black;">
-            {% if event.status == "Zapisy otwarte" or event.status == "W trakcie" %}
+            {% if event.status in ['1','2','3'] %}
             <div class="row">
                 <div class="col-4 Event-Box-Value-Title"><h5>Tydzień</h5></div>
                 <div class="col-4 Event-Box-Value-Title-Border"><h5>Przebyty dystans</h5></div>
@@ -35,7 +35,7 @@
             </div>
             {% endif %}
 
-            {% if event.status == "Zakończone" %}
+            {% if event.status == "4" %}
             <div class="row">
                 <div class="col-12"><h5>Wyzwanie zakończone!</h5></div>
             </div> 

@@ -16,3 +16,17 @@ def cron_test_post():
         file.write('dad' +"\n")
 
     return "crom"
+
+@cron.route("/cron/update_events_statuses", methods = ['POST'])
+def cron_update_event_statuses():
+
+    from event.classes import Event
+
+    events = Event.query.all()
+    log =[]
+
+    for event in events:
+
+        event.update_status()
+
+    return str(log)

@@ -30,16 +30,20 @@
 
 .Main-Button {
     position: relative;
+    min-width: 60px;
     max-width: 399px;
     height: 56px;
+    height: max-content;
     margin: auto !important;
     border-radius: 15px;
     margin-left: 200px;
-    background-color: #579956 !important;
+    background-color: #579956;
+    color: white;
     border: solid 2px #579956;
     justify-content: center;
   }
 
   .Main-Button:hover {
+    color: white;
     background-color: #000 !important;
   }

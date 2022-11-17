@@ -56,7 +56,7 @@ class Event(db.Model):
         
         DistancesTable.pass_distances_to_db(distances_form, self.id)
 
-        self.add_partcipant(current_user)
+        self.add_partcipant(current_user, form.password.data)
 
         return True
         

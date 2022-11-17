@@ -5,7 +5,7 @@
 {% endif %}
 
 {% if mode == 'edit' %}
-<form method ="post" action="{{ url_for('event.admin_modify_event', event_id = event_id) }}">
+<form method ="post" action="{{ url_for('event.admin_modify_event', event_id = event.id) }}">
     {{ form.csrf_token}}
 {% endif %}
 
@@ -233,7 +233,7 @@
             
             
                 <div class="row justify-content-left">
-                    <div class="col-3"><button class="btn btn-dark btn-lg Main-Button" style="background-color: #182c07e8;" type="submit">
+                    <div class="col-3"><button class="btn btn-dark btn-lg Main-Button" style="height: max-content; min-width: 170px;" type="submit">
                         {% if mode == 'create' %}Utwórz!{% endif %}
                         {% if mode == 'edit' %}Zapisz zmiany!{% endif %}
                     </button></div>

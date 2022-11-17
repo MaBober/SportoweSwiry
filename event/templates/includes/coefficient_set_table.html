@@ -37,63 +37,84 @@
     }); 
 </script>
 
-<div class="container">
-    <div class="row justify-content-md-center">
-        <div class="col-md-12">
-            <div class="table-responsive-md">
-                <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
-                    <thead>
+<div class="container-xl px-4 mt-4">
+    <div class="card mb-4 mb-xl-0 Event-Main-Box">
+        <div class="card-header Event-Title-Box">Modyfikuj współczynniki sportów</div>
+        <div class="card-body">
+
+            <form method ="post" action="{{ url_for('event.add_new_sport_to_event', event_id = event.id) }}">
+                {{ new_sport_form.csrf_token}}
+                <div class="row align-items-end">
+
+                    <div class="col-md-4 justify-content-left">
+                        <label class="form-label"><b>{{ new_sport_form.activity_type.label()}}</b></label> 
+                            {{ new_sport_form.activity_type(class_="form-control") }}
+                    </div>
+
+                    <div class="col-md-4 justify-content-left">
+                            <button class="btn btn-dark btn-lg Main-Button" style="height: max-content; min-width: 140px; margin-top: 5px;" type="submit">Dodaj sport</button>
+                    </div>
+                    
+                </div>
+                <div class="row pt-3"></div>
+            </form>
+
+            <table class="table table-sm table-secondary table-striped table-hover">
+                <thead>
+                <tr>
+
+                    <th scope="col">Aktywność</th>
+                    <th scope="col">Wartość</th>
+                    <th scope="col">Stała / Współczynnik</th>
+                    <th scope="col">Akcje</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                    {% for activity in CoefficientsSet: %}
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Aktywność</th>
-                        <th scope="col">Wartość</th>
-                        <th scope="col">Stała / Współczynnik</th>
-                        <th scope="col">Akcje</th>
+                        <td>{{activity.sport}}</td>
+                        <td>{{activity.value}}</td>
+                        <td>
+                            {% if activity.is_constant == True %}
+                            Stała
+                            {% else %}
+                            Współczynnik
+                            {% endif %}
+                        </td>
+                        <td>
+                            
+                            
+                            
+                            <a href="{{ url_for('event.modify_coefficient', event_id = activity.event_id, activity_type_id = activity.activity_type_id ) }}"  type="button" class="btn btn-sm Main-Button" style="height: max-content;">
+                                Edytuj
+                            </a>
+
+
+                            <a type="button" class="btn btn-danger btn-sm delete-confirm Main-Button"
+                            style="background-color: #e63119; border: solid 2px #e63119;" 
+                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                            data-desc="{{ 'Napewno chcesz usunać współczynnik dla : {}?'.format(activity.sport) }}"
+                            data-url="{{ url_for('event.delete_coefficient', event_id = activity.event_id, activity_type_id = activity.activity_type_id )}}">
+                            Usuń
+                            </a>
+                        </td>
 
                     </tr>
-                    </thead>
-                    <tbody>
-                        {% for activity in CoefficientsSet: %}
-                        <tr>
-                            <td scope="row">{{loop.index}}</td>
-                            <td>{{activity.sport}}</td>
-                            <td>{{activity.value}}</td>
-                            <td>
-                                {% if activity.is_constant == True %}
-                                Stała
-                                {% else %}
-                                Współczynnik
-                                {% endif %}
-                            </td>
-                            <td><a href="{{ url_for('event.modify_coefficient', event_id = activity.event_id, activity_type_id = activity.activity_type_id ) }}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Edytuj  </a>
-                                <a type="button" class="btn btn-danger btn-sm delete-confirm" 
-                                data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                                data-desc="{{ 'Napewno chcesz usunać współczynnik dla : {}?'.format(activity.sport) }}"
-                                data-url="{{ url_for('event.delete_coefficient', event_id = activity.event_id, activity_type_id = activity.activity_type_id )}}">
-                                Usuń
-                            </a></td>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            
+
             
 
         </div>
 
     </div>
 
+
+
+
+
 </div>
-
-
-<form method ="post" action="{{ url_for('event.add_new_sport_to_event', event_id = event_id) }}">
-    {{ new_sport_form.csrf_token}}
-
-    <div class="row justify-content-left px-4">
-        <div class="col-2 justify-content"><button class="btn btn-dark btn-lg" style="background-color: #182c07e8;" type="submit">Dodaj sport do wyzwania</button></div>
-        <div class="col-md-4 justify-content-left"><label class="form-label"><b>{{ new_sport_form.activity_type.label()}}</b></label> 
-            <br>{{ new_sport_form.activity_type(class_="form-control") }}
-        </div> 
-    <div class="row pt-3"></div>

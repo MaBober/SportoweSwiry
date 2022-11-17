@@ -10,8 +10,6 @@ class EventForm(FlaskForm):
     length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 0, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
     isPrivate = BooleanField("Wydarzenie prywatne")
     password=StringField("Hasło")
-    isSecret = BooleanField("Wydarenie ukryte")
-    status = SelectField("Status wyzwania", validators=[NumberRange(min=0, message="Wybierz pozycję z listy!")], default=1, choices=[])
     description = TextAreaField("Opis wyzwania")
     max_users = IntegerField("Maksymalna ilośc uczestników", validators = [NumberRange(min = 0, max= 25, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
 

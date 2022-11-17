@@ -424,10 +424,13 @@ class Event(db.Model):
         self.name = form.name.data
         self.start = form.start.data
         self.length_weeks = form.length.data
-        self.admin_id = form.adminID.data
         self.is_private = form.isPrivate.data
-        self.is_secret = form.isSecret.data
-        self.status = form.status.data
+        self.description = form.description.data
+        self.password = form.password.data
+        self.password = self.hash_password()
+        self.max_user_amount  = form.max_users.data
+
+        self.update_status()
 
         db.session.commit()
 

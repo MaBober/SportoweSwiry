@@ -72,10 +72,10 @@ def leave_event(event_id):
     if is_participating != None and event.status == "0":
 
         delete_user_from_event(is_participating.user_id, event_id)
-        flash("Wypisano się z wyzwania " + event.name + "!")
+        flash("Wypisano się z wyzwania " + event.name + "!", "success")
 
     elif is_participating != None and event.status != "0":
-        flash("Nie możesz się wypisać z rozpoczętego wyzwania!")
+        flash("Nie możesz się wypisać z rozpoczętego wyzwania!", "danger")
     
     elif is_participating == None:
         flash("Nie jesteś zapisany na to wyzwanie!")

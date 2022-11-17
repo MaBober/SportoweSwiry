@@ -29,7 +29,7 @@ def explore_events():
 
     password_form = EventPassword()
 
-    events=Event.query.filter(Event.status == '1').all()
+    events=Event.query.filter(Event.status.in_(['0','1'])).all()
 
 
     return render_template('/pages/explore_events.html',
@@ -69,13 +69,13 @@ def leave_event(event_id):
 
     # Check is user isn't signed already
     is_participating = Participation.query.filter(Participation.user_id == current_user.id).filter(Participation.event_id == event_id).first()
-    if is_participating != None and event.status == "Zapisy otwarte":
+    if is_participating != None and event.status == "0":
 
         delete_user_from_event(is_participating.user_id, event_id)
         flash("Wypisano się z wyzwania " + event.name + "!")
 
-    elif is_participating != None and event.status != "Zapisy otwarte":
-        flash("Nie możesz się wypisać z tego wyzwania, gdyż zapisy na nie zostały zamknięte!")
+    elif is_participating != None and event.status != "0":
+        flash("Nie możesz się wypisać z rozpoczętego wyzwania!")
     
     elif is_participating == None:
         flash("Nie jesteś zapisany na to wyzwanie!")
@@ -303,7 +303,7 @@ def create_event():
 
     del event_form.status
 
-    if len(Event.query.filter(Event.status != "Zakończone").filter(Event.admin_id == current_user.id).all()) <3:
+    if len(Event.query.filter(Event.status.in_(['4','5'])).filter(Event.admin_id == current_user.id).all()) <3:
         if event_form.validate_on_submit and distances_form.validate_on_submit():
 
             new_event = Event()
@@ -409,7 +409,6 @@ def admin_modify_event(event_id):
     form = EventForm(name = event.name,
             start = event.start,
             length = event.length_weeks,
-            status = event.status,
             coefficientsSetName = "---")
 
     formDist = DistancesForm(w1 = distance_set[0].target,
@@ -435,8 +434,6 @@ def admin_modify_event(event_id):
     admins=User.query.filter(User.is_admin == True).all()
     admin_ids = [(a.id, a.name) for a in admins]
     form.adminID.choices=admin_ids
-
-    form.status.choices = Event.status_options
 
     coefficientsSet = CoefficientsList.query.filter(CoefficientsList.event_id == event.id).all()
 

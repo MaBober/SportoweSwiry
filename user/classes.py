@@ -179,7 +179,7 @@ class User(db.Model, UserMixin):
     def finished_events(self):
 
         from event.classes import Event
-        finished_events = self.all_events.filter(Event.status == "5")
+        finished_events = self.all_events.filter(Event.status.in_(['4','5']))
 
         return finished_events
 
@@ -209,7 +209,7 @@ class DashboardPage:
 
             self.event_week_distance =  split_list[self.event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
 
-            if self.event.status != '1':
+            if self.event.status != '0':
                 beers_summary = self.event.give_beers_summary(split_list)
                 self.beers_recived_in_event = beers_summary['beers_to_recive'][current_user.id]
             else:

@@ -19,8 +19,11 @@
                     <h6><b>Długość:</b> {{event.length_weeks}} tygodni</h6>
                     <h6><b>Ilość uczestników: </b> {{ event.give_all_event_users()|length }} / {{event.max_user_amount}}</h6>
                     <h6><b>Administrator:</b> {{event.admin.name}} {{event.admin.last_name}}</h6>
-                    {% if event.desription != '' %}
+                    {% if event.description != '' %}
                     <h6>{{event.description}} </h6>
+                    {% endif %}
+                    {% if event.admin_id == current_user.id %}
+                    <a href="{{ url_for('event.admin_modify_event', event_id = event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Modyfikuj wyzwanie</a>
                     {% endif %}
                 </div>
             </div>

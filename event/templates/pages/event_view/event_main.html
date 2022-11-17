@@ -32,7 +32,7 @@
                 <div class="card-header Event-Title-Box">Aktualny tydzień</div>
                 
                 <div class="card-body">
-                    {% if event.status != "Zakończone" %}
+                    {% if event.status not in ["4","5"] %}
                     <div class="row">
                         <div class="col-4"><h5>Tydzień</h5></div>
                         <div class="col-4"><h5>Twój dystans</h5></div>

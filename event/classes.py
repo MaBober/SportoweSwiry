@@ -44,7 +44,7 @@ class Event(db.Model):
         self.length_weeks = form.length.data
         self.admin_id = current_user.id
         self.is_private = form.isPrivate.data
-        self.is_secret = form.isSecret.data
+        self.is_secret = False
         self.max_user_amount = form.max_users.data
         self.password = form.password.data
         self.password = self.hash_password()

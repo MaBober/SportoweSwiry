@@ -301,9 +301,7 @@ def create_event():
     event_form = EventForm()
     distances_form = DistancesForm()
 
-    del event_form.status
-
-    if len(Event.query.filter(Event.status.in_(['4','5'])).filter(Event.admin_id == current_user.id).all()) <3:
+    if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) <3:
         if event_form.validate_on_submit and distances_form.validate_on_submit():
 
             new_event = Event()

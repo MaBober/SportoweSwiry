@@ -26,6 +26,7 @@ class Event(db.Model):
     password = db.Column(db.String(500))
     max_user_amount = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(300))
+    added_on = db.Column(db.DateTime, default = dt.datetime.now())
 
     participants = db.relationship('Participation', backref='event', lazy='dynamic')
     distance_set = db.relationship('DistancesTable', backref='event', lazy='dynamic')
@@ -50,6 +51,7 @@ class Event(db.Model):
         self.password = self.hash_password()
         self.description = form.description.data
         self.status = 0
+        
 
         db.session.add(self)
         db.session.commit()

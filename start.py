@@ -5,11 +5,18 @@ from flask_migrate import Migrate
 from config import Config
 from werkzeug.exceptions import HTTPException
 
+import logging
+
+logging.basicConfig(
+        filename='logging1.log',
+        level=logging.DEBUG)
+
 db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
+    app.logger.debug("app created!")
 
     # app.config.from_pyfile('config.py')
     app.config.from_object(Config)

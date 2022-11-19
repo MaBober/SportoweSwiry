@@ -209,6 +209,8 @@ class DashboardPage:
             all_event_activities = self.event.give_all_event_activities(calculated_values = True)
             split_list = self.event.give_overall_weekly_summary(all_event_activities)
 
+
+            print(split_list[self.event.current_week-1].loc['total']['calculated_distance'])
             self.event_week_distance =  split_list[self.event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
 
             if self.event.status != '0':

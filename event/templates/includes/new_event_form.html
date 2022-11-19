@@ -5,7 +5,7 @@
 {% endif %}
 
 {% if mode == 'edit' %}
-<form method ="post" action="{{ url_for('event.admin_modify_event', event_id = event.id) }}">
+<form method ="post" action="{{ url_for('event.modify_event', event_id = event.id) }}">
     {{ form.csrf_token}}
 {% endif %}
 

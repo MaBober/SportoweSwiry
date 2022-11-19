@@ -11,7 +11,7 @@ class EventForm(FlaskForm):
     isPrivate = BooleanField("Wydarzenie prywatne")
     password=StringField("Hasło")
     description = TextAreaField("Opis wyzwania")
-    max_users = IntegerField("Maksymalna ilośc uczestników", validators = [NumberRange(min = 0, max= 25, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
+    max_users = IntegerField("Maksymalna ilośc uczestników", validators = [NumberRange(min = 1, max= 25, message = "Podaj proszę liczbę większą od zera!")], default = 10)
 
 class EventPassword(FlaskForm):
 

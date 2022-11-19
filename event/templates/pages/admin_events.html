@@ -78,7 +78,7 @@
                                 <td>
                                     <!-- Button trigger modal -->
                                     <a href="{{ url_for('event.event_main', event_id = event.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Podgląd  </a></div>
-                                    <a href="{{ url_for('event.admin_modify_event', event_id = event.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Modyfikuj  </a></div>
+                                    <a href="{{ url_for('event.modify_event', event_id = event.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Modyfikuj  </a></div>
                                     <a type="button" class="btn btn-danger btn-sm delete-confirm" 
                                         data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                                         data-desc="{{ 'Napewno chcesz usunać wyzwania: {}?'.format(event.name) }}"

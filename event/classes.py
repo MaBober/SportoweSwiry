@@ -26,6 +26,7 @@ class Event(db.Model):
     password = db.Column(db.String(500))
     max_user_amount = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(300))
+    added_on = db.Column(db.DateTime, default = dt.datetime.now())
 
     participants = db.relationship('Participation', backref='event', lazy='dynamic')
     distance_set = db.relationship('DistancesTable', backref='event', lazy='dynamic')
@@ -50,6 +51,7 @@ class Event(db.Model):
         self.password = self.hash_password()
         self.description = form.description.data
         self.status = 0
+        
 
         db.session.add(self)
         db.session.commit()
@@ -353,15 +355,17 @@ class Event(db.Model):
         beers_to_buy = { i : 0 for i in event_participants.keys() }
         beers_to_recive = {i : 0 for i in event_participants.keys() }
 
-        
+        print(self.name)
+        print(self.give_all_event_users_ids())
         for week in range(1, self.length_weeks):
             for user in event_participants:
                 if True:
-                    if beer_summray.iloc[week]['calculated_distance',user][0]:
-                        try:
+                    try:
+                        if beer_summray.iloc[week]['calculated_distance',user][0]:
+                        
                             beers_to_recive[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[0]
-                        except:
-                            pass
+                    except:
+                        pass
 
                     else:
                         try:

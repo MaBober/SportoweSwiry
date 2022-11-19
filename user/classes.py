@@ -8,6 +8,7 @@ import binascii
 from flask import current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import os
+import datetime as dt
 
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -24,6 +25,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(500), nullable=False)
     is_admin = db.Column(db.Boolean)
     confirmed = db.Column(db.Boolean, default=False)
+    added_on = db.Column(db.DateTime, default = dt.datetime.now())
 
     is_added_by_google = db.Column(db.Boolean, default=False)
     is_added_by_fb = db.Column(db.Boolean, default=False)

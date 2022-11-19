@@ -1,4 +1,5 @@
 from start import db
+import datetime as dt
 
 class Sport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +32,7 @@ class Activities(db.Model):
     distance = db.Column(db.Float, nullable=False)
     time = db.Column(db.Integer, nullable=False, default=0)
     strava_id = db.Column(db.BigInteger)
+    added_on = db.Column(db.DateTime, default = dt.datetime.now())
 
 
 

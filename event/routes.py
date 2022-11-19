@@ -395,7 +395,7 @@ def admin_delete_event(event_id):
 @event.route("/modify_event/<int:event_id>", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
-def admin_modify_event(event_id):
+def modify_event(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
 
@@ -441,7 +441,7 @@ def admin_modify_event(event_id):
         event.modify(form, formDist)
     
         flash('Zmodyfikowano wydarzenie form"{}"!'.format(form.name.data))
-        return redirect(url_for('event.admin_modify_event', event_id = event.id))
+        return redirect(url_for('event.modify_event', event_id = event.id))
 
     return render_template("/pages/modify_event.html",
                     title_prefix = "Modfyfikuj wydarzenie",
@@ -459,7 +459,7 @@ def admin_modify_event(event_id):
 @login_required #This page needs to be login
 def add_new_sport_to_event(event_id):
 
-    if not current_user.is_admin:
+    if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej akcji")
         return redirect(url_for('other.hello'))
     
@@ -480,7 +480,7 @@ def add_new_sport_to_event(event_id):
     else:
         flash("Ten sport już znajduje się w wyzwaniu!")
     
-    return redirect(url_for('event.admin_modify_event', event_id = event_id))
+    return redirect(url_for('event.modify_event', event_id = event_id))
 
 
 @event.route("/deleteCoeficientSport/<int:event_id>/<int:activity_type_id>")
@@ -499,7 +499,7 @@ def delete_coefficient(event_id, activity_type_id):
         db.session.delete(positionToDelete)
         db.session.commit()
 
-    return redirect(url_for('event.admin_modify_event', event_id = event_id))
+    return redirect(url_for('event.modify_event', event_id = event_id))
 
 
 @event.route("/modifyCoeficientSport/<int:event_id>/<int:activity_type_id>", methods=['POST', 'GET'])
@@ -507,7 +507,9 @@ def delete_coefficient(event_id, activity_type_id):
 @login_required #This page needs to be login
 def modify_coefficient(event_id, activity_type_id):
 
-    if not current_user.is_admin:
+    event = Event.query.filter(Event.id == event_id).first()
+
+    if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
@@ -524,7 +526,7 @@ def modify_coefficient(event_id, activity_type_id):
         coefficient_to_modify.is_constant= form.is_constant.data
         db.session.commit()
     
-        return redirect(url_for('event.admin_modify_event', event_id = event_id))
+        return redirect(url_for('event.modify_event', event_id = event_id))
 
     return render_template("/pages/modify_coeficients.html",
                     title_prefix = "Nowa tabela współczynników",
@@ -608,11 +610,6 @@ def modify_sport_in_base(sport_id):
                     form = form,
                     mode = 'edit',
                     sport_id = sport_id) 
-
-
-
-
-
 
 
 

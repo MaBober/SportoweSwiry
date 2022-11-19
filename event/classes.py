@@ -353,17 +353,15 @@ class Event(db.Model):
         beers_to_buy = { i : 0 for i in event_participants.keys() }
         beers_to_recive = {i : 0 for i in event_participants.keys() }
 
-        print(self.name)
-        print(self.give_all_event_users_ids())
+        
         for week in range(1, self.length_weeks):
             for user in event_participants:
                 if True:
-                    try:
-                        if beer_summray.iloc[week]['calculated_distance',user][0]:
-                        
+                    if beer_summray.iloc[week]['calculated_distance',user][0]:
+                        try:
                             beers_to_recive[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[0]
-                    except:
-                        pass
+                        except:
+                            pass
 
                     else:
                         try:

@@ -24,22 +24,22 @@ activity = Blueprint("activity", __name__, template_folder='templates')
 def add_activity():
 
     form = ActivityForm()
+    form.fill_sports_to_select()
+
+    if form.validate_on_submit():
+
+        newActivity = Activities()
+        message, status, url = newActivity.add_to_db(form)
+
+        flash(message, status)
+        return redirect(url_for(url))
 
     user_events = current_user.current_events.all()
-
     for event in user_events:
 
         all_event_activities = event.give_all_event_activities(calculated_values = True)
         split_list = event.give_overall_weekly_summary(all_event_activities)
         event.event_week_distance =  split_list[event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
-
-    if form.validate_on_submit():
-
-        newActivity = Activities()
-        message = newActivity.add_to_db(form)
-
-        flash(message[0], message[1])
-        return  redirect(url_for('activity.add_activity'))
     
     else:
         return render_template('/pages/addActivity.html',

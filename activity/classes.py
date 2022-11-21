@@ -49,16 +49,17 @@ class Activities(db.Model):
                             user_id = current_user.id)
 
         try:
+    
             db.session.add(newActivity)
             db.session.commit()
-            current_app.logger.info(f"User {current_user.id} added activity {newActivity.id}")
 
-            return 'Poprawnie dodano nową aktywność', 'success'
+            current_app.logger.info(f"User {current_user.id} added activity {newActivity.id}")
+            return 'Poprawnie dodano nową aktywność', 'success', 'activity.add_activity'
 
         except:
+            
             current_app.logger.exception(f"User {current_user.id} failed to add activity")
-
-            return 'Aktywność NIE DODANA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem', 'danger'
+            return 'Aktywność NIE DODANA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem', 'danger', 'activity.add_activity'
 
 
     def modify(self, activity_form):

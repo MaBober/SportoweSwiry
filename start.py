@@ -9,14 +9,16 @@ import logging
 
 logging.basicConfig(
         filename='logging1.log',
-        level=logging.DEBUG)
+        level=logging.DEBUG,
+        format=f'%(asctime)s %(levelname)s %(name)s : %(message)s'
+        )
 
 db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
-    app.logger.debug("app created!")
+    app.logger.info("app created!")
 
     # app.config.from_pyfile('config.py')
     app.config.from_object(Config)

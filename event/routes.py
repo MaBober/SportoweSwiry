@@ -7,7 +7,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 
 from .classes import *
 from .forms import CoeficientsForm, DistancesForm, EventForm, NewSportToEventForm, EventPassword
-from .functions import delete_user_from_event
 from activity.classes import Activities, Sport
 from other.functions import send_email, account_confirmation_check
 from user.functions import account_confirmation_check#, send_email
@@ -16,6 +15,8 @@ from user.classes import User
 from other.classes import MailboxMessage
 from other.functions import sendMessgaeFromContactFormToDB
 
+
+MAX_EVENTS_AS_ADMIN = 3
 
 event = Blueprint("event", __name__,
     template_folder='templates')
@@ -28,9 +29,7 @@ event = Blueprint("event", __name__,
 def explore_events():
 
     password_form = EventPassword()
-
-    events=Event.query.filter(Event.status.in_(['0','1'])).all()
-
+    events = Event.available_to_join()
 
     return render_template('/pages/explore_events.html',
                         events=events,
@@ -51,36 +50,22 @@ def join_event(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
         
-    added_to_db, flash_message  = event.add_partcipant(user = current_user, provided_password = password)
-    flash(flash_message)
+    flash_message, status, action  = event.add_partcipant(user = current_user, provided_password = password)
+    flash(flash_message, status)
 
-    if added_to_db:
-        return redirect(url_for('event.event_main', event_id = event_id))
+    return action
     
-    else:
-        return redirect(url_for('event.explore_events'))
-
-
 
 @event.route("/leave_event/<int:event_id>")
 @login_required
 def leave_event(event_id):
+
     event = Event.query.filter(Event.id == event_id).first()
+    message, staus, action = event.leave_event(current_user)
 
-    # Check is user isn't signed already
-    is_participating = Participation.query.filter(Participation.user_id == current_user.id).filter(Participation.event_id == event_id).first()
-    if is_participating != None and event.status == "0":
+    flash(message, staus)
 
-        delete_user_from_event(is_participating.user_id, event_id)
-        flash("Wypisano się z wyzwania " + event.name + "!", "success")
-
-    elif is_participating != None and event.status != "0":
-        flash("Nie możesz się wypisać z rozpoczętego wyzwania!", "danger")
-    
-    elif is_participating == None:
-        flash("Nie jesteś zapisany na to wyzwanie!")
-
-    return redirect(url_for('event.explore_events'))
+    return action
 
 
 @event.route("/your_events/<mode>")
@@ -184,9 +169,7 @@ def event_preview(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
     password_form = EventPassword()
-
-
-    event_participants = event.give_all_event_users()
+    
     event_coefficinets_set = event.give_all_event_activities_types(mode = "All")
 
     return render_template('/pages/event_view/event_preview.html',
@@ -239,7 +222,6 @@ def event_contestants(event_id):
     
         event = Event.query.filter(Event.id == event_id).first()
         event_participants = event.give_all_event_users(scope = 'Objects_Dictionary')
-        
 
         return render_template('/pages/event_view/event_contestants.html',
                         event = event,
@@ -301,17 +283,17 @@ def create_event():
     event_form = EventForm()
     distances_form = DistancesForm()
 
-    if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) <3:
+    if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) < MAX_EVENTS_AS_ADMIN:
 
         if event_form.validate_on_submit and distances_form.validate_on_submit():
 
             new_event = Event()
-            new_event.add_to_db(event_form, distances_form)
+            message, status, action = new_event.add_to_db(event_form, distances_form)
 
             CoefficientsList.create_coeffciet_set_with_default_values(new_event)
         
-            flash('Stworzono wydarzenie "{}"!'.format(new_event.name))
-            return redirect(url_for('event.event_main', event_id = new_event.id))
+            flash(message, status)
+            return action
 
         return render_template("/pages/new_event.html",
                         title_prefix = "Nowe wydarzenie",
@@ -360,36 +342,27 @@ def admin_list_of_sports():
 @event.route("/admin_delete_contestant/<int:event_id>/<user_id>")
 @login_required
 def admin_delete_contestant(event_id, user_id):
+
     event = Event.query.filter(Event.id == event_id).first()
+    user_to_delete = User.query.filter(User.id == user_id).first()
 
-    # Check is user isn't signed already
-    is_participating = Participation.query.filter(Participation.user_name == user_id).filter(Participation.event_id == event_id).first()
+    message, status, action = event.leave_event(user_to_delete)
+    flash(message, status)
 
-    if is_participating != None:
-        delete_user_from_event(is_participating.id, event_id)
-        flash("Usunięto użytkownika {} z wyzwania {}".format(is_participating.user_name, event.name))
-    
-    elif is_participating == None:
-        flash("Użytkownik {} nie jest zapisany na wyzwanie {}!".format(user_id, event.name))
-
-    return redirect(url_for('event_contestants', event_id = event_id))
+    return action
 
 
 @account_confirmation_check
 @event.route("/delete_event/<int:event_id>")
 @login_required #This page needs to be login
 def admin_delete_event(event_id):
-
-    if not current_user.is_admin:
-        flash("Nie masz uprawnień do tej zawartości")
-        return redirect(url_for('other.hello'))
     
     event = Event.query.filter(Event.id == event_id).first()
-    event.delete()
+    message, status, action = event.delete()
 
-    flash("Usunięto wyzwanie {}!".format(event.name))
+    flash(message, status)
 
-    return redirect(url_for('event.admin_list_of_events'))
+    return action
 
 
 @event.route("/modify_event/<int:event_id>", methods=['POST','GET'])
@@ -437,7 +410,6 @@ def modify_event(event_id):
 
     if form.validate_on_submit and formDist.validate_on_submit():
 
-        #changeEvent(event.id, form, formDist)
         event.modify(form, formDist)
     
         flash('Zmodyfikowano wydarzenie form"{}"!'.format(form.name.data))

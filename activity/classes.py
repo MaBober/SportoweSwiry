@@ -41,15 +41,25 @@ class Sport(db.Model):
             return message, "danger", redirect(url_for('event.admin_list_of_sports'))
 
     def delete(self):
+
+        from event.classes import CoefficientsList
         
         sport_to_delete = self.name
         current_app.logger.info(f"Admin {current_user.id} tries to delete sport '{self.name}' from app.")
-
+ 
         has_activity = Activities.query.filter(Activities.activity_type_id == self.id).first()
+        used_in_event = CoefficientsList.query.filter(CoefficientsList.activity_type_id == self.id).first()
+
         if has_activity is not None:
             
             message = f"Nie można usunąć sportu '{self.name}' z aplikacji. Jest to on użyty w zarejstrowanych aktywnościach!"
             current_app.logger.warning(f"Admin {current_user.id} didn't delete sport '{sport_to_delete}' from app. It has been used in saved activities!")
+            return message, "success", redirect(url_for('event.admin_list_of_sports'))
+
+        if used_in_event is not None:
+            
+            message = f"Nie można usunąć sportu '{self.name}' z aplikacji. Jest to on użyty w wyzwaniach!"
+            current_app.logger.warning(f"Admin {current_user.id} didn't delete sport '{sport_to_delete}' from app. It has been used in events!")
             return message, "success", redirect(url_for('event.admin_list_of_sports'))
 
         try:

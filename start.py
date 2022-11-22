@@ -27,18 +27,13 @@ dictConfig(
             },
             "file": {
                 "class": "logging.FileHandler",
-                "filename": "flask.log",
+                "filename": f"logs\{dt.date.today()}.log",
                 "formatter": "default",
             },
         },
         "root": {"level": "DEBUG", "handlers": ["console", "file"]},
     }
 )
-
-# logging.basicConfig(
-#         level = logging.DEBUG,
-#         format = f'%(asctime)s %(levelname)s %(name)s : %(message)s'
-#         )
 
 db = SQLAlchemy()
 migrate = Migrate()

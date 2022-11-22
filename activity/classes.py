@@ -1,6 +1,6 @@
 from start import db
 import datetime as dt
-from flask import current_app
+from flask import current_app, redirect, url_for
 from flask_login import current_user
 
 class Sport(db.Model):
@@ -15,6 +15,81 @@ class Sport(db.Model):
 
     def __repr__(self):
         return self.name
+        
+
+    @classmethod
+    def add_new(cls, new_sport_form):
+
+        current_app.logger.info(f"Admin {current_user.id} tries to add sport '{new_sport_form.activity_name.data}' to app.")
+
+        try:
+            new_sport = Sport(
+                name = new_sport_form.activity_name.data,
+                default_coefficient = new_sport_form.value.data,
+                default_is_constant = new_sport_form.is_constant.data)
+
+            db.session.add(new_sport)
+            db.session.commit()
+
+            message = f"Dodano sport '{new_sport.name}' do aplikacji"
+            current_app.logger.info(f"Admin {current_user.id} added sport '{new_sport.name}' to app.")
+            return message, "success", redirect(url_for('event.admin_list_of_sports'))
+        
+        except:
+            message = f"NIE UDAŁO SIĘ DODAĆ NOWEGO SPORTU"
+            current_app.logger.exception(f"Admin {current_user.id} failed to add sport to app")
+            return message, "danger", redirect(url_for('event.admin_list_of_sports'))
+
+    def delete(self):
+        
+        sport_to_delete = self.name
+        current_app.logger.info(f"Admin {current_user.id} tries to delete sport '{self.name}' from app.")
+
+        has_activity = Activities.query.filter(Activities.activity_type_id == self.id).first()
+        if has_activity is not None:
+            
+            message = f"Nie można usunąć sportu '{self.name}' z aplikacji. Jest to on użyty w zarejstrowanych aktywnościach!"
+            current_app.logger.warning(f"Admin {current_user.id} didn't delete sport '{sport_to_delete}' from app. It has been used in saved activities!")
+            return message, "success", redirect(url_for('event.admin_list_of_sports'))
+
+        try:
+
+            db.session.delete(self)
+            db.session.commit()
+
+            message = f"Usunięto sport '{self.name}' z aplikacji"
+            current_app.logger.info(f"Admin {current_user.id} deleted sport '{sport_to_delete}' from app.")
+            return message, "success", redirect(url_for('event.admin_list_of_sports'))
+
+        except:
+
+            message = f"NIE UDAŁO SIĘ USUNĄĆ SPORTU"
+            current_app.logger.exception(f"Admin {current_user.id} failed to add sport to app")
+            return message, "danger", redirect(url_for('event.admin_list_of_sports'))
+
+    
+    def modify(self, sport_form):
+
+        current_app.logger.info(f"Admin {current_user.id} tries to modfiy sport '{self.name}' in app.")
+        try:
+
+            self.name = sport_form.activity_name.data
+            self.default_coefficient = sport_form.value.data
+            self.default_is_constant = sport_form.is_constant.data
+
+            db.session.commit()
+
+            message = f"Zmodyfikowano sport '{self.name}' w aplikacji"
+            current_app.logger.info(f"Admin {current_user.id} modified sport '{self.name}' in app.")
+            return message, "success", redirect(url_for('event.admin_list_of_sports'))
+
+        except:
+
+            message = f"NIE UDAŁO SIĘ MODYFIKOWAĆ SPORTU"
+            current_app.logger.exception(f"Admin {current_user.id} failed to modify sport in app")
+            return message, "danger", redirect(url_for('event.admin_list_of_sports'))
+
+
 
     @staticmethod
     def all_sports():

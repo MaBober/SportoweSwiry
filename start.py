@@ -8,7 +8,7 @@ from werkzeug.exceptions import HTTPException
 import logging
 import datetime as dt
 
-LOGGING_FILE_NAME = f'logs/{dt.date.today()}.log'
+LOGGING_FILE_NAME = f'{dt.date.today()}.log'
 
 logging.basicConfig(
         filename = LOGGING_FILE_NAME,

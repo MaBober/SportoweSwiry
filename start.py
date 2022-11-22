@@ -27,7 +27,7 @@ dictConfig(
             },
             "file": {
                 "class": "logging.FileHandler",
-                "filename": f"logs\{dt.date.today()}.log",
+                "filename": os.path.join("logs", f'{str(dt.date.today())}.log'),
                 "formatter": "default",
             },
         },
@@ -39,7 +39,9 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app():
+    print(os.path.join("logs", f'{str(dt.date.today())}.log'))
     app = Flask(__name__)
+    
     app.logger.info("app created!")
 
     # app.config.from_pyfile('config.py')

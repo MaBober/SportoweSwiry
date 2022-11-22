@@ -21,6 +21,12 @@ class ActivityForm(FlaskForm):
     distance = DecimalField("Dystans", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
     time = DateTimeField("Czas", format='%H:%M:%S', default=datetime.time())
 
+    def fill_sports_to_select(self):
+
+        from activity.classes import Sport
+
+        self.activity.choices = Sport.all_sports()
+
 
 class UploadAvatarForm(FlaskForm):
     image = FileField('Wgraj zdjęcie (<=3MB)', validators=[

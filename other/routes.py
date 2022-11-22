@@ -11,10 +11,6 @@ from .forms import MessageForm,  AppMailForm, AppMailToRead
 from .functions import send_email, prepareListOfChoicesForAdmin, saveMessageInDB, deleteMessagesFromDB, saveMessageInDBforEvent, saveMessageInDBforAll, prepareListOfChoicesForNormalUser, sendMessgaeFromContactFormToDB
 from user.classes import User
 from user.functions import account_confirmation_check
-from user.routes import copy_users_from_csv
-
-from activity.routes import copy_activities_from_csv
-from event.routes import copy_coefficients_from_csv, copy_distances_from_csv, copy_events_from_csv, copy_participation_from_csv
 
 from start import db    
 

@@ -1,4 +1,5 @@
 from flask_login import current_user
+from flask import redirect, url_for, current_app
 import hashlib
 import binascii
 from start import db
@@ -40,6 +41,8 @@ class Event(db.Model):
 
     def add_to_db(self, form, distances_form):
 
+        current_app.logger.info(f"User {current_user.id} submited new event form")
+
         self.name = form.name.data
         self.start = form.start.data
         self.length_weeks = form.length.data
@@ -51,16 +54,237 @@ class Event(db.Model):
         self.password = self.hash_password()
         self.description = form.description.data
         self.status = 0
+
+        try:
+            db.session.add(self)
+            db.session.commit()
+            
+            DistancesTable.pass_distances_to_db(distances_form, self.id) 
+            self.add_partcipant(current_user, form.password.data)
+
+            current_app.logger.info(f"User {current_user.id} created event {self.id}")
+            message = 'Stworzono wydarzenie "{}"!'.format(self.name)
+            return message, 'success', redirect(url_for('event.event_main', event_id = self.id))
+
+        except:
+            current_app.logger.exception(f"User {current_user.id} failed to add new event")
+            return 'Wyzwanie NIE UTWORZONE! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem', 'danger', 'event.new_event'
+
+    
+    def modify(self, form, formDist):
+
+        current_app.logger.info(f"User {current_user.id} submited modify form for event {self.id}")
+
+        try:
+            oldDistances =  DistancesTable.query.filter(DistancesTable.event_id == self.id).all()
+
+            for position in oldDistances:
+                db.session.delete(position)
+                db.session.commit()
+
+            DistancesTable.pass_distances_to_db(formDist, self.id)
+
+            self.name = form.name.data
+            self.start = form.start.data
+            self.length_weeks = form.length.data
+            self.is_private = form.isPrivate.data
+            self.description = form.description.data
+            self.password = form.password.data
+            self.password = self.hash_password()
+            self.max_user_amount  = form.max_users.data
+
+            self.update_status()
+            db.session.commit()
+
+            current_app.logger.info(f"User {current_user.id} modified event {self.id}")
+            message = f"Zmodyfikowano wyzwanie {self.name}"
+            return message, 'success', redirect(url_for('event.modify_event'))
+
+        except:
+            current_app.logger.exception(f"User {current_user.id} failed to modify event {self.name}.")
+            message = 'Wyzwanie {self.name} NIE ZDMODYFIKOWANE!'
+            return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
+
+
+    def delete(self):
+
+        event_name = self.name
+
+        if not current_user.is_admin:
+            current_app.logger.warning(f"User {current_user.id} tries to delete event {self.id}. He is not an admin!")
+            message = "Nie masz uprawnień do tej zawartości!"
+            return message, 'danger', redirect(url_for('other.hello'))
         
+        current_app.logger.info(f"Admin {current_user.id} tries to delete event {self.id}.")
+        try:
+            distances = DistancesTable.query.filter(DistancesTable.event_id == self.id).all()
 
-        db.session.add(self)
-        db.session.commit()
+            for distance in distances:
+                db.session.delete(distance)
+                db.session.commit()
+            current_app.logger.info(f"Admin {current_user.id} deleted distances table in event {event_name}.")
+
+            coefficients = CoefficientsList.query.filter(CoefficientsList.event_id == self.id).all()
+
+            for coefficient in coefficients:
+                db.session.delete(coefficient)
+                db.session.commit()
+            current_app.logger.info(f"Admin {current_user.id} deleted coeficients table in event {event_name}.")
+
+            partcipants = Participation.query.filter(Participation.event_id == self.id).all()
+
+            for participant in partcipants:
+                db.session.delete(participant)
+                db.session.commit()
+            current_app.logger.info(f"Admin {current_user.id} deleted all participants from event {event_name}.")
+
+            db.session.delete(self)
+            db.session.commit()
+
+            message = f"Usunięto wyzwanie {event_name}"
+            current_app.logger.info(f"Admin {current_user.id} deleted event {event_name}.")
+            return message, 'success', redirect(url_for('event.admin_list_of_events'))
+
+        except:
+            current_app.logger.exception(f"Admin {current_user.id} failed to delet event {event_name}.")
+            message = f'Wyzwanie {event_name} NIE USUNIĘTE!'
+            return message, 'danger', redirect(url_for('event.admin_list_of_events'))
+
+
+    def add_partcipant(self, user, provided_password = '') :
+
+        current_app.logger.info(f"User {current_user.id} tries to join event {self.id}")
+
+        is_participating = Participation.query.filter(Participation.user_id == user.id).filter(Participation.event_id == self.id).first()
+
+        if self.status not in ['0','1']:
+            message = f"Wyzwanie {self.name} już się rozpoczęło, nie możesz się do niego dopisać!"
+            current_app.logger.warning(f"User {current_user.id} tries to join event {self.id}. Event is on going!")
+            return message, 'danger', redirect(url_for('event.explore_events'))
+
+        event_password = self.password
+        verify = Event.verify_password(event_password, provided_password)
+
+        if self.is_private and verify is not True:
+            message = "Podałeś/aś złe hasło do wyzwania. Spróbuj jeszcze raz!"
+            current_app.logger.info(f"User {current_user.id} give wrong password for event {self.id}")
+            return message, 'danger', redirect(url_for('event.explore_events'))
+
+        if is_participating is not None:
+            message = "Już jesteś zapisny/a na to wyzwanie!"
+            current_app.logger.info(f"User {current_user.id} tries to join event {self.id}. Already takes part in it!")
+            return message, 'danger', redirect(url_for('event.explore_events'))
+
+        if self.is_full:
+            message = "Do tego wyzwania zapisała się już maksymalna ilość uczestników!"
+            current_app.logger.info(f"User {current_user.id} tries to join event {self.id}. Event is full!")
+            return message, 'danger', redirect(url_for('event.explore_events'))
+
+        from other.functions import send_email
+
+        send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'welcome', event=self)
+
+        message = '''
+        Czołem  {} {}!,
+
+        Witaj w wyzwaniu sportowym {}!
+
+        Data rozpoczęcia: {}
+        Długość: {} tygodni
+
+        Życzymy samych sukcesów i wielu pokonanych kilometrów.
+
+        Ubieraj buty i zaczynaj zabawę już dziś! ;)
+
+        Pozdrawiamy,
+
+        Administracja Sportowych Świrów
+        '''.format(current_user.name, current_user.last_name, self.name, self.start, self.length_weeks)
+
+        # newMessage = MailboxMessage(date=datetime.date.today(), sender="Sportowe Świry", senderName="Sportowe Świry", receiver = current_user.mail,
+        # receiverName = current_user.name+" "+current_user.lastName, subject = "Witaj w wyzwaniu: " + event.name, message = message, sendByApp = True,
+        # sendByEmail= False, messageReaded=False, multipleMessage=True)
+        # sendMessgaeFromContactFormToDB(newMessage)
+
+        try:
+            participation = Participation(user_id = user.id, event_id = self.id)
+            db.session.add(participation)
+            db.session.commit()
+
+            message = "Zapisano do wyzwania " + self.name + "!"
+            current_app.logger.info(f"User {current_user.id} joined event {self.id}")
+            return message, 'success', redirect(url_for('event.event_main', event_id = self.id))
+
+        except:
+            message = "NIE DODANO DO WYZWANIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User {current_user.id} failed to join event {self.id}")
+            return message, 'danger', redirect(url_for('event.explore_events'))
+
+    
+    def leave_event(self, user):
+
+        current_app.logger.info(f"User {current_user.id} tries to erase {user.id} from event {self.id}.")
+        is_participating = Participation.query.filter(Participation.user_id == user.id).filter(Participation.event_id == self.id).first()
+    
+        if current_user.is_admin == False:
+
+            if is_participating != None and self.status != "0":
+                message = "Nie możesz się wypisać z rozpoczętego wyzwania!", "danger"
+                current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Event is on going!")
+                return message, "danger", redirect(url_for('event.explore_events'))
+            
+            if is_participating == None:
+                message = "Nie jesteś zapisany na to wyzwanie!"
+                current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Does not take part in it!")
+                return message, "danger", redirect(url_for('event.explore_events'))
+            
+            if self.admin_id == user.id:
+                message = "Administrator nie może opuścić swojego wyzwania!"
+                current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
+                return message, "danger", redirect(url_for('event.explore_events'))
+
+            try:
+                db.session.delete(is_participating)
+                db.session.commit()
+            
+                message = f"Wypisano z wyzwania {self.name}!"
+                current_app.logger.info(f"User {current_user.id} left event {self.id}")
+                return message, "success", redirect(url_for('event.explore_events'))
+
+            except:
+                message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User {current_user.id} failed to leave event {self.id}")
+                return message, "danger", redirect(url_for('event.explore_events'))
+
+        else:
+
+            if is_participating == None:
+                message = f"Użytkownik {user.name} nie jest zapisany wyzwanie {self.name}!"
+                current_app.logger.warning(f"Admin {current_user.id} tries to erase user {user.id} from event {self.id}. He does not take part in it!")
+                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+
+            try:
+                db.session.delete(is_participating)
+                db.session.commit()
+            
+                message = f"Użytkownik {user.name} wypisany z wyzwania {self.name}!"
+                current_app.logger.info(f"Admin {current_user.id} deleted user {user.name} from event {self.id}")
+                return message, "success", redirect(url_for('event.event_contestants', event_id = self.id))
+
+            except:
+                message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"Admin {current_user.id} failed to erase user {user.id} from event {self.id}")
+                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+            
         
-        DistancesTable.pass_distances_to_db(distances_form, self.id)
+    def is_participant(self, user):
 
-        self.add_partcipant(current_user, form.password.data)
+        if Participation.query.filter(Participation.event_id == self.id).filter(Participation.user_id == user.id).first() is None:
+            return False
+            
+        else:
+            return True
 
-        return True
         
     def hash_password(self):
         """Hash a password for storing."""
@@ -87,6 +311,7 @@ class Event(db.Model):
     def end(self):
         return self.start + dt.timedelta(weeks = self.length_weeks, days=-1)
 
+
     @property
     def status_description(self):
 
@@ -98,6 +323,7 @@ class Event(db.Model):
                     "5" : "Wyzwanie archiwalne"}
 
         return statuses[self.status]
+
 
     def update_status(self):
 
@@ -128,6 +354,86 @@ class Event(db.Model):
         db.session.commit()
 
         return None
+
+    def add_sport(self, sport_to_add):
+        current_app.logger.info(f"User {current_user.id} tries to add {sport_to_add.name} to event {self.id}.")
+        if CoefficientsList.query.filter(CoefficientsList.activity_type_id == sport_to_add.id).filter(CoefficientsList.event_id == self.id).first() == None:
+            try:
+                new_coefficient = CoefficientsList(
+                                    event_id = self.id,
+                                    activity_type_id = sport_to_add.id,
+                                    value = sport_to_add.default_coefficient,
+                                    is_constant = sport_to_add.default_is_constant)
+
+                db.session.add(new_coefficient)
+                db.session.commit()
+
+                message = f"Dodano {sport_to_add.name} do wyzwania!"
+                current_app.logger.info(f"User {current_user.id} added {sport_to_add.name} to event {self.id}.")
+                return message, "success", redirect(url_for('event.modify_event', event_id = self.id))
+
+            except:
+                message = "NIE DODANO SPORTU! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User {current_user.id} failed to add {sport_to_add.name} to event {self.id}")
+                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+
+        else:
+            message = "Ten sport już znajduje się w wyzwaniu!"
+            current_app.logger.info(f"User {current_user.id} added {sport_to_add.name} to event {self.id}. It is already in it!")
+            return message, 'message', redirect(url_for('event.modify_event', event_id = self.id))
+
+    
+    def delete_sport(self, sport_to_delete):
+
+        current_app.logger.info(f"User {current_user.id} tries to delete {sport_to_delete} from event {self.id}.")
+        position_to_delete = CoefficientsList.query.filter(CoefficientsList.event_id == self.id).filter(CoefficientsList.activity_type_id == sport_to_delete).first()
+
+        if position_to_delete != None:
+
+            try:
+                db.session.delete(position_to_delete)
+                db.session.commit()
+
+                message = f'Usunięto sport z wyzwania!'
+                current_app.logger.info(f"User {current_user.id} deleted {sport_to_delete} from event {self.id}.")
+                return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
+
+
+            except:
+                message = "NIE USUNIĘTO SPORTU! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User {current_user.id} failed to delete {sport_to_delete} from event {self.id}")
+                return message, "danger", redirect(url_for('event.modify_event', event_id = self.id))
+
+        else:
+            message = f'Sport nie znajduje się w wyzwaniu!'
+            current_app.logger.warning(f"User {current_user.id} tried delete {sport_to_delete} from event {self.id}. There is no such sport in this event!")
+            return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
+
+
+    def modifiy_sport_coefficient(self, sport_to_modify, coefficient_form):
+        current_app.logger.info(f"User {current_user.id} tries to modify {sport_to_modify} in event {self.id}.")
+
+        if sport_to_modify != None:
+            try:
+                sport_to_modify.value = coefficient_form.value.data
+                sport_to_modify.is_constant= coefficient_form.is_constant.data
+                db.session.commit()
+
+                message = f'Zmodyfikowano współczynnik wyzwania!'
+                current_app.logger.info(f"User {current_user.id} modified {sport_to_modify.activity_type_id} in event {self.id}.")
+                return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
+
+            except:
+                message = "NIE ZMIENIONO WSPÓŁCZYNNIKA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User {current_user.id} failed to modifiy {sport_to_modify.activity_type_id} in event {self.id}")
+                return message, "danger", redirect(url_for('event.modify_event', event_id = self.id))
+        
+        else:
+            message = f'Sport nie znajduje się w wyzwaniu!'
+            current_app.logger.warning(f"User {current_user.id} tried delete {sport_to_modify.activity_type_id} in event {self.id}. There is no such sport in this event!")
+            return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
+
+        
 
     def give_all_event_activities(self, calculated_values = False, user = 'all'):
 
@@ -416,123 +722,10 @@ class Event(db.Model):
 
         return user_overall_summary
     
-    def modify(self, form, formDist):
+    @classmethod
+    def available_to_join(cls):
+        return cls.query.filter(cls.status.in_(['0','1'])).all()
 
-        oldDistances =  DistancesTable.query.filter(DistancesTable.event_id == self.id).all()
-        for position in oldDistances:
-            db.session.delete(position)
-            db.session.commit()
-
-        DistancesTable.pass_distances_to_db(formDist, self.id)
-
-        self.name = form.name.data
-        self.start = form.start.data
-        self.length_weeks = form.length.data
-        self.is_private = form.isPrivate.data
-        self.description = form.description.data
-        self.password = form.password.data
-        self.password = self.hash_password()
-        self.max_user_amount  = form.max_users.data
-
-        self.update_status()
-
-        db.session.commit()
-
-        return self.id
-
-    def delete(self):
-        
-        distances = DistancesTable.query.filter(DistancesTable.event_id == self.id).all()
-
-        for distance in distances:
-            db.session.delete(distance)
-            db.session.commit()
-
-        coefficients = CoefficientsList.query.filter(CoefficientsList.event_id == self.id).all()
-
-        for coefficient in coefficients:
-            db.session.delete(coefficient)
-            db.session.commit()
-
-        partcipants = Participation.query.filter(Participation.event_id == self.id).all()
-
-        for participant in partcipants:
-            db.session.delete(participant)
-            db.session.commit()
-
-        db.session.delete(self)
-        db.session.commit()
-
-        return None
-
-
-    def add_partcipant(self, user, provided_password = ''):
-
-        is_participating = Participation.query.filter(Participation.user_id == user.id).filter(Participation.event_id == self.id).first()
-
-        if self.status not in ['0','1']:
-            message == "Wyzwanie {self.name} już się rozpoczęło, nie możesz się do niego dopisać!"
-            return False, message
-
-        event_password = self.password
-        verify = Event.verify_password(event_password, provided_password)
-
-        if self.is_private and verify is not True:
-            message = "Podałeś/aś złe hasło do wyzwania. Spróbuj jeszcze raz!"
-            return False, message
-
-        if is_participating is not None:
-            message = "Już jesteś zapisny/a na to wyzwanie!"
-            return False , message
-
-
-        if self.is_full:
-            message = "Do tego wyzwania zapisała się już maksymalna ilość uczestników!"
-            return False, message
-
-        from other.functions import send_email
-
-        send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'welcome', event=self)
-
-        message = '''
-        Czołem  {} {}!,
-
-        Witaj w wyzwaniu sportowym {}!
-
-        Data rozpoczęcia: {}
-        Długość: {} tygodni
-
-        Życzymy samych sukcesów i wielu pokonanych kilometrów.
-
-        Ubieraj buty i zaczynaj zabawę już dziś! ;)
-
-        Pozdrawiamy,
-
-        Administracja Sportowych Świrów
-        '''.format(current_user.name, current_user.last_name, self.name, self.start, self.length_weeks)
-
-        # newMessage = MailboxMessage(date=datetime.date.today(), sender="Sportowe Świry", senderName="Sportowe Świry", receiver = current_user.mail,
-        # receiverName = current_user.name+" "+current_user.lastName, subject = "Witaj w wyzwaniu: " + event.name, message = message, sendByApp = True,
-        # sendByEmail= False, messageReaded=False, multipleMessage=True)
-        # sendMessgaeFromContactFormToDB(newMessage)
-
-
-        participation = Participation(user_id = user.id, event_id = self.id)
-        db.session.add(participation)
-        db.session.commit()
-
-        message = "Zapisano do wyzwania " + self.name + "!"
-
-        return True, message
-        
-    def is_participant(self, user):
-
-        if Participation.query.filter(Participation.event_id == self.id).filter(Participation.user_id == user.id).first() is None:
-            return False
-            
-        else:
-            return True
-  
 
     
 
@@ -558,14 +751,21 @@ class CoefficientsList(db.Model):
     def create_coeffciet_set_with_default_values(new_event):
         all_sports = Sport.query.all()
 
-        for sport in all_sports:
-            new_coffcient = CoefficientsList(event_id = new_event.id,
-            activity_type_id = sport.id,
-            value = sport.default_coefficient,
-            is_constant = sport.default_is_constant)
-            db.session.add(new_coffcient)
-            
-        db.session.commit()
+        current_app.logger.info(f"User {current_user.id} tries to create default coeficients for event {new_event.id}")
+        try:
+            for sport in all_sports:
+                new_coffcient = CoefficientsList(event_id = new_event.id,
+                activity_type_id = sport.id,
+                value = sport.default_coefficient,
+                is_constant = sport.default_is_constant)
+                db.session.add(new_coffcient)
+                
+            db.session.commit()
+            current_app.logger.info(f"User {current_user.id} created default coeficients for event {new_event.id}")
+
+        except:
+            current_app.logger.exception(f"User {current_user.id} failed to add default coefficients")
+            return 'NIE UDAŁO SIĘ STWORZYĆ TABLICY WSPÓŁCZYNNIKÓW! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem', 'danger', 'other.hello'
 
         return None
 
@@ -578,66 +778,73 @@ class DistancesTable(db.Model):
 
     @staticmethod
     def pass_distances_to_db(formDist, event_id):
+        current_app.logger.info(f"User {current_user.id} starts creating distance table for {event_id}")
+        try:
+            newDistance = DistancesTable(event_id = event_id, week = 1, target = formDist.w1.data )
+            db.session.add(newDistance)
+            db.session.commit()
 
-        newDistance = DistancesTable(event_id = event_id, week = 1, target = formDist.w1.data )
-        db.session.add(newDistance)
-        db.session.commit()
+            newDistance = DistancesTable(event_id = event_id, week = 2, target = formDist.w2.data )
+            db.session.add(newDistance)
+            db.session.commit()
 
-        newDistance = DistancesTable(event_id = event_id, week = 2, target = formDist.w2.data )
-        db.session.add(newDistance)
-        db.session.commit()
+            newDistance = DistancesTable(event_id = event_id, week = 3, target = formDist.w3.data )
+            db.session.add(newDistance)
+            db.session.commit()
 
-        newDistance = DistancesTable(event_id = event_id, week = 3, target = formDist.w3.data )
-        db.session.add(newDistance)
-        db.session.commit()
+            newDistance = DistancesTable(event_id = event_id, week = 4, target = formDist.w4.data )
+            db.session.add(newDistance)
+            db.session.commit()
+            
+            newDistance = DistancesTable(event_id = event_id, week = 5, target = formDist.w5.data )
+            db.session.add(newDistance)
+            db.session.commit()
 
-        newDistance = DistancesTable(event_id = event_id, week = 4, target = formDist.w4.data )
-        db.session.add(newDistance)
-        db.session.commit()
+            newDistance = DistancesTable(event_id = event_id, week = 6, target = formDist.w6.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            newDistance = DistancesTable(event_id = event_id, week = 7, target = formDist.w7.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            newDistance = DistancesTable(event_id = event_id, week = 8, target = formDist.w8.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            newDistance = DistancesTable(event_id = event_id, week = 9, target = formDist.w9.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            newDistance = DistancesTable(event_id = event_id, week = 10, target = formDist.w10.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            newDistance = DistancesTable(event_id = event_id, week = 11, target = formDist.w11.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            newDistance = DistancesTable(event_id = event_id, week = 12, target = formDist.w12.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            newDistance = DistancesTable(event_id = event_id, week = 13, target = formDist.w13.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            newDistance = DistancesTable(event_id = event_id, week = 14, target = formDist.w14.data )
+            db.session.add(newDistance)
+            db.session.commit()
+            
+            newDistance = DistancesTable(event_id = event_id, week = 15, target = formDist.w15.data )
+            db.session.add(newDistance)
+            db.session.commit()
+
+            current_app.logger.info(f"User {current_user.id} created distance table for {event_id}")
         
-        newDistance = DistancesTable(event_id = event_id, week = 5, target = formDist.w5.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 6, target = formDist.w6.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 7, target = formDist.w7.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 8, target = formDist.w8.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 9, target = formDist.w9.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 10, target = formDist.w10.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 11, target = formDist.w11.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 12, target = formDist.w12.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 13, target = formDist.w13.data )
-        db.session.add(newDistance)
-        db.session.commit()
-
-        newDistance = DistancesTable(event_id = event_id, week = 14, target = formDist.w14.data )
-        db.session.add(newDistance)
-        db.session.commit()
-        
-        newDistance = DistancesTable(event_id = event_id, week = 15, target = formDist.w15.data )
-        db.session.add(newDistance)
-        db.session.commit()
+        except:
+            current_app.logger.exception(f"User {current_user.id}  failed to creat distance table for {event_id}")
+            return 'NIE UDAŁO SIĘ STWORZYĆ TABELI DYSTANSÓW! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem', 'danger', 'other.hello'
 
 def calculate_distance(row):
     if row['is_constant']:

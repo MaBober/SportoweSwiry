@@ -1,5 +1,5 @@
-from start import  db
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from start import  db, app
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 
 from activity.classes import Activities
@@ -23,32 +23,23 @@ activity = Blueprint("activity", __name__, template_folder='templates')
 @login_required #This page needs to be login
 def add_activity():
 
-    form=ActivityForm()
-    form.activity.choices = Sport.all_sports()
+    form = ActivityForm()
+    form.fill_sports_to_select()
+
+    if form.validate_on_submit():
+
+        newActivity = Activities()
+        message, status, url = newActivity.add_to_db(form)
+
+        flash(message, status)
+        return redirect(url_for(url))
 
     user_events = current_user.current_events.all()
-
     for event in user_events:
 
         all_event_activities = event.give_all_event_activities(calculated_values = True)
         split_list = event.give_overall_weekly_summary(all_event_activities)
         event.event_week_distance =  split_list[event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
-
-    if form.validate_on_submit():
-
-        time_in_seconds = (form.time.data - dt.datetime(1900,1,1,0,0,0)).total_seconds()
-        
-        newActivity = Activities(date = form.date.data,
-                            activity_type_id = form.activity.data,
-                            distance = form.distance.data,
-                            time = time_in_seconds,
-                            user_id = current_user.id)
-
-        db.session.add(newActivity)
-        db.session.commit()
-
-        flash("Poprawnie dodano nową aktywność", 'success')
-        return  redirect(url_for('activity.add_activity'))
     
     else:
         return render_template('/pages/addActivity.html',
@@ -64,56 +55,46 @@ def add_activity():
 @login_required #This page needs to be login
 def delete_activity(activity_id):
 
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
-
     activity_to_delete = Activities.query.filter(Activities.id == activity_id).first()
-    deleted_activity_type = activity_to_delete.activity_type
 
-    db.session.delete(activity_to_delete)
-    db.session.commit()
+    message, status, url = activity_to_delete.delete()
+    flash(message, status)
 
-    flash("Aktywność ({}) została usunięta z bazy danych".format(deleted_activity_type), 'success')
-
-    return redirect(url_for('activity.my_activities'))
+    return redirect(url_for(url))
 
 
 @account_confirmation_check
 @activity.route("/modifyActivity/<int:activity_id>", methods=['POST','GET'])
 @login_required #This page needs to be login
 def modify_activity(activity_id):
-
-    if current_user.is_authenticated and not current_user.confirmed:
-        return redirect(url_for('user.unconfirmed'))
- 
-    activity = Activities.query.filter(Activities.id == activity_id).first()
-
-    form = ActivityForm(date = activity.date,
-                        activity_type = activity.activity_type,
-                        distance = activity.distance,
-                        time = (dt.datetime(1970,1,1) + dt.timedelta(seconds=activity.time)).time())
-
-    form.activity.choices = Sport.all_sports()
-
-    if form.validate_on_submit():
-
-        time_in_seconds = (form.time.data - dt.datetime(1900,1,1,0,0,0)).total_seconds()
-
-        activity.date = form.date.data
-        activity.activity_type_id = form.activity.data
-        activity.distance = form.distance.data
-        activity.time = time_in_seconds
-        db.session.commit()
     
-        flash('Zmodyfikowano aktywność: {}'.format(form.activity.data))
-        return redirect(url_for('activity.my_activities'))
+    activity_to_modify = Activities.query.filter(Activities.id == activity_id).first()
+    if activity_to_modify.user_id == current_user.id :
+
+        form = ActivityForm(date = activity_to_modify.date,
+                            activity = activity_to_modify.activity_type,
+                            distance = activity_to_modify.distance,
+                            time = (dt.datetime(1970,1,1) + dt.timedelta(seconds=activity_to_modify.time)).time())
+        form.fill_sports_to_select()
+        form.activity.id = activity_to_modify.activity_type_id
+
+        if form.validate_on_submit():
+            message, status, url = activity_to_modify.modify(form)
+            flash(message, status)
         
+            return redirect(url_for(url))
+            
+        else:
+            return render_template('/pages/addActivity.html',
+                            form = form,
+                            mode ="create",
+                            title_prefix = "Dodaj aktywność",
+                            menuMode = "mainApp")
+
     else:
-        return render_template('/pages/addActivity.html',
-                        form = form,
-                        mode ="create",
-                        title_prefix = "Dodaj aktywność",
-                        menuMode = "mainApp")
+
+        flash("Możesz edytować tylko swoje aktywności!", 'danger')
+        return redirect(url_for('activity.my_activities'))
 
 
 @account_confirmation_check

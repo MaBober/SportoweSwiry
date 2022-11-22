@@ -7,7 +7,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 
 from .classes import *
 from .forms import CoeficientsForm, DistancesForm, EventForm, NewSportToEventForm, EventPassword
-from .functions import delete_user_from_event
 from activity.classes import Activities, Sport
 from other.functions import send_email, account_confirmation_check
 from user.functions import account_confirmation_check#, send_email
@@ -16,6 +15,7 @@ from user.classes import User
 from other.classes import MailboxMessage
 from other.functions import sendMessgaeFromContactFormToDB
 
+MAX_EVENTS_AS_ADMIN = 3
 
 event = Blueprint("event", __name__,
     template_folder='templates')
@@ -28,9 +28,7 @@ event = Blueprint("event", __name__,
 def explore_events():
 
     password_form = EventPassword()
-
-    events=Event.query.filter(Event.status.in_(['0','1'])).all()
-
+    events = Event.available_to_join()
 
     return render_template('/pages/explore_events.html',
                         events=events,
@@ -51,36 +49,22 @@ def join_event(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
         
-    added_to_db, flash_message  = event.add_partcipant(user = current_user, provided_password = password)
-    flash(flash_message)
+    flash_message, status, action  = event.add_partcipant(user = current_user, provided_password = password)
+    flash(flash_message, status)
 
-    if added_to_db:
-        return redirect(url_for('event.event_main', event_id = event_id))
+    return action
     
-    else:
-        return redirect(url_for('event.explore_events'))
-
-
 
 @event.route("/leave_event/<int:event_id>")
 @login_required
 def leave_event(event_id):
+
     event = Event.query.filter(Event.id == event_id).first()
+    message, staus, action = event.leave_event(current_user)
 
-    # Check is user isn't signed already
-    is_participating = Participation.query.filter(Participation.user_id == current_user.id).filter(Participation.event_id == event_id).first()
-    if is_participating != None and event.status == "0":
+    flash(message, staus)
 
-        delete_user_from_event(is_participating.user_id, event_id)
-        flash("Wypisano się z wyzwania " + event.name + "!", "success")
-
-    elif is_participating != None and event.status != "0":
-        flash("Nie możesz się wypisać z rozpoczętego wyzwania!", "danger")
-    
-    elif is_participating == None:
-        flash("Nie jesteś zapisany na to wyzwanie!")
-
-    return redirect(url_for('event.explore_events'))
+    return action
 
 
 @event.route("/your_events/<mode>")
@@ -184,9 +168,7 @@ def event_preview(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
     password_form = EventPassword()
-
-
-    event_participants = event.give_all_event_users()
+    
     event_coefficinets_set = event.give_all_event_activities_types(mode = "All")
 
     return render_template('/pages/event_view/event_preview.html',
@@ -239,7 +221,6 @@ def event_contestants(event_id):
     
         event = Event.query.filter(Event.id == event_id).first()
         event_participants = event.give_all_event_users(scope = 'Objects_Dictionary')
-        
 
         return render_template('/pages/event_view/event_contestants.html',
                         event = event,
@@ -301,17 +282,17 @@ def create_event():
     event_form = EventForm()
     distances_form = DistancesForm()
 
-    if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) <3:
+    if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) < MAX_EVENTS_AS_ADMIN:
 
         if event_form.validate_on_submit and distances_form.validate_on_submit():
 
             new_event = Event()
-            new_event.add_to_db(event_form, distances_form)
+            message, status, action = new_event.add_to_db(event_form, distances_form)
 
             CoefficientsList.create_coeffciet_set_with_default_values(new_event)
         
-            flash('Stworzono wydarzenie "{}"!'.format(new_event.name))
-            return redirect(url_for('event.event_main', event_id = new_event.id))
+            flash(message, status)
+            return action
 
         return render_template("/pages/new_event.html",
                         title_prefix = "Nowe wydarzenie",
@@ -324,74 +305,6 @@ def create_event():
             return redirect(url_for('other.hello'))
 
 
-@account_confirmation_check
-@event.route("/admin_event_list")
-@account_confirmation_check
-@login_required #This page needs to be login
-def admin_list_of_events():
-
-    if not current_user.is_admin:
-        flash("Nie masz uprawnień do tej zawartości")
-        return redirect(url_for('other.hello'))
-
-    events=Event.query.all()
-    return render_template('/pages/admin_events.html',
-                    events=events,
-                    title_prefix = "Lista wyzwań")
-
-
-@account_confirmation_check
-@event.route("/admin_list_of_sports")
-@account_confirmation_check
-@login_required #This page needs to be login
-def admin_list_of_sports():
-
-    if not current_user.is_admin:
-        flash("Nie masz uprawnień do tej zawartości")
-        return redirect(url_for('other.hello'))
-
-    sports = Sport.query.all()
-    return render_template('/pages/admin_sports.html',
-                    sports = sports,
-                    title_prefix = "Lista sportów")
-    
-
-# TODO Move deleting to class
-@event.route("/admin_delete_contestant/<int:event_id>/<user_id>")
-@login_required
-def admin_delete_contestant(event_id, user_id):
-    event = Event.query.filter(Event.id == event_id).first()
-
-    # Check is user isn't signed already
-    is_participating = Participation.query.filter(Participation.user_name == user_id).filter(Participation.event_id == event_id).first()
-
-    if is_participating != None:
-        delete_user_from_event(is_participating.id, event_id)
-        flash("Usunięto użytkownika {} z wyzwania {}".format(is_participating.user_name, event.name))
-    
-    elif is_participating == None:
-        flash("Użytkownik {} nie jest zapisany na wyzwanie {}!".format(user_id, event.name))
-
-    return redirect(url_for('event_contestants', event_id = event_id))
-
-
-@account_confirmation_check
-@event.route("/delete_event/<int:event_id>")
-@login_required #This page needs to be login
-def admin_delete_event(event_id):
-
-    if not current_user.is_admin:
-        flash("Nie masz uprawnień do tej zawartości")
-        return redirect(url_for('other.hello'))
-    
-    event = Event.query.filter(Event.id == event_id).first()
-    event.delete()
-
-    flash("Usunięto wyzwanie {}!".format(event.name))
-
-    return redirect(url_for('event.admin_list_of_events'))
-
-
 @event.route("/modify_event/<int:event_id>", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -399,11 +312,9 @@ def modify_event(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
 
-
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej zawartości!")
         return redirect(url_for('other.hello'))
-    
     
     distance_set = DistancesTable.query.filter(DistancesTable.event_id == event.id).all()
 
@@ -437,11 +348,10 @@ def modify_event(event_id):
 
     if form.validate_on_submit and formDist.validate_on_submit():
 
-        #changeEvent(event.id, form, formDist)
-        event.modify(form, formDist)
+        message, status, action = event.modify(form, formDist)
     
-        flash('Zmodyfikowano wydarzenie form"{}"!'.format(form.name.data))
-        return redirect(url_for('event.modify_event', event_id = event.id))
+        flash(message, status)
+        return action
 
     return render_template("/pages/modify_event.html",
                     title_prefix = "Modfyfikuj wydarzenie",
@@ -464,23 +374,13 @@ def add_new_sport_to_event(event_id):
         return redirect(url_for('other.hello'))
     
     sport_to_add = Sport.query.filter(Sport.id == request.form['activity_type']).first()
+    event = Event.query.filter(Event.id == event_id).first()
 
-    if CoefficientsList.query.filter(CoefficientsList.activity_type_id == sport_to_add.id).filter(CoefficientsList.event_id == event_id).first() == None:
+    message, status, action = event.add_sport(sport_to_add)
 
-        new_coefficient = CoefficientsList(
-                            event_id = event_id,
-                            activity_type_id = sport_to_add.id,
-                            value = sport_to_add.default_coefficient,
-                            is_constant = sport_to_add.default_is_constant)
+    flash(message, status)
+    return action
 
-        db.session.add(new_coefficient)
-        db.session.commit()
-        flash(f"Dodano {sport_to_add.name} do wyzwania!", "success")
-    
-    else:
-        flash("Ten sport już znajduje się w wyzwaniu!")
-    
-    return redirect(url_for('event.modify_event', event_id = event_id))
 
 
 @event.route("/deleteCoeficientSport/<int:event_id>/<int:activity_type_id>")
@@ -488,18 +388,15 @@ def add_new_sport_to_event(event_id):
 @login_required #This page needs to be login
 def delete_coefficient(event_id, activity_type_id):
 
-    event = Event.query.filter(Event.id == event_id).first()
-
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej zawartości!")
         return redirect(url_for('other.hello'))
 
-    positionToDelete = CoefficientsList.query.filter(CoefficientsList.event_id == event_id).filter(CoefficientsList.activity_type_id == activity_type_id).first()
-    if positionToDelete != None:
-        db.session.delete(positionToDelete)
-        db.session.commit()
+    event = Event.query.filter(Event.id == event_id).first()
+    message, status, action = event.delete_sport(activity_type_id)
 
-    return redirect(url_for('event.modify_event', event_id = event_id))
+    flash(message, status)
+    return action
 
 
 @event.route("/modifyCoeficientSport/<int:event_id>/<int:activity_type_id>", methods=['POST', 'GET'])
@@ -507,33 +404,90 @@ def delete_coefficient(event_id, activity_type_id):
 @login_required #This page needs to be login
 def modify_coefficient(event_id, activity_type_id):
 
-    event = Event.query.filter(Event.id == event_id).first()
-
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
     coefficient_to_modify = CoefficientsList.query.filter(CoefficientsList.event_id==event_id).filter(CoefficientsList.activity_type_id==activity_type_id).first()
+    event = Event.query.filter(Event.id == event_id).first()
 
-    form = CoeficientsForm(event_name = coefficient_to_modify.event,
+    coefficient_form = CoeficientsForm(event_name = coefficient_to_modify.event,
         activity_name = coefficient_to_modify.sport,
         value = coefficient_to_modify.value,
-        is_constant = coefficient_to_modify.is_constant )
+        is_constant = coefficient_to_modify.is_constant)
 
-    if form.validate_on_submit():
-
-        coefficient_to_modify.value = form.value.data
-        coefficient_to_modify.is_constant= form.is_constant.data
-        db.session.commit()
+    if coefficient_form.validate_on_submit():
     
-        return redirect(url_for('event.modify_event', event_id = event_id))
+        message, status, action = event.modifiy_sport_coefficient(coefficient_to_modify, coefficient_form)
+    
+        flash(message, status)
+        return action
 
     return render_template("/pages/modify_coeficients.html",
                     title_prefix = "Nowa tabela współczynników",
-                    form = form,
+                    form = coefficient_form,
                     menuMode="mainApp",
                     event_id = event_id,
                     activity_type_id = activity_type_id)
+
+###############################
+
+@account_confirmation_check
+@event.route("/admin_event_list")
+@account_confirmation_check
+@login_required #This page needs to be login
+def admin_list_of_events():
+
+    if not current_user.is_admin:
+        flash("Nie masz uprawnień do tej zawartości")
+        return redirect(url_for('other.hello'))
+
+    events=Event.query.all()
+    return render_template('/pages/admin_events.html',
+                    events=events,
+                    title_prefix = "Lista wyzwań")
+
+
+@account_confirmation_check
+@event.route("/admin_list_of_sports")
+@account_confirmation_check
+@login_required #This page needs to be login
+def admin_list_of_sports():
+
+    if not current_user.is_admin:
+        flash("Nie masz uprawnień do tej zawartości")
+        return redirect(url_for('other.hello'))
+
+    sports = Sport.query.all()
+    return render_template('/pages/admin_sports.html',
+                    sports = sports,
+                    title_prefix = "Lista sportów")
+    
+
+@event.route("/admin_delete_contestant/<int:event_id>/<user_id>")
+@login_required
+def admin_delete_contestant(event_id, user_id):
+
+    event = Event.query.filter(Event.id == event_id).first()
+    user_to_delete = User.query.filter(User.id == user_id).first()
+
+    message, status, action = event.leave_event(user_to_delete)
+    flash(message, status)
+
+    return action
+
+
+@account_confirmation_check
+@event.route("/delete_event/<int:event_id>")
+@login_required #This page needs to be login
+def admin_delete_event(event_id):
+    
+    event = Event.query.filter(Event.id == event_id).first()
+    message, status, action = event.delete()
+
+    flash(message, status)
+
+    return action
 
 
 @event.route('/addNewSport/', methods=['POST','GET'])
@@ -549,14 +503,10 @@ def add_new_sport_to_base():
     del form.event_name
 
     if form.validate_on_submit():
-        new_sport = Sport(
-            name = form.activity_name.data,
-            default_coefficient = form.value.data,
-            default_is_constant = form.is_constant.data)
 
-        db.session.add(new_sport)
-        db.session.commit()
-        return redirect(url_for('event.admin_list_of_sports'))
+        message, status, aciton = Sport.add_new(form)
+        flash(message, status)
+        return aciton
 
     return render_template("/pages/new_sport_to_db.html",
                     title_prefix = "Nowy sport",
@@ -573,10 +523,10 @@ def delete_sport_from_base(sport_id):
         return redirect(url_for('other.hello'))
 
     sport_to_delete = Sport.query.filter(Sport.id == sport_id).first()
-    db.session.delete(sport_to_delete)
-    db.session.commit()
+    message, status, action =  sport_to_delete.delete()
 
-    return redirect(url_for('event.admin_list_of_sports'))
+    flash(message, status)
+    return action
 
 
 @event.route('/modifySport/<int:sport_id>', methods=['POST','GET'])
@@ -590,130 +540,21 @@ def modify_sport_in_base(sport_id):
 
     sport_to_modify = Sport.query.filter(Sport.id == sport_id).first()
 
-    form = CoeficientsForm(activity_name = sport_to_modify.name,
+    sport_form = CoeficientsForm(activity_name = sport_to_modify.name,
                         value = sport_to_modify.default_coefficient,
                         is_constant = sport_to_modify.default_is_constant)
-    del form.event_name
+    del sport_form.event_name
 
-    if form.validate_on_submit():
+    if sport_form.validate_on_submit():
 
-        sport_to_modify.name = form.activity_name.data
-        sport_to_modify.default_coefficient = form.value.data
-        sport_to_modify.default_is_constant = form.is_constant.data
+        message, status, action = sport_to_modify.modify(sport_form)
 
-        db.session.commit()
-
-        return redirect(url_for('event.admin_list_of_sports'))
+        flash(message, status)
+        return action
 
     return render_template("/pages/modify_sport_in_db.html",
                     title_prefix = "Nowy sport",
-                    form = form,
+                    form = sport_form,
                     mode = 'edit',
                     sport_id = sport_id) 
-
-
-
-###############################################
-
-
-def copy_participation_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as participation_file:
-        a = csv.DictReader(participation_file)
-        for row in a:
-            new_participatoin = Participation(user_id = row["user_name"], event_id = row["event_id"] )
-
-            try:
-                db.session.add(new_participatoin)
-                db.session.commit()
-            except:
-                print('error', row['event_ID'])
-
-    return True
-
-
-def copy_distances_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as distances_file:
-        a = csv.DictReader(distances_file)
-        for row in a:
-
-            if row["event_ID"] == '2' or row["event_ID"] == '3' or row["event_ID"] == '4' or row["event_ID"] == '5':
-                new_distance = DistancesTable(event_id = row["event_ID"], week = row["week"], target=row['value'] )
-
-                try:
-                    db.session.add(new_distance)
-                    db.session.commit()
-                except:
-                    print('error', row['event_ID'])
-
-    return True
-
-
-from activity.classes import Sport
-def copy_coefficients_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as coefficients_file:
-        a = csv.DictReader(coefficients_file)
-        for row in a:
-            if row["activityName"] == "Narciarstwo zjadowe":
-                row["activityName"] = "Narciarstwo zjazdowe"
-
-            if row['activityName'] == "Wspinaczka ":
-                row['activityName'] = "Wspinaczka"
-
-            if row["constant"] == '0':
-                row["constant"] = False
-            
-            else:
-                row["constant"] = True
-
-            full_name = row["activityName"]
-    
-            activity_id = Sport.query.filter(Sport.name == full_name).first()
-
-            if row['setName'] == '1':
-                new_coefficient = CoefficientsList(event_id = 2, activity_type_id = activity_id.id , value = row['value'], is_constant = row['constant'] )
-                db.session.add(new_coefficient)
-
-            elif row['setName'] == 'DlaKsiegowych2':
-                new_coefficient = CoefficientsList(event_id = 3, activity_type_id = activity_id.id , value = row['value'], is_constant = row['constant'] )
-                db.session.add(new_coefficient)
-            
-            elif row['setName'] == 'Biegowe Świry 8':
-                new_coefficient = CoefficientsList(event_id = 5, activity_type_id = activity_id.id , value = row['value'], is_constant = row['constant'] )
-                new_coefficient2 = CoefficientsList(event_id = 4, activity_type_id = activity_id.id , value = row['value'], is_constant = row['constant'] )
-                db.session.add(new_coefficient)
-                db.session.add(new_coefficient2)
-
-    db.session.commit()
-    return True
-
-
-def copy_events_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as events_file:
-        a = csv.DictReader(events_file)
-        for row in a:
-
-            if row["isPrivate"] == 'NULL' or row["isPrivate"] == '0':
-                row["isPrivate"] = False
-            else:
-                row["isPrivate"] = True
-
-            if row["isSecret"] == 'NULL' or row["isSecret"] == '0':
-                row["isSecret"] = False
-            else:
-                row["isSecret"] = True
-
-            (y1, m1, d1) = row['start'].split('-')
-            start = dt.date(int(y1),int(m1),int(d1))
-
-            new_event = Event(id = row["id"], name = row["name"], start = start, length_weeks = row["lengthWeeks"], 
-            password = row["password"], admin_id = row["adminID"], status = row["status"], is_private = row["isPrivate"], is_secret = row["isSecret"], max_user_amount = row['maxUserAmount'] )
-
-            db.session.add(new_event)
-            db.session.commit()
-
-    return True
 

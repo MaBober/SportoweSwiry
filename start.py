@@ -6,11 +6,14 @@ from config import Config
 from werkzeug.exceptions import HTTPException
 
 import logging
+import datetime as dt
+
+LOGGING_FILE_NAME = f'logs/{dt.date.today()}.log'
 
 logging.basicConfig(
-        filename='logging1.log',
-        level=logging.DEBUG,
-        format=f'%(asctime)s %(levelname)s %(name)s : %(message)s'
+        filename = LOGGING_FILE_NAME,
+        level = logging.DEBUG,
+        format = f'%(asctime)s %(levelname)s %(name)s : %(message)s'
         )
 
 db = SQLAlchemy()

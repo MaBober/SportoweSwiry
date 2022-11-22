@@ -6,15 +6,39 @@ from config import Config
 from werkzeug.exceptions import HTTPException
 
 import logging
+from logging.config import dictConfig
 import datetime as dt
 
 LOGGING_FILE_NAME = f'{dt.date.today()}.log'
 
-logging.basicConfig(
-        filename = LOGGING_FILE_NAME,
-        level = logging.DEBUG,
-        format = f'%(asctime)s %(levelname)s %(name)s : %(message)s'
-        )
+dictConfig(
+    {
+        "version": 1,
+        "formatters": {
+            "default": {
+                "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
+            }
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+                "formatter": "default",
+            },
+            "file": {
+                "class": "logging.FileHandler",
+                "filename": "flask.log",
+                "formatter": "default",
+            },
+        },
+        "root": {"level": "DEBUG", "handlers": ["console", "file"]},
+    }
+)
+
+# logging.basicConfig(
+#         level = logging.DEBUG,
+#         format = f'%(asctime)s %(levelname)s %(name)s : %(message)s'
+#         )
 
 db = SQLAlchemy()
 migrate = Migrate()

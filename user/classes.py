@@ -185,6 +185,17 @@ class User(db.Model, UserMixin):
 
         return finished_events
 
+    @classmethod
+    def all_application_admins(cls):
+        admins = cls.query.filter(cls.is_admin == True).all()
+        return admins
+
+
+    @classmethod
+    def added_in_last_days(cls, days):
+        inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
+        return len(inserts)
+
     
 
 class DashboardPage:

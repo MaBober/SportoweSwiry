@@ -1,7 +1,7 @@
 import imp
 from start import db
 from flask_login import current_user
-from flask import render_template, current_app, request, flash
+from flask import render_template, current_app, request, flash, redirect, url_for
 from flask_mail import Mail, Message
 from start import app
 from user.classes import User

@@ -1,0 +1,12 @@
+Czołem {{admin.name}}!
+
+Poniżej znajdziesz podsumowanie ostatnich dni w apliakcji:
+
+New activities: {{ summary.new_activities }}
+New users: {{ summary.new_users }}
+New events: {{ summary.new_events }}
+Sumary for : {{ summary.start_date }} - {{ summary.end_date }}
+
+Pozdrawiam,
+Aplikacja Sportowe Świry
+

@@ -569,50 +569,5 @@ def googleConnectCallback():
     return redirect(url_for('user.settings'))
 
 
-@user.route('/copy_users')
-def copy_users():
-
-    copy_users_from_csv('user.csv')
-
-    return redirect(url_for('other.hello'))
-
-
-def copy_users_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as user_file:
-        a = csv.DictReader(user_file)
-        for row in a:
-
-            if row["isAddedByGoogle"] == 'NULL' or row["isAddedByGoogle"] == '0':
-                row["isAddedByGoogle"] = False
-            else:
-                row["isAddedByGoogle"] = True
-
-            if row["isAddedByFB"] == 'NULL' or row["isAddedByFB"] == '0':
-                row["isAddedByFB"] = False
-            else:
-                row["isAddedByFB"] = True
-
-            if row["isAdmin"] == '0':
-                row["isAdmin"] = False
-            else:
-                row["isAdmin"] = True
-
-            if row["confirmed"] == '1':
-                row["confirmed"] = True
-
-            newUser = User(id = row["id"], name = row["name"], last_name = row["lastName"], mail=row["mail"], 
-            password = row["password"], is_admin=row["isAdmin"], confirmed = row["confirmed"], is_added_by_google = row["isAddedByGoogle"], is_added_by_fb = row["isAddedByFB"] )
-
-            try:
-
-                db.session.add(newUser)
-                db.session.commit()
-
-            except:
-                print('Error', row['id'])
-
-    return True
-    
 
 

@@ -2,7 +2,7 @@ from start import app, db
 from flask import redirect, url_for, request, flash
 from flask_login import current_user, login_user
 
-from .classes import User
+# from .classes import User
 
 from urllib.parse import urlparse, urljoin
 from werkzeug.utils import secure_filename
@@ -47,23 +47,23 @@ def save_avatar_from_facebook(picture_url):
     return True
 
 
-def create_standard_account(form):
-        #Rewriting data from the form
-        newUser=User(name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, 
-                    id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data)
+# def create_standard_account(form):
+#         #Rewriting data from the form
+#         newUser=User(name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, 
+#                     id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data)
 
-        #Generatin new user ID
-        newUser.id = newUser.generate_ID()
-        newUser.id = newUser.removeAccents()
+#         #Generatin new user ID
+#         newUser.id = newUser.generate_ID()
+#         newUser.id = newUser.removeAccents()
 
-        #Hash of password       
-        newUser.password=newUser.hash_password()
+#         #Hash of password       
+#         newUser.password=newUser.hash_password()
 
-        #adding admins to datebase 
-        db.session.add(newUser)
-        db.session.commit()
+#         #adding admins to datebase 
+#         db.session.add(newUser)
+#         db.session.commit()
 
-        return newUser
+#         return newUser
 
 
 def create_account_from_social_media(first_name, last_name, email):

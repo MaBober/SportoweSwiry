@@ -42,7 +42,7 @@ def about():
 def sendMessage():
 
     if current_user.is_authenticated:
-        form=MessageForm(name=current_user.name, lastName=current_user.lastName, mail=current_user.mail)
+        form=MessageForm(name=current_user.name, lastName=current_user.last_name, mail=current_user.mail)
         form.name.data = form.name.data+" "+form.lastName.data
     else:
         form=MessageForm()
@@ -51,20 +51,19 @@ def sendMessage():
 
     if form.validate_on_submit():
 
-
         if current_user.is_authenticated:
-            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(current_user.name, current_user.lastName, form.subject.data),'message', 
+            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(current_user.name, current_user.last_name, form.subject.data),'message', 
                         name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, message=form.message.data)
         else:
             send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.lastName.data, form.subject.data),'message', 
                         name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, message=form.message.data)
 
-        admins = User.query.filter(User.isAdmin==True).all()
+        admins = User.query.filter(User.is_admin == True).all()
         for admin in admins:
             if current_user.is_authenticated:
-                newMessage = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, senderName=current_user.name+" "+current_user.lastName, receiver = admin.mail, receiverName = admin.name+" "+admin.lastName, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, sendByApp = False, sendByEmail= True, messageReaded=False, multipleMessage=True)
+                newMessage = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, senderName=current_user.name+" "+current_user.last_name, receiver = admin.mail, receiverName = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, sendByApp = False, sendByEmail= True, messageReaded=False, multipleMessage=True)
             else:
-                newMessage = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, senderName=form.name.data, receiver = admin.mail, receiverName = admin.name+" "+admin.lastName, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, sendByApp = False, sendByEmail= True, messageReaded=False, multipleMessage=True)
+                newMessage = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, senderName=form.name.data, receiver = admin.mail, receiverName = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, sendByApp = False, sendByEmail= True, messageReaded=False, multipleMessage=True)
             sendMessgaeFromContactFormToDB(newMessage)
         
         flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")
@@ -154,74 +153,3 @@ def changeStatusOfMessage(messageID):
     current_user.changeStatusOfMessage(messageID)
     return redirect(url_for('other.mailbox', actionName='inbox'))
 
-
-import csv
-
-@other.route('/copy_data')
-def copy_data():
-
-    #copy_messages_from_csv("mailbox_message.csv")
-    #copy_users_from_csv('user.csv')
-    # copy_events_from_csv('event.csv')
-    # copy_coefficients_from_csv("coefficients_list.csv")
-    # copy_distances_from_csv("distances_table.csv")
-    # copy_participation_from_csv("participation.csv")
-    
-
-    # copy_activities_from_csv('activities.csv')
-
-    return redirect(url_for('other.hello'))
-
-
-@other.route('/copy_messages')
-def copy_messages():
-    
-    copy_messages_from_csv("mailbox_message.csv")
-
-    return redirect(url_for('other.hello'))
-
-
-def copy_messages_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as messages_file:
-        a = csv.DictReader(messages_file)
-        for row in a:
-
-            if row["sendByApp"] == 'NULL' or row["sendByApp"] == '0':
-                row["sendByApp"] = False
-            else:
-                row["sendByApp"] = True
-
-            if row["sendByEmail"] == 'NULL' or row["sendByEmail"] == '0':
-                row["sendByEmail"] = False
-            else:
-                row["sendByEmail"] = True
-
-            if row["messageReaded"] == 'NULL' or row["messageReaded"] == '0':
-                row["messageReaded"] = False
-            else:
-                row["messageReaded"] = True
-
-
-            if row["multipleMessage"] == 'NULL' or row["multipleMessage"] == '0':
-                row["multipleMessage"] = False
-            else:
-                row["multipleMessage"] = True
-
-            sender = User.query.filter(User.mail == row['sender']).first()
-            reciver = User.query.filter(User.mail == row['receiver']).first()
-            
-            if row['receiver'] != "Wszyscy":
-
-                new_message = MailboxMessage(id = row["id"], date = row["date"], sender = sender.id, receiver = reciver.id, 
-                subject = row["subject"], message = row["message"], send_by_app = row["sendByApp"], send_by_email = row["sendByEmail"],
-                message_readed = row["messageReaded"], multiple_message = row['multipleMessage'] )
-
-                try:
-                    db.session.add(new_message)
-                    db.session.commit()
-
-                except:
-                    print('Error', row['id'])
-
-    return True

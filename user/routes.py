@@ -1,4 +1,3 @@
-import csv
 from start import app, db
 from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort
 
@@ -14,11 +13,10 @@ from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, Upload
 from other.functions import account_confirmation_check, send_email
 import functools
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
-from .functions import create_standard_account, create_account_from_social_media, standard_login, login_from_facebook
+from .functions import create_account_from_social_media, standard_login, login_from_facebook
 
 from werkzeug.utils import secure_filename
-import datetime as dt
-import math
+
 
 from PIL import Image
 from flask_avatars import Avatars
@@ -94,21 +92,22 @@ def isSafeUrl(target):
 @user.route("/createUser", methods=['POST', 'GET'])
 def create_account():
     
-    form=UserForm()
+    form = UserForm()
     #Delete of not necessary inputs
     del form.isAdmin
     del form.avatar
     del form.id
 
     if form.validate_on_submit():
-        newUser = create_standard_account(form)
-        token = newUser.generate_confirmation_token()
-        send_email(newUser.mail, 'Potwierdź swoje konto','confirm', user=newUser, token=token)
-        login_user(newUser)
-        flash("Nowe konto zostało utworzone a na Twój adres e-mail wysłano prośbę o potwierdzenie konta.")
-        return redirect(url_for('other.hello'))
 
-    return render_template('NewUserForm.html', form=form, title_prefix = "Nowe konto")
+        message, status, action = User.create_standard_account(form)
+        flash(message, status)
+
+        return action
+
+    return render_template('NewUserForm.html',
+                 form = form,
+                 title_prefix = "Nowe konto")
 
 @user.route("/unconfirmedUser")
 @login_required
@@ -119,45 +118,41 @@ def unconfirmed():
 @login_required
 def sendTokenAgain():
     #Re-sending the email with the account confirmation token
-    user=User.query.filter(User.id == current_user.id).first()
-    token = user.generate_confirmation_token()
-    send_email(user.mail, 'Potwierdź swoje konto.','confirm', user=user, token=token)
-    flash('Na twój adres e-mail wysłano nowego linka potwierdzającego.')
+    user = User.query.filter(User.id == current_user.id).first()
+    user.generate_confirmation_token()
+
+    flash('Na Twój adres e-mail wysłano nowy link potwierdzający.')
     return redirect(url_for('other.hello'))
 
 @user.route('/confirmUser/<token>')
 @login_required
 def confirm(token):
-    #Accepting the token confirmation from the link in the email
-    if current_user.confirmed:
-        return redirect(url_for('other.hello'))
-    if current_user.confirm(token):
-        db.session.commit()
-        flash('Potwierdziłeś swoje konto. Dzięki!')
-    else:
-        flash('Link potwierdzający jest nieprawidłowy lub już wygasł.')
-    return redirect(url_for('other.hello'))
+
+    message, status, action = current_user.confirm(token)
+    flash(message, status)
+
+    return action
 
 @user.route('/resetPassword', methods=['POST', 'GET'])
 def reset():
 
-    form=VerifyEmailForm()
+    form = VerifyEmailForm()
     if form.validate_on_submit():
 
         #Sending a token to an e-mail to reset the password
-        user=User.query.filter(User.mail == form.mail.data).first()
-        token = user.generate_reset_token()
-        send_email(user.mail, 'Zresetuj hasło','reset', user=user, token=token)
-        # flash("Na twój adres e-mail wysłano link do resetowania hasła")
-        return redirect(url_for('user.resetSent'))
+        user = User.query.filter(User.mail == form.mail.data).first()
+        message, staus, action = user.generate_reset_token()
+
+        #flash(message, staus)
+        return action
 
     return render_template("verifyEmail.html", title_prefix = "Resetowanie hasła", form=form)
 
 
-@user.route('/resetPasswordSent')
-def resetSent():
+# @user.route('/resetPasswordSent')
+# def resetSent():
 
-    return render_template("verifyEmailSent.html", title_prefix = "Resetowanie hasła")
+#     return render_template("verifyEmailSent.html", title_prefix = "Resetowanie hasła")
 
 @user.route('/resetPassword/<token>', methods=['POST', 'GET'])
 def resetPassword(token):

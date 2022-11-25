@@ -42,10 +42,10 @@ def cron_send_weekly_summary():
     admins = User.all_application_admins()
     user = User.query.filter(User.id == "MaBober").first()
 
-    # send_email(user.mail, f"Podsumowanie ostatnich {summary.days} dni",'emails/app_summary', summary = summary, admin = user)
+    send_email(user.mail, f"Podsumowanie ostatnich {summary.days} dni",'emails/app_summary', summary = summary, admin = user)
 
-    for admin in admins:
-        send_email(admin.mail, f"Podsumowanie ostatnich {summary.days} dni",'emails/app_summary', summary = summary, admin = admin)
+    # for admin in admins:
+    #     send_email(admin.mail, f"Podsumowanie ostatnich {summary.days} dni",'emails/app_summary', summary = summary, admin = admin)
 
     return f'''New activities: {str(summary.new_activities)}
               New users: {str(summary.new_users)}

@@ -109,10 +109,12 @@ def create_account():
                  form = form,
                  title_prefix = "Nowe konto")
 
+
 @user.route("/unconfirmedUser")
 @login_required
 def unconfirmed():
     return render_template('unconfirmed.html')
+
 
 @user.route("/sendTokenAgain")
 @login_required
@@ -124,6 +126,7 @@ def sendTokenAgain():
     flash('Na Twój adres e-mail wysłano nowy link potwierdzający.')
     return redirect(url_for('other.hello'))
 
+
 @user.route('/confirmUser/<token>')
 @login_required
 def confirm(token):
@@ -132,6 +135,7 @@ def confirm(token):
     flash(message, status)
 
     return action
+
 
 @user.route('/resetPassword', methods=['POST', 'GET'])
 def reset():
@@ -149,11 +153,6 @@ def reset():
     return render_template("verifyEmail.html", title_prefix = "Resetowanie hasła", form=form)
 
 
-# @user.route('/resetPasswordSent')
-# def resetSent():
-
-#     return render_template("verifyEmailSent.html", title_prefix = "Resetowanie hasła")
-
 @user.route('/resetPassword/<token>', methods=['POST', 'GET'])
 def resetPassword(token):
 
@@ -162,13 +161,9 @@ def resetPassword(token):
 
     if form.validate_on_submit():
 
-        #Token acceptance and password reset
-        if User.reset_password(token, form.newPassword.data):
-            db.session.commit()
-            flash("Hasło zostało poprawnie zmienione. Możesz się zalogować")
-            return redirect(url_for('user.login'))
-        else:
-            return redirect(url_for('other.hello'))
+        message, status, action = User.reset_password(token, form.newPassword.data)
+        flash(message, status)
+        return action
 
     return render_template("resetPassword.html", title_prefix = "Resetowanie hasła", form=form)
 
@@ -218,17 +213,16 @@ def login():
 
     logForm = LoginForm()
     if logForm.validate_on_submit():
+
+        # Defines uset to login
         user = User.query.filter(User.id == logForm.name.data).first() #if login=userName
         if not user:
             user = User.query.filter(User.mail == logForm.name.data).first() #if login=mail
 
-        verify = User.verify_password(user.password, logForm.password.data)
+        message, status, action = user.standard_login(login_form = logForm, remember = logForm.remember.data)
 
-        if user != None and verify:
-            standard_login(user, remember=logForm.remember.data)
-            return redirect(url_for('user.dashboard'))
-        else:
-            flash("Nie udało się zalogować. Podaj pawidłowe hasło")
+        flash(message, status)
+        return action
 
     return render_template('login.html',
                     logForm=logForm,
@@ -396,21 +390,20 @@ def callbackGoogle():
     email = id_info.get("email")
 
     #Login user to APP
-    user=User.query.filter(User.mail == email).first()
+    user = User.query.filter(User.mail == email).first()
     if user != None:
-        standard_login(user, remember=True)
+        user.standard_login(remember=True)
         return redirect(url_for('user.dashboard'))
 
     else:
-        fullName = str(name).split(" ")
-        firstName = fullName[0]
-        last_name = fullName[1]
+        full_name = str(name).split(" ")
+        first_name = full_name[0]
+        last_name = full_name[1]
 
-        create_account_from_social_media(firstName, last_name, email)
-        user=User.query.filter(User.mail == email).first()
-        standard_login(user, remember=True)
+        message, status, action = User.create_account_from_social_media(first_name, last_name, email, google)
+        flash(message, status)
 
-    return redirect(url_for('other.hello'))
+    return action
 
 
 @login_from_messenger_check

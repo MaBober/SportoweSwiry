@@ -14,17 +14,17 @@ import random
 import string
 
 
-def standard_login(user, remember=True):
-    login_user(user, remember)
-    check_next_url()
-    return None
+# def standard_login(user, remember=True):
+#     login_user(user, remember)
+#     check_next_url()
+#     return None
 
 
-def login_from_facebook(user, picture_url, remember=True):
-    login_user(user, remember)
-    save_avatar_from_facebook(picture_url)
-    check_next_url()
-    return None
+# def login_from_facebook(user, picture_url, remember=True):
+#     login_user(user, remember)
+#     save_avatar_from_facebook(picture_url)
+#     check_next_url()
+#     return None
 
 
 def check_next_url():
@@ -68,23 +68,23 @@ def save_avatar_from_facebook(picture_url):
 #         return newUser
 
 
-def create_account_from_social_media(first_name, last_name, email):
+# def create_account_from_social_media(first_name, last_name, email):
 
-    from .classes import User
+#     from .classes import User
     
-    newUser=User(name=first_name, last_name=last_name, mail=email, 
-                id=first_name[0:3]+last_name[0:3], password=password_generator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
+#     newUser=User(name=first_name, last_name=last_name, mail=email, 
+#                 id=first_name[0:3]+last_name[0:3], password=password_generator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
 
-    #Generatin new user ID
-    newUser.id = newUser.generate_ID()
-    newUser.id = newUser.removeAccents()
+#     #Generatin new user ID
+#     newUser.id = newUser.generate_ID()
+#     newUser.id = newUser.removeAccents()
 
-    #Hash of password       
-    newUser.password=newUser.hash_password()
+#     #Hash of password       
+#     newUser.password=newUser.hash_password()
 
-    #adding admins to datebase 
-    db.session.add(newUser)
-    db.session.commit()
+#     #adding admins to datebase 
+#     db.session.add(newUser)
+#     db.session.commit()
 
     return True
 

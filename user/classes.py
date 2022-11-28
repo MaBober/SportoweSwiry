@@ -74,6 +74,7 @@ class User(db.Model, UserMixin):
                 current_app.logger.exception(f"User failed to create account!")
                 return message, 'danger', redirect(url_for('other.hello'))
 
+
     @classmethod
     def create_account_from_social_media(cls, first_name, last_name, email, media):
 
@@ -120,7 +121,45 @@ class User(db.Model, UserMixin):
 
 
 
-    def standard_login(self, login_form, social_media_login = False,  remember=True):
+    def modify(self, user_form):
+
+        current_app.logger.info(f"User ({self.id}) tries to modify account!")
+
+        try:
+            self.name = user_form.name.data
+            self.last_name = user_form.lastName.data
+            db.session.commit()
+
+            message = 'Dane zmienione poprawnie'
+            current_app.logger.info(f"User ({self.id}) modified account!")
+            return message, 'success', redirect(url_for('user.settings'))
+
+        except:
+            message = "NIE ZMIENIONO DANYCH! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User failed to modify account!")
+            return message, 'danger', redirect(url_for('user.settings'))
+
+    
+    def change_password(self, password_form):
+
+        current_app.logger.info(f"User ({self.id}) tries to modify passowrd!")
+
+        try:
+            self.password = password_form.newPassword.data
+            self.password = self.hash_password()
+            db.session.commit()
+            current_app.logger.info(f"User ({self.id}) modified password!")
+            message = "Hasło zmienione. Zaloguj się ponownie"
+
+            return message, "success", redirect(url_for('user.logout'))
+        
+        except:
+            message = "NIE ZMIENIONO HASŁA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User failed to modify password!")
+            return message, 'danger', redirect(url_for('user.passwordChange'))
+
+
+    def standard_login(self, login_form, social_media_login = False, remember=True):
 
         from user.functions import check_next_url
         if self.verify_password(login_form.password.data) or social_media_login:
@@ -199,17 +238,16 @@ class User(db.Model, UserMixin):
         pwdhash = binascii.hexlify(pwdhash).decode('ascii')
         return pwdhash == stored_password
 
+
     def generate_confirmation_token(self, expiration=3600, remind = False):
 
         current_app.logger.info(f"User {self.id} tries to generate confirmation token")
-
         try:
             s = Serializer(current_app.config['SECRET_KEY'], expiration)
             token = s.dumps({'confirm': self.id}).decode('utf-8')
             send_email(self.mail, 'Potwierdź swoje konto.','confirm', user = self, token = token)
 
             current_app.logger.info(f"User {self.id} generated confirmation token")
-
             return token
 
         except:
@@ -238,12 +276,10 @@ class User(db.Model, UserMixin):
     def confirm(self, token):
 
         current_app.logger.info(f"User {self.id }tries to confirm account")
-
         if self.confirmed:
             message = f"Twoje kotno jest już aktywowane!"
             current_app.logger.warning(f"User {self.id } tries to confirm account. It is already confrimed!")
             return message, "message", redirect(url_for('other.hello'))
-
         
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
@@ -274,6 +310,31 @@ class User(db.Model, UserMixin):
             return message, "danger", redirect(url_for('other.hello'))
 
 
+    def upload_avatar(self, file):
+
+        current_app.logger.info(f"User {self.id} tries to upload avatar")
+        try:
+            avatar = Image.open(file)
+            avatar.thumbnail((60,60))
+
+            if avatar.format=='png':
+                filename = secure_filename(self.id + '.png')
+                avatar = avatar.convert('RGB') #Convert from png to jpg
+
+            filename = secure_filename(self.id + '.jpg')
+            avatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+
+            message = "Zdjęcie profilowe zostało poprawnie przesłane na serwer"
+            current_app.logger.info(f"User {self.id} uploaded avatar")
+            return message, "success", redirect(url_for('user.settings'))
+
+        except:
+            message = "NIE WGRANO AVATARA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User {self.id} failed to upload avatar!")
+            return message, "danger", redirect(url_for('other.hello'))
+
+
+
     def avatarCheck(self, path):
         filename = self.id+'.jpg'
         path = os.path.join(path, filename)
@@ -281,15 +342,14 @@ class User(db.Model, UserMixin):
         
         
     def give_avatar_path(self):
+
         avatars_location = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
         if self.avatarCheck(avatars_location):
-
             avatar_path = '/static/avatars/{}'.format(self.id+'.jpg')
             return avatar_path
 
         else:
-            
             avatar_path = "/static/pictures/runner_logo.svg"
             return avatar_path
 
@@ -330,13 +390,26 @@ class User(db.Model, UserMixin):
             current_app.logger.exception(f"User {user.id} failed to reset password")
             return message, 'danger', redirect(url_for('other.hello'))
 
-    @staticmethod
-    def rotateAvatar(angle):
-        filename = secure_filename(current_user.id + '.jpg')
-        avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-        rotatedAvatar = avatar.rotate(angle, expand=True)
-        rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-        return True
+    
+    def rotate_avatar(self, angle):
+
+        current_app.logger.infor(f"User tries to rotate avatar ({angle})")
+        try:
+
+            filename = secure_filename(self.id + '.jpg')
+            avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+            rotatedAvatar = avatar.rotate(angle, expand = True)
+            rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+
+            message = 'Avatar obrócony. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            current_app.logger.info(f"User {self.id} rotated avatar ({angle})")
+            return message, 'danger', redirect(url_for('user.settings'))
+
+        except:
+            message = 'AVATAR NIE OBRÓCONY. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            current_app.logger.exception(f"User {self.id} failed to rotate avatar ({angle})")
+            return message, 'danger', redirect(url_for('user.settings'))
+
 
     @property
     def all_events(self):
@@ -351,6 +424,7 @@ class User(db.Model, UserMixin):
 
         return user_events
 
+
     @property
     def current_events(self):
 
@@ -358,6 +432,7 @@ class User(db.Model, UserMixin):
         current_events = self.all_events.filter(Event.status != "5")
 
         return current_events
+
 
     @property
     def finished_events(self):

@@ -156,7 +156,7 @@ def reset():
 @user.route('/resetPassword/<token>', methods=['POST', 'GET'])
 def resetPassword(token):
 
-    form=NewPasswordForm()
+    form = NewPasswordForm()
     del form.oldPassword
 
     if form.validate_on_submit():
@@ -177,7 +177,7 @@ def list_of_users():
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    users=User.query.all()
+    users = User.query.all()
     return render_template('listOfUsers.html',
                     users=users,
                     title_prefix = "Lista użytkowników")
@@ -254,35 +254,20 @@ def settings():
     del form.mail
 
     if not avatarForm.image.data and form.validate_on_submit():
-        #update name and last name in date base
-        actualUser = User.query.filter(User.name == current_user.name).first()
-        actualUser.name = form.name.data
-        actualUser.last_name = form.lastName.data
-        db.session.commit()
 
-        flash('Dane zmienione poprawnie')
-        return redirect(url_for('user.settings'))
+        #update name and last name in date base
+        message, status, action = current_user.modify(form)
+
+        flash(message, status)
+        return action
 
     if avatarForm.validate_on_submit():
+
         #Upload a new avatar photo
+        message, status, action = current_user.upload_avatar(avatarForm.image.data)
 
-        file = avatarForm.image.data
-        avatar = Image.open(file)
-        avatar.thumbnail((60,60))
-
-        if avatar.format=='jpg':
-            filename = secure_filename(current_user.id + '.jpg')
-            print(app.root_path, app.config['AVATARS_SAVE_PATH'], filename)
-            avatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-            flash("Zdjęcie profilowe zostało poprawnie przesłane na serwer")
-        else:
-            filename = secure_filename(current_user.id + '.png')
-            newAvatar = avatar.convert('RGB') #Convert from png to jpg
-            filename = secure_filename(current_user.id + '.jpg')
-            newAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-            flash("Zdjęcie profilowe zostało poprawnie przesłane na serwer")
-
-        return redirect(url_for('user.settings'))
+        flash(message, status)
+        return action
 
     return render_template("accountSettings.html",
                     title_prefix = "Ustawienia konta",
@@ -297,17 +282,15 @@ def settings():
 @login_required #This page needs to be login
 def passwordChange():
 
-    form=NewPasswordForm(id=current_user.id)
+    form = NewPasswordForm(id=current_user.id)
 
     if form.validate_on_submit():
-        #update password in date base
-        actualUser=User.query.filter(User.name == current_user.name).first()
-        actualUser.password=form.newPassword.data
-        actualUser.password=actualUser.hash_password()
-        db.session.commit()
 
-        flash("Hasło zmienione. Zaloguj się ponownie")
-        return redirect(url_for('user.logout'))
+        #update password in date base
+        message, status, action = current_user.change_password(form)
+
+        flash(message, status)
+        return action
 
     return render_template("passwordChange.html",
                     title_prefix = "Prywatność",
@@ -329,20 +312,20 @@ def dashboard():
                     menuMode = "mainApp")     
         
   
-@user.route("/rotateAvatarRight")
+@user.route("/rotate_avatar_right")
 @login_required #This page needs to be login
-def rotateAvatarRight():
+def rotate_avatar_right():
 
-    current_user.rotateAvatar(angle = -90)
-    return redirect(url_for('user.settings'))
+    action = current_user.rotate_avatar(angle = -90)
+    return action
 
 
-@user.route("/rotateAvatarLeft")
+@user.route("/rotate_avatar_left")
 @login_required #This page needs to be login
-def rotateAvatarLeft():
+def rotate_avatar_left():
 
-    current_user.rotateAvatar(angle = 90)
-    return redirect(url_for('user.settings'))
+    action = current_user.rotate_avatar(angle = 90)
+    return action
 
 
 @login_from_messenger_check
@@ -392,18 +375,19 @@ def callbackGoogle():
     #Login user to APP
     user = User.query.filter(User.mail == email).first()
     if user != None:
-        user.standard_login(remember=True)
-        return redirect(url_for('user.dashboard'))
+        message, status, action = user.standard_login(remember=True, social_media_login = True)
+        flash(message, status)
+        return action
 
     else:
         full_name = str(name).split(" ")
         first_name = full_name[0]
         last_name = full_name[1]
 
-        message, status, action = User.create_account_from_social_media(first_name, last_name, email, google)
+        message, status, action = User.create_account_from_social_media(first_name, last_name, email, "Google")
         flash(message, status)
 
-    return action
+        return action
 
 
 @login_from_messenger_check
@@ -434,17 +418,19 @@ def callback():
     
     user = User.query.filter(User.mail == email).first()
     if user != None:
-            login_from_facebook(user, picture_url, remember=True)
-            return redirect(url_for('user.dashboard'))
-    else:
-        fullName = str(name).split(" ")
-        firstName = fullName[0]
-        last_name = fullName[1]
+        message, status, action = user.standard_login(remember=True, social_media_login = True)
+        flash(message, status)
+        return action
 
-        create_account_from_social_media(firstName, last_name, email)
-        user = User.query.filter(User.mail == email).first()
-        login_from_facebook(user, picture_url, remember=True)
-        return redirect(url_for('user.dashboard'))
+    else:
+        full_name = str(name).split(" ")
+        first_name = full_name[0]
+        last_name = full_name[1]
+
+        message, status, action = User.create_account_from_social_media(first_name, last_name, email, "Facebook")
+        flash(message, status)
+
+        return action
 
 
 @login_from_messenger_check
@@ -479,6 +465,7 @@ def callbackConnect():
 
     if checkingExistUser:
         flash("Konto facebook ({}) jest już wykorzystywane przez innego użytkownika. Użyj innego konta facebook".format(email))
+
     else:
         user = User.query.filter(User.id == current_user.id).first()
         fullName = str(name).split(" ")

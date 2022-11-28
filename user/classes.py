@@ -74,6 +74,76 @@ class User(db.Model, UserMixin):
                 current_app.logger.exception(f"User failed to create account!")
                 return message, 'danger', redirect(url_for('other.hello'))
 
+    @classmethod
+    def create_account_from_social_media(cls, first_name, last_name, email, media):
+
+        current_app.logger.info(f"New user generate callback from {media} to create new account")
+        from functions import password_generator
+        
+        new_user = cls(name = first_name,
+                      last_name = last_name,
+                      mail=  email,
+                      id = first_name[0:3]+last_name[0:3],
+                      password = password_generator(),
+                      isAdmin = False,
+                      confirmed = True,
+                      is_added_by_google = False,
+                      is_added_by_fb = False)
+
+        if media == "Google":
+            new_user.is_added_by_google = True
+        
+        elif media == 'Facebook':
+            new_user.is_added_by_fb = True
+
+        #Generatin new user ID
+        new_user.id = new_user.generate_ID()
+        new_user.id = new_user.removeAccents()
+
+        #Hash of password       
+        new_user.password=new_user.hash_password()
+
+        try:
+            #adding admins to datebase 
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user)
+
+            message = "Nowe konto zostało utworzone!"
+            current_app.logger.info(f"New user ({new_user.id}) created account with {media}!")
+            return message, 'success', redirect(url_for('other.hello'))
+
+        except:
+            message = "NIE UTWORZONO KONTA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User failed to create account!")
+            return message, 'danger', redirect(url_for('other.hello'))
+
+
+
+    def standard_login(self, login_form, social_media_login = False,  remember=True):
+
+        from user.functions import check_next_url
+        if self.verify_password(login_form.password.data) or social_media_login:
+
+            try:
+                login_user(self, remember)
+                check_next_url()
+                message = "Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name)
+                current_app.logger.info(f"User ({self.id}) loged in!")
+                return message, "success", redirect(url_for('user.dashboard'))
+            
+            except:
+                message = "NIE ZALOGOWOANO! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User failed to log in!")
+                return message, 'danger', redirect(url_for('other.hello'))
+
+        else:
+            message = "Nie udało się zalogować. Podaj pawidłowe hasło!"
+            current_app.logger.info(f"User ({self.id}) tried to login with wrong password!")
+            return message, 'danger', render_template('login.html',
+                                        logForm=login_form,
+                                        title_prefix = "Zaloguj")
+
 
     def changeStatusOfMessage(self,id):
         messageFromInBox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
@@ -119,10 +189,11 @@ class User(db.Model, UserMixin):
         pwdhash = binascii.hexlify(pwdhash)
         return (salt + pwdhash).decode('ascii') 
 
-    def verify_password(stored_password, provided_password):
+    
+    def verify_password(self, provided_password):
         """Verify a stored password against one provided by user"""
-        salt = stored_password[:64]
-        stored_password = stored_password[64:]
+        salt = self.password[:64]
+        stored_password = self.password[64:]
         pwdhash = hashlib.pbkdf2_hmac('sha512', provided_password.encode('utf-8'),
         salt.encode('ascii'), 100000)
         pwdhash = binascii.hexlify(pwdhash).decode('ascii')
@@ -224,22 +295,40 @@ class User(db.Model, UserMixin):
 
     @staticmethod
     def reset_password(token, new_password):
+
+        current_app.logger.infor(f"User tries to reset password")
         s = Serializer(current_app.config['SECRET_KEY'])
+
         try:
             data = s.loads(token.encode('utf-8'))
+
         except:
-            return False
+            message = 'Hasło nie zostało poprawnie zmienione!'
+            current_app.logger.warning(f"User didn't reset password")
+            return message, 'danger', redirect(url_for('other.hello'))
+
         user = User.query.get(data.get('resetPassword'))
+
         if user is None:
-            return False
+            message = 'Hasło nie zostało poprawnie zmienione!'
+            current_app.logger.warning(f"User didn't reset password")
+            return message, 'danger', redirect(url_for('other.hello'))
 
-        user.password = new_password
-        
-        #Hash of password       
-        user.password = user.hash_password()
+        try:
+            user.password = new_password      
+            user.password = user.hash_password()
 
-        db.session.add(user)
-        return True
+            db.session.add(user)
+            db.session.commit()
+
+            message = 'Hasło zostało poprawnie zmienione. Możesz się zalogować'
+            current_app.logger.info(f"User {user.id} reset password")
+            return message, 'success', redirect(url_for('user.login'))
+
+        except:
+            message = 'HASŁO NIE ZOSTAŁO ZMIENIONE. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            current_app.logger.exception(f"User {user.id} failed to reset password")
+            return message, 'danger', redirect(url_for('other.hello'))
 
     @staticmethod
     def rotateAvatar(angle):

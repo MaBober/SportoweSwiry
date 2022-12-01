@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from other.classes import MailboxMessage
 from event.classes import Event
-from user.forms import LoginForm
+
 
 
 class User(db.Model, UserMixin):
@@ -159,8 +159,7 @@ class User(db.Model, UserMixin):
             current_app.logger.exception(f"User failed to modify password!")
             return message, 'danger', redirect(url_for('user.passwordChange'))
 
-
-    def standard_login(self, login_form = LoginForm(), social_media_login = False, remember=True):
+    def standard_login(self, login_form = None, social_media_login = False, remember=True):
 
         from user.functions import check_next_url
         if self.verify_password(login_form.password.data) or social_media_login:

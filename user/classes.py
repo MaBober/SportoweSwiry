@@ -87,7 +87,7 @@ class User(db.Model, UserMixin):
                       mail=  email,
                       id = first_name[0:3]+last_name[0:3],
                       password = password_generator(),
-                      isAdmin = False,
+                      is_admin = False,
                       confirmed = True,
                       is_added_by_google = False,
                       is_added_by_fb = False)

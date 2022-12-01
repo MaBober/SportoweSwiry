@@ -15,6 +15,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from other.classes import MailboxMessage
 from event.classes import Event
+from user.forms import LoginForm
 
 
 class User(db.Model, UserMixin):
@@ -79,7 +80,7 @@ class User(db.Model, UserMixin):
     def create_account_from_social_media(cls, first_name, last_name, email, media):
 
         current_app.logger.info(f"New user generate callback from {media} to create new account")
-        from functions import password_generator
+        from .functions import password_generator
         
         new_user = cls(name = first_name,
                       last_name = last_name,
@@ -159,7 +160,7 @@ class User(db.Model, UserMixin):
             return message, 'danger', redirect(url_for('user.passwordChange'))
 
 
-    def standard_login(self, login_form, social_media_login = False, remember=True):
+    def standard_login(self, login_form = LoginForm(), social_media_login = False, remember=True):
 
         from user.functions import check_next_url
         if self.verify_password(login_form.password.data) or social_media_login:

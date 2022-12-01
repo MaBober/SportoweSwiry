@@ -1,10 +1,10 @@
 import imp
 from start import db
 from flask_login import current_user
-from flask import render_template, current_app, request, flash
+from flask import render_template, current_app, request, flash, redirect, url_for
 from flask_mail import Mail, Message
 from start import app
-from user.classes import User
+# from user.classes import User
 from .classes import MailboxMessage
 from event.classes import Event
 import datetime
@@ -17,6 +17,8 @@ def send_email(to, subject, template, **kwargs):
     msg.body = render_template(template + ".txt", **kwargs)
     msg.html = render_template(template + ".html", **kwargs)
     mail.send(msg)
+    current_app.logger.info(f"Mail sent to: {to}. Subject: {subject}.")
+
     return None
 
 

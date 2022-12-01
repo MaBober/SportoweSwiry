@@ -1,4 +1,3 @@
-import csv
 from start import app, db
 from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort
 
@@ -14,11 +13,10 @@ from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, Upload
 from other.functions import account_confirmation_check, send_email
 import functools
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
-from .functions import create_standard_account, create_account_from_social_media, standard_login, login_from_facebook
+from .functions import create_account_from_social_media, standard_login, login_from_facebook
 
 from werkzeug.utils import secure_filename
-import datetime as dt
-import math
+
 
 from PIL import Image
 from flask_avatars import Avatars
@@ -94,86 +92,78 @@ def isSafeUrl(target):
 @user.route("/createUser", methods=['POST', 'GET'])
 def create_account():
     
-    form=UserForm()
+    form = UserForm()
     #Delete of not necessary inputs
     del form.isAdmin
     del form.avatar
     del form.id
 
     if form.validate_on_submit():
-        newUser = create_standard_account(form)
-        token = newUser.generate_confirmation_token()
-        send_email(newUser.mail, 'Potwierdź swoje konto','confirm', user=newUser, token=token)
-        login_user(newUser)
-        flash("Nowe konto zostało utworzone a na Twój adres e-mail wysłano prośbę o potwierdzenie konta.")
-        return redirect(url_for('other.hello'))
 
-    return render_template('NewUserForm.html', form=form, title_prefix = "Nowe konto")
+        message, status, action = User.create_standard_account(form)
+        flash(message, status)
+
+        return action
+
+    return render_template('NewUserForm.html',
+                 form = form,
+                 title_prefix = "Nowe konto")
+
 
 @user.route("/unconfirmedUser")
 @login_required
 def unconfirmed():
     return render_template('unconfirmed.html')
 
+
 @user.route("/sendTokenAgain")
 @login_required
 def sendTokenAgain():
     #Re-sending the email with the account confirmation token
-    user=User.query.filter(User.id == current_user.id).first()
-    token = user.generate_confirmation_token()
-    send_email(user.mail, 'Potwierdź swoje konto.','confirm', user=user, token=token)
-    flash('Na twój adres e-mail wysłano nowego linka potwierdzającego.')
+    user = User.query.filter(User.id == current_user.id).first()
+    user.generate_confirmation_token()
+
+    flash('Na Twój adres e-mail wysłano nowy link potwierdzający.')
     return redirect(url_for('other.hello'))
+
 
 @user.route('/confirmUser/<token>')
 @login_required
 def confirm(token):
-    #Accepting the token confirmation from the link in the email
-    if current_user.confirmed:
-        return redirect(url_for('other.hello'))
-    if current_user.confirm(token):
-        db.session.commit()
-        flash('Potwierdziłeś swoje konto. Dzięki!')
-    else:
-        flash('Link potwierdzający jest nieprawidłowy lub już wygasł.')
-    return redirect(url_for('other.hello'))
+
+    message, status, action = current_user.confirm(token)
+    flash(message, status)
+
+    return action
+
 
 @user.route('/resetPassword', methods=['POST', 'GET'])
 def reset():
 
-    form=VerifyEmailForm()
+    form = VerifyEmailForm()
     if form.validate_on_submit():
 
         #Sending a token to an e-mail to reset the password
-        user=User.query.filter(User.mail == form.mail.data).first()
-        token = user.generate_reset_token()
-        send_email(user.mail, 'Zresetuj hasło','reset', user=user, token=token)
-        # flash("Na twój adres e-mail wysłano link do resetowania hasła")
-        return redirect(url_for('user.resetSent'))
+        user = User.query.filter(User.mail == form.mail.data).first()
+        message, staus, action = user.generate_reset_token()
+
+        #flash(message, staus)
+        return action
 
     return render_template("verifyEmail.html", title_prefix = "Resetowanie hasła", form=form)
 
 
-@user.route('/resetPasswordSent')
-def resetSent():
-
-    return render_template("verifyEmailSent.html", title_prefix = "Resetowanie hasła")
-
 @user.route('/resetPassword/<token>', methods=['POST', 'GET'])
 def resetPassword(token):
 
-    form=NewPasswordForm()
+    form = NewPasswordForm()
     del form.oldPassword
 
     if form.validate_on_submit():
 
-        #Token acceptance and password reset
-        if User.reset_password(token, form.newPassword.data):
-            db.session.commit()
-            flash("Hasło zostało poprawnie zmienione. Możesz się zalogować")
-            return redirect(url_for('user.login'))
-        else:
-            return redirect(url_for('other.hello'))
+        message, status, action = User.reset_password(token, form.newPassword.data)
+        flash(message, status)
+        return action
 
     return render_template("resetPassword.html", title_prefix = "Resetowanie hasła", form=form)
 
@@ -187,7 +177,7 @@ def list_of_users():
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    users=User.query.all()
+    users = User.query.all()
     return render_template('listOfUsers.html',
                     users=users,
                     title_prefix = "Lista użytkowników")
@@ -223,17 +213,16 @@ def login():
 
     logForm = LoginForm()
     if logForm.validate_on_submit():
+
+        # Defines uset to login
         user = User.query.filter(User.id == logForm.name.data).first() #if login=userName
         if not user:
             user = User.query.filter(User.mail == logForm.name.data).first() #if login=mail
 
-        verify = User.verify_password(user.password, logForm.password.data)
+        message, status, action = user.standard_login(login_form = logForm, remember = logForm.remember.data)
 
-        if user != None and verify:
-            standard_login(user, remember=logForm.remember.data)
-            return redirect(url_for('user.dashboard'))
-        else:
-            flash("Nie udało się zalogować. Podaj pawidłowe hasło")
+        flash(message, status)
+        return action
 
     return render_template('login.html',
                     logForm=logForm,
@@ -265,35 +254,20 @@ def settings():
     del form.mail
 
     if not avatarForm.image.data and form.validate_on_submit():
-        #update name and last name in date base
-        actualUser = User.query.filter(User.name == current_user.name).first()
-        actualUser.name = form.name.data
-        actualUser.last_name = form.lastName.data
-        db.session.commit()
 
-        flash('Dane zmienione poprawnie')
-        return redirect(url_for('user.settings'))
+        #update name and last name in date base
+        message, status, action = current_user.modify(form)
+
+        flash(message, status)
+        return action
 
     if avatarForm.validate_on_submit():
+
         #Upload a new avatar photo
+        message, status, action = current_user.upload_avatar(avatarForm.image.data)
 
-        file = avatarForm.image.data
-        avatar = Image.open(file)
-        avatar.thumbnail((60,60))
-
-        if avatar.format=='jpg':
-            filename = secure_filename(current_user.id + '.jpg')
-            print(app.root_path, app.config['AVATARS_SAVE_PATH'], filename)
-            avatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-            flash("Zdjęcie profilowe zostało poprawnie przesłane na serwer")
-        else:
-            filename = secure_filename(current_user.id + '.png')
-            newAvatar = avatar.convert('RGB') #Convert from png to jpg
-            filename = secure_filename(current_user.id + '.jpg')
-            newAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-            flash("Zdjęcie profilowe zostało poprawnie przesłane na serwer")
-
-        return redirect(url_for('user.settings'))
+        flash(message, status)
+        return action
 
     return render_template("accountSettings.html",
                     title_prefix = "Ustawienia konta",
@@ -308,17 +282,15 @@ def settings():
 @login_required #This page needs to be login
 def passwordChange():
 
-    form=NewPasswordForm(id=current_user.id)
+    form = NewPasswordForm(id=current_user.id)
 
     if form.validate_on_submit():
-        #update password in date base
-        actualUser=User.query.filter(User.name == current_user.name).first()
-        actualUser.password=form.newPassword.data
-        actualUser.password=actualUser.hash_password()
-        db.session.commit()
 
-        flash("Hasło zmienione. Zaloguj się ponownie")
-        return redirect(url_for('user.logout'))
+        #update password in date base
+        message, status, action = current_user.change_password(form)
+
+        flash(message, status)
+        return action
 
     return render_template("passwordChange.html",
                     title_prefix = "Prywatność",
@@ -340,20 +312,20 @@ def dashboard():
                     menuMode = "mainApp")     
         
   
-@user.route("/rotateAvatarRight")
+@user.route("/rotate_avatar_right")
 @login_required #This page needs to be login
-def rotateAvatarRight():
+def rotate_avatar_right():
 
-    current_user.rotateAvatar(angle = -90)
-    return redirect(url_for('user.settings'))
+    action = current_user.rotate_avatar(angle = -90)
+    return action
 
 
-@user.route("/rotateAvatarLeft")
+@user.route("/rotate_avatar_left")
 @login_required #This page needs to be login
-def rotateAvatarLeft():
+def rotate_avatar_left():
 
-    current_user.rotateAvatar(angle = 90)
-    return redirect(url_for('user.settings'))
+    action = current_user.rotate_avatar(angle = 90)
+    return action
 
 
 @login_from_messenger_check
@@ -401,21 +373,21 @@ def callbackGoogle():
     email = id_info.get("email")
 
     #Login user to APP
-    user=User.query.filter(User.mail == email).first()
+    user = User.query.filter(User.mail == email).first()
     if user != None:
-        standard_login(user, remember=True)
-        return redirect(url_for('user.dashboard'))
+        message, status, action = user.standard_login(remember=True, social_media_login = True)
+        flash(message, status)
+        return action
 
     else:
-        fullName = str(name).split(" ")
-        firstName = fullName[0]
-        last_name = fullName[1]
+        full_name = str(name).split(" ")
+        first_name = full_name[0]
+        last_name = full_name[1]
 
-        create_account_from_social_media(firstName, last_name, email)
-        user=User.query.filter(User.mail == email).first()
-        standard_login(user, remember=True)
+        message, status, action = User.create_account_from_social_media(first_name, last_name, email, "Google")
+        flash(message, status)
 
-    return redirect(url_for('other.hello'))
+        return action
 
 
 @login_from_messenger_check
@@ -446,17 +418,19 @@ def callback():
     
     user = User.query.filter(User.mail == email).first()
     if user != None:
-            login_from_facebook(user, picture_url, remember=True)
-            return redirect(url_for('user.dashboard'))
-    else:
-        fullName = str(name).split(" ")
-        firstName = fullName[0]
-        last_name = fullName[1]
+        message, status, action = user.standard_login(remember=True, social_media_login = True)
+        flash(message, status)
+        return action
 
-        create_account_from_social_media(firstName, last_name, email)
-        user = User.query.filter(User.mail == email).first()
-        login_from_facebook(user, picture_url, remember=True)
-        return redirect(url_for('user.dashboard'))
+    else:
+        full_name = str(name).split(" ")
+        first_name = full_name[0]
+        last_name = full_name[1]
+
+        message, status, action = User.create_account_from_social_media(first_name, last_name, email, "Facebook")
+        flash(message, status)
+
+        return action
 
 
 @login_from_messenger_check
@@ -491,6 +465,7 @@ def callbackConnect():
 
     if checkingExistUser:
         flash("Konto facebook ({}) jest już wykorzystywane przez innego użytkownika. Użyj innego konta facebook".format(email))
+
     else:
         user = User.query.filter(User.id == current_user.id).first()
         fullName = str(name).split(" ")
@@ -569,50 +544,5 @@ def googleConnectCallback():
     return redirect(url_for('user.settings'))
 
 
-@user.route('/copy_users')
-def copy_users():
-
-    copy_users_from_csv('user.csv')
-
-    return redirect(url_for('other.hello'))
-
-
-def copy_users_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as user_file:
-        a = csv.DictReader(user_file)
-        for row in a:
-
-            if row["isAddedByGoogle"] == 'NULL' or row["isAddedByGoogle"] == '0':
-                row["isAddedByGoogle"] = False
-            else:
-                row["isAddedByGoogle"] = True
-
-            if row["isAddedByFB"] == 'NULL' or row["isAddedByFB"] == '0':
-                row["isAddedByFB"] = False
-            else:
-                row["isAddedByFB"] = True
-
-            if row["isAdmin"] == '0':
-                row["isAdmin"] = False
-            else:
-                row["isAdmin"] = True
-
-            if row["confirmed"] == '1':
-                row["confirmed"] = True
-
-            newUser = User(id = row["id"], name = row["name"], last_name = row["lastName"], mail=row["mail"], 
-            password = row["password"], is_admin=row["isAdmin"], confirmed = row["confirmed"], is_added_by_google = row["isAddedByGoogle"], is_added_by_fb = row["isAddedByFB"] )
-
-            try:
-
-                db.session.add(newUser)
-                db.session.commit()
-
-            except:
-                print('Error', row['id'])
-
-    return True
-    
 
 

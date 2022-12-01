@@ -162,7 +162,7 @@ class User(db.Model, UserMixin):
     def standard_login(self, login_form = None, social_media_login = False, remember=True):
 
         from user.functions import check_next_url
-        if self.verify_password(login_form.password.data) or social_media_login:
+        if social_media_login or self.verify_password(login_form.password.data):
 
             try:
                 login_user(self, remember)

@@ -39,7 +39,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app():
-    print(os.path.join("logs", f'{str(dt.date.today())}.log'))
+
     app = Flask(__name__)
     
     app.logger.info("app created!")
@@ -67,7 +67,12 @@ def handle_exception(error):
 
     from flask_login import current_user
 
-    current_app.logger.exception(f"User {current_user.id} generated error")
+    if current_user.is_anonymous:
+        current_app.logger.exception(f"User anonymous user generated error")
+    
+    else:
+        current_app.logger.exception(f"User {current_user.id} generated error")
+
     if isinstance(error, HTTPException):
        return error
     

@@ -726,6 +726,14 @@ class Event(db.Model):
     def available_to_join(cls):
         return cls.query.filter(cls.status.in_(['0','1'])).all()
 
+    
+    @classmethod
+    def added_in_last_days(cls, days):
+
+        inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
+
+        return len(inserts)
+
 
     
 

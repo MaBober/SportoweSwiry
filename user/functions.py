@@ -2,7 +2,7 @@ from start import app, db
 from flask import redirect, url_for, request, flash
 from flask_login import current_user, login_user
 
-from .classes import User
+# from .classes import User
 
 from urllib.parse import urlparse, urljoin
 from werkzeug.utils import secure_filename
@@ -14,25 +14,27 @@ import random
 import string
 
 
-def standard_login(user, remember=True):
-    login_user(user, remember)
-    check_next_url()
-    return None
+# def standard_login(user, remember=True):
+#     login_user(user, remember)
+#     check_next_url()
+#     return None
 
-def login_from_facebook(user, picture_url, remember=True):
-    login_user(user, remember)
-    save_avatar_from_facebook(picture_url)
-    check_next_url()
-    return None
+
+# def login_from_facebook(user, picture_url, remember=True):
+#     login_user(user, remember)
+#     save_avatar_from_facebook(picture_url)
+#     check_next_url()
+#     return None
 
 
 def check_next_url():
     next = request.args.get('next')
     if next and is_safe_url(next):
-        flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name))
+        #flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name))
         return redirect(next)
     else:
-        flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name))
+        #flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name))
+        pass
     return None
 
 def is_safe_url(target): 
@@ -47,42 +49,44 @@ def save_avatar_from_facebook(picture_url):
     return True
 
 
-def create_standard_account(form):
-        #Rewriting data from the form
-        newUser=User(name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, 
-                    id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data)
+# def create_standard_account(form):
+#         #Rewriting data from the form
+#         newUser=User(name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, 
+#                     id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data)
 
-        #Generatin new user ID
-        newUser.id = newUser.generate_ID()
-        newUser.id = newUser.removeAccents()
+#         #Generatin new user ID
+#         newUser.id = newUser.generate_ID()
+#         newUser.id = newUser.removeAccents()
 
-        #Hash of password       
-        newUser.password=newUser.hash_password()
+#         #Hash of password       
+#         newUser.password=newUser.hash_password()
 
-        #adding admins to datebase 
-        db.session.add(newUser)
-        db.session.commit()
+#         #adding admins to datebase 
+#         db.session.add(newUser)
+#         db.session.commit()
 
-        return newUser
+#         return newUser
 
 
-def create_account_from_social_media(first_name, last_name, email):
+# def create_account_from_social_media(first_name, last_name, email):
+
+#     from .classes import User
     
-        newUser=User(name=first_name, last_name=last_name, mail=email, 
-                    id=first_name[0:3]+last_name[0:3], password=password_generator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
+#     newUser=User(name=first_name, last_name=last_name, mail=email, 
+#                 id=first_name[0:3]+last_name[0:3], password=password_generator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
 
-        #Generatin new user ID
-        newUser.id = newUser.generate_ID()
-        newUser.id = newUser.removeAccents()
+#     #Generatin new user ID
+#     newUser.id = newUser.generate_ID()
+#     newUser.id = newUser.removeAccents()
 
-        #Hash of password       
-        newUser.password=newUser.hash_password()
+#     #Hash of password       
+#     newUser.password=newUser.hash_password()
 
-        #adding admins to datebase 
-        db.session.add(newUser)
-        db.session.commit()
+#     #adding admins to datebase 
+#     db.session.add(newUser)
+#     db.session.commit()
 
-        return True
+    return True
 
 def password_generator():
     characters=[]

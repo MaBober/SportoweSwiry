@@ -2,12 +2,14 @@ import pandas as pd
 import pygal
 
 from start import db, app
-from flask_login import UserMixin, current_user
+from flask_login import UserMixin, current_user, login_user
+from other.functions import send_email
 import hashlib
 import binascii
-from flask import current_app
+from flask import current_app, redirect, url_for, render_template
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import os
+import datetime as dt
 
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -24,6 +26,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(500), nullable=False)
     is_admin = db.Column(db.Boolean)
     confirmed = db.Column(db.Boolean, default=False)
+    added_on = db.Column(db.DateTime, default = dt.datetime.now())
 
     is_added_by_google = db.Column(db.Boolean, default=False)
     is_added_by_fb = db.Column(db.Boolean, default=False)
@@ -34,6 +37,152 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User %r>' % self.id
+
+    @classmethod
+    def create_standard_account(cls, form):
+
+            current_app.logger.info(f"New user tries to create account")
+            #Rewriting data from the form
+            new_user = cls(
+                name = form.name.data,
+                last_name = form.lastName.data,
+                mail = form.mail.data, 
+                id = form.name.data[0:3]+form.lastName.data[0:3],
+                password = form.password.data)
+
+            #Generatin new user ID
+            new_user.id = new_user.generate_ID()
+            new_user.id = new_user.removeAccents()
+
+            #Hash of password       
+            new_user.password=new_user.hash_password()
+
+            try:
+                #adding user to datebase 
+                db.session.add(new_user)
+                db.session.commit()
+
+                new_user.generate_confirmation_token()
+                login_user(new_user)
+
+                message = "Nowe konto zostało utworzone, a na Twój adres e-mail wysłano prośbę o potwierdzenie konta."
+                current_app.logger.info(f"New user ({new_user.id}) created account!")
+                return message, 'success', redirect(url_for('other.hello'))
+
+            except:
+                message = "NIE UTWORZONO KONTA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User failed to create account!")
+                return message, 'danger', redirect(url_for('other.hello'))
+
+
+    @classmethod
+    def create_account_from_social_media(cls, first_name, last_name, email, media):
+
+        current_app.logger.info(f"New user generate callback from {media} to create new account")
+        from functions import password_generator
+        
+        new_user = cls(name = first_name,
+                      last_name = last_name,
+                      mail=  email,
+                      id = first_name[0:3]+last_name[0:3],
+                      password = password_generator(),
+                      isAdmin = False,
+                      confirmed = True,
+                      is_added_by_google = False,
+                      is_added_by_fb = False)
+
+        if media == "Google":
+            new_user.is_added_by_google = True
+        
+        elif media == 'Facebook':
+            new_user.is_added_by_fb = True
+
+        #Generatin new user ID
+        new_user.id = new_user.generate_ID()
+        new_user.id = new_user.removeAccents()
+
+        #Hash of password       
+        new_user.password=new_user.hash_password()
+
+        try:
+            #adding admins to datebase 
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user)
+
+            message = "Nowe konto zostało utworzone!"
+            current_app.logger.info(f"New user ({new_user.id}) created account with {media}!")
+            return message, 'success', redirect(url_for('other.hello'))
+
+        except:
+            message = "NIE UTWORZONO KONTA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User failed to create account!")
+            return message, 'danger', redirect(url_for('other.hello'))
+
+
+
+    def modify(self, user_form):
+
+        current_app.logger.info(f"User ({self.id}) tries to modify account!")
+
+        try:
+            self.name = user_form.name.data
+            self.last_name = user_form.lastName.data
+            db.session.commit()
+
+            message = 'Dane zmienione poprawnie'
+            current_app.logger.info(f"User ({self.id}) modified account!")
+            return message, 'success', redirect(url_for('user.settings'))
+
+        except:
+            message = "NIE ZMIENIONO DANYCH! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User failed to modify account!")
+            return message, 'danger', redirect(url_for('user.settings'))
+
+    
+    def change_password(self, password_form):
+
+        current_app.logger.info(f"User ({self.id}) tries to modify passowrd!")
+
+        try:
+            self.password = password_form.newPassword.data
+            self.password = self.hash_password()
+            db.session.commit()
+            current_app.logger.info(f"User ({self.id}) modified password!")
+            message = "Hasło zmienione. Zaloguj się ponownie"
+
+            return message, "success", redirect(url_for('user.logout'))
+        
+        except:
+            message = "NIE ZMIENIONO HASŁA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User failed to modify password!")
+            return message, 'danger', redirect(url_for('user.passwordChange'))
+
+
+    def standard_login(self, login_form, social_media_login = False, remember=True):
+
+        from user.functions import check_next_url
+        if self.verify_password(login_form.password.data) or social_media_login:
+
+            try:
+                login_user(self, remember)
+                check_next_url()
+                message = "Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name)
+                current_app.logger.info(f"User ({self.id}) loged in!")
+                return message, "success", redirect(url_for('user.dashboard'))
+            
+            except:
+                message = "NIE ZALOGOWOANO! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User failed to log in!")
+                return message, 'danger', redirect(url_for('other.hello'))
+
+        else:
+            message = "Nie udało się zalogować. Podaj pawidłowe hasło!"
+            current_app.logger.info(f"User ({self.id}) tried to login with wrong password!")
+            return message, 'danger', render_template('login.html',
+                                        logForm=login_form,
+                                        title_prefix = "Zaloguj")
+
 
     def changeStatusOfMessage(self,id):
         messageFromInBox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
@@ -79,80 +228,188 @@ class User(db.Model, UserMixin):
         pwdhash = binascii.hexlify(pwdhash)
         return (salt + pwdhash).decode('ascii') 
 
-    def verify_password(stored_password, provided_password):
+    
+    def verify_password(self, provided_password):
         """Verify a stored password against one provided by user"""
-        salt = stored_password[:64]
-        stored_password = stored_password[64:]
+        salt = self.password[:64]
+        stored_password = self.password[64:]
         pwdhash = hashlib.pbkdf2_hmac('sha512', provided_password.encode('utf-8'),
         salt.encode('ascii'), 100000)
         pwdhash = binascii.hexlify(pwdhash).decode('ascii')
         return pwdhash == stored_password
 
-    def generate_confirmation_token(self, expiration=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'confirm': self.id}).decode('utf-8')
+
+    def generate_confirmation_token(self, expiration=3600, remind = False):
+
+        current_app.logger.info(f"User {self.id} tries to generate confirmation token")
+        try:
+            s = Serializer(current_app.config['SECRET_KEY'], expiration)
+            token = s.dumps({'confirm': self.id}).decode('utf-8')
+            send_email(self.mail, 'Potwierdź swoje konto.','confirm', user = self, token = token)
+
+            current_app.logger.info(f"User {self.id} generated confirmation token")
+            return token
+
+        except:
+            current_app.logger.exception(f"User {self.id} failed to generate confirmation token")
+
 
     def generate_reset_token(self, expiration=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'resetPassword': self.id}).decode('utf-8')
+
+        current_app.logger.info(f"User {self.id} tries to generate reset token")
+        try:
+            s = Serializer(current_app.config['SECRET_KEY'], expiration)
+            token = s.dumps({'resetPassword': self.id}).decode('utf-8')
+            send_email(self.mail, 'Zresetuj hasło','reset', user = self, token = token)
+
+            current_app.logger.info(f"User {self.id} generated reset token")
+            message = f'Na Twój adres e-mail ({self.mail}) wysłaliśmy link do resetowania hasła'
+            return message, "success", render_template("verifyEmailSent.html", title_prefix = "Resetowanie hasła")
+
+        except:
+
+            current_app.logger.exception(f"User {self.id} failed to generate reset token")
+            message = f'NIE UDAŁO SIĘ ZRESETOWAĆ HASŁA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            return message, "danger", redirect(url_for('user.reset'))
+
     
     def confirm(self, token):
+
+        current_app.logger.info(f"User {self.id }tries to confirm account")
+        if self.confirmed:
+            message = f"Twoje kotno jest już aktywowane!"
+            current_app.logger.warning(f"User {self.id } tries to confirm account. It is already confrimed!")
+            return message, "message", redirect(url_for('other.hello'))
+        
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token.encode('utf-8'))
+
         except:
-            return False
+            message = 'Link potwierdzający jest nieprawidłowy lub już wygasł'
+            current_app.logger.warning(f"User {self.id } tries to confirm account with wrong token!")
+            return message, "danger", redirect(url_for('other.hello'))
+
         if data.get('confirm') != self.id:
-            return False
-        self.confirmed = True
-        db.session.add(self)
-        return True
+            message = 'Link potwierdzający jest nieprawidłowy lub już wygasł'
+            current_app.logger.warning(f"User {self.id } tries to confirm account with wrong token!")
+            return message, "danger", redirect(url_for('other.hello'))
+
+        try:
+            self.confirmed = True
+            db.session.add(self)
+            db.session.commit()
+
+            message = "Twoje konto zostało potwierdzone. Dzięki!"
+            current_app.logger.info(f"User {self.id} confirmed account")
+            return message, "success", redirect(url_for('other.hello'))
+
+        except:
+            message = "NIE POTWIERDZONO KONTA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User {self.id} failed to confirm account")
+            return message, "danger", redirect(url_for('other.hello'))
+
+
+    def upload_avatar(self, file):
+
+        current_app.logger.info(f"User {self.id} tries to upload avatar")
+        try:
+            avatar = Image.open(file)
+            avatar.thumbnail((60,60))
+
+            if avatar.format=='png':
+                filename = secure_filename(self.id + '.png')
+                avatar = avatar.convert('RGB') #Convert from png to jpg
+
+            filename = secure_filename(self.id + '.jpg')
+            avatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+
+            message = "Zdjęcie profilowe zostało poprawnie przesłane na serwer"
+            current_app.logger.info(f"User {self.id} uploaded avatar")
+            return message, "success", redirect(url_for('user.settings'))
+
+        except:
+            message = "NIE WGRANO AVATARA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User {self.id} failed to upload avatar!")
+            return message, "danger", redirect(url_for('other.hello'))
+
+
 
     def avatarCheck(self, path):
-        filename=self.id+'.jpg'
-        path=os.path.join(path, filename)
+        filename = self.id+'.jpg'
+        path = os.path.join(path, filename)
         return os.path.isfile(path)
         
         
     def give_avatar_path(self):
+
         avatars_location = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
         if self.avatarCheck(avatars_location):
-
             avatar_path = '/static/avatars/{}'.format(self.id+'.jpg')
             return avatar_path
 
         else:
-            
             avatar_path = "/static/pictures/runner_logo.svg"
             return avatar_path
 
     @staticmethod
     def reset_password(token, new_password):
+
+        current_app.logger.infor(f"User tries to reset password")
         s = Serializer(current_app.config['SECRET_KEY'])
+
         try:
             data = s.loads(token.encode('utf-8'))
+
         except:
-            return False
+            message = 'Hasło nie zostało poprawnie zmienione!'
+            current_app.logger.warning(f"User didn't reset password")
+            return message, 'danger', redirect(url_for('other.hello'))
+
         user = User.query.get(data.get('resetPassword'))
+
         if user is None:
-            return False
+            message = 'Hasło nie zostało poprawnie zmienione!'
+            current_app.logger.warning(f"User didn't reset password")
+            return message, 'danger', redirect(url_for('other.hello'))
 
-        user.password = new_password
-        
-        #Hash of password       
-        user.password=user.hash_password()
+        try:
+            user.password = new_password      
+            user.password = user.hash_password()
 
-        db.session.add(user)
-        return True
+            db.session.add(user)
+            db.session.commit()
 
-    @staticmethod
-    def rotateAvatar(angle):
-        filename = secure_filename(current_user.id + '.jpg')
-        avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-        rotatedAvatar = avatar.rotate(angle, expand=True)
-        rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
-        return True
+            message = 'Hasło zostało poprawnie zmienione. Możesz się zalogować'
+            current_app.logger.info(f"User {user.id} reset password")
+            return message, 'success', redirect(url_for('user.login'))
+
+        except:
+            message = 'HASŁO NIE ZOSTAŁO ZMIENIONE. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            current_app.logger.exception(f"User {user.id} failed to reset password")
+            return message, 'danger', redirect(url_for('other.hello'))
+
+    
+    def rotate_avatar(self, angle):
+
+        current_app.logger.infor(f"User tries to rotate avatar ({angle})")
+        try:
+
+            filename = secure_filename(self.id + '.jpg')
+            avatar = Image.open(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+            rotatedAvatar = avatar.rotate(angle, expand = True)
+            rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
+
+            message = 'Avatar obrócony. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            current_app.logger.info(f"User {self.id} rotated avatar ({angle})")
+            return message, 'danger', redirect(url_for('user.settings'))
+
+        except:
+            message = 'AVATAR NIE OBRÓCONY. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            current_app.logger.exception(f"User {self.id} failed to rotate avatar ({angle})")
+            return message, 'danger', redirect(url_for('user.settings'))
+
 
     @property
     def all_events(self):
@@ -167,6 +424,7 @@ class User(db.Model, UserMixin):
 
         return user_events
 
+
     @property
     def current_events(self):
 
@@ -175,6 +433,7 @@ class User(db.Model, UserMixin):
 
         return current_events
 
+
     @property
     def finished_events(self):
 
@@ -182,6 +441,17 @@ class User(db.Model, UserMixin):
         finished_events = self.all_events.filter(Event.status.in_(['4','5']))
 
         return finished_events
+
+    @classmethod
+    def all_application_admins(cls):
+        admins = cls.query.filter(cls.is_admin == True).all()
+        return admins
+
+
+    @classmethod
+    def added_in_last_days(cls, days):
+        inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
+        return len(inserts)
 
     
 
@@ -207,6 +477,8 @@ class DashboardPage:
             all_event_activities = self.event.give_all_event_activities(calculated_values = True)
             split_list = self.event.give_overall_weekly_summary(all_event_activities)
 
+
+            print(split_list[self.event.current_week-1].loc['total']['calculated_distance'])
             self.event_week_distance =  split_list[self.event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
 
             if self.event.status != '0':

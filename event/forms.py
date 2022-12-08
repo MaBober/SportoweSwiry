@@ -23,6 +23,7 @@ class CoeficientsForm(FlaskForm):
     event_name = StringField("Wyzwanie", validators=[DataRequired("Pole nie może być puste")])
     activity_name = StringField("Nazwa aktywności", validators=[DataRequired("Pole nie może być puste")])
     is_constant = BooleanField("Stała wartość?", default=False)
+    strava_name = StringField("Nazwa aktywności w Strava [ENG]")
     value = DecimalField("Współczynnik", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
 
 class NewSportToEventForm(FlaskForm):

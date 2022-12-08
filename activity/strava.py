@@ -1,7 +1,7 @@
 from start import db
 from flask import request
 from flask_login import current_user
-from activity.classes import Activities
+from activity.classes import Activities, Sport
 
 import requests
 import pandas as pd
@@ -9,21 +9,20 @@ import datetime as dt
 
 def getLastStravaActivityDate():
 
-        lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).filter(Activities.stravaID != None).order_by(Activities.date.desc()).first()
+        lastStravaActivitity = Activities.query.filter(Activities.user_id == current_user.id).filter(Activities.strava_id != None).order_by(Activities.date.desc()).first()
         
         if lastStravaActivitity == None:
-            lastActivitity = Activities.query.filter(Activities.userName == current_user.id).order_by(Activities.date.desc()).first()
+            lastActivitity = Activities.query.filter(Activities.user_id == current_user.id).order_by(Activities.date.desc()).first()
             lastStravaActivitityDate = dt.datetime(lastActivitity.date.year, lastActivitity.date.month, lastActivitity.date.day,0,0).timestamp()
         
         else:
-            lastStravaActivitity = Activities.query.filter(Activities.userName == current_user.id).filter(Activities.stravaID != None).order_by(Activities.date.desc()).first()
+            lastStravaActivitity = Activities.query.filter(Activities.user_id == current_user.id).filter(Activities.strava_id != None).order_by(Activities.date.desc()).first()
             lastStravaActivitityDate = dt.datetime(lastStravaActivitity.date.year, lastStravaActivitity.date.month, lastStravaActivitity.date.day,0,0).timestamp()
 
         return lastStravaActivitityDate
 
-def getStravaAccessToken():
+def getStravaAccessToken(code):
 
-    code = request.args['code']
     auth_url = "https://www.strava.com/oauth/token"
     
     payload = {
@@ -64,36 +63,16 @@ def convertStravaData(activitiesJSON):
     
     activitiesJSON = activitiesJSON[columns]
 
-    #Dodać wszystkie aktywności!
-    #Defines names relations
-    acitivitieTypesDictionary = {
-        "Run":"Bieg",
-        "Trail Run" : "BiegTrailowy",
-        "Walk":"Spacer",
-        "Hike":"Trekking",
-        "Ride":"Kolarstwo",
-        "Mountain Bike Ride": "Kolarstwo górskie",
-        "Gravel Bike Ride":"Kolarstwo",
-        "Swim":"Pływanie",
-        "Alpine Ski":"Narciarstwo zjazdowe",
-        "Yoga":"Joga",
-        "Inline Skate":"Rolki",
-        "Rock Climb":"Wspinaczka",
-        "Workout":"Fitness"
-        }
-
     #Defines columns names
     columsDictionary = {
-        "id":"stravaID",
+        "id":"strava_id",
         "start_date_local":"date",
-        "type":"activity",
+        "type":"activity_type_id",
         'elapsed_time':"time"
         }
 
     activitiesJSON.rename(columns=columsDictionary, inplace=True)
-    
     #Prepare data to match APP tables
-    activitiesJSON["activity"].replace(acitivitieTypesDictionary, inplace=True)
     activitiesJSON['date'] = pd.to_datetime(activitiesJSON['date']).dt.date
     activitiesJSON['distance'] = round(activitiesJSON['distance']/1000, 1)
     activitiesJSON['time'] = activitiesJSON['time'].apply(format_time)
@@ -108,22 +87,28 @@ def format_time(x):
 
 def addStravaActivitiesToDB (activitiesFrame):
 
-    for index, singleActivity in activitiesFrame.iterrows() :
+    for index, single_activity in activitiesFrame.iterrows() :
 
-        #Check if activity with this stravaID doesn't already exists
-        if Activities.query.filter(Activities.stravaID == singleActivity['stravaID']).first() == None:
+        #Check if activity with this strava_id doesn't already exists
+        if Activities.query.filter(Activities.strava_id == single_activity['strava_id']).first() == None:
 
             #Check if simlat activity wasn't addded manualy
             if Activities.query.\
-                filter(Activities.date == singleActivity['date']).\
-                filter(Activities.stravaID == None).\
-                filter(Activities.userName == current_user.id).\
-                filter(Activities.activity == singleActivity['activity'] ).\
-                filter(Activities.distance > singleActivity['distance'] -0.5).\
-                filter(Activities.distance < singleActivity['distance'] +0.5).first() == None:
+                filter(Activities.date == single_activity['date']).\
+                filter(Activities.strava_id == None).\
+                filter(Activities.id == current_user.id).\
+                filter(Activities.activity_type_id == Sport.query.filter(Sport.strava_name == single_activity["activity_type_id"]).first().id ).\
+                filter(Activities.distance > single_activity['distance'] -0.5).\
+                filter(Activities.distance < single_activity['distance'] +0.5).first() == None:
 
-                newActivity=Activities(date=singleActivity['date'], activity=singleActivity['activity'], distance=singleActivity['distance'], 
-                                    time=singleActivity['time'], userName=current_user.id, stravaID = singleActivity['stravaID'])
+                print(single_activity)
+                newActivity=Activities(
+                    date = single_activity['date'],
+                    activity_type_id = Sport.query.filter(Sport.strava_name == single_activity["activity_type_id"]).first().id,
+                    distance = single_activity['distance'], 
+                    time = single_activity['time'],
+                    user_id = current_user.id,
+                    strava_id = single_activity['strava_id'])
 
                 # #adding new activity to datebase
                 db.session.add(newActivity)

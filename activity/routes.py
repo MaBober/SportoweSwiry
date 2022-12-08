@@ -188,7 +188,8 @@ def strava_callback():
                 if request.args["scope"] == 'read,activity:read_all,profile:read_all':
                     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-                    access_token = getStravaAccessToken()
+                    code = request.args['code']
+                    access_token = getStravaAccessToken(code)
                     lastStravaActivity = getLastStravaActivityDate()
                     stravaActivities = getActivitiesFromStrava(access_token, lastStravaActivity)
                     stravaActivities = json_normalize(stravaActivities)
@@ -224,8 +225,8 @@ def copy_activities_from_csv(file_path):
         a = csv.DictReader(activities_file)
         for row in a:
             print(row)
-            if row["stravaID"] == 'NULL' or row["stravaID"] == '0':
-                row["stravaID"] = False
+            if row["strava_id"] == 'NULL' or row["strava_id"] == '0':
+                row["strava_id"] = False
 
             row['time'] = time_to_sec(row['time'])
 
@@ -244,7 +245,7 @@ def copy_activities_from_csv(file_path):
 
 
             new_activity = Activities(id = row["id"], activity_type_id = activity_type.id, date = date, distance = row['distance'], user_id = row['userName'], 
-            time = row["time"], strava_id = row["stravaID"])
+            time = row["time"], strava_id = row["strava_id"])
 
             db.session.add(new_activity)
             

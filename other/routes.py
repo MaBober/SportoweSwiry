@@ -35,7 +35,7 @@ def faq():
 
 @other.route("/regulamin")
 def statute():
-    print("TEST2")
+    
     return render_template('/pages/statute.html', title_prefix = "Regulamin" )
 
 @other.route("/about")

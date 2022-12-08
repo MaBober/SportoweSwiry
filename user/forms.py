@@ -1,7 +1,7 @@
 from .classes import User
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, EmailField, PasswordField, BooleanField, DecimalField, DateField, IntegerField, SelectField, DateTimeField, SubmitField, HiddenField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, ValidationError, NumberRange, InputRequired, NumberRange
+from wtforms.validators import DataRequired, Length, Email, ValidationError, NumberRange, InputRequired, NumberRange, EqualTo
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 
@@ -31,6 +31,7 @@ class UserForm(FlaskForm):
     verifyPassword=PasswordField("Potwierdź hasło", validators=[DataRequired("Pole nie może być puste"), ValidatePassword])
     isAdmin=BooleanField("Admin", default=False)
     avatar=BooleanField("Avatar", default=False)
+    statute_acceptance=BooleanField("Akceptuję regulamin serwisu",validators=[DataRequired("Musisz zaakceptować regulamin!")], default=False)
 
 
 class VerifyEmailForm(FlaskForm):

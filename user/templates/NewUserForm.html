@@ -62,7 +62,7 @@
         <div class="Checkbox-Main-Box">
             {{ form.statute_acceptance(class_="Checkbox-Box form-check-input" ) }}
             <span class="Checkbox-Font">
-                {{ form.statute_acceptance.label }}
+                Akceptuję <a href="{{ url_for('other.statute') }}">regulamin serwisu</a>
                 <p class="Error-Message">
                     {% for error in form.statute_acceptance.errors %}
                         {{ error }}

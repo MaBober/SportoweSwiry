@@ -1,0 +1,133 @@
+{% extends "pages//baseNew.html" %}
+
+
+{% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/about.css') }}">
+
+<div class="Static-Content">
+    <div class="Title-About-Us">Regulamin</div>
+    <div class="About-Us-Box">
+      <div class="About-Us-Text" style="width:80%;">
+        <span class="About-Us-Font">
+          Cześć!<br>
+          <h5>Nazywamy się Łukasz Bartsch oraz Marcin Bober i jesteśmy twórcami aplikacji internetowej „Sportowe Świry”. Poniżej znajdziesz regulamin, w którym zawarte zostały najważniejsze informacje i regulacje związane z korzystaniem z naszej aplikacji.</h5>
+          <h5>Pozdrawiamy i życzymy udanej zabawy,<br>
+          Łukasz Bartsch i Marcin Bober<br></h5>
+
+          <br><h4><center>§1</center></h4>
+          <h4>Definicje</h5>
+          <ol>
+            <li>Aplikacja – Aplikacja internetowa dostępna pod adresem https://sportoweswiry.com.pl<br></li>
+            <li>Użytkownik -  Osoba korzystająca z Aplikacji<br></li>
+            <li>Właściciel Aplikacji – Łukasz Bartsch, zamieszkały XXX U, oraz Marcin Bober, zamieszkały przy ul. Chorwackiej 35/41 we Wrocławiu.<br></li>
+            <li>Regulamin – niniejszy regulamin, dostępny pod adresem https://sportoweswiry.com.pl/regulamin<br></li>
+            <li>Wyzwanie – Wydarzenie w ramach, którego Użytkownicy prowadzą między sobą rywalizacje.<br></li>
+            <li>Administrator wyzwania – Użytkownik tworzący nowe wyzwanie w ramach Aplikacji<br></li>
+            <li>Uczestnik Wyzwaniu– Użytkownik, który zadeklarował udział w Wyzwaniu.<br></li>
+            <li>Aktywność – Zapis aktywności fizycznej wykonanej przez Użytkownika.<br></li>
+          </ol>
+
+          <br><h4><center>§2</center></h4>
+          <h4>Postanowienia ogólne</h4>
+          <ol>
+            <li>Aplikacja jest narzędziem służącym do grupowej rywalizacji sportowej, w ramach tworzonych przez Użytkowników Wyzwań.<br>
+            <li>Korzystanie z Aplikacji jest bezpłatne dla wszystkich Użytkowników.<br>
+            <li>Do korzystanie z Aplikacji przez Użytkownika konieczne są:<br>
+              <ul>
+              <li>dostęp do Internetu,<br></li>
+              <li>standardowa przeglądarka internetowa<br></li>
+              <li>posiadanie aktywnego adresu e-mail lub <br></li>
+              </ul></li>
+            <li>W ramach Aplikacji możliwe jest:<br>
+              <ul>
+                <li>zakładanie kont Użytkownika, w tym z wykorzystaniem integracji z Google lub Facebook<br></li>
+                <li>dołączanie do istniejących Wyzwań<br></li>
+                <li>tworzenie nowych Wyzwań<br></li>
+                <li>umieszczanie w bazie danych Aplikacji swoich Aktywności, w tym z wykorzystaniem synchronizacji z serwisem Strava<br></li>
+                <li>przeglądanie statusu Wyzwań, w tym realizacji celi tygodniowych przez poszczególnych Uczestników Wyzwania.<br></li>
+              </ul></li>
+          </ol>
+          
+          <br><h4><center>§3</center></h4>
+          <h4>Zasady korzystania z Aplikacji</h4>
+          <ol>
+            <li>Użytkownik tworząc nowe Wyzwanie staje się jednocześnie jego Administratorem.<br>
+            <li>Administrator Wyzwania określa:<br>
+            <ul>
+              <li>Datę rozpoczęcia,<br></li>
+              <li>Czas trwanie w tygodniach,<br></li>
+              <li>Maksymalną ilość Uczestników wyzwania,<br></li>
+              <li>Cel dystansowy na każdy tydzień wyzwania,<br></li>
+              <li>Rodzaje aktywności uwzględniane w wyzwaniu, oraz ich przeliczniki na dystans<br></li>
+              <li>Hasło dla wyzwań prywatnych<br></li>
+            </ul></li>
+            <li>Celem Uczestników Wyzwania jest zrealizowanie w każdym tygodniu trwania wyzwania celu określonego na dany tydzień wyzwania.</li>
+            <li>Użytkownik dołączając do Wyzwania wyraża zgodę na udostępnienie danych swoich Aktywności innym Uczestnikom Wyzwania.</li>
+            <li>Cel na każdy tydzień wyzwania to minimalny łączny przeliczony dystans Aktywności jaki każdy Uczestnik Wyzwania musi zrealizować. <br></li>
+            <li>Przeliczony dystans Aktywności w wyzwaniu oblicza się na jeden z dwóch sposób:<br></li>
+            <ul>
+                    <li>Dla sportów dla, których przelicznik jest wartością współczynnikiem:<br>
+                    PD = D * W<br>
+                          Gdzie:<br>
+                    PD = Przeliczony Dystans<br>
+                    D = Rzeczywisty dystans aktywności<br>
+                    W = Współczynnik dla sportu w danym Wyzwaniu<br><br>
+                    
+                    <li>Dla sportów dla, których przelicznik jest wartością stałą:<br>
+                    PD = S	<br>
+                          Gdzie:<br>
+                    PD = Przeliczony Dystans<br>
+                    S = Stała wartość dla sportu w danym Wyzwaniu<br><br></li>
+                  </ul></li>
+            <li>Aplikacja nalicza ilość nagród i kar dla każdego Uczestnika Wyzwania, gdzie:<br></li>
+            <li>jedną nagrodę Uczestnik otrzymuje za każdego innego Uczestnika Wyzwania, który nie wypełnił celu tygodnia,  w którym sam Uczestnik wypełnił cel<br></li>
+            <li>jedną karę Uczestnik otrzymuje za każdego innego Uczestnika Wyzwania, który wypełnił cel tygodnia,  w którym sam Uczestnik nie wypełnił celu.<br></li>
+            <li>Użytkownicy zobowiązani są do określenie sposobu realizacji kar i nagród przed rozpoczęciem wyzwania.<br></li>
+            <li>Użytkownicy zobowiązują się do realizacji kar i nagród w sposób zgodny z prawem polskim.<br></li>
+            <li>Aplikacja udostępnia narzędzie do zliczania należnych nagród i kar. Właściciele Aplikacji nie odpowiadają za realizacje zobowiązań powstałych pomiędzy Uczestnikami Wyzwań, w skutek udziału w Wyzwaniu.<br></li>
+            <li>Właściciele Aplikacji nie ponoszą odpowiedzialności za prawdziwość danych podawanych przez Użytkowników podczas dodawania Aktywności.<br></li>
+            <li>Użytkownik umieszczając w aplikacji zdjęcie oświadcza, że jest jego autorem, lub posiada zgodę na jego użycie.  Użytkownik ponosi pełną odpowiedzialność za naruszenie praw autorskich osób trzecich.<br></li>
+          </ol>
+
+          <br><h4><center>§4</center></h4>
+          <h4>Dane osobowe i pliki cookies</h4>
+          <ol>
+            <li> Administratorami danych osobowych Użytkownika są Właściciele Aplikacji.<br></li>
+            <li>  Użytkownik ma prawo usunąć Konto w Aplikacji poprzez panel użytkownika w Aplikacji. <br></li>
+            <li> Właściciele Aplikacji zastrzegają sobie prawo do pozostawiania w Aplikacji historii uczestnictwa Użytkownika w Wyzwaniach, oraz jego Aktywności, w celu zachowania archiwum Wyzwań dla jego pozostałych Uczestników. Właściciele Aplikacji zobowiązują się do anonimizacji  takich danych, uniemożliwiającej połączenie jest z konkretnym Użytkownikiem.<br></li>
+            <li> Aplikacja wykorzystuje technologię plików cookies.<br></li>
+            <li> Uprawnienia Użytkownika związane z przetwarzaniem danych osobowych: <br>
+              <ul>
+                <li>prawo do żądania od Właścicieli Aplikacji dostępu do danych osobowych,<br></li>
+                <li>ich sprostowania danych osobowych,<br></li>
+                <li>usunięcia danych osobowych,<br></li>
+                <li>ograniczenia przetwarzania danych osobowych,<br></li>
+                <li>prawo wniesienia sprzeciwu wobec przetwarzania danych osobowych,<br></li>
+                <li>prawo do przenoszenia danych osobowych,<br></li>
+                <li>prawo do wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.<br></li>
+              </ul>
+              </li>
+            <li>Podanie danych osobowych przez Użytkownika jest dobrowolne, ale niezbędne by skontaktować się ze Właścicielem Aplikacji, założyć konto Użytkownika, uczestniczyć w Wyzwaniach lub zapisać się do newslettera.<br></li>
+            <li>Szczegółowe informacje związane z danymi osobowymi znajdują się w Polityce Prywatności, dostępnej pod adresem: https://sportoweswiry.com.pl/polityka_prywatnosci<br></li>
+          </ol>
+
+          <br><h4><center>§5</center></h4>
+          <h4>Postanowienia końcowe</h4>
+          <ol>
+            <li>Właściciele Aplikacji nie ponoszą odpowiedzialności za przerwy w dostępie do Aplikacji wynikające z awarii, działania sił wyższych oraz powstające w wyniku niezbędnych przeglądów technicznych. <br></li>
+            <li>Prawa autorskie do elementów graficznych Aplikacji, w tym do logo, przysługują Właścicielom Aplikacji, za wyjątkiem oznaczeń zewnętrznych partnerów.<br></li>
+            <li>Każdy Użytkownik ma prawo złożyć reklamacje związaną z działaniem Aplikacji.<br></li>
+            <li>Właściciele Aplikacji zastrzegają sobie prawo do modyfikacji niniejszego Regulaminu.<br></li>
+            <li>W sprawach nieuregulowanych w Regulaminie zastosowanie mają przepisy polskiego prawa.<br></li>
+            <li>Niniejszy regulamin obowiązuje od dnia 01.01.2023.<br></li>
+            <li>Wszystkie archiwalne wersje Regulaminu dostępne są do pobrania na dole niniejszej strony.<br></li>
+        </ol>
+          
+        </span>
+      </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -13,7 +13,6 @@ from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, Upload
 from other.functions import account_confirmation_check, send_email
 import functools
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
-from .functions import create_account_from_social_media, standard_login, login_from_facebook
 
 from werkzeug.utils import secure_filename
 

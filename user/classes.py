@@ -17,6 +17,7 @@ from other.classes import MailboxMessage
 from event.classes import Event
 
 
+
 class User(db.Model, UserMixin):
 
     id = db.Column(db.String(50), unique=True, nullable=False , primary_key=True)
@@ -79,14 +80,14 @@ class User(db.Model, UserMixin):
     def create_account_from_social_media(cls, first_name, last_name, email, media):
 
         current_app.logger.info(f"New user generate callback from {media} to create new account")
-        from functions import password_generator
+        from .functions import password_generator
         
         new_user = cls(name = first_name,
                       last_name = last_name,
                       mail=  email,
                       id = first_name[0:3]+last_name[0:3],
                       password = password_generator(),
-                      isAdmin = False,
+                      is_admin = False,
                       confirmed = True,
                       is_added_by_google = False,
                       is_added_by_fb = False)
@@ -158,11 +159,10 @@ class User(db.Model, UserMixin):
             current_app.logger.exception(f"User failed to modify password!")
             return message, 'danger', redirect(url_for('user.passwordChange'))
 
-
-    def standard_login(self, login_form, social_media_login = False, remember=True):
+    def standard_login(self, login_form = None, social_media_login = False, remember=True):
 
         from user.functions import check_next_url
-        if self.verify_password(login_form.password.data) or social_media_login:
+        if social_media_login or self.verify_password(login_form.password.data):
 
             try:
                 login_user(self, remember)

@@ -32,6 +32,12 @@ def faq():
 
     return render_template('/pages/faq.html', title_prefix = "FAQ" )
 
+
+@other.route("/regulamin")
+def statute():
+    
+    return render_template('/pages/statute.html', title_prefix = "Regulamin" )
+
 @other.route("/about")
 def about():
 

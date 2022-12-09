@@ -1,11 +1,46 @@
 from start import db
-from flask import request
+from flask import redirect, url_for, current_app
 from flask_login import current_user
 from activity.classes import Activities, Sport
 
 import requests
 import pandas as pd
 import datetime as dt
+import urllib3
+
+def serve_strava_callback(request):
+    try:
+        if "error" not in request.args:
+            if request.args["scope"] == 'read,activity:read_all,profile:read_all':
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+                code = request.args['code']
+                access_token = getStravaAccessToken(code)
+                lastStravaActivity = getLastStravaActivityDate()
+                stravaActivities = getActivitiesFromStrava(access_token, lastStravaActivity)
+                stravaActivities = pd.json_normalize(stravaActivities)
+                stravaActivities = convertStravaData(stravaActivities)
+
+                addStravaActivitiesToDB (stravaActivities)
+                message = "Zsynchronizowano aktywności ze Strava!"
+                current_app.logger.info(f"User {current_user.id} added activity with Strava")
+                return message, 'success', redirect(url_for('other.hello'))
+            
+            else:
+                message = "Zaznacz proszę wszystkie wymagane zgody i spróbuj synchronizować ze Strava jeszcze raz."
+                current_app.logger.warning(f"User {current_user.id} failed to add activity with Strava. Not all agree chekboxes cheked.")
+                return message, 'danger', redirect(url_for('activity.add_activity'))
+
+        else:
+            message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+            current_app.logger.warning(f"User {current_user.id} failed to add activity with Strava")
+            return message, 'danger', redirect(url_for('activity.add_activity'))
+
+    except:
+        message = "W czasie synchronizacji ze Strava pojawił się nieoczekiwany błąd. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+        current_app.logger.exception(f"User {current_user.id} failed to add activity with Strava")
+        return message, 'danger', redirect(url_for('activity.add_activity'))
+
 
 def getLastStravaActivityDate():
 
@@ -49,7 +84,7 @@ def getActivitiesFromStrava(access_token, afterDate):
 
     return stravaActivities
 
-#TODO rebuild activities dictionary
+
 def convertStravaData(activitiesJSON):
 
     #Defines columns to proceed
@@ -89,6 +124,12 @@ def addStravaActivitiesToDB (activitiesFrame):
 
     for index, single_activity in activitiesFrame.iterrows() :
 
+        new_activity_sport = Sport.query.filter(Sport.strava_name == single_activity["activity_type_id"]).first()
+        if new_activity_sport == None:
+            new_activity_sport_id = 30
+        else:
+            new_activity_sport_id = new_activity_sport.id
+
         #Check if activity with this strava_id doesn't already exists
         if Activities.query.filter(Activities.strava_id == single_activity['strava_id']).first() == None:
 
@@ -97,14 +138,13 @@ def addStravaActivitiesToDB (activitiesFrame):
                 filter(Activities.date == single_activity['date']).\
                 filter(Activities.strava_id == None).\
                 filter(Activities.id == current_user.id).\
-                filter(Activities.activity_type_id == Sport.query.filter(Sport.strava_name == single_activity["activity_type_id"]).first().id ).\
+                filter(Activities.activity_type_id == new_activity_sport_id ).\
                 filter(Activities.distance > single_activity['distance'] -0.5).\
                 filter(Activities.distance < single_activity['distance'] +0.5).first() == None:
 
-                print(single_activity)
                 newActivity=Activities(
                     date = single_activity['date'],
-                    activity_type_id = Sport.query.filter(Sport.strava_name == single_activity["activity_type_id"]).first().id,
+                    activity_type_id = new_activity_sport_id,
                     distance = single_activity['distance'], 
                     time = single_activity['time'],
                     user_id = current_user.id,

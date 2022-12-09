@@ -9,6 +9,7 @@ class Sport(db.Model):
     default_coefficient = db.Column(db.Float, nullable = False, default = 0)
     default_is_constant = db.Column(db.Boolean, nullable = False, default = False)
     category = db.Column(db.String(50), nullable = False, default = 'Other')
+    strava_name = db.Column(db.String(50))
 
     activities = db.relationship('Activities', backref='activity_type', lazy='dynamic')
     events = db.relationship('CoefficientsList', backref='sport', lazy='dynamic')
@@ -26,7 +27,8 @@ class Sport(db.Model):
             new_sport = Sport(
                 name = new_sport_form.activity_name.data,
                 default_coefficient = new_sport_form.value.data,
-                default_is_constant = new_sport_form.is_constant.data)
+                default_is_constant = new_sport_form.is_constant.data,
+                strava_name = new_sport_form.strava_name.data )
 
             db.session.add(new_sport)
             db.session.commit()

@@ -8,6 +8,8 @@ import pandas as pd
 import datetime as dt
 import urllib3
 
+from config import Config
+
 def serve_strava_callback(request):
     try:
         if "error" not in request.args:
@@ -61,8 +63,8 @@ def getStravaAccessToken(code):
     auth_url = "https://www.strava.com/oauth/token"
     
     payload = {
-    'client_id': "87931",
-    'client_secret': 'a02f77e5eedb0784e84a5646e59072f300562e84',
+    'client_id': Config.STRAVA_CLIENT_ID,
+    'client_secret': Config.STRAVA_CLIENT_SECRET,
     'code': code,
     'grant_type': "authorization_code",
     'f': 'json'

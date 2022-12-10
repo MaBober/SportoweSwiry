@@ -110,14 +110,9 @@ def convertStravaData(activitiesJSON):
     #Prepare data to match APP tables
     activitiesJSON['date'] = pd.to_datetime(activitiesJSON['date']).dt.date
     activitiesJSON['distance'] = round(activitiesJSON['distance']/1000, 1)
-    activitiesJSON['time'] = activitiesJSON['time'].apply(format_time)
     activitiesJSON['userName'] = current_user.id
     
     return activitiesJSON
-
-def format_time(x):
-
-    return str(dt.timedelta(seconds = x))
 
 
 def addStravaActivitiesToDB (activitiesFrame):

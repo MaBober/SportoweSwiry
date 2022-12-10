@@ -147,37 +147,33 @@ class User(db.Model, UserMixin):
         account_to_delete = self.id
         current_app.logger.info(f"User ({current_user.id}) tries to delete account {self.id}!")
 
+        if not current_user.is_admin:
+            logout_user()
+        
+        if self.is_admin:
+            message = "Nie można usunąć konta administratora!"
+            current_app.logger.warning(f"User ({current_user.id}) tried to delete admin account {self.id}!")
+            return message, 'danger', redirect(url_for('user.settings'))
+
         try:
-            if not current_user.is_admin:
-                logout_user()
-            
-            if self.is_admin:
-                message = "Nie można usunąć konta administratora!"
-                current_app.logger.warning(f"User ({current_user.id}) tried to delete admin account {self.id}!")
-                return message, 'danger', redirect(url_for('user.settings'))
+            db.session.delete(self)
+            db.session.commit()
+            message = "Użytkownik {} {} został usunięty z bazy danych".format(self.name, self.last_name)
+            return message, 'success', redirect(url_for('other.hello'))
 
-            try:
-                db.session.delete(self)
-                db.session.commit()
-                message = "Użytkownik {} {} został usunięty z bazy danych".format(self.name, self.last_name)
-                return message, 'success', redirect(url_for('other.hello'))
+        except (SQLAlchemyError, AssertionError) as e:
+            db.session.rollback()
 
-            except SQLAlchemyError as e:
-                db.session.rollback()
+            self.name = "Konto"
+            self.last_name = 'Usunięte'
+            self.mail = password_generator()
+            db.session.commit()
 
-                self.name = "Konto"
-                self.last_name = 'Usunięte'
-                self.mail = password_generator()
-                db.session.commit()
+            message = f"Konto usunięte!"
+            return message, 'success', redirect(url_for('other.hello'))
 
-                if not current_user.is_admin:
-                    message = f"Konto usunięte!"
-                    return message, 'success', redirect(url_for('other.hello'))
-                else:
-                    message = f"Konto zanonimizowane!"
-                    return message, 'success', redirect(url_for('user.list_of_users'))
 
-        except:
+        except Exception as e:
             message = "NIE USUNIĘTO KONTA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
             current_app.logger.exception(f"User ({current_user.id}) failed to delete account {account_to_delete}!")
             return message, 'danger', redirect(url_for('user.settings'))

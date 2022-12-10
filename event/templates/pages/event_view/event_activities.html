@@ -30,7 +30,7 @@
                             <td>{{activity.name_sport}}</td>
                             <td>{{activity.distance}}</td>
                             <td>{{activity.calculated_distance}}</td>
-                            <td>{{activity.time}}</td>
+                            <td>{{sec_to_H_M_S(activity.time)}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

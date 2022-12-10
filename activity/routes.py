@@ -185,50 +185,5 @@ def strava_callback():
     return action
 
 
-@activity.route('/copy_activities')
-def copy_activities():
-
-    copy_activities_from_csv('activities.csv')
-
-    return redirect(url_for('other.hello'))
-
-
-def copy_activities_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as activities_file:
-        a = csv.DictReader(activities_file)
-        for row in a:
-            print(row)
-            if row["strava_id"] == 'NULL' or row["strava_id"] == '0':
-                row["strava_id"] = False
-
-            row['time'] = time_to_sec(row['time'])
-
-            if row["activity"] == "Narciarstwo zjadowe":
-                row["activity"] = "Narciarstwo zjazdowe"
-
-            if row["activity"] == "Wspinaczka ":
-                row["activity"] = "Wspinaczka"
-
-            full_name = row["activity"]
-            
-            activity_type = Sport.query.filter(Sport.name == full_name).first()
-            
-            (y, m, d) = row['date'].split('-')
-            date = dt.date(int(y),int(m),int(d))
-
-
-            new_activity = Activities(id = row["id"], activity_type_id = activity_type.id, date = date, distance = row['distance'], user_id = row['userName'], 
-            time = row["time"], strava_id = row["strava_id"])
-
-            db.session.add(new_activity)
-            
-        db.session.commit()
-    return True
-
-def time_to_sec(t):
-   h, m, s = map(int, t.split(':'))
-   return h * 3600 + m * 60 + s
-
 def sec_to_H_M_S(seconds):
     return str(dt.timedelta(seconds = seconds))

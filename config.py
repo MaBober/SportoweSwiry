@@ -29,3 +29,6 @@ class Config:
     GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
     GOOGLE_PROJECT_ID = os.environ.get('GOOGLE_PROJECT_ID')
     CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+
+    STRAVA_CLIENT_ID = os.environ.get('STRAVA_CLIENT_ID')
+    STRAVA_CLIENT_SECRET = os.environ.get('STRAVA_CLIENT_SECRET')

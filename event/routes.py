@@ -150,6 +150,7 @@ def event_activities(event_id):
         all_event_activities = event.give_all_event_activities(calculated_values = True)
 
         return render_template('/pages/event_view/event_activities.html',
+                        sec_to_H_M_S = sec_to_H_M_S,
                         activities = all_event_activities,
                         event = event,
                         title_prefix = "Aktywności wyzwania",
@@ -558,3 +559,5 @@ def modify_sport_in_base(sport_id):
                     mode = 'edit',
                     sport_id = sport_id) 
 
+def sec_to_H_M_S(seconds):
+    return str(dt.timedelta(seconds = seconds))

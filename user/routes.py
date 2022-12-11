@@ -42,7 +42,9 @@ loginManager.login_view = 'user.login' #Redirect to login for restricted pages
 loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zawartości"
 
 user = Blueprint("user", __name__,
-    template_folder='templates')
+    template_folder='templates',
+    static_folder='static',
+    static_url_path='/user/static')
 
 FB_CLIENT_ID = Config.FB_CLIENT_ID
 FB_CLIENT_SECRET = Config.FB_CLIENT_SECRET
@@ -187,24 +189,15 @@ def list_of_users():
 @login_required #This page needs to be login
 def delete_user(user_id):
 
-    if not current_user.is_admin:
+    if not current_user.is_admin and not user_id == current_user.id :
         flash("Nie masz uprawnień do tej akcji")
         return redirect(url_for('other.hello'))
 
-    userToDelete=User.query.filter(User.id == user_id).first()
-    if not userToDelete.is_admin:
-        try:
-            db.session.delete(userToDelete)
-            db.session.commit()
-            flash("Użytkownik {} {} został usunięty z bazy danych".format(userToDelete.name, userToDelete.last_name))
+    user_to_delete = User.query.filter(User.id == user_id).first()
+    message, status, action = user_to_delete.delete()
 
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            flash("Nie można usunąć użytkownika {} {}".format(userToDelete.name, userToDelete.last_name),'danger')
-    else:
-        flash("Nie można usunąć użytkownika {} {}".format(userToDelete.name, userToDelete.last_name),'danger')
-
-    return redirect(url_for('user.list_of_users'))
+    flash(message, status)
+    return action
 
 
 @user.route("/login", methods=['POST', 'GET'])

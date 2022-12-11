@@ -2,7 +2,8 @@ import pandas as pd
 import pygal
 
 from start import db, app
-from flask_login import UserMixin, current_user, login_user
+from flask_login import UserMixin, current_user, login_user, logout_user
+from sqlalchemy.exc import SQLAlchemyError
 from other.functions import send_email
 import hashlib
 import binascii
@@ -15,6 +16,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from other.classes import MailboxMessage
 from event.classes import Event
+from .functions import password_generator
 
 
 
@@ -80,7 +82,7 @@ class User(db.Model, UserMixin):
     def create_account_from_social_media(cls, first_name, last_name, email, media):
 
         current_app.logger.info(f"New user generate callback from {media} to create new account")
-        from .functions import password_generator
+        
         
         new_user = cls(name = first_name,
                       last_name = last_name,
@@ -139,6 +141,43 @@ class User(db.Model, UserMixin):
             message = "NIE ZMIENIONO DANYCH! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
             current_app.logger.exception(f"User failed to modify account!")
             return message, 'danger', redirect(url_for('user.settings'))
+
+    def delete(self):
+
+        account_to_delete = self.id
+        current_app.logger.info(f"User ({current_user.id}) tries to delete account {self.id}!")
+
+        if not current_user.is_admin:
+            logout_user()
+        
+        if self.is_admin:
+            message = "Nie można usunąć konta administratora!"
+            current_app.logger.warning(f"User ({current_user.id}) tried to delete admin account {self.id}!")
+            return message, 'danger', redirect(url_for('user.settings'))
+
+        try:
+            db.session.delete(self)
+            db.session.commit()
+            message = "Użytkownik {} {} został usunięty z bazy danych".format(self.name, self.last_name)
+            return message, 'success', redirect(url_for('other.hello'))
+
+        except (SQLAlchemyError, AssertionError) as e:
+            db.session.rollback()
+
+            self.name = "Konto"
+            self.last_name = 'Usunięte'
+            self.mail = password_generator()
+            db.session.commit()
+
+            message = f"Konto usunięte!"
+            return message, 'success', redirect(url_for('other.hello'))
+
+
+        except Exception as e:
+            message = "NIE USUNIĘTO KONTA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+            current_app.logger.exception(f"User ({current_user.id}) failed to delete account {account_to_delete}!")
+            return message, 'danger', redirect(url_for('user.settings'))
+
 
     
     def change_password(self, password_form):

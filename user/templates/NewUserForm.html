@@ -58,11 +58,19 @@
             {% endfor %}
         </p>
 
+
         <div class="Checkbox-Main-Box">
-            <div class="Checkbox-Box"></div>
+            {{ form.statute_acceptance(class_="Checkbox-Box form-check-input" ) }}
             <span class="Checkbox-Font">
-                Akceptuję regulamin serwisu
+                Akceptuję <a href="{{ url_for('other.statute') }}">regulamin serwisu</a>
+                <p class="Error-Message">
+                    {% for error in form.statute_acceptance.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </p>
             </span>
+
+
         </div>
         <button class="Main-Button" type="submit">
             <span class="Main-Button-Font">

@@ -42,7 +42,9 @@ loginManager.login_view = 'user.login' #Redirect to login for restricted pages
 loginManager.login_message = "Musisz się zalogować, żeby przejść do tej zawartości"
 
 user = Blueprint("user", __name__,
-    template_folder='templates')
+    template_folder='templates',
+    static_folder='static',
+    static_url_path='/user/static')
 
 FB_CLIENT_ID = Config.FB_CLIENT_ID
 FB_CLIENT_SECRET = Config.FB_CLIENT_SECRET

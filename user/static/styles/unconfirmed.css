@@ -1,0 +1,73 @@
+
+  body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/icon-image 4.webp") no-repeat center fixed;
+    background-size: cover;
+    background-color: #3a3a3a;
+    min-height: 100%;
+    position: relative;
+  }
+  
+  /* TITLE "UNCOMFIRMED" */
+  
+  .Title-Unconfirmed {
+  
+    font-family: Lato;
+    font-size: 40px;
+    color: white;
+    text-align: center;
+    margin-top: 110px;
+  }
+  
+  
+  /* MAIN CONTENER WITH PHOTO AND TEXT - ABOUT US */
+  
+  .Unconfirmed-Box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width:100%;
+    padding-top: 54px;
+  }
+  
+
+  
+  .Unconfirmed-Text {
+    width: 80%;
+    height: auto;
+    padding: 36px 28px 27px 38px;
+    background-color: #efefef;
+  }
+  
+  
+  .Unconfirmed-Font {
+    margin: 0 0 33px;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+  
+  
+  
+  /* FOR SMALL SCREENS */
+  @media(max-width: 850px) {
+  
+  
+    /* TITLE "ABOUT US" */
+    .Title-Unconfirmed {
+        font-size: 30px;
+        margin-top: 150px;
+    }
+
+    .Unconfirmed-Font {
+        font-size: 14px;
+      }
+
+  
+  }
+  

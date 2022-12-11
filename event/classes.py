@@ -98,11 +98,11 @@ class Event(db.Model):
 
             current_app.logger.info(f"User {current_user.id} modified event {self.id}")
             message = f"Zmodyfikowano wyzwanie {self.name}"
-            return message, 'success', redirect(url_for('event.modify_event'))
+            return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
 
         except:
             current_app.logger.exception(f"User {current_user.id} failed to modify event {self.name}.")
-            message = 'Wyzwanie {self.name} NIE ZDMODYFIKOWANE!'
+            message = f'Wyzwanie {self.name} NIE ZDMODYFIKOWANE!'
             return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
 
 

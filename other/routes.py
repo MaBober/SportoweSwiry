@@ -15,7 +15,9 @@ from user.functions import account_confirmation_check
 from start import db    
 
 other = Blueprint("other", __name__,
-    template_folder='templates')
+    template_folder = 'templates',
+    static_folder = 'static',
+    static_url_path = '/other/static')
 
 @other.route("/")
 def hello():

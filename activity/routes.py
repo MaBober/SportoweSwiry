@@ -6,12 +6,10 @@ from activity.classes import Activities
 from activity.forms import ActivityForm
 from user.functions import account_confirmation_check
 from other.functions import account_confirmation_check
-from .strava import addStravaActivitiesToDB, getActivitiesFromStrava, getLastStravaActivityDate, getStravaAccessToken, convertStravaData
+from .strava import addStravaActivitiesToDB, getActivitiesFromStrava, getLastStravaActivityDate, getStravaAccessToken, convertStravaData, serve_strava_callback
 from .classes import Activities, Sport
 
-from pandas import json_normalize
 import datetime as dt
-import urllib3
 import csv
 
 
@@ -173,87 +171,19 @@ def my_activities():
 @activity.route("/stravaLogin")
 @login_required
 def strava_login():
+    current_app.logger.info(f'User {current_user.id} clicked "Connect with Strava" button')
+    return redirect('https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=http://127.0.0.1:5000/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all')
 
-    return redirect('https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=https://sportoweswiry.com.pl/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all')
 
-
-@activity.route("/strava-callback",methods=['POST','GET'])
+@activity.route("/strava-callback",methods=['GET'])
 @login_required
 def strava_callback():
-    
-    if request.method == "GET":
 
-        try:
-            if "error" not in request.args:
-                if request.args["scope"] == 'read,activity:read_all,profile:read_all':
-                    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    message, status, action = serve_strava_callback(request)
 
-                    access_token = getStravaAccessToken()
-                    lastStravaActivity = getLastStravaActivityDate()
-                    stravaActivities = getActivitiesFromStrava(access_token, lastStravaActivity)
-                    stravaActivities = json_normalize(stravaActivities)
-                    stravaActivities = convertStravaData(stravaActivities)
+    flash(message, status)
+    return action
 
-                    addStravaActivitiesToDB (stravaActivities)
-                    message = "Zsynchronizowano aktywności ze Strava!"
-                
-                else:
-                    message = "Zaznacz proszę wszystkie wymagane zgody i spróbuj synchronizować ze Strava jeszcze raz."
-
-            else:
-                message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
-
-        except:
-            message = "Nie udało się połączyć ze Strava. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
-
-    flash(message)
-    return redirect(url_for('other.hello'))
-
-
-@activity.route('/copy_activities')
-def copy_activities():
-
-    copy_activities_from_csv('activities.csv')
-
-    return redirect(url_for('other.hello'))
-
-
-def copy_activities_from_csv(file_path):
-
-    with open(file_path, encoding="utf8") as activities_file:
-        a = csv.DictReader(activities_file)
-        for row in a:
-            print(row)
-            if row["stravaID"] == 'NULL' or row["stravaID"] == '0':
-                row["stravaID"] = False
-
-            row['time'] = time_to_sec(row['time'])
-
-            if row["activity"] == "Narciarstwo zjadowe":
-                row["activity"] = "Narciarstwo zjazdowe"
-
-            if row["activity"] == "Wspinaczka ":
-                row["activity"] = "Wspinaczka"
-
-            full_name = row["activity"]
-            
-            activity_type = Sport.query.filter(Sport.name == full_name).first()
-            
-            (y, m, d) = row['date'].split('-')
-            date = dt.date(int(y),int(m),int(d))
-
-
-            new_activity = Activities(id = row["id"], activity_type_id = activity_type.id, date = date, distance = row['distance'], user_id = row['userName'], 
-            time = row["time"], strava_id = row["stravaID"])
-
-            db.session.add(new_activity)
-            
-        db.session.commit()
-    return True
-
-def time_to_sec(t):
-   h, m, s = map(int, t.split(':'))
-   return h * 3600 + m * 60 + s
 
 def sec_to_H_M_S(seconds):
     return str(dt.timedelta(seconds = seconds))

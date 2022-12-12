@@ -69,14 +69,16 @@ def modify_activity(activity_id):
     activity_to_modify = Activities.query.filter(Activities.id == activity_id).first()
     if activity_to_modify.user_id == current_user.id :
 
+        #form = ActivityForm(request.form, activity_id)
         form = ActivityForm(date = activity_to_modify.date,
-                            activity = activity_to_modify.activity_type,
+                            activity = activity_to_modify.activity_type.id,
                             distance = activity_to_modify.distance,
                             time = (dt.datetime(1970,1,1) + dt.timedelta(seconds=activity_to_modify.time)).time())
+
         form.fill_sports_to_select()
-        form.activity.id = activity_to_modify.activity_type_id
 
         if form.validate_on_submit():
+
             message, status, url = activity_to_modify.modify(form)
             flash(message, status)
         

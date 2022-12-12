@@ -53,7 +53,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Uczestnik</th>
 
-                            {% if current_user.isAdmin %}
+                            {% if current_user.is_admin or event.admin_id == current_user.id %}
                             <th scope="col">Akcje</th>
                             {% endif %}
                         </tr>
@@ -64,15 +64,14 @@
                             <td scope="row">{{loop.index}}</td>
                             <td>             
                                 <b><img src="{{ eventUsers[user].give_avatar_path() }} " width="40">     {{eventUsers[user].name}} {{eventUsers[user].last_name}} </b>
-                                {{user.name}} {{user.last_name}}
                         
-                                {% if current_user.isAdmin %}
+                                {% if current_user.is_admin or event.admin_id == current_user.id %}
                                     <td>
                                     <!-- Button trigger modal -->
                                         <a type="button" class="btn btn-danger btn-sm delete-confirm" 
                                         data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                                        data-desc="{{ 'Napewno chcesz usunać użytkownika: {}?'.format(user.id) }}"
-                                        data-url="{{ url_for('event.adminDeleteContestant', eventID =event.id, userID=user.id)}}">
+                                        data-desc="Napewno chcesz usunać użytkownika: {{eventUsers[user].name}} {{eventUsers[user].last_name}}?"
+                                        data-url="{{ url_for('event.admin_delete_contestant', event_id = event.id, user_id = eventUsers[user].id)}}">
                                             Usuń
                                         </a>
                                     </td>

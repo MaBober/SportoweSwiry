@@ -53,7 +53,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Uczestnik</th>
 
-                            {% if current_user.is_admin %}
+                            {% if current_user.is_admin or event.admin_id == current_user.id %}
                             <th scope="col">Akcje</th>
                             {% endif %}
                         </tr>
@@ -65,7 +65,7 @@
                             <td>             
                                 <b><img src="{{ eventUsers[user].give_avatar_path() }} " width="40">     {{eventUsers[user].name}} {{eventUsers[user].last_name}} </b>
                         
-                                {% if current_user.is_admin %}
+                                {% if current_user.is_admin or event.admin_id == current_user.id %}
                                     <td>
                                     <!-- Button trigger modal -->
                                         <a type="button" class="btn btn-danger btn-sm delete-confirm" 

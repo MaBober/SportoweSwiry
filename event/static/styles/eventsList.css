@@ -1,20 +1,20 @@
 .Settings-Main-Box {
-    width: 94%;
+    width: 100%;
     margin: auto;
     margin-top: 80px !important;
     
 }
 
 .event-box {
-    width: 35%;
+    width: 40%;
     background-color: white;
     margin-top: 20px;
     margin-bottom: 60px;
     padding-bottom: 20px;
     padding-left: 0;
     padding-right: 0;
-    margin-right: 70px;
-    margin-left: 70px;
+    margin-right: 10px;
+    margin-left: 10px;
 
     position: relative;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -78,15 +78,13 @@
 @media(max-width: 990px) {
 
     .event-box {
-        width: 75%;
+        width: 95%;
         background-color: white;
         margin-top: 20px;
         margin-bottom: 20px;
         padding-bottom: 20px;
         padding-left: 0;
         padding-right: 0;
-        margin-right: 70px;
-        margin-left: 70px;
     
     }
 }

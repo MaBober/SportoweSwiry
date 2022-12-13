@@ -1,7 +1,7 @@
 {% extends "pages//baseNew.html" %}
 
 {% block body_content %}
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventsList.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('event.static',filename='styles/eventsList.css') }}">
 
  <!-- Modal -->
  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -68,9 +68,9 @@
 </div>
 
 
-<div class="container">
-    {% if events != None %}
-    <div class="row" >
+<div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; width:100%;">
+        {% if events != None %}
+
         {% for event in events: %}
 
         <div class="event-box">
@@ -104,7 +104,6 @@
                 </div>
             </div> 
         {% endfor %}
-    </div>
     {% endif %}
 </div>
 

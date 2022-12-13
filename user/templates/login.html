@@ -39,9 +39,8 @@
 
         {{ logForm.password(class_="form-control Input-Box", placeholder="Hasło" ) }}
         <p class="Error-Message">
-            {% for error in logForm.password.errors %}
-                {{ error }}
-            {% endfor %}
+            {{logForm.password.errors[0] }}
+
         </p>
 
         <div class="Checkbox-Main-Box">

@@ -397,7 +397,7 @@ img.icon-add-activity {
   margin-right: 0;
   align-content: center;
   text-align: center;
-  height: 40px;
+  height: fit-content;
   position: relative;
   z-index: 4;
   border-radius: 0%;
@@ -471,6 +471,12 @@ img.icon-add-activity {
   .Create-Account-Button {
     right: 50px;
     top: 30px;
+  }
+
+  .flash-text{
+
+    font-size: 14px;
+  
   }
 
 

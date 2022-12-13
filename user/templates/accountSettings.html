@@ -44,7 +44,7 @@
                     </div>
                     <div class="small font-italic text-muted mb-4">JPG lub PNG nie większe niż 5 MB</div>
                     <!-- Profile picture upload button-->
-                    <form method="POST" style="margin-top:30px;" enctype="multipart/form-data">
+                    <form method="post" style="margin-top:30px;" enctype="multipart/form-data" action="{{ url_for('user.upload_avatar') }}">
                         <div class="row justify-content-center">
                             {{ avatarForm.csrf_token }}
                             <div class="small font-italic text-muted mb-4">
@@ -68,16 +68,6 @@
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">
                         {{ form.csrf_token }}
-                        <!-- Form Group (username)-->
-                        <div class="mb-3">
-                            <label class="small mb-1">Login (Nazwa, która jest tylko dla potrzeb aplikacji. Nigdzie nie będzie widoczna)</label>
-                            <input class="form-control" type="text" value="{{current_user.id}}" aria-label="Disabled input example" disabled readonly>
-                            <ul>
-                                {% for error in form.id.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </ul>
-                        </div>
                         <!-- Form Row-->
                         <div class="row gx-3 mb-3">
                             <!-- Form Group (first name)-->
@@ -110,19 +100,6 @@
                                     {{ error }}
                                 {% endfor %}
                             </ul>
-                        </div>
-                        <!-- Form Row-->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (phone number)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputPhone">Numer telefonu</label>
-                                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="brak">
-                            </div>
-                            <!-- Form Group (birthday)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputBirthday">Urodziny</label>
-                                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="brak">
-                            </div>
                         </div>
                         <!-- Save changes button-->
                         <button class="btn btn-dark Account-Settings-Main-Button" style="background-color: #182c07e8;" type="submit">Zapisz zmiany</button>

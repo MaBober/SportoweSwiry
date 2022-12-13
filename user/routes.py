@@ -261,7 +261,7 @@ def settings():
                     menuMode = "mainApp",
                     mode = "settings")
 
-@user.route("/upload_avatar", methods=['POST','GET'])
+@user.route("/upload_avatar", methods=['POST'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def upload_avatar():

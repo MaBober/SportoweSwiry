@@ -349,7 +349,7 @@ def modify_event(event_id):
 
     coefficientsSet = CoefficientsList.query.filter(CoefficientsList.event_id == event.id).all()
 
-    if form.validate_on_submit and formDist.validate_on_submit():
+    if form.validate_on_submit() and formDist.validate_on_submit():
 
         message, status, action = event.modify(form, formDist)
     
@@ -375,6 +375,7 @@ def add_new_sport_to_event(event_id):
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej akcji")
         return redirect(url_for('other.hello'))
+        
     
     sport_to_add = Sport.query.filter(Sport.id == request.form['activity_type']).first()
     event = Event.query.filter(Event.id == event_id).first()

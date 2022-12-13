@@ -13,7 +13,7 @@ import os
 import datetime as dt
 
 from werkzeug.utils import secure_filename
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from other.classes import MailboxMessage
 from event.classes import Event
 from .functions import password_generator
@@ -367,10 +367,15 @@ class User(db.Model, UserMixin):
             current_app.logger.info(f"User {self.id} uploaded avatar")
             return message, "success", redirect(url_for('user.settings'))
 
+        except UnidentifiedImageError as e:
+            message = "Nie poprawny format obrazu!"
+            current_app.logger.warning(f"User {self.id} tried to upload wrong picture format.")
+            return message, "message", redirect(url_for('user.settings'))
+
         except:
             message = "NIE WGRANO AVATARA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
             current_app.logger.exception(f"User {self.id} failed to upload avatar!")
-            return message, "danger", redirect(url_for('other.hello'))
+            return message, "danger", redirect(url_for('user.settings'))
 
 
 

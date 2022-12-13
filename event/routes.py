@@ -18,7 +18,9 @@ from other.functions import sendMessgaeFromContactFormToDB
 MAX_EVENTS_AS_ADMIN = 3
 
 event = Blueprint("event", __name__,
-    template_folder='templates')
+    template_folder='templates',
+    static_folder='static',
+    static_url_path='/event/static')
 
 
 @account_confirmation_check

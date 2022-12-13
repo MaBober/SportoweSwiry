@@ -218,9 +218,7 @@ class User(db.Model, UserMixin):
         else:
             message = "Nie udało się zalogować. Podaj pawidłowe hasło!"
             current_app.logger.info(f"User ({self.id}) tried to login with wrong password!")
-            return message, 'danger', render_template('login.html',
-                                        logForm=login_form,
-                                        title_prefix = "Zaloguj")
+            return message, 'danger', redirect(url_for('user.login'))
 
 
     def changeStatusOfMessage(self,id):

@@ -68,15 +68,26 @@ class NewPasswordForm(FlaskForm):
 #Definition class for LOGIN function
 class LoginForm(FlaskForm):
 
-    def ValidateLoginIsCorrect(form, field):
+    def validate_login_is_correct(form, field):
         tempLogin = User.query.filter(User.id==field.data).first()
         tempMail = User.query.filter(User.mail==field.data).first()
         if (not tempMail) and (not tempLogin):
-            raise ValidationError("Tego adresu email nie ma w naszej bazie danych")
+            raise ValidationError("Tego adresu e-mail nie ma w naszej bazie danych")
 
-    name=StringField("Adres mailowy", validators=[ValidateLoginIsCorrect])
-    password=PasswordField("Hasło")
-    remember=BooleanField("Zapamiętaj mnie", default=False)
+    def validate_password(self, field):
+
+        temp_user_mail = User.query.filter(User.mail==self.name.data).first()
+        temp_user_login = User.query.filter(User.id==self.name.data).first()
+        if temp_user_mail != None:
+            if (not temp_user_mail.verify_password(field.data)):
+                raise ValidationError("Błędne hasło dla tego adresu e-mail!")
+        if temp_user_login != None:
+            if (not temp_user_login.verify_password(field.data)):
+                raise ValidationError("Błędne hasło dla tego adresu e-mail!")
+
+    name = StringField("Adres mailowy", validators=[validate_login_is_correct])
+    password = PasswordField("Hasło", validators=[validate_password])
+    remember = BooleanField("Zapamiętaj mnie", default=False)
 
 
 class UploadAvatarForm(FlaskForm):

@@ -287,7 +287,7 @@ def create_event():
 
     if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) < MAX_EVENTS_AS_ADMIN:
 
-        if event_form.validate_on_submit and distances_form.validate_on_submit():
+        if event_form.validate_on_submit() and distances_form.validate_on_submit():
 
             new_event = Event()
             message, status, action = new_event.add_to_db(event_form, distances_form)

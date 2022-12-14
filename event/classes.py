@@ -661,8 +661,6 @@ class Event(db.Model):
         beers_to_buy = { i : 0 for i in event_participants.keys() }
         beers_to_recive = {i : 0 for i in event_participants.keys() }
 
-        print(self.name)
-        print(self.give_all_event_users_ids())
         for week in range(1, self.length_weeks):
             for user in event_participants:
                 if True:
@@ -703,7 +701,7 @@ class Event(db.Model):
                 average_time = str(dt.timedelta(seconds = average_time))
                 user_overall_summary['average_time'] = average_time
             except:
-                print("Błąd w: average_time=user_time_sum/user_activites_amount")
+                current_app.logger.warning(f"Error in: average_time=user_time_sum/user_activites_amount")
                 user_overall_summary['average_time'] = '---'
             
             try:
@@ -712,7 +710,7 @@ class Event(db.Model):
                 user_overall_summary['average_distance_for_event'] = average_distance_for_event
 
             except:
-                print("Błąd w: average_distance_for_event = user_distance_sum/user_activites_amount")
+                current_app.logger.warning(f"Erroe in: average_distance_for_event = user_distance_sum/user_activites_amount")
                 user_overall_summary['average_distance_for_event'] = '---'
 
         else:
@@ -733,10 +731,6 @@ class Event(db.Model):
         inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
 
         return len(inserts)
-
-
-    
-
         
 # Defines tabele, which connect users with events
 class Participation(db.Model):

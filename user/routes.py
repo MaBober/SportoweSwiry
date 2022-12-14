@@ -301,7 +301,6 @@ def passwordChange():
 def dashboard():
 
     dashboard = DashboardPage(request.args)
-    print(dashboard.event)
 
     return render_template('dashboard.html',
                     dashboard = dashboard,

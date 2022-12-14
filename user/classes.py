@@ -249,7 +249,6 @@ class User(db.Model, UserMixin):
 
         while user != None:
             sufix +=1
-            print(sufix)
             id = self.name[0:3] + self.last_name[0:3] + str(sufix)
             user=User.query.filter(User.id == id).first()
 
@@ -519,8 +518,6 @@ class DashboardPage:
             all_event_activities = self.event.give_all_event_activities(calculated_values = True)
             split_list = self.event.give_overall_weekly_summary(all_event_activities)
 
-
-            print(split_list[self.event.current_week-1].loc['total']['calculated_distance'])
             self.event_week_distance =  split_list[self.event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
 
             if self.event.status != '0':
@@ -545,7 +542,6 @@ class DashboardPage:
         from event.classes import Event, Participation
 
         self.user_events = current_user.current_events.all()
-        print(self.user_events)
 
         if self.user_events != []:
             if 'event_id' in requested_event:
@@ -583,7 +579,7 @@ class DashboardPage:
             else:
                 self.d1 = 100
         except:
-                print("self.event.current_week < self.event.length_weeks")
+                current_app.logger.exception(f"self.event.current_week < self.event.length_weeks")
 
         try:
 
@@ -594,7 +590,7 @@ class DashboardPage:
             else:
                 self.d2=100
         except:
-                print("self.event_week_distance < self.current_week_target")
+                current_app.logger.exception("self.event_week_distance < self.current_week_target")
 
         return None
 

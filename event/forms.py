@@ -1,11 +1,17 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, BooleanField, DecimalField, DateField, IntegerField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, NumberRange,NumberRange, Length
+from wtforms.validators import DataRequired, NumberRange,NumberRange, Length, ValidationError
+from .classes import Event
 
 
 class EventForm(FlaskForm):
 
-    name = StringField("Nazwa", validators=[DataRequired("Pole nie może być puste")],)
+    def validate_name_is_free(form, field):
+        name_to_check = Event.query.filter(Event.status != '5').filter(Event.name == field.data).first()
+        if name_to_check != None:
+            raise ValidationError("Istnieje już aktywne wyzwanie o takiej nazwie. Wybierz proszę inną nazwę.")
+
+    name = StringField("Nazwaaaa", validators=[DataRequired("Pole nie może być puste"), validate_name_is_free])
     start = DateField("Data rozpoczęcia", validators=[DataRequired("Pole nie może być puste")])
     length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 0, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
     isPrivate = BooleanField("Wydarzenie prywatne")

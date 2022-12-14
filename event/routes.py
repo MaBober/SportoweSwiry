@@ -79,6 +79,8 @@ def your_events(mode):
         user_events = current_user.current_events
     elif mode == 'finished':
         user_events = current_user.finished_events
+    elif mode == 'future':
+        user_events = current_user.future_events
 
     if current_user.all_events != None:
     
@@ -326,7 +328,9 @@ def modify_event(event_id):
             length = event.length_weeks,
             isPrivate = event.is_private,
             description = event.description,
-            max_users = event.max_user_amount)
+            max_users = event.max_user_amount,
+            old_name = event.name)
+
 
     formDist = DistancesForm(w1 = distance_set[0].target,
     w2 = distance_set[1].target,

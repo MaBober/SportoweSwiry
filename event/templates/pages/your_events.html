@@ -58,11 +58,20 @@
             <a class="nav-link " href="{{ url_for('event.your_events', mode='finished') }}"  style="color: white;">Zakończone</a>
         {% endif %}
 
+    
+        {% if mode=='future': %}
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='future') }}"  style="color: white; background-color: #579956;">Przyszłe</a>
+        {% else %}
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='future') }}"  style="color: white;">Przyszłe</a>
+        {% endif %}
+
         {% if mode=='all': %}
             <a class="nav-link " href="{{ url_for('event.your_events', mode='all') }}"  style="color: white; background-color: #579956;">Wszystkie</a>
         {% else %}
             <a class="nav-link " href="{{ url_for('event.your_events', mode='all') }}"  style="color: white;">Wszystkie</a>
         {% endif %}
+
+
 
     </nav>
 </div>

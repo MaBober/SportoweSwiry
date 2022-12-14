@@ -592,9 +592,14 @@ class Event(db.Model):
 
     def give_overall_weekly_summary(self, activites_list):
 
+        #CREATE EMPTY ACTIVITIES FOR ALL USERS
+
+        users = self.give_all_event_users(scope = 'Objects')
+        for user in users:
+            activites_list = activites_list.append({'user_id': user.id, 'activity_type_id':1, 'date':self.start, 'distance':1, 'time':0, 'calculated_distance':0, 'name':user.name, 'last_name':user.last_name}, ignore_index=True)
+
         # CREATE PIVOT TABLE FOR WHOLE EVENT
         activities_pivot = activites_list.pivot_table(index="date", columns =['user_id','name','last_name'], values=['calculated_distance'], aggfunc='sum')
-        
         activities_pivot = activities_pivot.fillna(value=0)
         activities_pivot = activities_pivot.round(decimals = 2)
 

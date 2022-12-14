@@ -22,8 +22,6 @@ other = Blueprint("other", __name__,
 @other.route("/")
 def hello():
 
-    print(current_user)
-
     if current_user.is_authenticated:
         return redirect(url_for('user.dashboard'))
 
@@ -117,10 +115,8 @@ def mailbox(actionName):
 
 
     messagesCurrentUserReceived = MailboxMessage.query.filter(MailboxMessage.receiver == current_user.mail).filter(MailboxMessage.multipleMessage == True).order_by(MailboxMessage.id.desc()).all()
- 
-    print(messagesCurrentUserReceived)
     messagesCurrentUserSent = MailboxMessage.query.filter(MailboxMessage.sender == current_user.mail).filter(MailboxMessage.multipleMessage == False).order_by(MailboxMessage.id.desc()).all()
-    print(messagesCurrentUserSent)
+
     amountOfReceivedMessages=len(messagesCurrentUserReceived)
     amountOfSentMessages=len(messagesCurrentUserSent)
 

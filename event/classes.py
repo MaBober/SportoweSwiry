@@ -225,23 +225,23 @@ class Event(db.Model):
 
         current_app.logger.info(f"User {current_user.id} tries to erase {user.id} from event {self.id}.")
         is_participating = Participation.query.filter(Participation.user_id == user.id).filter(Participation.event_id == self.id).first()
-    
+
+        if self.admin_id == user.id:
+            message = "Administrator nie może opuścić swojego wyzwania!"
+            current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
+            return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+
         if current_user.is_admin == False:
 
             if is_participating != None and self.status != "0":
                 message = "Nie możesz się wypisać z rozpoczętego wyzwania!", "danger"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Event is on going!")
-                return message, "danger", redirect(url_for('event.explore_events'))
+                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
             
             if is_participating == None:
                 message = "Nie jesteś zapisany na to wyzwanie!"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Does not take part in it!")
-                return message, "danger", redirect(url_for('event.explore_events'))
-            
-            if self.admin_id == user.id:
-                message = "Administrator nie może opuścić swojego wyzwania!"
-                current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
-                return message, "danger", redirect(url_for('event.explore_events'))
+                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
 
             try:
                 db.session.delete(is_participating)
@@ -254,7 +254,7 @@ class Event(db.Model):
             except:
                 message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
                 current_app.logger.exception(f"User {current_user.id} failed to leave event {self.id}")
-                return message, "danger", redirect(url_for('event.explore_events'))
+                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
 
         else:
 
@@ -661,8 +661,6 @@ class Event(db.Model):
         beers_to_buy = { i : 0 for i in event_participants.keys() }
         beers_to_recive = {i : 0 for i in event_participants.keys() }
 
-        print(self.name)
-        print(self.give_all_event_users_ids())
         for week in range(1, self.length_weeks):
             for user in event_participants:
                 if True:
@@ -703,7 +701,7 @@ class Event(db.Model):
                 average_time = str(dt.timedelta(seconds = average_time))
                 user_overall_summary['average_time'] = average_time
             except:
-                print("Błąd w: average_time=user_time_sum/user_activites_amount")
+                current_app.logger.warning(f"Error in: average_time=user_time_sum/user_activites_amount")
                 user_overall_summary['average_time'] = '---'
             
             try:
@@ -712,7 +710,7 @@ class Event(db.Model):
                 user_overall_summary['average_distance_for_event'] = average_distance_for_event
 
             except:
-                print("Błąd w: average_distance_for_event = user_distance_sum/user_activites_amount")
+                current_app.logger.warning(f"Erroe in: average_distance_for_event = user_distance_sum/user_activites_amount")
                 user_overall_summary['average_distance_for_event'] = '---'
 
         else:
@@ -733,10 +731,6 @@ class Event(db.Model):
         inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
 
         return len(inserts)
-
-
-    
-
         
 # Defines tabele, which connect users with events
 class Participation(db.Model):

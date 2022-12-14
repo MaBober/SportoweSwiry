@@ -13,7 +13,7 @@ import os
 import datetime as dt
 
 from werkzeug.utils import secure_filename
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from other.classes import MailboxMessage
 from event.classes import Event
 from .functions import password_generator
@@ -218,9 +218,7 @@ class User(db.Model, UserMixin):
         else:
             message = "Nie udało się zalogować. Podaj pawidłowe hasło!"
             current_app.logger.info(f"User ({self.id}) tried to login with wrong password!")
-            return message, 'danger', render_template('login.html',
-                                        logForm=login_form,
-                                        title_prefix = "Zaloguj")
+            return message, 'danger', redirect(url_for('user.login'))
 
 
     def changeStatusOfMessage(self,id):
@@ -251,7 +249,6 @@ class User(db.Model, UserMixin):
 
         while user != None:
             sufix +=1
-            print(sufix)
             id = self.name[0:3] + self.last_name[0:3] + str(sufix)
             user=User.query.filter(User.id == id).first()
 
@@ -367,10 +364,15 @@ class User(db.Model, UserMixin):
             current_app.logger.info(f"User {self.id} uploaded avatar")
             return message, "success", redirect(url_for('user.settings'))
 
+        except UnidentifiedImageError as e:
+            message = "Nie poprawny format obrazu!"
+            current_app.logger.warning(f"User {self.id} tried to upload wrong picture format.")
+            return message, "message", redirect(url_for('user.settings'))
+
         except:
             message = "NIE WGRANO AVATARA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
             current_app.logger.exception(f"User {self.id} failed to upload avatar!")
-            return message, "danger", redirect(url_for('other.hello'))
+            return message, "danger", redirect(url_for('user.settings'))
 
 
 
@@ -465,10 +467,18 @@ class User(db.Model, UserMixin):
 
 
     @property
+    def future_events(self):
+
+        from event.classes import Event
+        current_events = self.all_events.filter(Event.status == "0").all()
+
+        return current_events
+
+    @property
     def current_events(self):
 
         from event.classes import Event
-        current_events = self.all_events.filter(Event.status != "5")
+        current_events = self.all_events.filter(Event.status != "5").filter(Event.status != "4").filter(Event.status != "0").all()
 
         return current_events
 
@@ -477,7 +487,7 @@ class User(db.Model, UserMixin):
     def finished_events(self):
 
         from event.classes import Event
-        finished_events = self.all_events.filter(Event.status.in_(['4','5']))
+        finished_events = self.all_events.filter(Event.status.in_(['4','5'])).all()
 
         return finished_events
 
@@ -516,8 +526,6 @@ class DashboardPage:
             all_event_activities = self.event.give_all_event_activities(calculated_values = True)
             split_list = self.event.give_overall_weekly_summary(all_event_activities)
 
-
-            print(split_list[self.event.current_week-1].loc['total']['calculated_distance'])
             self.event_week_distance =  split_list[self.event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
 
             if self.event.status != '0':
@@ -541,8 +549,7 @@ class DashboardPage:
 
         from event.classes import Event, Participation
 
-        self.user_events = current_user.current_events.all()
-        print(self.user_events)
+        self.user_events = current_user.current_events
 
         if self.user_events != []:
             if 'event_id' in requested_event:
@@ -580,7 +587,7 @@ class DashboardPage:
             else:
                 self.d1 = 100
         except:
-                print("self.event.current_week < self.event.length_weeks")
+                current_app.logger.exception(f"self.event.current_week < self.event.length_weeks")
 
         try:
 
@@ -591,7 +598,7 @@ class DashboardPage:
             else:
                 self.d2=100
         except:
-                print("self.event_week_distance < self.current_week_target")
+                current_app.logger.exception("self.event_week_distance < self.current_week_target")
 
         return None
 

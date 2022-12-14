@@ -8,6 +8,7 @@ from user.functions import account_confirmation_check
 from other.functions import account_confirmation_check
 from .strava import addStravaActivitiesToDB, getActivitiesFromStrava, getLastStravaActivityDate, getStravaAccessToken, convertStravaData, serve_strava_callback
 from .classes import Activities, Sport
+from event.classes import Event
 
 import datetime as dt
 import csv
@@ -32,7 +33,7 @@ def add_activity():
         flash(message, status)
         return redirect(url_for(url))
 
-    user_events = current_user.current_events.all()
+    user_events = current_user.current_events
     for event in user_events:
 
         all_event_activities = event.give_all_event_activities(calculated_values = True)
@@ -69,25 +70,36 @@ def modify_activity(activity_id):
     activity_to_modify = Activities.query.filter(Activities.id == activity_id).first()
     if activity_to_modify.user_id == current_user.id :
 
+        #form = ActivityForm(request.form, activity_id)
         form = ActivityForm(date = activity_to_modify.date,
-                            activity = activity_to_modify.activity_type,
+                            activity = activity_to_modify.activity_type.id,
                             distance = activity_to_modify.distance,
                             time = (dt.datetime(1970,1,1) + dt.timedelta(seconds=activity_to_modify.time)).time())
+
         form.fill_sports_to_select()
-        form.activity.id = activity_to_modify.activity_type_id
 
         if form.validate_on_submit():
+
             message, status, url = activity_to_modify.modify(form)
             flash(message, status)
         
             return redirect(url_for(url))
+
+        user_events = current_user.current_events
+        for event in user_events:
+
+            all_event_activities = event.give_all_event_activities(calculated_values = True)
+            split_list = event.give_overall_weekly_summary(all_event_activities)
+            event.event_week_distance =  split_list[event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
             
         else:
             return render_template('/pages/addActivity.html',
                             form = form,
-                            mode ="create",
-                            title_prefix = "Dodaj aktywność",
-                            menuMode = "mainApp")
+                            mode ="edit",
+                            activity_id = activity_id,
+                            title_prefix = "Edytuj aktywność",
+                            menuMode = "mainApp",
+                            events = user_events)
 
     else:
 

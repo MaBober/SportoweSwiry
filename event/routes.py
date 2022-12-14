@@ -18,7 +18,9 @@ from other.functions import sendMessgaeFromContactFormToDB
 MAX_EVENTS_AS_ADMIN = 3
 
 event = Blueprint("event", __name__,
-    template_folder='templates')
+    template_folder='templates',
+    static_folder='static',
+    static_url_path='/event/static')
 
 
 @account_confirmation_check
@@ -77,6 +79,8 @@ def your_events(mode):
         user_events = current_user.current_events
     elif mode == 'finished':
         user_events = current_user.finished_events
+    elif mode == 'future':
+        user_events = current_user.future_events
 
     if current_user.all_events != None:
     
@@ -285,7 +289,7 @@ def create_event():
 
     if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) < MAX_EVENTS_AS_ADMIN:
 
-        if event_form.validate_on_submit and distances_form.validate_on_submit():
+        if event_form.validate_on_submit() and distances_form.validate_on_submit():
 
             new_event = Event()
             message, status, action = new_event.add_to_db(event_form, distances_form)
@@ -324,7 +328,9 @@ def modify_event(event_id):
             length = event.length_weeks,
             isPrivate = event.is_private,
             description = event.description,
-            max_users = event.max_user_amount)
+            max_users = event.max_user_amount,
+            old_name = event.name)
+
 
     formDist = DistancesForm(w1 = distance_set[0].target,
     w2 = distance_set[1].target,
@@ -347,7 +353,7 @@ def modify_event(event_id):
 
     coefficientsSet = CoefficientsList.query.filter(CoefficientsList.event_id == event.id).all()
 
-    if form.validate_on_submit and formDist.validate_on_submit():
+    if form.validate_on_submit() and formDist.validate_on_submit():
 
         message, status, action = event.modify(form, formDist)
     
@@ -373,6 +379,7 @@ def add_new_sport_to_event(event_id):
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej akcji")
         return redirect(url_for('other.hello'))
+        
     
     sport_to_add = Sport.query.filter(Sport.id == request.form['activity_type']).first()
     event = Event.query.filter(Event.id == event_id).first()

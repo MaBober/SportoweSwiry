@@ -233,19 +233,20 @@ def logout():
 @login_required #This page needs to be login
 def settings():
 
-    form = UserForm(userName = current_user.id,
+    form = UserForm(id = current_user.id,
                     name = current_user.name,
                     lastName = current_user.last_name,
-                    mail = current_user.mail)
-
-    avatarForm = UploadAvatarForm()
-
+                    mail = current_user.mail,
+                    statute_acceptance = True)
     del form.password
     del form.verifyPassword
     del form.id
     del form.mail
+    del form.statute_acceptance
 
-    if not avatarForm.image.data and form.validate_on_submit():
+    avatar_form = UploadAvatarForm()
+
+    if avatar_form.image.data == None and form.validate_on_submit():       
 
         #update name and last name in date base
         message, status, action = current_user.modify(form)
@@ -253,20 +254,23 @@ def settings():
         flash(message, status)
         return action
 
-    if avatarForm.validate_on_submit():
-
-        #Upload a new avatar photo
-        message, status, action = current_user.upload_avatar(avatarForm.image.data)
-
-        flash(message, status)
-        return action
-
     return render_template("accountSettings.html",
                     title_prefix = "Ustawienia konta",
                     form = form,
-                    avatarForm = avatarForm,
+                    avatarForm = avatar_form,
                     menuMode = "mainApp",
                     mode = "settings")
+
+@user.route("/upload_avatar", methods=['POST'])
+@account_confirmation_check
+@login_required #This page needs to be login
+def upload_avatar():
+
+    picture = request.files['image']
+    message, status, action = current_user.upload_avatar(picture)
+
+    flash(message, status)
+    return action
 
 
 @user.route("/passwordChange", methods=['POST','GET'])
@@ -297,7 +301,6 @@ def passwordChange():
 def dashboard():
 
     dashboard = DashboardPage(request.args)
-    print(dashboard.event)
 
     return render_template('dashboard.html',
                     dashboard = dashboard,

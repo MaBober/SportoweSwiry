@@ -1,7 +1,7 @@
 {% extends "pages//baseNew.html" %}
 
 {% block body_content %}
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventsList.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('event.static',filename='styles/eventsList.css') }}">
 
  <!-- Modal -->
  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -58,19 +58,28 @@
             <a class="nav-link " href="{{ url_for('event.your_events', mode='finished') }}"  style="color: white;">Zakończone</a>
         {% endif %}
 
+    
+        {% if mode=='future': %}
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='future') }}"  style="color: white; background-color: #579956;">Przyszłe</a>
+        {% else %}
+            <a class="nav-link " href="{{ url_for('event.your_events', mode='future') }}"  style="color: white;">Przyszłe</a>
+        {% endif %}
+
         {% if mode=='all': %}
             <a class="nav-link " href="{{ url_for('event.your_events', mode='all') }}"  style="color: white; background-color: #579956;">Wszystkie</a>
         {% else %}
             <a class="nav-link " href="{{ url_for('event.your_events', mode='all') }}"  style="color: white;">Wszystkie</a>
         {% endif %}
 
+
+
     </nav>
 </div>
 
 
-<div class="container">
-    {% if events != None %}
-    <div class="row" >
+<div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; width:100%;">
+        {% if events != None %}
+
         {% for event in events: %}
 
         <div class="event-box">
@@ -104,7 +113,6 @@
                 </div>
             </div> 
         {% endfor %}
-    </div>
     {% endif %}
 </div>
 

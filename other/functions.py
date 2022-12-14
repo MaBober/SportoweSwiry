@@ -128,7 +128,7 @@ def prepareListOfCurrentUserEventsSingleUsers():
                 
 
     except:
-        print("Somethink went wrong!")
+        current_app.logger.exception(f"Somethink went wrong!")
          
     return list(zip(listOfMails, listOfFullNames))
 

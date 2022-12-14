@@ -467,10 +467,18 @@ class User(db.Model, UserMixin):
 
 
     @property
+    def future_events(self):
+
+        from event.classes import Event
+        current_events = self.all_events.filter(Event.status == "0").all()
+
+        return current_events
+
+    @property
     def current_events(self):
 
         from event.classes import Event
-        current_events = self.all_events.filter(Event.status != "5")
+        current_events = self.all_events.filter(Event.status != "5").filter(Event.status != "4").filter(Event.status != "0").all()
 
         return current_events
 
@@ -479,7 +487,7 @@ class User(db.Model, UserMixin):
     def finished_events(self):
 
         from event.classes import Event
-        finished_events = self.all_events.filter(Event.status.in_(['4','5']))
+        finished_events = self.all_events.filter(Event.status.in_(['4','5'])).all()
 
         return finished_events
 
@@ -541,7 +549,7 @@ class DashboardPage:
 
         from event.classes import Event, Participation
 
-        self.user_events = current_user.current_events.all()
+        self.user_events = current_user.current_events
 
         if self.user_events != []:
             if 'event_id' in requested_event:

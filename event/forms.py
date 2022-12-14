@@ -8,16 +8,19 @@ class EventForm(FlaskForm):
 
     def validate_name_is_free(form, field):
         name_to_check = Event.query.filter(Event.status != '5').filter(Event.name == field.data).first()
-        if name_to_check != None:
+        if field.data == form.old_name.data:
+            pass
+        elif name_to_check != None:
             raise ValidationError("Istnieje już aktywne wyzwanie o takiej nazwie. Wybierz proszę inną nazwę.")
 
-    name = StringField("Nazwaaaa", validators=[DataRequired("Pole nie może być puste"), validate_name_is_free])
+    name = StringField("Nazwa", validators=[DataRequired("Pole nie może być puste"), validate_name_is_free])
     start = DateField("Data rozpoczęcia", validators=[DataRequired("Pole nie może być puste")])
     length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 0, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
     isPrivate = BooleanField("Wydarzenie prywatne")
     password=StringField("Hasło")
     description = TextAreaField("Opis wyzwania")
     max_users = IntegerField("Maksymalna ilośc uczestników", validators = [NumberRange(min = 1, max= 25, message = "Podaj proszę liczbę większą od zera!")], default = 10)
+    old_name =  StringField("Nazwa")
 
 class EventPassword(FlaskForm):
 

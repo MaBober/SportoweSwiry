@@ -8,6 +8,7 @@ from user.functions import account_confirmation_check
 from other.functions import account_confirmation_check
 from .strava import addStravaActivitiesToDB, getActivitiesFromStrava, getLastStravaActivityDate, getStravaAccessToken, convertStravaData, serve_strava_callback
 from .classes import Activities, Sport
+from event.classes import Event
 
 import datetime as dt
 import csv
@@ -32,7 +33,7 @@ def add_activity():
         flash(message, status)
         return redirect(url_for(url))
 
-    user_events = current_user.current_events.all()
+    user_events = current_user.current_events
     for event in user_events:
 
         all_event_activities = event.give_all_event_activities(calculated_values = True)
@@ -83,13 +84,22 @@ def modify_activity(activity_id):
             flash(message, status)
         
             return redirect(url_for(url))
+
+        user_events = current_user.current_events
+        for event in user_events:
+
+            all_event_activities = event.give_all_event_activities(calculated_values = True)
+            split_list = event.give_overall_weekly_summary(all_event_activities)
+            event.event_week_distance =  split_list[event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
             
         else:
             return render_template('/pages/addActivity.html',
                             form = form,
-                            mode ="create",
-                            title_prefix = "Dodaj aktywność",
-                            menuMode = "mainApp")
+                            mode ="edit",
+                            activity_id = activity_id,
+                            title_prefix = "Edytuj aktywność",
+                            menuMode = "mainApp",
+                            events = user_events)
 
     else:
 

@@ -7,7 +7,6 @@ from start import app
 # from user.classes import User
 from .classes import MailboxMessage
 from event.classes import Event
-
 import datetime
 
 mail = Mail(app)

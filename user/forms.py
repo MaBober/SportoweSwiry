@@ -4,6 +4,7 @@ from wtforms.fields import StringField, EmailField, PasswordField, BooleanField,
 from wtforms.validators import DataRequired, Length, Email, ValidationError, NumberRange, InputRequired, NumberRange, EqualTo
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
+MAX_AVATAR_SIZE_IN_MB = 5
 
 #Definition class for User - WTF-FlaskForm
 class UserForm(FlaskForm):
@@ -91,6 +92,14 @@ class LoginForm(FlaskForm):
 
 
 class UploadAvatarForm(FlaskForm):
+
+    def validate_avatar_size(form, field):
+        #print(len(field.data.read()))
+        #print(len(field.data.read()) > 1024)
+        if len(field.data.read()) > MAX_AVATAR_SIZE_IN_MB * 1024 * 1024:
+            raise ValidationError("Przesłany plik jest za duży")
+
     image = FileField('Wgraj zdjęcie (<=3MB)', validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'Zdjęcie może być wyłącznie w formacie .jpg lub .png')])
+        FileAllowed(['jpg', 'png'], 'Zdjęcie może być wyłącznie w formacie .jpg lub .png'),
+        validate_avatar_size])

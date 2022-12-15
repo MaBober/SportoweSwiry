@@ -254,6 +254,13 @@ def settings():
         flash(message, status)
         return action
 
+    if avatar_form.validate_on_submit():
+        
+        picture = avatar_form.image.data
+        message, status, action = current_user.upload_avatar(picture)
+        flash(message, status)
+        return action
+
     return render_template("accountSettings.html",
                     title_prefix = "Ustawienia konta",
                     form = form,
@@ -261,16 +268,6 @@ def settings():
                     menuMode = "mainApp",
                     mode = "settings")
 
-@user.route("/upload_avatar", methods=['POST'])
-@account_confirmation_check
-@login_required #This page needs to be login
-def upload_avatar():
-
-    picture = request.files['image']
-    message, status, action = current_user.upload_avatar(picture)
-
-    flash(message, status)
-    return action
 
 
 @user.route("/passwordChange", methods=['POST','GET'])

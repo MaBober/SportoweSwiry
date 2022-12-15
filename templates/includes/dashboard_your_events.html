@@ -4,8 +4,7 @@
     <div class="card-header Event-Title-Box" style="background-color: rgba(224, 153, 94);">Twoje wyzwania</div>
     {% if dashboard.event != None : %}
     <div class="Event-Box-Row">
-      
-        {% if eventAmount !=1 %}
+        {% if dashboard.user_events|length !=1 %}
         <div class="Arrow-Box-Left"><a href="{{ url_for('user.dashboard', event_id=dashboard.previous_event)}}"><img src="/static/img/turn_left.webp"></a></div>
         {% endif %}
         <div class="card-body">
@@ -53,7 +52,7 @@
 
 
         </div>
-        {% if eventAmount != 1%}
+        {% if dashboard.user_events|length !=1 %}
         <div class="Arrow-Box-Right"><a href="{{ url_for('user.dashboard', event_id=dashboard.next_event)}}"><img src="/static/img/turn_right.webp"></a></div>
         {% endif %}
        

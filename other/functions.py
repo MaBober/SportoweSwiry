@@ -12,14 +12,18 @@ import datetime
 mail = Mail(app)
 
 def send_email(to, subject, template, **kwargs):
-    app = current_app._get_current_object()
-    msg = Message(subject, recipients=[to])
-    msg.body = render_template(template + ".txt", **kwargs)
-    msg.html = render_template(template + ".html", **kwargs)
-    mail.send(msg)
-    current_app.logger.info(f"Mail sent to: {to}. Subject: {subject}.")
+    try:
+        app = current_app._get_current_object()
+        msg = Message(subject, recipients=[to])
+        msg.body = render_template(template + ".txt", **kwargs)
+        msg.html = render_template(template + ".html", **kwargs)
+        mail.send(msg)
+        current_app.logger.info(f"Mail sent to: {to}. Subject: {subject}.")
+        return None
 
-    return None
+    except:
+        current_app.logger.exception(f"Failed to sent mail to: {to}. Subject: {subject}.")
+
 
 
 def prepareListOfChoicesForAdmin():
@@ -42,6 +46,7 @@ def prepareListOfChoicesForNormalUser():
 
 def prepareListOfUsers():
     #Creating list of users
+
     listOfUsers=User.query.all()
     listOfUsersMails = [(a.mail) for a in listOfUsers]
     listOfUsersNames = [(a.name) for a in listOfUsers]
@@ -148,17 +153,19 @@ def crateAvailableListOfEvents():
 
 
 def saveMessageInDB(form):
-    
-    senderFullName=setSenderFullName()
-    receiverFullName=setReceiverFullName(form)
+    try:
+        senderFullName=setSenderFullName()
+        receiverFullName=setReceiverFullName(form)
 
-    newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
-    db.session.add(newMessage)
-    db.session.commit()
-    newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
-    db.session.add(newMessage)
-    db.session.commit()
-
+        newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
+        db.session.add(newMessage)
+        db.session.commit()
+        newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+        db.session.add(newMessage)
+        db.session.commit()
+        app.logger.info(f"User {current_user.id} sent message to {receiverFullName}.")
+    except:
+        current_app.logger.exception(f"User {current_user.id} failed to send message to {receiverFullName}.")
 
 def setSenderFullName():
     senderName=current_user.name
@@ -173,53 +180,67 @@ def setReceiverFullName(form):
 
 
 def saveMessageInDBforEvent(form):
-    senderFullName=setSenderFullName()
-    (eventName, id) = (form.receiverEmail.data).split(', ID:')
-    newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = eventName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
-    db.session.add(newMessage)
-    db.session.commit()
-
-    event=Event.query.filter(Event.name==eventName).first()
-    for participant in event.participants:
-        receiverUser=User.query.filter(User.id==participant.user_name).first()
-        receiverMail=receiverUser.mail
-        receiverName=receiverUser.name
-        receiverLastName=receiverUser.lastName
-        receiverFullName=receiverName + " " + receiverLastName
-        newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+    try:
+        senderFullName=setSenderFullName()
+        (eventName, id) = (form.receiverEmail.data).split(', ID:')
+        newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = eventName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
         db.session.add(newMessage)
         db.session.commit()
 
+        event=Event.query.filter(Event.name==eventName).first()
+        for participant in event.participants:
+            receiverUser=User.query.filter(User.id==participant.user_name).first()
+            receiverMail=receiverUser.mail
+            receiverName=receiverUser.name
+            receiverLastName=receiverUser.lastName
+            receiverFullName=receiverName + " " + receiverLastName
+            newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+            db.session.add(newMessage)
+            db.session.commit()
+            app.logger.info(f"User {current_user.id} sent message to {eventName} participants.")
+    except:
+        current_app.logger.exception(f"User {current_user.id} failed to send message to {eventName} participants.")
 
 def saveMessageInDBforAll(form):
-    senderFullName=setSenderFullName()
-    newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
-    db.session.add(newMessage)
-    db.session.commit()
-
-    users=User.query.all()
-    for user in users:
-        receiverMail=user.mail
-        receiverName=user.name
-        receiverLastName=user.lastName
-        receiverFullName=receiverName + " " + receiverLastName
-        newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+    try:
+        senderFullName=setSenderFullName()
+        newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )
         db.session.add(newMessage)
         db.session.commit()
 
+        users=User.query.all()
+        for user in users:
+            receiverMail=user.mail
+            receiverName=user.name
+            receiverLastName=user.lastName
+            receiverFullName=receiverName + " " + receiverLastName
+            newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = receiverMail, receiverName = receiverFullName, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=True )
+            db.session.add(newMessage)
+            db.session.commit()
+
+        app.logger.info(f"User {current_user.id} sent message to all users.")
+    except:
+        current_app.logger.exception(f"User {current_user.id} failed to send message to all users.")
 
 def sendMessgaeFromContactFormToDB(newMessage):
-    db.session.add(newMessage)
-    db.session.commit()
+    try:
+        db.session.add(newMessage)
+        db.session.commit()
+        app.logger.info(f"Message sent from contact form.")
+    except:
+        current_app.logger.exception(f"User failed to send message from contact form.")
 
     
 def deleteMessagesFromDB(messagesToDelete):
-
-    for messageID in messagesToDelete:
-        messageToDelete=MailboxMessage.query.filter(MailboxMessage.id == messageID).first()
-        db.session.delete(messageToDelete)
-        db.session.commit()
-    return None
+    try:
+        for messageID in messagesToDelete:
+            messageToDelete=MailboxMessage.query.filter(MailboxMessage.id == messageID).first()
+            db.session.delete(messageToDelete)
+            db.session.commit()
+        return None
+    except:
+         current_app.logger.exception(f"User failed to delete message from mailbox.")
+    
     
 @app.context_processor
 def cookies_check():

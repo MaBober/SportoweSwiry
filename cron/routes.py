@@ -1,5 +1,6 @@
 import datetime as dt
 import csv
+import os
 
 from flask_login import login_required, current_user
 from start import db, app
@@ -42,10 +43,10 @@ def cron_send_weekly_summary():
     admins = User.all_application_admins()
     user = User.query.filter(User.id == "MaBober").first()
 
-    send_email(user.mail, f"Podsumowanie ostatnich {summary.days} dni",'emails/app_summary', summary = summary, admin = user)
+    #send_email(user.mail, f"Podsumowanie ostatnich {summary.days} dni",'emails/app_summary', summary = summary, admin = user)
 
-    # for admin in admins:
-    #     send_email(admin.mail, f"Podsumowanie ostatnich {summary.days} dni",'emails/app_summary', summary = summary, admin = admin)
+    for admin in admins:
+        send_email(admin.mail, f"Podsumowanie ostatnich {summary.days} dni",'emails/app_summary', summary = summary, admin = admin)
 
     return f'''New activities: {str(summary.new_activities)}
               New users: {str(summary.new_users)}
@@ -53,7 +54,43 @@ def cron_send_weekly_summary():
               Sumary for : {str(summary.start_date)} - {str(summary.end_date)}
               Admins: {str(admins)}'''
               
+@cron.route("/cron/error_summary", methods = ['POST'])
+def cron_errors_summary():
 
+    report = generate_error_summary(7)
+
+    return report
+
+def generate_error_summary(days = 7):
+
+    logs_path = r'logs'
+    os.path.isdir(logs_path)
+    report = {}
+    report['start'] = dt.date.today() - dt.timedelta(days = days)
+    report['end'] = dt.date.today()
+    report['sum_of_errors'] = 0
+    report['sum_of_warnings'] = 0
+
+    for file in os.listdir(logs_path):
+        date = dt.date(int(file.split('-')[0]), int(file.split('-')[1]), int(file.split('-')[2].split(".")[0]))
+        if date  > dt.date.today() - dt.timedelta(days = days):
+            day = {}
+            day['date'] = date
+            day['errors'] = 0
+            day['warnings'] = 0
+
+            with open(os.path.join(logs_path, file), 'r') as log:
+                for line in log:
+                    if line[0] == '[' and line.rstrip("\n").split(" ")[2] == "ERROR":
+                        day['errors'] +=1
+                    if line[0] == '[' and line.rstrip("\n").split(" ")[2] == "WARNING":
+                        day['warnings'] +=1
+
+            report['sum_of_errors'] += day['errors']
+            report['sum_of_warnings'] += day['warnings']
+            report[file.split('-')[0] + file.split('-')[1] + file.split('-')[2].split(".")[0]] = day
+
+    return report
 
 class StatisticalSummary():
 
@@ -69,3 +106,11 @@ class StatisticalSummary():
         self.new_activities = Activities.added_in_last_days(self.days)
         self.new_users = User.added_in_last_days(self.days)
         self.new_events = Event.added_in_last_days(self.days)
+        
+        report = generate_error_summary(self.days)
+        self.errors = report['sum_of_errors']
+        self.warnings = report['sum_of_warnings']
+
+
+            
+

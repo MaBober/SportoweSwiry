@@ -1,9 +1,9 @@
-{% extends "pages//baseNew.html" %}
+{% extends "pages//base.html" %}
 
 {% block body_content %}
 {% include "/includes/event_menu.html" %}
 
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/eventView.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('event.static',filename='styles/event_view.css') }}">
 
 <div class="container-xl px-4 mt-4">
 

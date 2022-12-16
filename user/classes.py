@@ -196,7 +196,7 @@ class User(db.Model, UserMixin):
         except:
             message = "NIE ZMIENIONO HASŁA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
             current_app.logger.exception(f"User failed to modify password!")
-            return message, 'danger', redirect(url_for('user.passwordChange'))
+            return message, 'danger', redirect(url_for('user.password_change'))
 
     def standard_login(self, login_form = None, social_media_login = False, remember=True):
 
@@ -221,7 +221,7 @@ class User(db.Model, UserMixin):
             return message, 'danger', redirect(url_for('user.login'))
 
 
-    def changeStatusOfMessage(self,id):
+    def change_message_status(self,id):
         messageFromInBox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
         messageFromInBox.messageReaded = 1
         db.session.commit()
@@ -300,7 +300,7 @@ class User(db.Model, UserMixin):
 
             current_app.logger.info(f"User {self.id} generated reset token")
             message = f'Na Twój adres e-mail ({self.mail}) wysłaliśmy link do resetowania hasła'
-            return message, "success", render_template("verifyEmailSent.html", title_prefix = "Resetowanie hasła")
+            return message, "success", render_template("verify_email_sent.html", title_prefix = "Resetowanie hasła")
 
         except:
 

@@ -106,7 +106,7 @@ def create_account():
 
         return action
 
-    return render_template('NewUserForm.html',
+    return render_template('new_user_form.html',
                  form = form,
                  title_prefix = "Nowe konto")
 
@@ -138,7 +138,7 @@ def confirm(token):
     return action
 
 
-@user.route('/resetPassword', methods=['POST', 'GET'])
+@user.route('/reset_password', methods=['POST', 'GET'])
 def reset():
 
     form = VerifyEmailForm()
@@ -151,11 +151,11 @@ def reset():
         #flash(message, staus)
         return action
 
-    return render_template("verifyEmail.html", title_prefix = "Resetowanie hasła", form=form)
+    return render_template("verify_email.html", title_prefix = "Resetowanie hasła", form=form)
 
 
-@user.route('/resetPassword/<token>', methods=['POST', 'GET'])
-def resetPassword(token):
+@user.route('/reset_password/<token>', methods=['POST', 'GET'])
+def reset_password(token):
 
     form = NewPasswordForm()
     del form.oldPassword
@@ -166,10 +166,10 @@ def resetPassword(token):
         flash(message, status)
         return action
 
-    return render_template("resetPassword.html", title_prefix = "Resetowanie hasła", form=form)
+    return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
 
 
-@user.route("/listOfUsers")
+@user.route("/list_of_users")
 @account_confirmation_check
 @login_required #This page needs to be login
 def list_of_users():
@@ -179,7 +179,7 @@ def list_of_users():
         return redirect(url_for('other.hello'))
 
     users = User.query.all()
-    return render_template('listOfUsers.html',
+    return render_template('list_of_users.html',
                     users=users,
                     title_prefix = "Lista użytkowników")
 
@@ -261,7 +261,7 @@ def settings():
         flash(message, status)
         return action
 
-    return render_template("accountSettings.html",
+    return render_template("account_settings.html",
                     title_prefix = "Ustawienia konta",
                     form = form,
                     avatarForm = avatar_form,
@@ -270,10 +270,10 @@ def settings():
 
 
 
-@user.route("/passwordChange", methods=['POST','GET'])
+@user.route("/password_change", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
-def passwordChange():
+def password_change():
 
     form = NewPasswordForm(id=current_user.id)
 
@@ -285,7 +285,7 @@ def passwordChange():
         flash(message, status)
         return action
 
-    return render_template("passwordChange.html",
+    return render_template("password_change.html",
                     title_prefix = "Prywatność",
                     form = form,
                     menuMode = "mainApp",

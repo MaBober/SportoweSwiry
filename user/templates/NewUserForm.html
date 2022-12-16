@@ -2,8 +2,8 @@
 
 
 {% block body_content %}
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/newUserForm.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('user.static',filename='styles/login.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('user.static',filename='styles/new_user_form.css') }}">
 <div class="Static-Content">
     <form class="Login-Main-Box" method="POST">
         {{ form.csrf_token }}

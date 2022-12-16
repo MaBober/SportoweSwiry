@@ -14,7 +14,10 @@ import datetime as dt
 import csv
 
 
-activity = Blueprint("activity", __name__, template_folder='templates')
+activity = Blueprint("activity", __name__,
+            template_folder='templates',
+            static_folder='static',
+            static_url_path='/activity/static')
 
 
 @account_confirmation_check

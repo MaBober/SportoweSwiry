@@ -44,8 +44,8 @@ def about():
     return render_template('/pages/about.html', title_prefix = "O nas" )
 
 
-@other.route("/sendMessage", methods=['POST','GET'])
-def sendMessage():
+@other.route("/send_message", methods=['POST','GET'])
+def send_message():
 
     if current_user.is_authenticated:
         form=MessageForm(name=current_user.name, lastName=current_user.last_name, mail=current_user.mail)
@@ -73,9 +73,9 @@ def sendMessage():
             sendMessgaeFromContactFormToDB(newMessage)
         
         flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")
-        return redirect(url_for('other.contactFormResponse'))
+        return redirect(url_for('other.contact_form_response'))
 
-    return render_template('/pages/sendMessage.html', form=form, title_prefix = "Formularz kontaktowy" )
+    return render_template('/pages/send_message.html', form=form, title_prefix = "Formularz kontaktowy" )
 
 @other.route("/mailbox/<actionName>", methods=['POST','GET'])
 @account_confirmation_check
@@ -129,8 +129,8 @@ def mailbox(actionName):
     return render_template('/pages/mailbox.html', form=form, readForm=readForm, messagesCurrentUser=messagesCurrentUser, current_user=current_user, 
             amountOfReceivedMessages=amountOfReceivedMessages, amountOfSentMessages=amountOfSentMessages, actionName=actionName, menuMode="mainApp")
 
-@other.route("/acceptCookies", methods=['POST','GET'])
-def acceptCookies():
+@other.route("/accept_cookies", methods=['POST','GET'])
+def accept_cookies():
 
     if request.method == 'POST':
 
@@ -142,18 +142,18 @@ def acceptCookies():
     
     return redirect(url_for('other.hello'))
 
-@other.route("/privacyPolicy")
-def privacyPolicy():
+@other.route("/privacy_policy")
+def privacy_policy():
     
-    return render_template('/pages/privacyPolicy.html', title_prefix= "Polityka Prywatności")
+    return render_template('/pages/privacy_policy.html', title_prefix= "Polityka Prywatności")
 
-@other.route("/contactFormResponse")
-def contactFormResponse():
+@other.route("/contact_form_response")
+def contact_form_response():
 
-    return render_template('/pages/messageSent.html', title_prefix = "Formularz kontaktowy" )
+    return render_template('/pages/message_sent.html', title_prefix = "Formularz kontaktowy" )
 
-@other.route("/changeMessageStatus/<messageID>", methods=['POST','GET'])
-def changeStatusOfMessage(messageID):
-    current_user.changeStatusOfMessage(messageID)
+@other.route("/change_message_status/<messageID>", methods=['POST','GET'])
+def change_message_status(messageID):
+    current_user.change_message_status(messageID)
     return redirect(url_for('other.mailbox', actionName='inbox'))
 

@@ -21,7 +21,7 @@ activity = Blueprint("activity", __name__,
 
 
 @account_confirmation_check
-@activity.route("/addActivity", methods=['POST','GET'])
+@activity.route("/add_activity", methods=['POST','GET'])
 @login_required #This page needs to be login
 def add_activity():
 
@@ -44,7 +44,7 @@ def add_activity():
         event.event_week_distance =  split_list[event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
     
     else:
-        return render_template('/pages/addActivity.html',
+        return render_template('/pages/add_activity.html',
                     form = form,
                     mode = "create",
                     title_prefix = "Dodaj aktywność",
@@ -53,7 +53,7 @@ def add_activity():
 
 
 @account_confirmation_check
-@activity.route('/deleteActivity/<int:activity_id>')
+@activity.route('/delete_activity/<int:activity_id>')
 @login_required #This page needs to be login
 def delete_activity(activity_id):
 
@@ -66,7 +66,7 @@ def delete_activity(activity_id):
 
 
 @account_confirmation_check
-@activity.route("/modifyActivity/<int:activity_id>", methods=['POST','GET'])
+@activity.route("/modify_activity/<int:activity_id>", methods=['POST','GET'])
 @login_required #This page needs to be login
 def modify_activity(activity_id):
     
@@ -96,7 +96,7 @@ def modify_activity(activity_id):
             event.event_week_distance =  split_list[event.current_week-1].loc['total']['calculated_distance'][current_user.id][0]
             
         else:
-            return render_template('/pages/addActivity.html',
+            return render_template('/pages/add_activity.html',
                             form = form,
                             mode ="edit",
                             activity_id = activity_id,
@@ -111,7 +111,7 @@ def modify_activity(activity_id):
 
 
 @account_confirmation_check
-@activity.route("/myActivities")
+@activity.route("/my_activities")
 @login_required #This page needs to be login
 def my_activities():
 
@@ -165,7 +165,7 @@ def my_activities():
             dataList.append(distance)
             dates.append(str(date))
 
-        return render_template('/pages/myActivities.html',
+        return render_template('/pages/my_activities.html',
                                 activities = activities,
                                 title_prefix = "Moje aktywności",
                                 sec_to_H_M_S = sec_to_H_M_S,
@@ -183,7 +183,7 @@ def my_activities():
         return redirect(url_for('other.hello'))
 
 
-@activity.route("/stravaLogin")
+@activity.route("/strava_login")
 @login_required
 def strava_login():
     current_app.logger.info(f'User {current_user.id} clicked "Connect with Strava" button')

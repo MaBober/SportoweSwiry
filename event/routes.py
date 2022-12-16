@@ -371,7 +371,7 @@ def modify_event(event_id):
                     CoefficientsSet = coefficientsSet)
 
 
-@event.route('/addNewSportToEvent/<int:event_id>', methods=['POST','GET'])
+@event.route('/add_new_sport_event/<int:event_id>', methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def add_new_sport_to_event(event_id):
@@ -391,7 +391,7 @@ def add_new_sport_to_event(event_id):
 
 
 
-@event.route("/deleteCoeficientSport/<int:event_id>/<int:activity_type_id>")
+@event.route("/delete_sport_event/<int:event_id>/<int:activity_type_id>")
 @account_confirmation_check
 @login_required #This page needs to be login
 def delete_coefficient(event_id, activity_type_id):
@@ -407,7 +407,7 @@ def delete_coefficient(event_id, activity_type_id):
     return action
 
 
-@event.route("/modifyCoeficientSport/<int:event_id>/<int:activity_type_id>", methods=['POST', 'GET'])
+@event.route("/modify_sport_event/<int:event_id>/<int:activity_type_id>", methods=['POST', 'GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def modify_coefficient(event_id, activity_type_id):
@@ -498,7 +498,7 @@ def admin_delete_event(event_id):
     return action
 
 
-@event.route('/addNewSport/', methods=['POST','GET'])
+@event.route('/add_sport_app/', methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def add_new_sport_to_base():
@@ -521,7 +521,7 @@ def add_new_sport_to_base():
                     form = form) 
 
 
-@event.route('/deleteSport/<int:sport_id>', methods=['POST','GET'])
+@event.route('/delete_sport_app/<int:sport_id>', methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def delete_sport_from_base(sport_id):
@@ -537,7 +537,7 @@ def delete_sport_from_base(sport_id):
     return action
 
 
-@event.route('/modifySport/<int:sport_id>', methods=['POST','GET'])
+@event.route('/modify_sport_app/<int:sport_id>', methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def modify_sport_in_base(sport_id):

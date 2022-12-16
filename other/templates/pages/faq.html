@@ -1,4 +1,4 @@
-{% extends "pages//baseNew.html" %}
+{% extends "pages//base.html" %}
 
 
 {% block body_content %}
@@ -36,7 +36,7 @@
         </div>
         <div id="flush-collapseTwo" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
           <div class="Answer-Font">
-            Na ten moment jedynie administratorzy aplikacji mogą uruchomić nowe wyzwania. Jeżeli chcesz stworzyć nowe wydarzenie, skontaktuj się nami przez <a href="{{ url_for('other.sendMessage') }}" >Formularz Kontaktowy</a>.
+            Na ten moment jedynie administratorzy aplikacji mogą uruchomić nowe wyzwania. Jeżeli chcesz stworzyć nowe wydarzenie, skontaktuj się nami przez <a href="{{ url_for('other.send_message') }}" >Formularz Kontaktowy</a>.
           </div>
         </div>
       </div>

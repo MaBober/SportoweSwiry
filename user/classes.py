@@ -353,7 +353,7 @@ class User(db.Model, UserMixin):
             avatar = Image.open(file)
             avatar.thumbnail((60,60))
 
-            if avatar.format=='png':
+            if avatar.format in ('png','PNG'):
                 filename = secure_filename(self.id + '.png')
                 avatar = avatar.convert('RGB') #Convert from png to jpg
 

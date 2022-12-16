@@ -90,7 +90,7 @@ def isSafeUrl(target):
 
 
 
-@user.route("/createUser", methods=['POST', 'GET'])
+@user.route("/create_user", methods=['POST', 'GET'])
 def create_account():
     
     form = UserForm()
@@ -111,15 +111,15 @@ def create_account():
                  title_prefix = "Nowe konto")
 
 
-@user.route("/unconfirmedUser")
+@user.route("/unconfirmed_user")
 @login_required
 def unconfirmed():
     return render_template('unconfirmed.html')
 
 
-@user.route("/sendTokenAgain")
+@user.route("/send_token_again")
 @login_required
-def sendTokenAgain():
+def send_token_again():
     #Re-sending the email with the account confirmation token
     user = User.query.filter(User.id == current_user.id).first()
     user.generate_confirmation_token()
@@ -128,7 +128,7 @@ def sendTokenAgain():
     return redirect(url_for('other.hello'))
 
 
-@user.route('/confirmUser/<token>')
+@user.route('/confirm_user/<token>')
 @login_required
 def confirm(token):
 
@@ -184,7 +184,7 @@ def list_of_users():
                     title_prefix = "Lista użytkowników")
 
 
-@user.route('/deleteUser/<user_id>')
+@user.route('/delete_user/<user_id>')
 @account_confirmation_check
 @login_required #This page needs to be login
 def delete_user(user_id):
@@ -228,7 +228,7 @@ def logout():
     return redirect(url_for('other.hello'))
 
 
-@user.route("/settingsUser", methods=['POST','GET'])
+@user.route("/settings_user", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def settings():

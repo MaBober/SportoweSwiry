@@ -1,4 +1,4 @@
-{% extends "pages//baseNew.html" %}
+{% extends "pages//base.html" %}
 
 {% block body_content %}
 
@@ -17,9 +17,9 @@
         {% endif %}
 
         {% if mode=='passwordChange' %}
-            <a class="nav-link" href="{{ url_for('user.passwordChange') }}" style="color: #182c07e8; background-color: #579956;">Prywatność</a>
+            <a class="nav-link" href="{{ url_for('user.password_change') }}" style="color: #182c07e8; background-color: #579956;">Prywatność</a>
         {% else %}
-            <a class="nav-link" href="{{ url_for('user.passwordChange') }}" style="color: #182c07e8;">Prywatność</a>
+            <a class="nav-link" href="{{ url_for('user.password_change') }}" style="color: #182c07e8;">Prywatność</a>
         {% endif %}
 
         <a class="nav-link" href="#" style="color: #182c07e8;">Inne</a>

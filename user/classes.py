@@ -191,9 +191,9 @@ class User(db.Model, UserMixin):
             self.password = self.hash_password()
             db.session.commit()
             current_app.logger.info(f"User ({self.id}) modified password!")
-            message = "Hasło zmienione. Zaloguj się ponownie"
+            message = "Hasło zmienione poprawnie!"
 
-            return message, "success", redirect(url_for('user.logout'))
+            return message, "success", redirect(url_for('other.hello'))
         
         except:
             message = "NIE ZMIENIONO HASŁA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"

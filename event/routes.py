@@ -12,8 +12,6 @@ from other.functions import send_email, account_confirmation_check
 from user.functions import account_confirmation_check#, send_email
 from user.classes import User
 
-from other.classes import MailboxMessage
-from other.functions import sendMessgaeFromContactFormToDB
 
 MAX_EVENTS_AS_ADMIN = 3
 

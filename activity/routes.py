@@ -5,8 +5,7 @@ from flask_login import login_required, current_user
 from activity.classes import Activities
 from activity.forms import ActivityForm
 from user.functions import account_confirmation_check
-from other.functions import account_confirmation_check
-from .strava import addStravaActivitiesToDB, getActivitiesFromStrava, getLastStravaActivityDate, getStravaAccessToken, convertStravaData, serve_strava_callback
+from .strava import serve_strava_callback
 from .classes import Activities, Sport
 from event.classes import Event
 

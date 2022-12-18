@@ -15,7 +15,7 @@ class EventForm(FlaskForm):
 
     name = StringField("Nazwa", validators=[DataRequired("Pole nie może być puste"), validate_name_is_free])
     start = DateField("Data rozpoczęcia", validators=[DataRequired("Pole nie może być puste")])
-    length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 0, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
+    length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 1, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
     isPrivate = BooleanField("Wydarzenie prywatne")
     password=StringField("Hasło")
     description = TextAreaField("Opis wyzwania")

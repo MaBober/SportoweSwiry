@@ -142,7 +142,7 @@ def accept_cookies():
     
     return redirect(url_for('other.hello'))
 
-@other.route("/privacy_policy")
+@other.route("/polityka_prywatnosci")
 def privacy_policy():
     
     return render_template('/pages/privacy_policy.html', title_prefix= "Polityka Prywatności")

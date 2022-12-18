@@ -14,6 +14,8 @@ import random
 import string
 
 
+
+
 # def standard_login(user, remember=True):
 #     login_user(user, remember)
 #     check_next_url()
@@ -111,6 +113,11 @@ def password_generator():
 def account_confirmation_check(initial_function):
     @wraps(initial_function)
     def wrapped_function(*args, **kwargs):
+
+
+        if current_user.is_authenticated and current_user.is_banned:
+
+            return redirect(url_for('user.unconfirmed'))
 
         if current_user.is_authenticated and not current_user.confirmed:
             return redirect(url_for('user.unconfirmed'))

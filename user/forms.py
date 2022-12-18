@@ -51,7 +51,7 @@ class NewPasswordForm(FlaskForm):
         tempUser = User.query.filter(User.id==form.id.data).first()
         currentPassword=tempUser.password
 
-        verify=User.verify_password(currentPassword, field.data)
+        verify=tempUser.verify_password(field.data)
 
         if not verify:
             raise ValidationError("Podaj poprawne aktulane hasło")

@@ -47,6 +47,8 @@ def prepareListOfChoicesForNormalUser():
 def prepareListOfUsers():
     #Creating list of users
 
+    from user.classes import User
+
     listOfUsers=User.query.all()
     listOfUsersMails = [(a.mail) for a in listOfUsers]
     listOfUsersNames = [(a.name) for a in listOfUsers]
@@ -63,6 +65,9 @@ def prepareListOfUsers():
     return list(zip(listOfUsersMails, listOfUsersFullNames))
 
 def prepareListOfAdmins():
+
+    from user.classes import User
+    
     listOfAdmins=User.query.filter(User.isAdmin==True).all()
 
     listOfAdminsMails = [(a.mail) for a in listOfAdmins]
@@ -102,6 +107,7 @@ def prepareListOfCurrentUserEventsUsers():
 
 def prepareListOfCurrentUserEventsSingleUsers():
 
+    from user.classes import User
 
     listOfEvents=Event.query.all()
     listOfRealEvents=[]
@@ -173,6 +179,9 @@ def setSenderFullName():
     return senderName + " " + senderLastName
 
 def setReceiverFullName(form):
+
+    from user.classes import User
+
     receiverUser=User.query.filter(User.mail==form.receiverEmail.data).first()
     receiverName=receiverUser.name
     receiverLastName=receiverUser.last_name
@@ -180,6 +189,9 @@ def setReceiverFullName(form):
 
 
 def saveMessageInDBforEvent(form):
+
+    from user.classes import User
+
     try:
         senderFullName=setSenderFullName()
         (eventName, id) = (form.receiverEmail.data).split(', ID:')
@@ -202,6 +214,8 @@ def saveMessageInDBforEvent(form):
         current_app.logger.exception(f"User {current_user.id} failed to send message to {eventName} participants.")
 
 def saveMessageInDBforAll(form):
+
+    from user.classes import User
     try:
         senderFullName=setSenderFullName()
         newMessage = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, senderName=senderFullName, receiver = form.receiverEmail.data, receiverName = form.receiverEmail.data, subject = form.subject.data, message = form.message.data, sendByApp = form.sendByApp.data, sendByEmail= form.sendByEmail.data, messageReaded=False, multipleMessage=False )

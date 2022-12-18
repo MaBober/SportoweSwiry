@@ -9,7 +9,7 @@ import os
 
 
 from .classes import User, DashboardPage, UserBans
-from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
+from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm, BanReason
 import functools
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
 
@@ -177,7 +177,7 @@ def reset_password(token):
 
     return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
 
-@user.route("/ban_user/<user_id>")
+@user.route("/ban_user/<user_id>", methods=['POST', 'GET'])
 def ban_user(user_id):
 
     if not current_user.is_admin:
@@ -187,13 +187,17 @@ def ban_user(user_id):
     user_to_ban = User.query.filter(User.id == user_id).first()
     if user_to_ban != None:
 
-        message, status, action = user_to_ban.ban("KONIEC!")
+        ban_reason = ''
+        if request.method == 'POST':
+            ban_reason = request.form['ban_reason']
+
+        message, status, action = user_to_ban.ban(ban_reason)
         flash(message, status)
         return action
 
     return redirect(url_for('other.hello'))
 
-@user.route("/unban_user/<user_id>")
+@user.route("/unban_user/<user_id>", methods=['POST', 'GET'])
 def unban_user(user_id):
 
     if not current_user.is_admin:
@@ -210,7 +214,7 @@ def unban_user(user_id):
     return redirect(url_for('other.hello'))
 
 
-@user.route("/list_of_users")
+@user.route("/list_of_users", methods=['POST', 'GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def list_of_users():
@@ -219,9 +223,13 @@ def list_of_users():
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
+    ban_form = BanReason()
+
     users = User.query.all()
     return render_template('list_of_users.html',
                     users=users,
+                    ban_form = ban_form,
+                    menuMode = "mainApp",
                     title_prefix = "Lista użytkowników")
 
 

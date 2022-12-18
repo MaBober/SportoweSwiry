@@ -35,6 +35,7 @@ class User(db.Model, UserMixin):
     is_added_by_fb = db.Column(db.Boolean, default=False)
 
     event_admin = db.relationship('Event', backref='admin', lazy='dynamic')
+    banned_user = db.relationship('UserBans', backref='user', lazy='dynamic')
     events = db.relationship('Participation', backref='user', lazy='dynamic')
     activities = db.relationship('Activities', backref='user', lazy='dynamic')
 
@@ -453,6 +454,68 @@ class User(db.Model, UserMixin):
             current_app.logger.exception(f"User {self.id} failed to rotate avatar ({angle})")
             return message, 'danger', redirect(url_for('user.settings'))
 
+        
+    
+    def ban(self, description):
+
+        if self.is_admin:
+            message = 'Nie można zablokować konta administratora!'
+            current_app.logger.warning(f"User {current_user.id} tried to ban admin ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+        if self.is_banned:
+            message =f'Konto użytkownika {self.name} {self.last_name} jest już zablokowane!'
+            current_app.logger.warning(f"User {current_user.id} tried to ban already banned acount ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+        try:   
+            banned_user = UserBans(
+                user_id = self.id,
+                description = description)
+
+            db.session.add(banned_user)
+            db.session.commit()
+
+            message =f'Konto użytkownika {self.name} {self.last_name} zostało zablokowane!'
+            current_app.logger.info(f"User {current_user.id} banned acount ({self.id})")
+            return message, 'success', redirect(url_for('user.list_of_users'))
+
+        except:
+            message = 'Nie udało się zablokować konta!'
+            current_app.logger.exception(f"User {current_user.id} failed to ban ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+
+    def unban(self):
+
+        if not self.is_banned:
+            message =f'Konto użytkownika {self.name} {self.last_name} nie jest zablokowane!'
+            current_app.logger.warning(f"User {current_user.id} tried to unban not banned acount ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+        try:
+            banned_to_delete = UserBans.query.filter(UserBans.user_id == self.id).first()
+            db.session.delete(banned_to_delete)
+            db.session.commit()
+
+            message =f'Konto użytkownika {self.name} {self.last_name} zostało odblokowane!'
+            current_app.logger.info(f"User {current_user.id} unbanned acount ({self.id})")
+            return message, 'success', redirect(url_for('user.list_of_users'))
+
+        except:
+            message = 'Nie udało się odblokować konta!'
+            current_app.logger.exception(f"User {current_user.id} failed to unban ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+
+    @property
+    def is_banned(self):
+
+        if UserBans.query.filter(UserBans.user_id == self.id).first() != None:
+            return True
+        else:
+            return False
+
 
     @property
     def all_events(self):
@@ -505,6 +568,12 @@ class User(db.Model, UserMixin):
         return len(inserts)
 
     
+class UserBans(db.Model):
+
+    user_id = db.Column(db.String(50), db.ForeignKey('user.id'), primary_key=True)
+    description = db.Column(db.String(500))
+    added_on = db.Column(db.DateTime, default = dt.datetime.now())
+
 
 class DashboardPage:
 

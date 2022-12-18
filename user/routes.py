@@ -168,6 +168,38 @@ def reset_password(token):
 
     return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
 
+@user.route("/ban_user/<user_id>")
+def ban_user(user_id):
+
+    if not current_user.is_admin:
+        flash("Nie masz uprawnień do tej zawartości")
+        return redirect(url_for('other.hello'))
+
+    user_to_ban = User.query.filter(User.id == user_id).first()
+    if user_to_ban != None:
+
+        message, status, action = user_to_ban.ban()
+        flash(message, status)
+        return action
+
+    return redirect(url_for('other.hello'))
+
+@user.route("/unban_user/<user_id>")
+def unban_user(user_id):
+
+    if not current_user.is_admin:
+        flash("Nie masz uprawnień do tej zawartości")
+        return redirect(url_for('other.hello'))
+
+    user_to_unban = User.query.filter(User.id == user_id).first()
+    if user_to_unban != None:
+
+        message, status, action = user_to_unban.unban()
+        flash(message, status)
+        return action
+
+    return redirect(url_for('other.hello'))
+
 
 @user.route("/list_of_users")
 @account_confirmation_check

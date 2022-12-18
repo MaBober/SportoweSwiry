@@ -263,15 +263,16 @@ def cookies_check():
 
 
 
-def account_confirmation_check(initial_function):
+# def account_confirmation_check(initial_function):
 
-    def wrapped_function(*args, **kwargs):
+#     def wrapped_function(*args, **kwargs):
 
-        if current_user.is_authenticated and not current_user.confirmed:
-            return redirect(url_for('user.unconfirmed'))
+#         if current_user.is_authenticated and not current_user.confirmed:
+#             return redirect(url_for('user.unconfirmed'))
 
-        else:
-            wrapped_route = initial_function(*args, **kwargs)
-            return wrapped_function
+
+#         else:
+#             wrapped_route = initial_function(*args, **kwargs)
+#             return wrapped_function
         
-    return wrapped_function
+#     return wrapped_function

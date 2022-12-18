@@ -8,9 +8,8 @@ from sqlalchemy.exc import SQLAlchemyError
 import os
 
 
-from .classes import User, DashboardPage
+from .classes import User, DashboardPage, UserBans
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
-from other.functions import account_confirmation_check, send_email
 import functools
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
 
@@ -114,7 +113,17 @@ def create_account():
 @user.route("/unconfirmed_user")
 @login_required
 def unconfirmed():
+
     return render_template('unconfirmed.html')
+
+
+@user.route("/banned_user")
+@login_required
+def banned():
+
+    message = UserBans.query.filter(UserBans.user_id == current_user.id).first().description
+    return render_template('banned.html', reason_description = message)
+
 
 
 @user.route("/send_token_again")
@@ -178,7 +187,7 @@ def ban_user(user_id):
     user_to_ban = User.query.filter(User.id == user_id).first()
     if user_to_ban != None:
 
-        message, status, action = user_to_ban.ban()
+        message, status, action = user_to_ban.ban("KONIEC!")
         flash(message, status)
         return action
 
@@ -328,7 +337,9 @@ def password_change():
 @account_confirmation_check
 @login_required #This page needs to be login
 def dashboard():
-
+    # print(f'auth: {current_user.is_authenticated}')
+    # print(f'banned: {current_user.is_banned}')
+    # print(f'confirmed: {current_user.confirmed}')
     dashboard = DashboardPage(request.args)
 
     return render_template('dashboard.html',

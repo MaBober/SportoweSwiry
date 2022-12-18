@@ -1,0 +1,25 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('user.static',filename='styles/unconfirmed.css') }}">
+
+<div class="Static-Content">
+    <div class="Title-Unconfirmed">Konto zablokowane!</div>
+    <div class="Unconfirmed-Box">
+        <div class="Unconfirmed-Text">
+            <span class="Unconfirmed-Font">
+            <h1>
+                Witaj {{current_user.name}}!
+            </h1>
+            <h3>Twoje konto zostało zablokowane przed administratora.</h3>
+            <p>
+                Powód nałożenia blokoady: <br>
+                {{reason_description}} <br><br>
+                Aby odblokować konto, skontaktuje się z administratorem przez formularz kontaktowy.
+                <a href="{{ url_for('other.send_message')  }}">Kliknij tutaj</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -159,6 +159,7 @@ class User(db.Model, UserMixin):
             db.session.delete(self)
             db.session.commit()
             message = "Użytkownik {} {} został usunięty z bazy danych".format(self.name, self.last_name)
+            current_app.logger.info(f"User ({account_to_delete}) deleted account!")
             return message, 'success', redirect(url_for('other.hello'))
 
         except (SQLAlchemyError, AssertionError) as e:
@@ -170,6 +171,7 @@ class User(db.Model, UserMixin):
             db.session.commit()
 
             message = f"Konto usunięte!"
+            current_app.logger.info(f"User ({account_to_delete}) account was anonimzed!")
             return message, 'success', redirect(url_for('other.hello'))
 
 

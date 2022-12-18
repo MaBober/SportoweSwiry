@@ -8,8 +8,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from .classes import *
 from .forms import CoeficientsForm, DistancesForm, EventForm, NewSportToEventForm, EventPassword
 from activity.classes import Activities, Sport
-from other.functions import send_email, account_confirmation_check
-from user.functions import account_confirmation_check#, send_email
+from user.functions import account_confirmation_check
 from user.classes import User
 
 

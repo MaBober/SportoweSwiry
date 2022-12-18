@@ -91,6 +91,10 @@ class LoginForm(FlaskForm):
     remember = BooleanField("Zapamiętaj mnie", default=False)
 
 
+class BanReason(FlaskForm):
+
+    ban_reason = StringField("Hasło", validators=[DataRequired("Pole nie może być puste")])
+
 class UploadAvatarForm(FlaskForm):
 
     def validate_avatar_size(form, field):

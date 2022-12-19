@@ -443,14 +443,14 @@ class Event(db.Model):
 
         if user == "all":
             event_activities_sql = Activities.query.filter(Activities.date >= self.start) \
-                .filter(Activities.date <= self.start + dt.timedelta(weeks = self.length_weeks)) \
+                .filter(Activities.date <= self.end) \
                 .filter(Activities.activity_type_id.in_(event_activity_types_ids)) \
                 .filter(Activities.user_id.in_(event_particitpants_ids)) \
                 .order_by(Activities.date.desc())
         
         else:
             event_activities_sql = Activities.query.filter(Activities.date >= self.start) \
-                .filter(Activities.date <= self.start + dt.timedelta(weeks = self.length_weeks)) \
+                .filter(Activities.date <= self.end) \
                 .filter(Activities.activity_type_id.in_(event_activity_types_ids)) \
                 .filter(Activities.user_id == user) \
                 .order_by(Activities.date.desc())

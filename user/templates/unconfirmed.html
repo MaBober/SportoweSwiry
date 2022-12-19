@@ -1,4 +1,4 @@
-{% extends "pages//baseNew.html" %}
+{% extends "pages//base.html" %}
 
 {% block body_content %}
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('user.static',filename='styles/unconfirmed.css') }}">
@@ -18,7 +18,7 @@
             </p>
             <p>
                 Potrzebujesz nowego linka potwierdzającego?
-                <a href="{{ url_for('user.sendTokenAgain')  }}">Kliknij tutaj</a>
+                <a href="{{ url_for('user.send_token_again')  }}">Kliknij tutaj</a>
             </p>
         </div>
     </div>

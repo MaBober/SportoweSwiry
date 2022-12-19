@@ -1,9 +1,9 @@
-{% extends "pages//baseNew.html" %}
+{% extends "pages//base.html" %}
 
 
 {% block body_content %}
 <!-- Site css sheet -->
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/faq.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/faq.css') }}">
 
 <div class="Static-Content">
   <div class="Title-FAQ">Najczęściej zadawane pytania</div>
@@ -36,7 +36,7 @@
         </div>
         <div id="flush-collapseTwo" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
           <div class="Answer-Font">
-            Na ten moment jedynie administratorzy aplikacji mogą uruchomić nowe wyzwania. Jeżeli chcesz stworzyć nowe wydarzenie, skontaktuj się nami przez <a href="{{ url_for('other.sendMessage') }}" >Formularz Kontaktowy</a>.
+            Na ten moment jedynie administratorzy aplikacji mogą uruchomić nowe wyzwania. Jeżeli chcesz stworzyć nowe wydarzenie, skontaktuj się nami przez <a href="{{ url_for('other.send_message') }}" >Formularz Kontaktowy</a>.
           </div>
         </div>
       </div>

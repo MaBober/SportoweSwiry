@@ -1,4 +1,4 @@
-{% extends "pages//baseNew.html" %}
+{% extends "pages//base.html" %}
 
 
 {% block body_content %}
@@ -17,10 +17,10 @@
 					{{ form.csrf_token }}
 
 					<div class="mb-3">
-						<label class="small mb-1" for="activity">{{ form.receiverEmail.label }}:</label>
-						{{ form.receiverEmail(class_="form-control") }}
+						<label class="small mb-1" for="activity">{{ form.receiver_email.label }}:</label>
+						{{ form.receiver_email(class_="form-control") }}
 						<ul>
-							{% for error in form.receiverEmail.errors %}
+							{% for error in form.receiver_email.errors %}
 								{{ error }}
 							{% endfor %}
 						</ul>
@@ -47,23 +47,13 @@
 					</div>
 
 						<div class="form-group Checkbox-Input">
-							<label class="form-label"> {{ form.sendByApp.label }} </label>
-							{{ form.sendByApp(class_="form-check-input", id="checkboxAppId") }}
-							<!-- <ul>
-								{% for error in form.sendByApp.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul> -->
+							<label class="form-label"> {{ form.send_by_app.label }} </label>
+							{{ form.send_by_app(class_="form-check-input", id="checkboxAppId") }}
 						</div>
 
 						<div class="form-group Checkbox-Input">
-							<label class="form-label"> {{ form.sendByEmail.label }} </label>
-							{{ form.sendByEmail(class_="form-check-input", id="checkboxEmailId") }}
-							<!-- <ul>
-								{% for error in form.sendByEmail.errors %}
-									{{ error }}
-								{% endfor %}
-							</ul> -->
+							<label class="form-label"> {{ form.send_by_email.label }} </label>
+							{{ form.send_by_email(class_="form-check-input", id="checkboxEmailId") }}
 						</div>
 				</div>
 				<div class="modal-footer">
@@ -156,7 +146,7 @@
 
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mailbox.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/mailbox.css') }}">
 <div class="container Mailbox-Main-Box">
 <div class="row">
 	<!-- BEGIN INBOX -->
@@ -181,10 +171,10 @@
 						<div class="katalogi">
 							<ul class="nav nav-pills nav-stacked">
 								<li class="header">Katalogi</li>
-								<li class="{{ 'active' if actionName=='inbox' }}"><a href="{{ url_for('other.mailbox', actionName='inbox') }}"><i class="fa fa-inbox"></i> Odebrane ({{ amountOfReceivedMessages}})</a></li>
+								<li class="{{ 'active' if actionName=='inbox' }}"><a href="{{ url_for('other.mailbox', actionName='inbox') }}"><i class="fa fa-inbox"></i> Odebrane ({{ amount_of_received_messages}})</a></li>
 								<!-- <li><a href="#"><i class="fa fa-star"></i> Oznaczone gwiazdką</a></li>
 								<li><a href="#"><i class="fa fa-bookmark"></i> Ważne</a></li> -->
-								<li class="{{ 'active' if actionName=='sent' }}"><a href="{{ url_for('other.mailbox', actionName='sent') }}"><i class="fa fa-mail-forward"></i> Wysłane ({{ amountOfSentMessages }})</a></li>
+								<li class="{{ 'active' if actionName=='sent' }}"><a href="{{ url_for('other.mailbox', actionName='sent') }}"><i class="fa fa-mail-forward"></i> Wysłane ({{ amount_of_sent_messages }})</a></li>
 								<!-- <li><a href="#"><i class="fa fa-folder"></i> Kosz</a></li> -->
 							</ul>
 
@@ -209,30 +199,30 @@
 										<th>Temat</th>
 										<th>Data</th>
 									</tr>
-									{% for message in messagesCurrentUser: %}
+									{% for message in messages_current_user: %}
 
-									{% if message.messageReaded == 0 and actionName=='inbox' %}
+									{% if message.message_readed == 0 and actionName=='inbox' %}
 									<tr class="listOfMessages" style="background-color: lightgray;">
 										<td class="action"><input type="checkbox" value="{{ message.id }}" name="checkboxesWithMessagesToDelete"></td>
 										<td class="name">
 											<a href="#" style="font-weight: 700; color:black;" class="readMessageConfirm" 
 											data-bs-toggle="modal" data-bs-target="#readMessageModal"
 											data-desc="{{ message.message }}"
-											data-url="{{ url_for('other.changeStatusOfMessage', messageID=message.id) }}">
-											{{ message.senderName }}</a>
+											data-url="{{ url_for('other.change_message_status', message_id=message.id) }}">
+											{{ message.sender_name }}</a>
 										</td>
 										<td class="name">
 											<a href="#" style="font-weight: 700; color:black;" class="readMessageConfirm" 
 											data-bs-toggle="modal" data-bs-target="#readMessageModal"
 											data-desc="{{ message.message }}"
-											data-url="{{ url_for('other.changeStatusOfMessage', messageID=message.id) }}">
-											{{ message.receiverName }}</a>
+											data-url="{{ url_for('other.change_message_status', message_id=message.id) }}">
+											{{ message.receiver_name }}</a>
 										</td>
 										<td class="subject">
 											<a href="#" style="font-weight: 700; color:black;" class="readMessageConfirm" 
 											data-bs-toggle="modal" data-bs-target="#readMessageModal"
 											data-desc="{{ message.message }}"
-											data-url="{{ url_for('other.changeStatusOfMessage', messageID=message.id) }}">
+											data-url="{{ url_for('other.change_message_status', message_id=message.id) }}">
 											{{ message.subject }}</a>
 										</td>
 										<td class="time" style="font-weight: 700;">{{ message.date }}</td>

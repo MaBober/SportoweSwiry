@@ -8,9 +8,8 @@ from sqlalchemy.exc import SQLAlchemyError
 import os
 
 
-from .classes import User, DashboardPage
-from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm
-from other.functions import account_confirmation_check, send_email
+from .classes import User, DashboardPage, UserBans
+from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm, BanReason
 import functools
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
 
@@ -90,7 +89,7 @@ def isSafeUrl(target):
 
 
 
-@user.route("/createUser", methods=['POST', 'GET'])
+@user.route("/create_user", methods=['POST', 'GET'])
 def create_account():
     
     form = UserForm()
@@ -106,20 +105,30 @@ def create_account():
 
         return action
 
-    return render_template('NewUserForm.html',
+    return render_template('new_user_form.html',
                  form = form,
                  title_prefix = "Nowe konto")
 
 
-@user.route("/unconfirmedUser")
+@user.route("/unconfirmed_user")
 @login_required
 def unconfirmed():
+
     return render_template('unconfirmed.html')
 
 
-@user.route("/sendTokenAgain")
+@user.route("/banned_user")
 @login_required
-def sendTokenAgain():
+def banned():
+
+    message = UserBans.query.filter(UserBans.user_id == current_user.id).first().description
+    return render_template('banned.html', reason_description = message)
+
+
+
+@user.route("/send_token_again")
+@login_required
+def send_token_again():
     #Re-sending the email with the account confirmation token
     user = User.query.filter(User.id == current_user.id).first()
     user.generate_confirmation_token()
@@ -128,7 +137,7 @@ def sendTokenAgain():
     return redirect(url_for('other.hello'))
 
 
-@user.route('/confirmUser/<token>')
+@user.route('/confirm_user/<token>')
 @login_required
 def confirm(token):
 
@@ -138,7 +147,7 @@ def confirm(token):
     return action
 
 
-@user.route('/resetPassword', methods=['POST', 'GET'])
+@user.route('/reset_password', methods=['POST', 'GET'])
 def reset():
 
     form = VerifyEmailForm()
@@ -151,11 +160,11 @@ def reset():
         #flash(message, staus)
         return action
 
-    return render_template("verifyEmail.html", title_prefix = "Resetowanie hasła", form=form)
+    return render_template("verify_email.html", title_prefix = "Resetowanie hasła", form=form)
 
 
-@user.route('/resetPassword/<token>', methods=['POST', 'GET'])
-def resetPassword(token):
+@user.route('/reset_password/<token>', methods=['POST', 'GET'])
+def reset_password(token):
 
     form = NewPasswordForm()
     del form.oldPassword
@@ -166,10 +175,46 @@ def resetPassword(token):
         flash(message, status)
         return action
 
-    return render_template("resetPassword.html", title_prefix = "Resetowanie hasła", form=form)
+    return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
+
+@user.route("/ban_user/<user_id>", methods=['POST', 'GET'])
+def ban_user(user_id):
+
+    if not current_user.is_admin:
+        flash("Nie masz uprawnień do tej zawartości")
+        return redirect(url_for('other.hello'))
+
+    user_to_ban = User.query.filter(User.id == user_id).first()
+    if user_to_ban != None:
+
+        ban_reason = ''
+        if request.method == 'POST':
+            ban_reason = request.form['ban_reason']
+
+        message, status, action = user_to_ban.ban(ban_reason)
+        flash(message, status)
+        return action
+
+    return redirect(url_for('other.hello'))
+
+@user.route("/unban_user/<user_id>", methods=['POST', 'GET'])
+def unban_user(user_id):
+
+    if not current_user.is_admin:
+        flash("Nie masz uprawnień do tej zawartości")
+        return redirect(url_for('other.hello'))
+
+    user_to_unban = User.query.filter(User.id == user_id).first()
+    if user_to_unban != None:
+
+        message, status, action = user_to_unban.unban()
+        flash(message, status)
+        return action
+
+    return redirect(url_for('other.hello'))
 
 
-@user.route("/listOfUsers")
+@user.route("/list_of_users", methods=['POST', 'GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def list_of_users():
@@ -178,13 +223,17 @@ def list_of_users():
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
+    ban_form = BanReason()
+
     users = User.query.all()
-    return render_template('listOfUsers.html',
+    return render_template('list_of_users.html',
                     users=users,
+                    ban_form = ban_form,
+                    menuMode = "mainApp",
                     title_prefix = "Lista użytkowników")
 
 
-@user.route('/deleteUser/<user_id>')
+@user.route('/delete_user/<user_id>')
 @account_confirmation_check
 @login_required #This page needs to be login
 def delete_user(user_id):
@@ -228,7 +277,7 @@ def logout():
     return redirect(url_for('other.hello'))
 
 
-@user.route("/settingsUser", methods=['POST','GET'])
+@user.route("/settings_user", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def settings():
@@ -261,7 +310,7 @@ def settings():
         flash(message, status)
         return action
 
-    return render_template("accountSettings.html",
+    return render_template("account_settings.html",
                     title_prefix = "Ustawienia konta",
                     form = form,
                     avatarForm = avatar_form,
@@ -270,10 +319,10 @@ def settings():
 
 
 
-@user.route("/passwordChange", methods=['POST','GET'])
+@user.route("/password_change", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
-def passwordChange():
+def password_change():
 
     form = NewPasswordForm(id=current_user.id)
 
@@ -285,7 +334,7 @@ def passwordChange():
         flash(message, status)
         return action
 
-    return render_template("passwordChange.html",
+    return render_template("password_change.html",
                     title_prefix = "Prywatność",
                     form = form,
                     menuMode = "mainApp",
@@ -296,7 +345,9 @@ def passwordChange():
 @account_confirmation_check
 @login_required #This page needs to be login
 def dashboard():
-
+    # print(f'auth: {current_user.is_authenticated}')
+    # print(f'banned: {current_user.is_banned}')
+    # print(f'confirmed: {current_user.confirmed}')
     dashboard = DashboardPage(request.args)
 
     return render_template('dashboard.html',

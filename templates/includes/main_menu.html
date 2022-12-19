@@ -51,8 +51,8 @@
                 <li class="nav-item Main-Menu-Message">
                     <a class="nav-link Main-Menu-Message" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
                     <a class="Alert-Message">
-                        {% if current_user.countNotReadedMessages()>0 %} 
-                            {{ current_user.countNotReadedMessages() }}
+                        {% if current_user.count_not_readed_messages()>0 %} 
+                            {{ current_user.count_not_readed_messages() }}
                         {% endif %}
                     </a>
                 </li>

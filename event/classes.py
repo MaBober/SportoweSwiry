@@ -231,17 +231,18 @@ class Event(db.Model):
             current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
             return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
 
-        if current_user.is_admin == False:
+        print(current_user.is_admin)
+        if current_user.is_admin != True:
 
             if is_participating != None and self.status != "0":
                 message = "Nie możesz się wypisać z rozpoczętego wyzwania!", "danger"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Event is on going!")
-                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
             
             if is_participating == None:
                 message = "Nie jesteś zapisany na to wyzwanie!"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Does not take part in it!")
-                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
 
             try:
                 db.session.delete(is_participating)
@@ -254,7 +255,7 @@ class Event(db.Model):
             except:
                 message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
                 current_app.logger.exception(f"User {current_user.id} failed to leave event {self.id}")
-                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
 
         else:
 
@@ -668,19 +669,16 @@ class Event(db.Model):
 
         for week in range(1, self.length_weeks):
             for user in event_participants:
-                if True:
+                if beer_summray.iloc[week]['calculated_distance',user][0] == 1:
                     try:
-                        if beer_summray.iloc[week]['calculated_distance',user][0]:
-                        
-                            beers_to_recive[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[0]
+                        beers_to_recive[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[0]
                     except:
                         pass
-
-                    else:
-                        try:
-                            beers_to_buy[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[1]
-                        except:
-                            pass
+                else:
+                    try:
+                        beers_to_buy[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[1]
+                    except:
+                        pass
 
         return {'beers_to_buy': beers_to_buy, 'beers_to_recive' : beers_to_recive}
 

@@ -51,7 +51,7 @@ class NewPasswordForm(FlaskForm):
         tempUser = User.query.filter(User.id==form.id.data).first()
         currentPassword=tempUser.password
 
-        verify=User.verify_password(currentPassword, field.data)
+        verify=tempUser.verify_password(field.data)
 
         if not verify:
             raise ValidationError("Podaj poprawne aktulane hasło")
@@ -90,6 +90,10 @@ class LoginForm(FlaskForm):
     password = PasswordField("Hasło", validators=[validate_password])
     remember = BooleanField("Zapamiętaj mnie", default=False)
 
+
+class BanReason(FlaskForm):
+
+    ban_reason = StringField("Hasło", validators=[DataRequired("Pole nie może być puste")])
 
 class UploadAvatarForm(FlaskForm):
 

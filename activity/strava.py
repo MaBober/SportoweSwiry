@@ -95,6 +95,7 @@ def convertStravaData(activitiesJSON):
         "start_date_local",
         "type",
         "distance",
+        "sport_type",
         "elapsed_time"
     ]
     
@@ -121,9 +122,13 @@ def addStravaActivitiesToDB (activitiesFrame):
 
     for index, single_activity in activitiesFrame.iterrows() :
 
-        new_activity_sport = Sport.query.filter(Sport.strava_name == single_activity["activity_type_id"]).first()
+        new_activity_sport = Sport.query.filter(Sport.strava_name == single_activity["sport_type"]).first()
         if new_activity_sport == None:
-            new_activity_sport_id = 30
+            new_activity_sport = Sport.query.filter(Sport.strava_name == single_activity["activity_type_id"]).first()
+            if new_activity_sport == None:
+                new_activity_sport_id = 30
+            else:
+                new_activity_sport_id = new_activity_sport.id
         else:
             new_activity_sport_id = new_activity_sport.id
 

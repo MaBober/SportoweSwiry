@@ -1,0 +1,192 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Usuwanie rekordu danych</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="idDeleteModalBody">
+            ...
+            </div>
+            <div class="modal-footer">
+                <form action="" method="GET" id="confirmDeleteForm">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="submit" class="btn btn-danger">Usuń użytkownika</button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+    <!-- Unban -->
+    <div class="modal fade" id="confirmUnbanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Odblokuj użytkownika</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="idUnbanModalBody">
+            ...
+            </div>
+            <div class="modal-footer">
+                <form action="" method="GET" id="confirmUnbanForm">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="submit" class="btn btn-success">Odblokuj użytkownika</button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+ <!-- // Delete -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script> 
+        $(document).ready(function () { 
+            // For A Delete Record Popup 
+            // This function is applied to all elements with class ending with ".delete-confirm" 
+            $('.delete-confirm').click(function () { 
+                // get attributes of the found element 
+                var desc = $(this).attr('data-desc'); 
+                var url = $(this).attr('data-url'); 
+                // the #... designates id of an element - change the text in the modal window 
+                $('#idDeleteModalBody').text(desc); 
+                $("#confirmDeleteForm").attr("action", url); 
+            }); 
+        }); 
+    </script>
+
+<!-- // Unban -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script> 
+    $(document).ready(function () { 
+        // For A Delete Record Popup 
+        // This function is applied to all elements with class ending with ".delete-confirm" 
+        $('.delete-confirm').click(function () { 
+            // get attributes of the found element 
+            var desc = $(this).attr('data-desc'); 
+            var url = $(this).attr('data-url'); 
+            // the #... designates id of an element - change the text in the modal window 
+            $('#idUnbanModalBody').text(desc); 
+            $("#confirmUnbanForm").attr("action", url); 
+        }); 
+    }); 
+</script>
+
+<!-- // Ban -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script> 
+    $(document).ready(function () { 
+        // For A Delete Record Popup 
+        // This function is applied to all elements with class ending with ".delete-confirm" 
+        $('.delete-confirm').click(function () { 
+            // get attributes of the found element 
+            var desc = $(this).attr('data-desc'); 
+            var url = $(this).attr('data-url'); 
+            // the #... designates id of an element - change the text in the modal window 
+            $("#confirmBanForm").attr("action", url); 
+        }); 
+    }); 
+</script>
+
+
+<div class="container-xl px-4 mt-4">
+
+        <div class="col-md-10">
+            <div class="table-responsive-md">
+                <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 100px; border-radius: 50px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Avatar</th>
+                        <th scope="col">Imię</th>
+                        <th scope="col">Nazwisko</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Login</th>
+                        <th scope="col">Admin</th>
+                        <th scope="col">Konto potwierdzone</th>
+                        <th scope="col">Konto zablokowane</th>
+                        <th scope="col">Operacje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users: %}
+                        <tr>
+                            <td scope="row">{{loop.index}}</td>
+                            <td>
+                                <img src="{{ user.give_avatar_path() }} " width="40">  
+                            </td>
+                            <td>{{user.name}}</td>
+                            <td>{{user.last_name}}</td>
+                            <td>{{user.mail}}</td>
+                            <td>{{user.id}}</td>
+                            <td>{{user.is_admin}}</td>
+                            <td>{{user.confirmed}}</td>
+                            <td>{{user.is_banned}}</td>
+                            <td>
+                                <!-- Button trigger modal -->
+                                <a type="button" class="btn btn-danger btn-sm delete-confirm" 
+                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                    data-desc="{{ 'Napewno chcesz usunać użytkownika: {} ({} {})?'.format(user.id, user.name, user.last_name) }}"
+                                    data-url="{{ url_for('user.delete_user', user_id=user.id )}}">
+                                    Usuń
+                                </a>
+
+                                {% if user.is_banned %}
+                                <a type="button" class="btn btn-success btn-sm delete-confirm" 
+                                    data-bs-toggle="modal" data-bs-target="#confirmUnbanModal"
+                                    data-desc="{{ 'Napewno chcesz odblokować użytkownika: {} ({} {})?'.format(user.id, user.name, user.last_name) }}"
+                                    data-url="{{ url_for('user.unban_user', user_id=user.id )}}">
+                                    Odblokuj
+                                </a>
+
+                                {% endif %}
+
+                                {% if not user.is_banned %}
+                                    <a type="button" class="btn btn-sm btn-warning Main-Button delete-confirm"
+                                    data-bs-toggle="modal" data-bs-target="#confirmBanModal"
+                                    data-desc='WWWW ',
+                                    data-url="{{ url_for('user.ban_user', user_id=user.id) }}">
+                                Zablokuj</a>
+                                {% endif %}
+
+                                <div class="modal fade" id="confirmBanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Blokowanie użytkownika</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" id="idBanModalBody">
+                                                Czy na pewno chesz zablokować?<br> Podaj proszę powód:
+                                        <form method ="post" action="" id="confirmBanForm">
+                                                {{ ban_form.ban_reason(class_="form-control form-control-sm" ) }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-danger">Zablokuj</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                                        </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

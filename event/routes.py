@@ -8,12 +8,9 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from .classes import *
 from .forms import CoeficientsForm, DistancesForm, EventForm, NewSportToEventForm, EventPassword
 from activity.classes import Activities, Sport
-from other.functions import send_email, account_confirmation_check
-from user.functions import account_confirmation_check#, send_email
+from user.functions import account_confirmation_check
 from user.classes import User
 
-from other.classes import MailboxMessage
-from other.functions import sendMessgaeFromContactFormToDB
 
 MAX_EVENTS_AS_ADMIN = 3
 
@@ -371,7 +368,7 @@ def modify_event(event_id):
                     CoefficientsSet = coefficientsSet)
 
 
-@event.route('/addNewSportToEvent/<int:event_id>', methods=['POST','GET'])
+@event.route('/add_new_sport_event/<int:event_id>', methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def add_new_sport_to_event(event_id):
@@ -391,7 +388,7 @@ def add_new_sport_to_event(event_id):
 
 
 
-@event.route("/deleteCoeficientSport/<int:event_id>/<int:activity_type_id>")
+@event.route("/delete_sport_event/<int:event_id>/<int:activity_type_id>")
 @account_confirmation_check
 @login_required #This page needs to be login
 def delete_coefficient(event_id, activity_type_id):
@@ -407,7 +404,7 @@ def delete_coefficient(event_id, activity_type_id):
     return action
 
 
-@event.route("/modifyCoeficientSport/<int:event_id>/<int:activity_type_id>", methods=['POST', 'GET'])
+@event.route("/modify_sport_event/<int:event_id>/<int:activity_type_id>", methods=['POST', 'GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def modify_coefficient(event_id, activity_type_id):
@@ -498,7 +495,7 @@ def admin_delete_event(event_id):
     return action
 
 
-@event.route('/addNewSport/', methods=['POST','GET'])
+@event.route('/add_sport_app/', methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def add_new_sport_to_base():
@@ -521,7 +518,7 @@ def add_new_sport_to_base():
                     form = form) 
 
 
-@event.route('/deleteSport/<int:sport_id>', methods=['POST','GET'])
+@event.route('/delete_sport_app/<int:sport_id>', methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def delete_sport_from_base(sport_id):
@@ -537,7 +534,7 @@ def delete_sport_from_base(sport_id):
     return action
 
 
-@event.route('/modifySport/<int:sport_id>', methods=['POST','GET'])
+@event.route('/modify_sport_app/<int:sport_id>', methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
 def modify_sport_in_base(sport_id):
@@ -550,7 +547,8 @@ def modify_sport_in_base(sport_id):
 
     sport_form = CoeficientsForm(activity_name = sport_to_modify.name,
                         value = sport_to_modify.default_coefficient,
-                        is_constant = sport_to_modify.default_is_constant)
+                        is_constant = sport_to_modify.default_is_constant,
+                        strava_name = sport_to_modify.strava_name)
     del sport_form.event_name
 
     if sport_form.validate_on_submit():

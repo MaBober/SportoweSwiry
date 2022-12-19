@@ -88,6 +88,7 @@ class Sport(db.Model):
             self.name = sport_form.activity_name.data
             self.default_coefficient = sport_form.value.data
             self.default_is_constant = sport_form.is_constant.data
+            self.strava_name = sport_form.strava_name.data
 
             db.session.commit()
 

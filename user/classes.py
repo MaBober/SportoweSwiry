@@ -35,6 +35,7 @@ class User(db.Model, UserMixin):
     is_added_by_fb = db.Column(db.Boolean, default=False)
 
     event_admin = db.relationship('Event', backref='admin', lazy='dynamic')
+    banned_user = db.relationship('UserBans', backref='user', lazy='dynamic')
     events = db.relationship('Participation', backref='user', lazy='dynamic')
     activities = db.relationship('Activities', backref='user', lazy='dynamic')
 
@@ -159,6 +160,7 @@ class User(db.Model, UserMixin):
             db.session.delete(self)
             db.session.commit()
             message = "Użytkownik {} {} został usunięty z bazy danych".format(self.name, self.last_name)
+            current_app.logger.info(f"User ({account_to_delete}) deleted account!")
             return message, 'success', redirect(url_for('other.hello'))
 
         except (SQLAlchemyError, AssertionError) as e:
@@ -170,6 +172,7 @@ class User(db.Model, UserMixin):
             db.session.commit()
 
             message = f"Konto usunięte!"
+            current_app.logger.info(f"User ({account_to_delete}) account was anonimzed!")
             return message, 'success', redirect(url_for('other.hello'))
 
 
@@ -189,14 +192,14 @@ class User(db.Model, UserMixin):
             self.password = self.hash_password()
             db.session.commit()
             current_app.logger.info(f"User ({self.id}) modified password!")
-            message = "Hasło zmienione. Zaloguj się ponownie"
+            message = "Hasło zmienione poprawnie!"
 
-            return message, "success", redirect(url_for('user.logout'))
+            return message, "success", redirect(url_for('other.hello'))
         
         except:
             message = "NIE ZMIENIONO HASŁA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
             current_app.logger.exception(f"User failed to modify password!")
-            return message, 'danger', redirect(url_for('user.passwordChange'))
+            return message, 'danger', redirect(url_for('user.password_change'))
 
     def standard_login(self, login_form = None, social_media_login = False, remember=True):
 
@@ -221,19 +224,19 @@ class User(db.Model, UserMixin):
             return message, 'danger', redirect(url_for('user.login'))
 
 
-    def changeStatusOfMessage(self,id):
+    def change_message_status(self,id):
         messageFromInBox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
         messageFromInBox.messageReaded = 1
         db.session.commit()
         return None
 
-    def countNotReadedMessages(self):
-        notReadedMessages=MailboxMessage.query.filter(MailboxMessage.receiver == self.mail).filter(MailboxMessage.messageReaded == 0).filter(MailboxMessage.multipleMessage == True).all()
-        amountOfNotReadedMessages=len(notReadedMessages)
-        return amountOfNotReadedMessages
+    def count_not_readed_messages(self):
+        not_readed_messages=MailboxMessage.query.filter(MailboxMessage.receiver == self.mail).filter(MailboxMessage.message_readed == 0).filter(MailboxMessage.multiple_message == True).all()
+        amount_of_not_readed_messages=len(not_readed_messages)
+        return amount_of_not_readed_messages
 
 
-    def removeAccents(self):
+    def remove_accents(self):
         strange='ŮôῡΒძěἊἦëĐᾇόἶἧзвŅῑἼźἓŉἐÿἈΌἢὶЁϋυŕŽŎŃğûλВὦėἜŤŨîᾪĝžἙâᾣÚκὔჯᾏᾢĠфĞὝŲŊŁČῐЙῤŌὭŏყἀхῦЧĎὍОуνἱῺèᾒῘᾘὨШūლἚύсÁóĒἍŷöὄЗὤἥბĔõὅῥŋБщἝξĢюᾫაπჟῸდΓÕűřἅгἰშΨńģὌΥÒᾬÏἴქὀῖὣᾙῶŠὟὁἵÖἕΕῨčᾈķЭτἻůᾕἫжΩᾶŇᾁἣჩαἄἹΖеУŹἃἠᾞåᾄГΠКíōĪὮϊὂᾱიżŦИὙἮὖÛĮἳφᾖἋΎΰῩŚἷРῈĲἁéὃσňİΙῠΚĸὛΪᾝᾯψÄᾭêὠÀღЫĩĈμΆᾌἨÑἑïოĵÃŒŸζჭᾼőΣŻçųøΤΑËņĭῙŘАдὗპŰἤცᾓήἯΐÎეὊὼΘЖᾜὢĚἩħĂыῳὧďТΗἺĬὰὡὬὫÇЩᾧñῢĻᾅÆßшδòÂчῌᾃΉᾑΦÍīМƒÜἒĴἿťᾴĶÊΊȘῃΟúχΔὋŴćŔῴῆЦЮΝΛῪŢὯнῬũãáἽĕᾗნᾳἆᾥйᾡὒსᾎĆрĀüСὕÅýფᾺῲšŵкἎἇὑЛვёἂΏθĘэᾋΧĉᾐĤὐὴιăąäὺÈФĺῇἘſგŜæῼῄĊἏØÉПяწДĿᾮἭĜХῂᾦωთĦлðὩზკίᾂᾆἪпἸиᾠώᾀŪāоÙἉἾρаđἌΞļÔβĖÝᾔĨНŀęᾤÓцЕĽŞὈÞუтΈέıàᾍἛśìŶŬȚĳῧῊᾟάεŖᾨᾉςΡმᾊᾸįᾚὥηᾛġÐὓłγľмþᾹἲἔбċῗჰხοἬŗŐἡὲῷῚΫŭᾩὸùᾷĹēრЯĄὉὪῒᾲΜᾰÌœĥტ'
         ascii_replacements='UoyBdeAieDaoiiZVNiIzeneyAOiiEyyrZONgulVoeETUiOgzEaoUkyjAoGFGYUNLCiIrOOoqaKyCDOOUniOeiIIOSulEySAoEAyooZoibEoornBSEkGYOapzOdGOuraGisPngOYOOIikoioIoSYoiOeEYcAkEtIuiIZOaNaicaaIZEUZaiIaaGPKioIOioaizTIYIyUIifiAYyYSiREIaeosnIIyKkYIIOpAOeoAgYiCmAAINeiojAOYzcAoSZcuoTAEniIRADypUitiiIiIeOoTZIoEIhAYoodTIIIaoOOCSonyKaAsSdoACIaIiFIiMfUeJItaKEISiOuxDOWcRoiTYNLYTONRuaaIeinaaoIoysACRAuSyAypAoswKAayLvEaOtEEAXciHyiiaaayEFliEsgSaOiCAOEPYtDKOIGKiootHLdOzkiaaIPIIooaUaOUAIrAdAKlObEYiINleoOTEKSOTuTEeiaAEsiYUTiyIIaeROAsRmAAiIoiIgDylglMtAieBcihkoIrOieoIYuOouaKerYAOOiaMaIoht'
         translator=str.maketrans(strange,ascii_replacements)
@@ -244,7 +247,7 @@ class User(db.Model, UserMixin):
         sufix = 0
 
         id = self.name[0:3] + self.last_name[0:3] + str(sufix)
-        id = self.removeAccents()
+        id = self.remove_accents()
         user=User.query.filter(User.id == id).first()
 
         while user != None:
@@ -300,7 +303,7 @@ class User(db.Model, UserMixin):
 
             current_app.logger.info(f"User {self.id} generated reset token")
             message = f'Na Twój adres e-mail ({self.mail}) wysłaliśmy link do resetowania hasła'
-            return message, "success", render_template("verifyEmailSent.html", title_prefix = "Resetowanie hasła")
+            return message, "success", render_template("verify_email_sent.html", title_prefix = "Resetowanie hasła")
 
         except:
 
@@ -451,6 +454,68 @@ class User(db.Model, UserMixin):
             current_app.logger.exception(f"User {self.id} failed to rotate avatar ({angle})")
             return message, 'danger', redirect(url_for('user.settings'))
 
+        
+    
+    def ban(self, description):
+
+        if self.is_admin:
+            message = 'Nie można zablokować konta administratora!'
+            current_app.logger.warning(f"User {current_user.id} tried to ban admin ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+        if self.is_banned:
+            message =f'Konto użytkownika {self.name} {self.last_name} jest już zablokowane!'
+            current_app.logger.warning(f"User {current_user.id} tried to ban already banned acount ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+        try:   
+            banned_user = UserBans(
+                user_id = self.id,
+                description = description)
+
+            db.session.add(banned_user)
+            db.session.commit()
+
+            message =f'Konto użytkownika {self.name} {self.last_name} zostało zablokowane!'
+            current_app.logger.info(f"User {current_user.id} banned acount ({self.id})")
+            return message, 'success', redirect(url_for('user.list_of_users'))
+
+        except:
+            message = 'Nie udało się zablokować konta!'
+            current_app.logger.exception(f"User {current_user.id} failed to ban ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+
+    def unban(self):
+
+        if not self.is_banned:
+            message =f'Konto użytkownika {self.name} {self.last_name} nie jest zablokowane!'
+            current_app.logger.warning(f"User {current_user.id} tried to unban not banned acount ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+        try:
+            banned_to_delete = UserBans.query.filter(UserBans.user_id == self.id).first()
+            db.session.delete(banned_to_delete)
+            db.session.commit()
+
+            message =f'Konto użytkownika {self.name} {self.last_name} zostało odblokowane!'
+            current_app.logger.info(f"User {current_user.id} unbanned acount ({self.id})")
+            return message, 'success', redirect(url_for('user.list_of_users'))
+
+        except:
+            message = 'Nie udało się odblokować konta!'
+            current_app.logger.exception(f"User {current_user.id} failed to unban ({self.id})")
+            return message, 'danger', redirect(url_for('user.list_of_users'))
+
+
+    @property
+    def is_banned(self):
+
+        if UserBans.query.filter(UserBans.user_id == self.id).first() != None:
+            return True
+        else:
+            return False
+
 
     @property
     def all_events(self):
@@ -503,6 +568,12 @@ class User(db.Model, UserMixin):
         return len(inserts)
 
     
+class UserBans(db.Model):
+
+    user_id = db.Column(db.String(50), db.ForeignKey('user.id'), primary_key=True)
+    description = db.Column(db.String(500))
+    added_on = db.Column(db.DateTime, default = dt.datetime.now())
+
 
 class DashboardPage:
 

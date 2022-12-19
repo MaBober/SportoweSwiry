@@ -669,19 +669,16 @@ class Event(db.Model):
 
         for week in range(1, self.length_weeks):
             for user in event_participants:
-                if True:
+                if beer_summray.iloc[week]['calculated_distance',user][0] == 1:
                     try:
-                        if beer_summray.iloc[week]['calculated_distance',user][0]:
-                        
-                            beers_to_recive[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[0]
+                        beers_to_recive[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[0]
                     except:
                         pass
-
-                    else:
-                        try:
-                            beers_to_buy[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[1]
-                        except:
-                            pass
+                else:
+                    try:
+                        beers_to_buy[user] += beer_summray.iloc[week]['calculated_distance'].value_counts()[1]
+                    except:
+                        pass
 
         return {'beers_to_buy': beers_to_buy, 'beers_to_recive' : beers_to_recive}
 

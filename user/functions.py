@@ -114,10 +114,8 @@ def account_confirmation_check(initial_function):
     @wraps(initial_function)
     def wrapped_function(*args, **kwargs):
 
-
         if current_user.is_authenticated and current_user.is_banned:
-
-            return redirect(url_for('user.unconfirmed'))
+            return redirect(url_for('user.banned'))
 
         if current_user.is_authenticated and not current_user.confirmed:
             return redirect(url_for('user.unconfirmed'))

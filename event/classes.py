@@ -231,17 +231,18 @@ class Event(db.Model):
             current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
             return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
 
-        if current_user.is_admin == False:
+        print(current_user.is_admin)
+        if current_user.is_admin != True:
 
             if is_participating != None and self.status != "0":
                 message = "Nie możesz się wypisać z rozpoczętego wyzwania!", "danger"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Event is on going!")
-                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
             
             if is_participating == None:
                 message = "Nie jesteś zapisany na to wyzwanie!"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Does not take part in it!")
-                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
 
             try:
                 db.session.delete(is_participating)
@@ -254,7 +255,7 @@ class Event(db.Model):
             except:
                 message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
                 current_app.logger.exception(f"User {current_user.id} failed to leave event {self.id}")
-                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
 
         else:
 

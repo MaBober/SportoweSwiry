@@ -56,7 +56,7 @@ class User(db.Model, UserMixin):
 
             #Generatin new user ID
             new_user.id = new_user.generate_ID()
-            new_user.id = new_user.removeAccents()
+            new_user.id = new_user.remove_accents()
 
             #Hash of password       
             new_user.password=new_user.hash_password()
@@ -103,7 +103,7 @@ class User(db.Model, UserMixin):
 
         #Generatin new user ID
         new_user.id = new_user.generate_ID()
-        new_user.id = new_user.removeAccents()
+        new_user.id = new_user.remove_accents()
 
         #Hash of password       
         new_user.password=new_user.hash_password()

@@ -35,7 +35,13 @@
                 <div class="card-header Event-Title-Box">Aktualny tydzień</div>
                 
                 <div class="card-body">
-                    {% if event.status not in ["4","5"] %}
+                {% if event.status == "0" %}
+                    {% if to_start == 1 %}
+                         <h5> Wyzwanie rozpocznie się jutro!</h5>
+                    {% else %}
+                        <h5> Wyzwanie rozpocznie się za {{ to_start }} dni!</h5>
+                    {% endif %}
+                {% elif event.status in ["1","2","3"] %}
                     <div class="row">
                         <div class="col-4"><h5>Tydzień</h5></div>
                         <div class="col-4"><h5>Twój dystans</h5></div>
@@ -58,6 +64,7 @@
                     <div class="col-4">{{event.week_targets.iloc[event.current_week-1]['target'] }} km</div>
                     
                 </div>
+
                 {% else %}
                    <h5> Wyzwanie zakończone!</h5>
                 {% endif %}

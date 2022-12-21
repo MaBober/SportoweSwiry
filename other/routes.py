@@ -8,7 +8,7 @@ import datetime
 
 from .classes import MailboxMessage
 from .forms import MessageForm,  AppMailForm, AppMailToRead
-from .functions import send_email, prepare_list_of_choices_for_admin, save_message_in_db, delete_messages_from_db, save_message_in_db_for_event, save_message_in_db_for_all, prepare_list_of_choices_for_normal_user, send_message_from_contact_form_to_db
+from .functions import send_email, send_message_from_contact_form_to_db
 from user.classes import User
 from user.functions import account_confirmation_check
 
@@ -86,21 +86,21 @@ def mailbox(actionName):
     read_form=AppMailToRead()
 
     if current_user.is_admin == True:
-        form.receiver_email.choices = prepare_list_of_choices_for_admin()
+        form.receiver_email.choices = MailboxMessage.prepare_list_of_choices_for_admin()
     else:
-        form.receiver_email.choices = prepare_list_of_choices_for_normal_user()
+        form.receiver_email.choices = MailboxMessage.prepare_list_of_choices_for_normal_user()
 
     if form.validate_on_submit():
 
         if form.receiver_email.data=="Wszyscy":
-            save_message_in_db_for_all(form)
+            MailboxMessage.save_message_in_db_for_all(form)
             flash("Wiadomość przesłana do wszystkich użytkowników aplikacji")
         elif ("ID:" in form.receiver_email.data):
-            save_message_in_db_for_event(form)
+            MailboxMessage.save_message_in_db_for_event(form)
             (event_name, id) = (form.receiver_email.data).split(', ID:')
             flash("Wiadomość przesłana do uczestników wyzwania: {}".format(event_name))
         else:
-            save_message_in_db(form)
+            MailboxMessage.save_message_in_db(form)
             flash("Wiadomość przesłana do użytkownika: {}".format(form.receiver_email.data))
 
     elif request.method == 'POST':
@@ -108,7 +108,7 @@ def mailbox(actionName):
         if not messages_to_delete:
             flash("Brak zaznaczonych wiadomości do usunięcia")
         else:
-            delete_messages_from_db(messages_to_delete)
+            MailboxMessage.delete_messages_from_db(messages_to_delete)
             flash ("Zaznaczone wiadomości zostały poprawnie usnięte")
         return redirect(url_for('other.mailbox', actionName='inbox'))
 

@@ -50,7 +50,16 @@ def getLastStravaActivityDate():
         
         if lastStravaActivitity == None:
             lastActivitity = Activities.query.filter(Activities.user_id == current_user.id).order_by(Activities.date.desc()).first()
-            lastStravaActivitityDate = dt.datetime(lastActivitity.date.year, lastActivitity.date.month, lastActivitity.date.day,0,0).timestamp()
+
+            if lastActivitity != None:
+                lastStravaActivitityDate = dt.datetime(lastActivitity.date.year, lastActivitity.date.month, lastActivitity.date.day,0,0).timestamp()
+
+            else:
+                if current_user.added_on != None:
+                    lastStravaActivitityDate = dt.datetime(current_user.added_on.year, current_user.added_on.month, current_user.added_on.day, 0, 0).timestamp()
+                    
+                else:
+                    lastStravaActivitityDate = dt.datetime(2022,1,1,0,0).timestamp()
         
         else:
             lastStravaActivitity = Activities.query.filter(Activities.user_id == current_user.id).filter(Activities.strava_id != None).order_by(Activities.date.desc()).first()

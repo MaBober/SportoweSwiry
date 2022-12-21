@@ -21,7 +21,7 @@ class ActivityForm(FlaskForm):
     date = DateField("Data aktywności", validators=[InputRequired("Musisz podać date"), ValidateFutureDate], default=datetime.date.today())
     activity = SelectField("Rodzaj aktywności", default=1, choices=[])
     distance = DecimalField("Dystans", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
-    time = DateTimeField("Czas", format='%H:%M:%S', default=datetime.time())
+    time = DateTimeField("Czas", format='%H:%M:%S', default=datetime.time(), validators=[DataRequired(message='Podaj proszę czas w formacie HH:MM:SS')])
 
     def fill_sports_to_select(self):
 

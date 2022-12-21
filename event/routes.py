@@ -116,12 +116,12 @@ def event_main(event_id):
                             menuMode="mainApp",
                             mode="eventView",
                             activitiesAmount = 0,
+                            to_start = (event.start - dt.date.today()).days,
                             eventUsers = event_participants)
 
         all_event_activities = event.give_all_event_activities(calculated_values = True)
         split_list = event.give_overall_weekly_summary(all_event_activities)
         event_users_amount = len(event_participants)
-   
         return render_template('/pages/event_view/event_main.html',
                         event = event,
                         title_prefix = event.name,
@@ -131,6 +131,7 @@ def event_main(event_id):
                         mode="eventView",
                         processed_data = split_list,
                         activitiesAmount = len(all_event_activities),
+                        to_start = (event.start - dt.date.today()).days,
                         eventUsers = event_participants)
 
     else:

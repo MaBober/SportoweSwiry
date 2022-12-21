@@ -80,10 +80,11 @@
                         {% endif %}
                     </button>
             </form>
+            {% if mode == 'create' %}
             <a href="{{ url_for('activity.strava_login')}}">
                 <div class="Strava-Button"></div>
             </a>
-
+            {% endif %}
                 
         </div>
         

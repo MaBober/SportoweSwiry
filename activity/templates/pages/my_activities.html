@@ -11,7 +11,7 @@
     <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Usuwanie rekordu danych</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Usuwanie aktywności</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="idDeleteModalBody">
@@ -121,7 +121,7 @@
                                 <!-- Button trigger modal -->
                                 <a type="button" class="delete-confirm" 
                                     data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                                    data-desc="{{ 'Napewno chcesz usunać aktywność: {} ({} km)?'.format(activity.activity, activity.distance) }}"
+                                    data-desc="{{ 'Chcesz usunąć aktywność: {} ({} km) z dnia {}?'.format(activity.activity_type.name, activity.distance, activity.date) }}"
                                     data-url="{{ url_for('activity.delete_activity', activity_id=activity.id )}}">
                                     <img src="static/img/icon-delete.webp" class="delete-button">
                                 </a>

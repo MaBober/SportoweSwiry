@@ -89,20 +89,20 @@ class MailboxMessage(db.Model):
 
         from user.classes import User
         
-        lis_of_admins=User.query.filter(User.isAdmin==True).all()
+        list_of_admins=User.query.filter(User.is_admin==True).all()
 
-        lis_of_admins_mails = [(a.mail) for a in lis_of_admins]
-        lis_of_admins_names = [(a.name) for a in lis_of_admins]
-        lis_of_admins_last_names = [(a.last_name) for a in lis_of_admins]
+        list_of_admins_mails = [(a.mail) for a in list_of_admins]
+        list_of_admins_names = [(a.name) for a in list_of_admins]
+        list_of_admins_last_names = [(a.last_name) for a in list_of_admins]
 
-        temp_tuple_name_list=list(zip(lis_of_admins_names,lis_of_admins_last_names))
-        lis_of_admins_full_names = []
+        temp_tuple_name_list=list(zip(list_of_admins_names,list_of_admins_last_names))
+        list_of_admins_full_names = []
 
         for name, last_name in temp_tuple_name_list:
             full_name=name+" "+last_name
-            lis_of_admins_full_names.append(full_name)
+            list_of_admins_full_names.append(full_name)
 
-        return list(zip(lis_of_admins_mails, lis_of_admins_full_names))
+        return list(zip(list_of_admins_mails, list_of_admins_full_names))
 
 
     @staticmethod
@@ -112,7 +112,7 @@ class MailboxMessage(db.Model):
 
         for event in list_of_events:
             for participant in event.participants:
-                if participant.user_name==current_user.id:
+                if participant.user_id==current_user.id:
                     list_of_real_events.append(event.name)
                     break
 
@@ -139,11 +139,11 @@ class MailboxMessage(db.Model):
 
         for event in list_of_events:
             for participant in event.participants:
-                if participant.user_name==current_user.id:
+                if participant.user_id==current_user.id:
                     list_of_real_events.append(event.name)
                     break
 
-        lis_of_admins=MailboxMessage.prepare_list_of_admins()
+        list_of_admins=MailboxMessage.prepare_list_of_admins()
         list_of_mails = []
         list_of_full_names = []
 
@@ -153,12 +153,12 @@ class MailboxMessage(db.Model):
             for single_event in list_of_real_events:
                 event=Event.query.filter(Event.name==single_event).first()
                 for participant in event.participants:
-                    receiver_user=User.query.filter(User.id==participant.user_name).first()
+                    receiver_user=User.query.filter(User.id==participant.user_id).first()
                     receiver_mail=receiver_user.mail
                     receiver_name=receiver_user.name
                     receiver_last_name=receiver_user.last_name
                     receiver_full_name=receiver_name + " " + receiver_last_name
-                    if receiver_mail is not current_user.mail and not receiver_mail in list_of_mails and not receiver_mail in lis_of_admins[0] and not receiver_mail in lis_of_admins[1] and not receiver_mail in lis_of_admins[3]:
+                    if receiver_mail is not current_user.mail and not receiver_mail in list_of_mails and not receiver_mail in list_of_admins[0] and not receiver_mail in list_of_admins[1] and not receiver_mail in list_of_admins[3]:
                         list_of_mails.append(receiver_mail)
                         list_of_full_names.append(receiver_full_name)
                     
@@ -217,7 +217,7 @@ class MailboxMessage(db.Model):
 
             event=Event.query.filter(Event.name==event_name).first()
             for participant in event.participants:
-                receiver_user=User.query.filter(User.id==participant.user_name).first()
+                receiver_user=User.query.filter(User.id==participant.user_id).first()
                 receiver_mail=receiver_user.mail
                 receiver_name=receiver_user.name
                 receiver_last_name=receiver_user.last_name

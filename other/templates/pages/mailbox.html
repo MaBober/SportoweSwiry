@@ -236,14 +236,14 @@
 											data-bs-toggle="modal" data-bs-target="#readMessageModal"
 											data-desc="{{ message.message }}"
 											data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
-											{{ message.senderName }}</a>
+											{{ message.sender_name }}</a>
 										</td>
 										<td class="name">
 											<a href="#" style="font-weight: 400; color:black;" class="readMessageConfirm" 
 											data-bs-toggle="modal" data-bs-target="#readMessageModal"
 											data-desc="{{ message.message }}"
 											data-url="{{ url_for('other.mailbox', actionName=actionName) }}">
-											{{ message.receiverName }}</a>
+											{{ message.receiver_name }}</a>
 										</td>
 										<td class="subject">
 											<a href="#" style="font-weight: 400; color:black;" class="readMessageConfirm" 

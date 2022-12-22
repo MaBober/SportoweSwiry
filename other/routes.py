@@ -62,7 +62,7 @@ def send_message():
                         name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data)
         else:
             send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.last_name.data, form.subject.data),'message', 
-                        name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, message=form.message.data)
+                        name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data)
 
         admins = User.query.filter(User.is_admin == True).all()
         for admin in admins:
@@ -152,7 +152,7 @@ def contact_form_response():
 
     return render_template('/pages/message_sent.html', title_prefix = "Formularz kontaktowy" )
 
-@other.route("/change_message_status/<messageID>", methods=['POST','GET'])
+@other.route("/change_message_status/<message_id>", methods=['POST','GET'])
 def change_message_status(message_id):
     current_user.change_message_status(message_id)
     return redirect(url_for('other.mailbox', actionName='inbox'))

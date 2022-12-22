@@ -49,9 +49,9 @@ class User(db.Model, UserMixin):
             #Rewriting data from the form
             new_user = cls(
                 name = form.name.data,
-                last_name = form.lastName.data,
+                last_name = form.last_name.data,
                 mail = form.mail.data, 
-                id = form.name.data[0:3]+form.lastName.data[0:3],
+                id = form.name.data[0:3]+form.last_name.data[0:3],
                 password = form.password.data)
 
             #Generatin new user ID
@@ -131,7 +131,7 @@ class User(db.Model, UserMixin):
 
         try:
             self.name = user_form.name.data
-            self.last_name = user_form.lastName.data
+            self.last_name = user_form.last_name.data
             db.session.commit()
 
             message = 'Dane zmienione poprawnie'
@@ -225,8 +225,8 @@ class User(db.Model, UserMixin):
 
 
     def change_message_status(self,id):
-        messageFromInBox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
-        messageFromInBox.messageReaded = 1
+        message_from_inbox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
+        message_from_inbox.message_readed = 1
         db.session.commit()
         return None
 

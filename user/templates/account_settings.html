@@ -65,10 +65,10 @@
                             </div>
                             <!-- Form Group (last name)-->
                             <div class="col-md-6">
-                                <label class="small mb-1">{{ form.lastName.label }}</label>
-                                {{ form.lastName(class_="form-control") }}
+                                <label class="small mb-1">{{ form.last_name.label }}</label>
+                                {{ form.last_name(class_="form-control") }}
                                 <ul>
-                                    {% for error in form.lastName.errors %}
+                                    {% for error in form.last_name.errors %}
                                         {{ error }}
                                     {% endfor %}
                                 </ul>

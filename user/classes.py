@@ -586,6 +586,7 @@ class DashboardPage:
     def __init__(self, requested_event = None) -> None:
         
         self.event = self.define_event_to_present(requested_event)
+        self.future_events = current_user.future_events
 
         if self.event != None:
             summary =  self.event.give_user_overall_summary(current_user.id)

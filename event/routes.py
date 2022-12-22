@@ -318,6 +318,10 @@ def modify_event(event_id):
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej zawartości!")
         return redirect(url_for('other.hello'))
+
+    if not current_user.is_admin and event.status != '0':
+        flash("Nie możesz modyfikować wyzwania, które już się rozpoczęło!")
+        return redirect(url_for('event.event_main', event_id = event_id))
     
     distance_set = DistancesTable.query.filter(DistancesTable.event_id == event.id).all()
 
@@ -377,6 +381,10 @@ def add_new_sport_to_event(event_id):
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej akcji")
         return redirect(url_for('other.hello'))
+
+    if not current_user.is_admin and event.status != '0':
+        flash("Nie możesz modyfikować wyzwania, które już się rozpoczęło!")
+        return redirect(url_for('event.event_main', event_id = event_id))
         
     
     sport_to_add = Sport.query.filter(Sport.id == request.form['activity_type']).first()
@@ -398,6 +406,10 @@ def delete_coefficient(event_id, activity_type_id):
         flash("Nie masz uprawnień do tej zawartości!")
         return redirect(url_for('other.hello'))
 
+    if not current_user.is_admin and event.status != '0':
+        flash("Nie możesz modyfikować wyzwania, które już się rozpoczęło!")
+        return redirect(url_for('event.event_main', event_id = event_id))
+
     event = Event.query.filter(Event.id == event_id).first()
     message, status, action = event.delete_sport(activity_type_id)
 
@@ -413,6 +425,10 @@ def modify_coefficient(event_id, activity_type_id):
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
+
+    if not current_user.is_admin and event.status != '0':
+        flash("Nie możesz modyfikować wyzwania, które już się rozpoczęło!")
+        return redirect(url_for('event.event_main', event_id = event_id))
 
     coefficient_to_modify = CoefficientsList.query.filter(CoefficientsList.event_id==event_id).filter(CoefficientsList.activity_type_id==activity_type_id).first()
     event = Event.query.filter(Event.id == event_id).first()

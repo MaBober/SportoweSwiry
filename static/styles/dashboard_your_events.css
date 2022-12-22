@@ -35,6 +35,8 @@
     border: 0 #000!important;
     border-radius: 0;
     width: 100%;
+    height: fit-content;
+    position: flex;
 }
 
 .Event-Box {
@@ -44,27 +46,30 @@
     padding-bottom: 15px;
 }
 
+
+
+
 .Details-Of-Event-Button {
-  width: 200px;
-  height: 50px;
-  flex-grow: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  /* margin: 26px 412px 0 2px; */
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-  background-color: #579956 !important;
-  font-family: Lato;
-  border: 2px solid #579956;
-  position:relative;
-  margin: auto;
-  margin-top: -5px;
-  margin-right: -10px;
-}
+    width: 80%;
+    height: 50px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    /* margin: 26px 412px 0 2px; */
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background-color: #579956 !important;
+    font-family: Lato;
+    border: 2px solid #579956;
+    position:relative;
+    margin: auto;
+    margin-top: -5px;
+
+  }
 
 .Details-Of-Event-Button:hover {
 
@@ -126,6 +131,9 @@
 
     .Event-Box-Value-Title-Border h5 {
         font-size: 16px !important;
+    }
+    .Details-Of-Event-Button {
+        font-size: 14px;
     }
 
     .Event-Main-Box {

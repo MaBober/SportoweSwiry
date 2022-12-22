@@ -48,21 +48,21 @@ def about():
 def send_message():
 
     if current_user.is_authenticated:
-        form=MessageForm(name=current_user.name, lastName=current_user.last_name, mail=current_user.mail)
-        form.name.data = form.name.data+" "+form.lastName.data
+        form=MessageForm(name=current_user.name, last_name=current_user.last_name, mail=current_user.mail)
+        form.name.data = form.name.data+" "+form.last_name.data
     else:
         form=MessageForm()
-        form.lastName.data="-"
+        form.last_name.data="-"
 
 
     if form.validate_on_submit():
 
         if current_user.is_authenticated:
             send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(current_user.name, current_user.last_name, form.subject.data),'message', 
-                        name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, message=form.message.data)
+                        name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data)
         else:
-            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.lastName.data, form.subject.data),'message', 
-                        name=form.name.data, lastName=form.lastName.data, mail=form.mail.data, message=form.message.data)
+            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.last_name.data, form.subject.data),'message', 
+                        name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, message=form.message.data)
 
         admins = User.query.filter(User.is_admin == True).all()
         for admin in admins:

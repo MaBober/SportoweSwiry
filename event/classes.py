@@ -234,12 +234,12 @@ class Event(db.Model):
         if current_user.is_admin != True:
             
             if current_user.id != user.id:
-                message = "Nie usunąć innego użytkownika z wyzwania!", "danger"
+                message = "Nie usunąć innego użytkownika z wyzwania!"
                 current_app.logger.warning(f"User {current_user.id} tries to delete other user from event {self.id}!")
                 return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
 
             if is_participating != None and self.status != "0":
-                message = "Nie możesz się wypisać z rozpoczętego wyzwania!", "danger"
+                message = "Nie możesz się wypisać z rozpoczętego wyzwania!"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Event is on going!")
                 return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
             

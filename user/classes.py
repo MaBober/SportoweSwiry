@@ -225,8 +225,8 @@ class User(db.Model, UserMixin):
 
 
     def change_message_status(self,id):
-        messageFromInBox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
-        messageFromInBox.messageReaded = 1
+        message_from_inbox=MailboxMessage.query.filter(MailboxMessage.id == id).first()
+        message_from_inbox.message_readed = 1
         db.session.commit()
         return None
 

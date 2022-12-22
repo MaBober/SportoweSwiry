@@ -284,7 +284,7 @@ def settings():
 
     form = UserForm(id = current_user.id,
                     name = current_user.name,
-                    lastName = current_user.last_name,
+                    last_name = current_user.last_name,
                     mail = current_user.mail,
                     statute_acceptance = True)
     del form.password

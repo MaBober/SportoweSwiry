@@ -1,4 +1,4 @@
-Czołem {{ '{} {}'.format(current_user.name, current_user.lastName) }},
+Czołem {{ '{} {}'.format(current_user.name, current_user.last_name) }},
 
 Witaj w Sportowych Świrach!
 

@@ -22,7 +22,7 @@
                     {% if event.description != '' %}
                     <h6>{{event.description}} </h6>
                     {% endif %}
-                    {% if event.admin_id == current_user.id %}
+                    {% if event.admin_id == current_user.id and event.status == '0' %}
                     <a href="{{ url_for('event.modify_event', event_id = event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Modyfikuj wyzwanie</a>
                     {% endif %}
                 </div>

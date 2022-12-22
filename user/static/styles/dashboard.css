@@ -36,7 +36,7 @@ body {
     background-color: black;
     width: 49%;
     color: white;
-    height: 350px;
+    height: fit-content;
     margin-bottom: 10px;
 }
 

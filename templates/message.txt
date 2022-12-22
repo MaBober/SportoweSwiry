@@ -1,6 +1,6 @@
 Czołem!
 
-Użytownik {{name}} {{lastName}} ( {{mail}} ) przesyła wiadomość:
+Użytownik {{name}} {{last_name}} ( {{mail}} ) przesyła wiadomość:
 
 {{message}}
 

@@ -62,7 +62,7 @@ def send_message():
                         name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data)
         else:
             send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.last_name.data, form.subject.data),'message', 
-                        name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, message=form.message.data)
+                        name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data)
 
         admins = User.query.filter(User.is_admin == True).all()
         for admin in admins:

@@ -234,7 +234,7 @@ class Event(db.Model):
         if current_user.is_admin != True:
             
             if current_user.id != user.id:
-                message = "Nie usunąć innego użytkownika z wyzwania!"
+                message = "Nie można usunąć innego użytkownika z wyzwania!"
                 current_app.logger.warning(f"User {current_user.id} tries to delete other user from event {self.id}!")
                 return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
 

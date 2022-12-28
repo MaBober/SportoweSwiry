@@ -179,7 +179,15 @@ def my_activities():
                                 menuMode = "mainApp")
         
     else:
-        return redirect(url_for('other.hello'))
+        return render_template('/pages/my_activities.html',
+                        activities = activities,
+                        title_prefix = "Moje aktywności",
+                        sec_to_H_M_S = sec_to_H_M_S,
+                        sumDistance = " --- ",
+                        averageDistance = " --- ",
+                        averageTime = " --- ",
+                        activitiesAmount = len(activities),
+                        menuMode = "mainApp")
 
 
 @activity.route("/strava_login")

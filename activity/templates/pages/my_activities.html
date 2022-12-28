@@ -82,6 +82,7 @@
 
     </div>
 
+    {% if activities|length != 0 %}
     <div class="dashBoard">
         <div class="Chart-Box">
             <span class="Title-Box">Różnorodność aktywności</span>
@@ -92,6 +93,7 @@
             <canvas id="bar-chart" class="Chart"></canvas>
         </div>
     </div>
+    
 
     <div class="row justify-content-md-center">
         <div class="col-md-10">
@@ -136,6 +138,15 @@
             </div>
         </div>
     </div>
+    {% else %}
+    <div class="row justify-content-md-center">
+        <div class="Chart-Box">
+            <span class="Title-Box">Nie posiadasz jeszcze żadnych aktywności!</span>
+                <a href="{{ url_for('activity.add_activity')}}" type="button" class="btn btn-dark btn-lg Main-Button" >Dodaj aktywność</a>
+            </span> 
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 

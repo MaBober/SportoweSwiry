@@ -127,7 +127,7 @@ def mailbox(actionName):
 
 
     return render_template('/pages/mailbox.html', form=form, readForm=read_form, messages_current_user=messages_current_user, current_user=current_user, 
-            amount_of_received_messages=amount_of_received_messages, amount_of_sent_messages=amount_of_sent_messages, actionName=actionName, menuMode="mainApp")
+            amount_of_received_messages=amount_of_received_messages, amount_of_sent_messages=amount_of_sent_messages, actionName=actionName, menu_mode="mainApp")
 
 @other.route("/accept_cookies", methods=['POST','GET'])
 def accept_cookies():

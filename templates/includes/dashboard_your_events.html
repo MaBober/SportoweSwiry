@@ -1,55 +1,55 @@
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dashboard_your_events.css') }}">
 
 <div class="card mb-4 Event-Main-Box">
-    
     {% if dashboard.event != None %}
-    <div class="card-header Event-Title-Box" style="background-color: rgba(224, 153, 94);">Twoje trwające wyzwania</div>
-    <div class="Event-Box-Row">
-        {% if dashboard.user_events|length !=1 %}
-            <div class="Arrow-Box-Left"><a href="{{ url_for('user.dashboard', event_id=dashboard.previous_event)}}"><img src="/static/img/turn_left.webp"></a></div>
-        {% endif %}
-        <div class="card-body">
-            <div class="Event-Box">
-                <div class="row">
+        <div class="card-header Event-Title-Box">Twoje trwające wyzwania</div>
+        <div class="Event-Box-Row">
 
-                    <div class="col-4 Event-Box-Value-Title">
-                        <h5>{{dashboard.event.name}}</h5>
-                        Tydzień {{dashboard.event.current_week}} / {{dashboard.event.length_weeks}} 
-                    </div>
+            {% if dashboard.user_events|length !=1 %}
+                <div class="Arrow-Box-Left"><a href="{{ url_for('user.dashboard', event_id=dashboard.previous_event)}}"><img src="/static/img/turn_left.webp"></a></div>
+            {% endif %}
+            <div class="card-body">
+                <div class="Event-Box">
+                    <div class="row">
 
-                    <div class="col-4 Event-Box-Value-Title-Border">
-                        Dystans
-                        {% if dashboard.event_week_distance >= dashboard.event.current_week_target %}
-                        <span style="color:rgb(47, 129, 20)"><b><h5>{{dashboard.event_week_distance}} / {{dashboard.event.current_week_target}}  km</b></h5></span>
-                        {% endif %}
-    
-                        {% if dashboard.event_week_distance < dashboard.event.current_week_target %}
-                        <span style="color:rgb(146, 40, 7)"><b>{{dashboard.event_week_distance}} / {{dashboard.event.current_week_target}} km</b></span>
-                        {% endif %}
-                    </div>
+                        <div class="col-4 Event-Box-Value-Title">
+                            <h5>{{dashboard.event.name}}</h5>
+                            Tydzień {{dashboard.event.current_week}} / {{dashboard.event.length_weeks}} 
+                        </div>
 
-                    <div class="col-4 Event-Box-Value-Title">
-                        <a href="{{ url_for('event.event_main', event_id=dashboard.event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">Szczegóły  </a>
+                        <div class="col-4 Event-Box-Value-Title-Border">
+                            Dystans
+                            {% if dashboard.event_week_distance >= dashboard.event.current_week_target %}
+                            <span style="color:rgb(47, 129, 20)"><b><h5>{{dashboard.event_week_distance}} / {{dashboard.event.current_week_target}}  km</b></h5></span>
+                            {% endif %}
+        
+                            {% if dashboard.event_week_distance < dashboard.event.current_week_target %}
+                            <span style="color:rgb(146, 40, 7)"><b>{{dashboard.event_week_distance}} / {{dashboard.event.current_week_target}} km</b></span>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-4 Event-Box-Value-Title">
+                            <a href="{{ url_for('event.event_main', event_id=dashboard.event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">Szczegóły  </a>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% if dashboard.user_events|length !=1 %}
+            <div class="Arrow-Box-Right"><a href="{{ url_for('user.dashboard', event_id=dashboard.next_event)}}"><img src="/static/img/turn_right.webp"></a></div>
+            {% endif %}
+        
+        </div>  
+    {% elif dashboard.event == None and dashboard.future_events == []  %}
+        <div class="card-header Event-Title-Box">Twoje wyzwania</div>
+        <div class="Event-Box-Row">
+            <span class="Event-Title-Box" style="text-align:center;"><br> Nie bierzesz akualnie udziału w żadnym wyzwaniu. <br><br> 
+                <a href="{{ url_for('event.explore_events')}}" type="button" class="btn btn-dark btn-lg Main-Button" >Zapisz się już dziś!</a>
+            </span> 
         </div>
-        {% if dashboard.user_events|length !=1 %}
-        <div class="Arrow-Box-Right"><a href="{{ url_for('user.dashboard', event_id=dashboard.next_event)}}"><img src="/static/img/turn_right.webp"></a></div>
-        {% endif %}
-       
-    </div>  
-    {% elif dashboard.event == None and dashboard.future_events == None  %}
-        <div class="card-header Event-Title-Box" style="background-color: rgba(224, 153, 94);">Twoje wyzwania</div>
-            <div class="Event-Box-Row">
-                <span class="Event-Title-Box" style="text-align:center;"><br> Nie bierzesz akualnie udziału w żadnym wyzwaniu. <br><br> 
-                    <a href="{{ url_for('event.explore_events')}}" type="button" class="btn btn-dark btn-lg Main-Button"" >Zapisz się już dziś!</a>
-                </span> 
-            </div>
-    {% endif %}
+   
 
-    {% if dashboard.future_events != None %}
-        <div class="card-header Event-Title-Box" style="background-color: rgba(224, 153, 94);">Twoje przyszłe wyzwania</div>
+    {% elif dashboard.future_events != [] %}
+        <div class="card-header Event-Title-Box">Twoje przyszłe wyzwania</div>
         {% for event in dashboard.future_events %}
             <div class="card-body">
                 <div class="Event-Box">
@@ -57,7 +57,7 @@
                         <div class="col-4 Event-Box-Value-Title"><h5>{{event.name}}</h5></div>
                         <div class="col-4 Event-Box-Value-Title-Border">Rozpoczęcie<br><h5>{{event.start}} </h5></div>
                         <div class="col-4 Event-Box-Value-Title">
-                            <a href="{{ url_for('event.event_main', event_id=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">Szczegóły</a>
+                            <a href="{{ url_for('event.event_main', event_id=event.id )}} " type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">Szczegóły</a>
                         </div>
                     </div>
                 </div>

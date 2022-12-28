@@ -126,14 +126,19 @@
 @media(max-width: 850px) {
 
     .Event-Box-Value-Title h5 {
-        font-size: 16px !important;
+        font-size: 12px !important;
     }
 
     .Event-Box-Value-Title-Border h5 {
-        font-size: 16px !important;
+        font-size: 12px !important;
     }
-    .Details-Of-Event-Button {
-        font-size: 14px;
+
+    .Event-Box-Value-Title h6 {
+        font-size: 12px !important;
+    }
+
+    .Event-Box-Value-Title-Border h6 {
+        font-size: 12px !important;
     }
 
     .Event-Main-Box {
@@ -147,6 +152,12 @@
         width: 4%;
         margin: auto;
     }
+
+    .Details-Of-Event-Button {
+        width: 90%;
+        font-size: 12px;
+    
+      }
 
 }
 

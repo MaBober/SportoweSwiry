@@ -24,13 +24,30 @@ def cron_update_event_statuses():
     from event.classes import Event
 
     events = Event.query.all()
-    log =[]
+    log = []
 
     for event in events:
 
         event.update_status()
 
     return str(log)
+
+@cron.route("/cron/send_event_start_reminder", methods = ['POST'])
+def cron_send_event_start_reminder():
+
+    from event.classes import Event
+    from user.classes import User
+    from other.functions import send_email
+
+    events = Event.query.all()
+    for event in events:
+
+        if event.start == dt.date.today():
+            for user in event.give_all_event_users('Objects'):
+                send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event)
+
+    return str([])
+
 
 
 @cron.route("/cron/send_weekly_summary", methods = ['POST'])

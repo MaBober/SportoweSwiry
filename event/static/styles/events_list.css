@@ -1,6 +1,10 @@
 body {
     background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmail.webp") no-repeat center fixed;
     min-height: 100%;
+    background-size: cover;
+    background-color: #3a3a3a;
+    min-height: 100%;
+    position: relative;
 }
 
 .Settings-Main-Box {

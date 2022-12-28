@@ -52,7 +52,7 @@
             <img src="/static/img/icon-route.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Pokonany dystans</span>
-                <span class="Dashboard-Value">{{sumDistance}} km</span> 
+                <span class="Dashboard-Value">{{sum_distance}} km</span> 
             </div>
         </div>
 
@@ -60,7 +60,7 @@
             <img src="/static/img/icon-average.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni dystans</span>
-                <span class="Dashboard-Value">{{averageDistance}} km</span>
+                <span class="Dashboard-Value">{{average_distance}} km</span>
             </div>
         </div>
 
@@ -68,7 +68,7 @@
             <img src="/static/img/icon-timeTime.webp" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Średni czas aktywności</span>
-                <span class="Dashboard-Value">{{averageTime}}</span>
+                <span class="Dashboard-Value">{{average_time}}</span>
             </div>
         </div>
 
@@ -76,7 +76,7 @@
             <img src="/static/img/arrow_direction_pointer_up_icon-2.svg" class="icon-Dashboard">
             <div class="Dashboard-Value-Main-Box">
                 <span class="Dashboard-Value-Title">Ilość aktywności</span>
-                <span class="Dashboard-Value">{{ activitiesAmount }}</span>
+                <span class="Dashboard-Value">{{ activities|length }}</span>
             </div>
         </div>
 
@@ -153,8 +153,8 @@
 
 <script>
 
-    var donut_labels = {{ kindOfActivities | safe }}
-    var donut_data = {{ percentsOfActivities | safe }}
+    var donut_labels = {{ kind_of_activities | safe }}
+    var donut_data = {{ percents_of_activities | safe }}
 
     new Chart(document.getElementById("doughnut-chart"), {
         type: 'doughnut',
@@ -195,7 +195,7 @@
 <script>
 
     var bar_labels = {{ dates | safe }}
-    var bar_data = {{ dataList | safe }}
+    var bar_data = {{ data_list | safe }}
 
     new Chart(document.getElementById("bar-chart"), {
     type: 'bar',

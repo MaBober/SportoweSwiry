@@ -229,7 +229,7 @@ def list_of_users():
     return render_template('list_of_users.html',
                     users=users,
                     ban_form = ban_form,
-                    menuMode = "mainApp",
+                    menu_mode = "mainApp",
                     title_prefix = "Lista użytkowników")
 
 
@@ -314,7 +314,7 @@ def settings():
                     title_prefix = "Ustawienia konta",
                     form = form,
                     avatarForm = avatar_form,
-                    menuMode = "mainApp",
+                    menu_mode = "mainApp",
                     mode = "settings")
 
 
@@ -337,7 +337,7 @@ def password_change():
     return render_template("password_change.html",
                     title_prefix = "Prywatność",
                     form = form,
-                    menuMode = "mainApp",
+                    menu_mode = "mainApp",
                     mode = "passwordChange")
 
 
@@ -352,7 +352,7 @@ def dashboard():
 
     return render_template('dashboard.html',
                     dashboard = dashboard,
-                    menuMode = "mainApp")     
+                    menu_mode = "mainApp")     
         
   
 @user.route("/rotate_avatar_right")

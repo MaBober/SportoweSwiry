@@ -47,7 +47,7 @@ def add_activity():
                     form = form,
                     mode = "create",
                     title_prefix = "Dodaj aktywność",
-                    menuMode = "mainApp",
+                    menu_mode = "mainApp",
                     events = user_events)
 
 
@@ -100,7 +100,7 @@ def modify_activity(activity_id):
                             mode ="edit",
                             activity_id = activity_id,
                             title_prefix = "Edytuj aktywność",
-                            menuMode = "mainApp",
+                            menu_mode = "mainApp",
                             events = user_events)
 
     else:
@@ -117,77 +117,74 @@ def my_activities():
     activities=Activities.query.filter(Activities.user_id == current_user.id).order_by(Activities.date.desc()).all()
 
     if activities:
-        sumDistance=0
+        sum_distance=0
         sumTime = 0
-        timeList = []
         amount = len(activities)
         average_distance = 0
         average_time = 0
 
         for activity in activities:
-            sumDistance = sumDistance + activity.distance
+            sum_distance = sum_distance + activity.distance
             sumTime += activity.time
 
         #Calculation of basic data about the user's activities
-        average_distance = round(sumDistance/amount,2)
+        average_distance = round(sum_distance/amount,2)
         average_time = int((sumTime/amount))
         average_time = sec_to_H_M_S(average_time)
 
-        sumDistance = round(sumDistance,1)
+        sum_distance = round(sum_distance,1)
 
-        checkTable = []
+        check_table = []
 
-        kindOfActivities = []
-        percentsOfActivities = []
+        kind_of_activities = []
+        percents_of_activities = []
 
         #calculation of the percentage of activity
-        for activityExternal in activities:
+        for activity_external in activities:
             quantity = 0
             for activityInternal in activities:
-                if activityExternal.activity_type.name == activityInternal.activity_type.name and not activityExternal.activity_type.name in checkTable:
+                if activity_external.activity_type.name == activityInternal.activity_type.name and not activity_external.activity_type.name in check_table:
                     quantity = quantity+1
             if quantity > 0:
-                kindOfActivities.append(activityExternal.activity_type.name)
-                percentsOfActivities.append(round((quantity/amount)*100,1))
-                checkTable.append(activityExternal.activity_type.name)
+                kind_of_activities.append(activity_external.activity_type.name)
+                percents_of_activities.append(round((quantity/amount)*100,1))
+                check_table.append(activity_external.activity_type.name)
         
         today = dt.date.today()
-        dataList = []
+        data_list = []
         dates = []
 
-        for dayActivity in range(10):
+        for day_activity in range(10):
             distance  =0
             for no in activities:
-                date = today - dt.timedelta(days = dayActivity)
+                date = today - dt.timedelta(days = day_activity)
                 if date == no.date:
                     distance = distance + no.distance
-            dataList.append(distance)
+            data_list.append(distance)
             dates.append(str(date))
 
         return render_template('/pages/my_activities.html',
                                 activities = activities,
                                 title_prefix = "Moje aktywności",
                                 sec_to_H_M_S = sec_to_H_M_S,
-                                sumDistance = sumDistance,
-                                averageDistance = average_distance,
-                                averageTime = average_time,
-                                activitiesAmount = len(activities),
-                                percentsOfActivities = percentsOfActivities,
-                                kindOfActivities = kindOfActivities,
+                                sum_distance = sum_distance,
+                                average_distance = average_distance,
+                                average_time = average_time,
+                                percents_of_activities = percents_of_activities,
+                                kind_of_activities = kind_of_activities,
                                 dates = dates,
-                                dataList = dataList,
-                                menuMode = "mainApp")
+                                data_list = data_list,
+                                menu_mode = "mainApp")
         
     else:
         return render_template('/pages/my_activities.html',
                         activities = activities,
                         title_prefix = "Moje aktywności",
                         sec_to_H_M_S = sec_to_H_M_S,
-                        sumDistance = " --- ",
-                        averageDistance = " --- ",
-                        averageTime = " --- ",
-                        activitiesAmount = len(activities),
-                        menuMode = "mainApp")
+                        sum_distance = " --- ",
+                        average_distance = " --- ",
+                        average_time = " --- ",
+                        menu_mode = "mainApp")
 
 
 @activity.route("/strava_login")

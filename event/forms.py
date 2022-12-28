@@ -21,7 +21,7 @@ class EventForm(FlaskForm):
 
     def validate_participants_amount(form,field):
         if field.data < form.participatns.data:
-            raise ValidationError(f'Do wyzwania już zapisało się {form.participatns.data} uczestników. Wybierz większą liczbzę')
+            raise ValidationError(f'Do wyzwania już zapisało się {form.participatns.data} uczestników. Wybierz większą liczbę.')
 
     name = StringField("Nazwa", validators=[DataRequired("Pole nie może być puste"), validate_name_is_free])
     start = DateField("Data rozpoczęcia", validators=[DataRequired("Pole nie może być puste"), validate_date])

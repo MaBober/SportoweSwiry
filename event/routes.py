@@ -32,7 +32,7 @@ def explore_events():
     return render_template('/pages/explore_events.html',
                         events=events,
                         title_prefix = "Dostępne wyzwania",
-                        menuMode="mainApp",
+                        menu_mode="mainApp",
                         form=password_form )
 
 
@@ -84,7 +84,7 @@ def your_events(mode):
         return render_template('/pages/your_events.html',
                         events = user_events,
                         title_prefix = "Twoje wyzwania",
-                        mode  = mode, menuMode="mainApp")
+                        mode  = mode, menu_mode="mainApp")
     
     else:
        flash ("Nie bierzesz udziału w żadnych wyzwaniach. Zapisz się już dziś!")
@@ -113,7 +113,7 @@ def event_main(event_id):
                             title_prefix = event.name ,
                             usersAmount = 0,
                             coefSet = event_coefficinets_set,
-                            menuMode="mainApp",
+                            menu_mode="mainApp",
                             mode="eventView",
                             activitiesAmount = 0,
                             to_start = (event.start - dt.date.today()).days,
@@ -127,7 +127,7 @@ def event_main(event_id):
                         title_prefix = event.name,
                         usersAmount = event_users_amount,
                         coefSet =event_coefficinets_set,
-                        menuMode="mainApp",
+                        menu_mode="mainApp",
                         mode="eventView",
                         processed_data = split_list,
                         activitiesAmount = len(all_event_activities),
@@ -156,7 +156,7 @@ def event_activities(event_id):
                         activities = all_event_activities,
                         event = event,
                         title_prefix = "Aktywności wyzwania",
-                        menuMode="mainApp",
+                        menu_mode="mainApp",
                         mode="eventAvtivities")
         
     else:
@@ -178,7 +178,7 @@ def event_preview(event_id):
                     event = event,
                     title_prefix = event.name,
                     coefSet = event_coefficinets_set,
-                    menuMode="mainApp",
+                    menu_mode="mainApp",
                     form=password_form) 
 
 
@@ -203,7 +203,7 @@ def event_statistics(event_id):
                         event = event,
                         title_prefix = event.name,
                         users_amount = event_participants_amounnt,
-                        menuMode = "mainApp",
+                        menu_mode = "mainApp",
                         mode = "eventStatistics",
                         highest_distance = highest_distance_sum,
                         most_activites = highest_activity_amount)
@@ -230,7 +230,7 @@ def event_contestants(event_id):
                         eventUsers = event_participants,
                         title_prefix = event.name,
                         current_user = current_user,
-                        menuMode="mainApp",
+                        menu_mode="mainApp",
                         mode="eventContestants" )
 
     else:
@@ -265,7 +265,7 @@ def event_beers(event_id):
                         current_user=current_user,
                         beerToBuy=beers_to_buy,
                         beers_to_recive = beers_to_recive,
-                        menuMode="mainApp",
+                        menu_mode="mainApp",
                         mode="eventBeers")
 
     else:
@@ -301,7 +301,7 @@ def create_event():
                         title_prefix = "Nowe wydarzenie",
                         form = event_form,
                         formDist = distances_form,
-                        menuMode="mainApp",
+                        menu_mode="mainApp",
                         mode = "create")
     else: 
             flash('Jesteś już administratorem 3 trwających wyzwań. W tym momencie nie możesz stworzyć kolejnych!', 'danger')
@@ -370,7 +370,7 @@ def modify_event(event_id):
                     new_sport_form = new_sport_form,
                     mode = "edit",
                     event = event,
-                    menuMode="mainApp",
+                    menu_mode="mainApp",
                     CoefficientsSet = coefficientsSet)
 
 
@@ -449,7 +449,7 @@ def modify_coefficient(event_id, activity_type_id):
     return render_template("/pages/modify_coeficients.html",
                     title_prefix = "Nowa tabela współczynników",
                     form = coefficient_form,
-                    menuMode="mainApp",
+                    menu_mode="mainApp",
                     event_id = event_id,
                     activity_type_id = activity_type_id)
 

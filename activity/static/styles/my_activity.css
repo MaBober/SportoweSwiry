@@ -37,6 +37,26 @@ body {
     
 }
 
+.Main-Button {
+  display: flex;
+  width: 60%;
+  max-width: 399px;
+  height: 56px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  background-color: #579956 !important;
+  margin-left: auto;
+  margin-right: auto;
+  border: solid 2px #579956;
+  justify-content: center;
+  position: relative;
+}
+
+.Main-Button:hover {
+  background-color: rgb(12, 75, 15) !important;
+}
+
+
 .Chart {
     max-height: 300px;
 }

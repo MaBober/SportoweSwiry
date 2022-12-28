@@ -1,3 +1,8 @@
+body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_dashboard.webp") no-repeat center fixed;
+    min-height: 100%;
+}
+
 .Small-Navbar {
     width: 100%;
     background-color: #000 !important;

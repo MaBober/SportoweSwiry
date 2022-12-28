@@ -1,4 +1,5 @@
 body {
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmailSent.webp") no-repeat center fixed;
     min-height: 100%;
 }
 

@@ -19,14 +19,19 @@ class EventForm(FlaskForm):
         elif name_to_check != None:
             raise ValidationError("Istnieje już aktywne wyzwanie o takiej nazwie. Wybierz proszę inną nazwę.")
 
+    def validate_participants_amount(form,field):
+        if field.data < form.participatns.data:
+            raise ValidationError(f'Do wyzwania już zapisało się {form.participatns.data} uczestników. Wybierz większą liczbę.')
+
     name = StringField("Nazwa", validators=[DataRequired("Pole nie może być puste"), validate_name_is_free])
     start = DateField("Data rozpoczęcia", validators=[DataRequired("Pole nie może być puste"), validate_date])
     length = IntegerField("Długość w tygodniach", validators = [NumberRange(min = 1, max= 15, message = "Podaj proszę liczbę nie ujemną!")], default = 10)
     isPrivate = BooleanField("Wydarzenie prywatne")
     password=StringField("Hasło")
     description = TextAreaField("Opis wyzwania")
-    max_users = IntegerField("Maksymalna ilośc uczestników", validators = [NumberRange(min = 1, max= 25, message = "Podaj proszę liczbę większą od zera!")], default = 10)
+    max_users = IntegerField("Maksymalna ilośc uczestników", validators = [NumberRange(min = 1, max= 25, message = "Podaj proszę liczbę większą od zera!"), validate_participants_amount], default = 10)
     old_name =  StringField("Nazwa")
+    participatns = IntegerField("Zapisanych uczestników")
 
 class EventPassword(FlaskForm):
 

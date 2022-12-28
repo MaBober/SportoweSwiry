@@ -331,7 +331,8 @@ def modify_event(event_id):
             isPrivate = event.is_private,
             description = event.description,
             max_users = event.max_user_amount,
-            old_name = event.name)
+            old_name = event.name,
+            participatns = len(event.give_all_event_users('Objects')))
 
 
     formDist = DistancesForm(w1 = distance_set[0].target,

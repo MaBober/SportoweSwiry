@@ -37,6 +37,7 @@ body {
     width: 49%;
     color: white;
     height: fit-content;
+    min-height: 200px;
     margin-bottom: 10px;
 }
 

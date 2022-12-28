@@ -14,7 +14,7 @@
 
                         <div class="col-4 Event-Box-Value-Title">
                             <h5>{{dashboard.event.name}}</h5>
-                            Tydzień {{dashboard.event.current_week}} / {{dashboard.event.length_weeks}} 
+                            <h6>Tydzień {{dashboard.event.current_week}} / {{dashboard.event.length_weeks}} </h6>
                         </div>
 
                         <div class="col-4 Event-Box-Value-Title-Border">
@@ -47,15 +47,15 @@
             </span> 
         </div>
    
-
-    {% elif dashboard.future_events != [] %}
+    {% endif %}
+    {% if dashboard.future_events != [] %}
         <div class="card-header Event-Title-Box">Twoje przyszłe wyzwania</div>
         {% for event in dashboard.future_events %}
             <div class="card-body">
                 <div class="Event-Box">
                     <div class="row">
                         <div class="col-4 Event-Box-Value-Title"><h5>{{event.name}}</h5></div>
-                        <div class="col-4 Event-Box-Value-Title-Border">Rozpoczęcie<br><h5>{{event.start}} </h5></div>
+                        <div class="col-4 Event-Box-Value-Title-Border">Start<br><h5>{{event.start}} </h5></div>
                         <div class="col-4 Event-Box-Value-Title">
                             <a href="{{ url_for('event.event_main', event_id=event.id )}} " type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">Szczegóły</a>
                         </div>

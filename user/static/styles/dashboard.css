@@ -1,5 +1,5 @@
 body {
-    /* background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_dashboard.webp") no-repeat center fixed; */
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_FAQ.webp") no-repeat center fixed;
     background-size: cover;
     background-color: #3a3a3a;
     min-height: 100%;

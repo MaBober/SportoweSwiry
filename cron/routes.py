@@ -35,10 +35,13 @@ def cron_send_event_end_reminder():
     current_app.logger.info(f"Event end reminder cron job requested with correct key")
 
     for event in events:
-        current_app.logger.info(f"Event {event.name} ends today. Reminder will be sent.")
         if event.start == dt.date.today() and Config.CRON_KEY:
+            current_app.logger.info(f"Event {event.name} ends today. Reminder will be sent.")
             for user in event.give_all_event_users('Objects'):
-                send_email(user.mail, f"Wyzwanie {event.name} kończy się dzisiaj!",'emails/event_end', event = event)
+                if user.name == "Konto" and user.last_name == "Usunięte":
+                    pass
+                else:
+                    send_email(user.mail, f"Wyzwanie {event.name} kończy się dzisiaj!",'emails/event_end', event = event)
 
     return 'End event mails sent!'
 

@@ -9,7 +9,7 @@ import os
 
 
 from .classes import User, DashboardPage, UserBans
-from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm, BanReason
+from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm, BanReason, SubscribeNewsletter
 import functools
 from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
 
@@ -102,6 +102,8 @@ def create_account():
 
         message, status, action = User.create_standard_account(form)
         flash(message, status)
+        if form.subscribe_newsletter.data == True:
+            current_user.subscribe_newsletter()
 
         return action
 
@@ -294,6 +296,14 @@ def settings():
     del form.statute_acceptance
 
     avatar_form = UploadAvatarForm()
+    newsletter_form = SubscribeNewsletter()
+
+    if newsletter_form.validate_on_submit():
+        message, status, action = current_user.subscribe_newsletter()
+        flash(message, status)
+
+        return action
+
 
     if avatar_form.image.data == None and form.validate_on_submit():       
 
@@ -313,6 +323,7 @@ def settings():
     return render_template("account_settings.html",
                     title_prefix = "Ustawienia konta",
                     form = form,
+                    newsletter_form = newsletter_form,
                     avatarForm = avatar_form,
                     menu_mode = "mainApp",
                     mode = "settings")
@@ -538,6 +549,17 @@ def googleLoginConnect():
     session["state"] = state   
 
     return redirect(authorization_url)
+
+
+@user.route("/subscribe_newsletter", methods=['GET'])
+@login_required
+def subscribe_newsletter():
+
+    message, status, action = current_user.subscribe_newsletter()
+    flash(message, status)
+
+    return action
+
 
 
 @user.route("/google-callback-connect", methods=['GET'])

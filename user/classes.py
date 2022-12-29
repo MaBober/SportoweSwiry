@@ -10,7 +10,9 @@ import binascii
 from flask import current_app, redirect, url_for, render_template
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import os
+import requests
 import datetime as dt
+from config import Config
 
 from werkzeug.utils import secure_filename
 from PIL import Image, UnidentifiedImageError
@@ -506,6 +508,28 @@ class User(db.Model, UserMixin):
             message = 'Nie udało się odblokować konta!'
             current_app.logger.exception(f"User {current_user.id} failed to unban ({self.id})")
             return message, 'danger', redirect(url_for('user.list_of_users'))
+
+
+    def subscribe_newsletter(self):
+
+        current_app.logger.info(f"User {current_user.id} clicked Subscribe Newsletter")
+        header = {'Authorization': 'Bearer ' + Config.MAILERLITE_TOKEN}
+        fields = {"name": self.name}
+        groups = ["75838930905204515"]
+        data = {"email": self.mail, "fields": fields, "groups": groups}
+        url = "http://connect.mailerlite.com/api/subscribers"
+
+        mailer_lite_response = requests.post(url, headers = header, json = data).json()
+        if "errors" not in mailer_lite_response:
+            current_app.logger.info(f"User {current_user.id} Subscribed Newsletter")
+            message = "Zapsiano do newsletter'a!"
+            return message, 'success', redirect(url_for('other.hello'))
+            
+        else:
+            current_app.logger.exception(f"User {current_user.id} failed to Subscribe Newsletter. Mailer response: {mailer_lite_response}")
+            message = "Wystąpił błąd! Nie zapsiano do newsletter'a!"
+            return message, 'success', redirect(url_for('other.hello'))
+
 
 
     @property

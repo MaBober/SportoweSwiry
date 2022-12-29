@@ -45,6 +45,10 @@ class VerifyEmailForm(FlaskForm):
     mail=EmailField("E-mail", validators=[DataRequired("Pole nie może być puste"), Email("Wpisz e-mail w poprawnej formie"), ValidateMailisExist])
 
 
+class SubscribeNewsletter(FlaskForm):
+    policy_acceptance=BooleanField("Akceptuję politykę prywatności serwisu",validators=[DataRequired("Musisz zaakceptować politykę prywatności!")], default=False)
+
+
 class NewPasswordForm(FlaskForm):
 
     def ValidatePasswordIsCorrect(form, field):

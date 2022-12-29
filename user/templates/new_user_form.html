@@ -59,7 +59,7 @@
         </p>
 
 
-        <div class="Checkbox-Main-Box">
+        <div class="Checkbox-Main-Box" style="margin-bottom: 10px;">
             {{ form.statute_acceptance(class_="Checkbox-Box form-check-input" ) }}
             <span class="Checkbox-Font">
                 Akceptuję <a href="{{ url_for('other.statute') }}">regulamin serwisu</a>
@@ -69,9 +69,21 @@
                     {% endfor %}
                 </p>
             </span>
-
-
         </div>
+        <div class="Checkbox-Main-Box">
+            {{ form.subscribe_newsletter(class_="Checkbox-Box form-check-input" ) }}
+            <span class="Checkbox-Font">
+                Zapisuje się na newsletter. Akceptuję <a href="{{ url_for('other.privacy_policy') }}">politykę prywatności</a>
+                <p class="Error-Message">
+                    {% for error in form.subscribe_newsletter.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </p>
+            </span>
+        </div>
+
+
+
         <button class="Main-Button" type="submit">
             <span class="Main-Button-Font">
                 Załóż konto

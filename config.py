@@ -30,3 +30,4 @@ class Config:
 
     STRAVA_CLIENT_ID = os.environ.get('STRAVA_CLIENT_ID')
     STRAVA_CLIENT_SECRET = os.environ.get('STRAVA_CLIENT_SECRET')
+    CRON_KEY = os.environ.get('CRON_KEY')

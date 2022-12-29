@@ -35,7 +35,7 @@ def cron_send_event_end_reminder():
     current_app.logger.info(f"Event end reminder cron job requested with correct key")
 
     for event in events:
-        if event.start == dt.date.today() and Config.CRON_KEY:
+        if event.end == dt.date.today() and Config.CRON_KEY:
             current_app.logger.info(f"Event {event.name} ends today. Reminder will be sent.")
             for user in event.give_all_event_users('Objects'):
                 if user.name == "Konto" and user.last_name == "Usunięte":

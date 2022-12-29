@@ -4,7 +4,7 @@ import os
 
 from flask_login import login_required, current_user
 from start import db, app
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 
 
 cron = Blueprint("cron", __name__,
@@ -38,15 +38,23 @@ def cron_send_event_start_reminder():
     from event.classes import Event
     from user.classes import User
     from other.functions import send_email
+    from config import Config
+
+    if request.form['key'] != Config.CRON_KEY:
+        current_app.logger.warning(f"Event end reminder cron job requested with wrong key!")
+        return 'Access Denied!'
+
+    current_app.logger.info(f"Event start reminder cron job requested with correct key")
 
     events = Event.query.all()
     for event in events:
 
         if event.start == dt.date.today():
+            current_app.logger.info(f"Event {event.name} starts today. Reminders will be sent.")
             for user in event.give_all_event_users('Objects'):
                 send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event)
 
-    return str([])
+    return "Start event mails sent"
 
 
 

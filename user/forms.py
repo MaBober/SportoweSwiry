@@ -33,6 +33,7 @@ class UserForm(FlaskForm):
     isAdmin=BooleanField("Admin", default=False)
     avatar=BooleanField("Avatar", default=False)
     statute_acceptance=BooleanField("Akceptuję regulamin serwisu",validators=[DataRequired("Musisz zaakceptować regulamin!")], default=False)
+    subscribe_newsletter = BooleanField("Zapisz się na newsletter.", default=False)
 
 
 class VerifyEmailForm(FlaskForm):

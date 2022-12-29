@@ -102,6 +102,8 @@ def create_account():
 
         message, status, action = User.create_standard_account(form)
         flash(message, status)
+        if form.subscribe_newsletter.data == True:
+            current_user.subscribe_newsletter()
 
         return action
 

@@ -201,6 +201,7 @@ class Activities(db.Model):
             return 'Aktywność NIE ZOSTAŁA USUNIĘTA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem', 'danger', 'activity.my_activities'
 
 
+
     @classmethod
     def added_in_last_days(cls, days):
         inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()

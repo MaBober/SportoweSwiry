@@ -12,7 +12,6 @@ import numpy as np
 from activity.classes import Sport
 import math
 
-    
 #Defines event table
 class Event(db.Model):
 
@@ -39,7 +38,9 @@ class Event(db.Model):
         return self.name
 
 
-    def add_to_db(self, form, distances_form):
+    def add_to_db(self, form):
+
+        from .forms import DistancesForm
 
         current_app.logger.info(f"User {current_user.id} submited new event form")
 
@@ -55,25 +56,40 @@ class Event(db.Model):
         self.description = form.description.data
         self.status = 0
 
+        distances_form = DistancesForm(w1 = 10,
+            w2 = 10,
+            w3 = 10,
+            w4 = 10,
+            w5 = 10,
+            w6 = 10,
+            w7 = 10,
+            w8 = 10,
+            w9 = 10,
+            w10 = 10,
+            w11 = 10,
+            w12 = 10,
+            w13 = 10,
+            w14 = 10,
+            w15 = 10)
+
         try:
             db.session.add(self)
             db.session.commit()
             
             DistancesTable.pass_distances_to_db(distances_form, self.id) 
+            current_app.logger.info(f"User {current_user.id} created targets table for event {self.id}")
             self.add_partcipant(current_user, form.password.data)
 
             current_app.logger.info(f"User {current_user.id} created event {self.id}")
             message = 'Stworzono wydarzenie "{}"!'.format(self.name)
-            return message, 'success', redirect(url_for('event.event_main', event_id = self.id))
+            return message, 'success', redirect(url_for('event.define_event_targets', event_id = self.id))
 
         except:
             current_app.logger.exception(f"User {current_user.id} failed to add new event")
             return 'Wyzwanie NIE UTWORZONE! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem', 'danger', 'event.new_event'
 
-    
-    def modify(self, form, formDist):
-
-        current_app.logger.info(f"User {current_user.id} submited modify form for event {self.id}")
+    def modify_targets(self, distance_form):
+        current_app.logger.info(f"User {current_user.id} submited modify targets form for event {self.id}")
 
         try:
             oldDistances =  DistancesTable.query.filter(DistancesTable.event_id == self.id).all()
@@ -82,7 +98,22 @@ class Event(db.Model):
                 db.session.delete(position)
                 db.session.commit()
 
-            DistancesTable.pass_distances_to_db(formDist, self.id)
+            DistancesTable.pass_distances_to_db(distance_form, self.id)
+
+            current_app.logger.info(f"User {current_user.id} modified event {self.id} targets")
+            message = f"Zmodyfikowano cele tygodniowe wyzwania {self.name}"
+            return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
+
+        except:
+            current_app.logger.exception(f"User {current_user.id} failed to modify event {self.name} targets.")
+            message = f'Cele tygodniowe {self.name} NIE ZDMODYFIKOWANE!'
+            return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
+
+    def modify(self, form, distance_form):
+
+        current_app.logger.info(f"User {current_user.id} submited modify form for event {self.id}")
+
+        try:
 
             self.name = form.name.data
             self.start = form.start.data
@@ -786,74 +817,75 @@ class DistancesTable(db.Model):
     target = db.Column(db.Float, nullable = False)
 
     @staticmethod
-    def pass_distances_to_db(formDist, event_id):
-        current_app.logger.info(f"User {current_user.id} starts creating distance table for {event_id}")
+    def pass_distances_to_db(distance_form, event_id):
         try:
-            newDistance = DistancesTable(event_id = event_id, week = 1, target = formDist.w1.data )
+            newDistance = DistancesTable(event_id = event_id, week = 1, target = distance_form.w1.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 2, target = formDist.w2.data )
+            newDistance = DistancesTable(event_id = event_id, week = 2, target = distance_form.w2.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 3, target = formDist.w3.data )
+            newDistance = DistancesTable(event_id = event_id, week = 3, target = distance_form.w3.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 4, target = formDist.w4.data )
+            newDistance = DistancesTable(event_id = event_id, week = 4, target = distance_form.w4.data )
             db.session.add(newDistance)
             db.session.commit()
             
-            newDistance = DistancesTable(event_id = event_id, week = 5, target = formDist.w5.data )
+            newDistance = DistancesTable(event_id = event_id, week = 5, target = distance_form.w5.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 6, target = formDist.w6.data )
+            newDistance = DistancesTable(event_id = event_id, week = 6, target = distance_form.w6.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 7, target = formDist.w7.data )
+            newDistance = DistancesTable(event_id = event_id, week = 7, target = distance_form.w7.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 8, target = formDist.w8.data )
+            newDistance = DistancesTable(event_id = event_id, week = 8, target = distance_form.w8.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 9, target = formDist.w9.data )
+            newDistance = DistancesTable(event_id = event_id, week = 9, target = distance_form.w9.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 10, target = formDist.w10.data )
+            newDistance = DistancesTable(event_id = event_id, week = 10, target = distance_form.w10.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 11, target = formDist.w11.data )
+            newDistance = DistancesTable(event_id = event_id, week = 11, target = distance_form.w11.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 12, target = formDist.w12.data )
+            newDistance = DistancesTable(event_id = event_id, week = 12, target = distance_form.w12.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 13, target = formDist.w13.data )
+            newDistance = DistancesTable(event_id = event_id, week = 13, target = distance_form.w13.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            newDistance = DistancesTable(event_id = event_id, week = 14, target = formDist.w14.data )
+            newDistance = DistancesTable(event_id = event_id, week = 14, target = distance_form.w14.data )
             db.session.add(newDistance)
             db.session.commit()
             
-            newDistance = DistancesTable(event_id = event_id, week = 15, target = formDist.w15.data )
+            newDistance = DistancesTable(event_id = event_id, week = 15, target = distance_form.w15.data )
             db.session.add(newDistance)
             db.session.commit()
 
-            current_app.logger.info(f"User {current_user.id} created distance table for {event_id}")
+            message = "Zapisano tabelę dystansów!"
+            return message, 'success', redirect(url_for('event.modify_event', event_id = event_id))
         
         except:
             current_app.logger.exception(f"User {current_user.id}  failed to creat distance table for {event_id}")
-            return 'NIE UDAŁO SIĘ STWORZYĆ TABELI DYSTANSÓW! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem', 'danger', 'other.hello'
+            message = 'NIE UDAŁO SIĘ MODYFIKOWAĆ TABELI DYSTANSÓW! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            return message, 'danger', redirect(url_for('event.define_event_targets', event_id = event_id))
 
 def calculate_distance(row):
     if row['is_constant']:

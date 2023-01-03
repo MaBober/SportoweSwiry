@@ -6,7 +6,7 @@
   <meta name="x-apple-disable-message-reformatting">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="telephone=no" name="format-detection">
-  <title>Doczenie do wyzwana</title><!--[if (mso 16)]>
+  <title>Reset hasła</title><!--[if (mso 16)]>
     <style type="text/css">
     a {text-decoration: none;}
     </style>
@@ -73,7 +73,7 @@ a[x-apple-data-detectors] {
                   <td align="center" valign="top" style="padding:0;Margin:0;width:410px">
                    <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#ffffff" role="presentation">
                      <tr>
-                      <td class="es-m-txt-c" align="center" style="padding:0;Margin:0;font-size:0px"><img src="https://zomrdt.stripocdn.email/content/guids/CABINET_21f9e404e56dd0d6b1f26ce9e6011684/images/logo.png" alt width="108" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></td>
+                      <td class="es-m-txt-c" align="center" style="padding:0;Margin:0;font-size:0px"><img src="https://zomrdt.stripocdn.email/content/guids/CABINET_4751c2778731896891ba14b860e07e57/images/logo.png" alt width="108" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></td>
                      </tr>
                    </table></td>
                  </tr>
@@ -96,10 +96,10 @@ a[x-apple-data-detectors] {
                       <td align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong><span style="font-size:18px">Cześć {{user.name}}!</span></strong></p></td>
                      </tr>
                      <tr>
-                      <td align="left" style="padding:0;Margin:0;padding-top:15px"><h3 style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:20px;font-style:normal;font-weight:bold;color:#333333">Witaj w wyzwaniu&nbsp;{{event.name}}!</h3></td>
+                      <td align="left" style="padding:0;Margin:0;padding-top:15px"><h3 style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:20px;font-style:normal;font-weight:bold;color:#333333">Resetowanie hasła</h3></td>
                      </tr>
                      <tr>
-                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify">Właśnie dołączył*ś do nowego wyzwania! Szykuj buty i wygodne ciuchy, rywalizacja rozpocznie się już wkrótce (jeszcze Ci o tym przypomnimy)!<br><br>Poniżej znajdziesz najważniejsze informacje dotyczące wyzwania, do którego się zapisał*ś:</p></td>
+                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify">Otrzymaliśmy Twoją prośbę o zresetowanie hasła do konta w aplikacji Sportowe Świry. Aby je zresetować kliknij <a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#5C68E2;font-size:14px;text-align:justify" href="{{ url_for('user.reset_password', token=token, _external=True) }}">TUTAJ</a>&nbsp;lub w przycisk poniżej.</p></td>
                      </tr>
                    </table></td>
                  </tr>
@@ -112,49 +112,25 @@ a[x-apple-data-detectors] {
                   <td class="es-m-p0r" align="center" style="padding:0;Margin:0;width:410px">
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;- <strong>Data rozpoczęcia :&nbsp;</strong>{{ event.start }}</p></td>
-                     </tr>
-                     <tr>
-                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;- <strong>Data zakończenia:&nbsp;</strong>{{ event.end}}</p></td>
-                     </tr>
-                     <tr>
-                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;- <strong>Czas trwania:&nbsp;</strong>{{ event.length_weeks}}</p></td>
-                     </tr>
-                     <tr>
-                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;-&nbsp;&nbsp;<strong>Zapisanych uczestników&nbsp;:&nbsp;</strong>{{event.give_all_event_users('Objects')|length }} tygodni</p></td>
-                     </tr>
-                     <tr>
-                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;-&nbsp;&nbsp;<strong>Cel na pierwszy tydzień&nbsp;:&nbsp;</strong>{{event.week_targets[event.week_targets['week'] == 1]['target'].values[0] }} km</p></td>
-                     </tr>
-                     <tr>
-                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify">Po każdym tygodniu otrzymasz od nas motywacyjnego e-maila o stopniu realizacji swojego celu. Dodatkowo podsumujemy jaką nagrodę otrzymasz lub będziesz zobowiązan* przekazać znajomym.<br>Więcej informacji znajdziesz <a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#5C68E2;font-size:14px;text-align:justify" href="{{ url_for('event.event_main', event_id=event.id )}}">TUTAJ</a>&nbsp;lub po kliknięciu w przycisk poniże</p></td>
-                     </tr>
-                     <tr>
-                      <td align="center" style="Margin:0;padding-left:5px;padding-right:5px;padding-top:15px;padding-bottom:15px"><!--[if mso]><a href="{{ url_for('event.event_main', event_id=event.id )}}" target="_blank" hidden>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="{{ url_for('event.event_main', event_id=event.id )}}" 
-                style="height:48px; v-text-anchor:middle; width:343px" arcsize="21%" stroke="f"  fillcolor="#579956">
+                      <td align="center" style="Margin:0;padding-left:5px;padding-right:5px;padding-top:15px;padding-bottom:15px"><!--[if mso]><a href="{{ url_for('user.reset_password', token=token, _external=True) }}" target="_blank" hidden>
+	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="{{ url_for('user.reset_password', token=token, _external=True) }}" 
+                style="height:48px; v-text-anchor:middle; width:258px" arcsize="21%" stroke="f"  fillcolor="#579956">
 		<w:anchorlock></w:anchorlock>
-		<center style='color:#ffffff; font-family:arial, "helvetica neue", helvetica, sans-serif; font-size:19px; font-weight:400; line-height:19px;  mso-text-raise:1px'>SZCZEGÓŁY WYZWANIA</center>
+		<center style='color:#ffffff; font-family:arial, "helvetica neue", helvetica, sans-serif; font-size:19px; font-weight:400; line-height:19px;  mso-text-raise:1px'>RESETUJ HASŁO</center>
 	</v:roundrect></a>
-<![endif]--><!--[if !mso]><!-- --><span class="msohide es-button-border" style="border-style:solid;border-color:#2CB543;background:#579956;border-width:0px;display:inline-block;border-radius:10px;width:auto;mso-hide:all"><a href="{{ url_for('event.event_main', event_id=event.id )}}" class="es-button es-button-1" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:24px;border-style:solid;border-color:#579956;border-width:10px 30px;display:inline-block;background:#579956;border-radius:10px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:29px;width:auto;text-align:center">SZCZEGÓŁY WYZWANIA</a></span><!--<![endif]--></td>
+<![endif]--><!--[if !mso]><!-- --><span class="msohide es-button-border" style="border-style:solid;border-color:#2CB543;background:#579956;border-width:0px;display:inline-block;border-radius:10px;width:auto;mso-hide:all"><a href="{{ url_for('user.reset_password', token=token, _external=True) }}" class="es-button es-button-1" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:24px;border-style:solid;border-color:#579956;border-width:10px 30px;display:inline-block;background:#579956;border-radius:10px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:29px;width:auto;text-align:center">RESETUJ HASŁO</a></span><!--<![endif]--></td>
                      </tr>
                    </table></td>
                  </tr>
                </table></td>
              </tr>
-             <tr>
-              <td align="left" style="padding:0;Margin:0;padding-bottom:5px;padding-left:20px;padding-right:20px">
-               <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                 <tr>
-                  <td valign="top" align="center" style="padding:0;Margin:0;width:410px">
-                   <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                     <tr>
-                      <td style="padding:0;Margin:0;padding-top:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify">Pamiętaj, że z wyzwania możesz wypisać się tylko przed jego rozpoczęciem!</p></td>
-                     </tr>
-                   </table></td>
-                 </tr>
-               </table></td>
-             </tr>
+           </table></td>
+         </tr>
+       </table>
+       <table class="es-footer" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%;background-color:transparent;background-repeat:repeat;background-position:center top">
+         <tr>
+          <td align="center" style="padding:0;Margin:0">
+           <table class="es-footer-body" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:450px" cellspacing="0" cellpadding="0" align="center">
              <tr>
               <td align="left" bgcolor="#ffffff" style="padding:0;Margin:0;padding-top:10px;padding-left:20px;padding-right:20px;background-color:#ffffff">
                <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
@@ -162,10 +138,10 @@ a[x-apple-data-detectors] {
                   <td align="center" valign="top" style="padding:0;Margin:0;width:410px">
                    <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify"><em>Do zobaczenia na trasie!<br>Zespół Sportowych Świrów</em></p></td>
+                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#333333;font-size:12px;text-align:justify"><em>Do zobaczenia na trasie!<br>Zespół Sportowych Świrów</em></p></td>
                      </tr>
                      <tr>
-                      <td style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify">PS Masz jakieś pytania lub wątpliwości? A możesz nie wiesz, jak zacząć działać? Chętnie odpowiemy na wszystkie Twoje pytania. Możesz po prostu odpowiedzieć na ten e-mail, lub napisać do nas naa <a target="_blank" href="mailto:kontakt@sportoweswiry.com.pl" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#5C68E2;font-size:14px;text-align:justify">kontakt@sportoweswiry.com.pl</a></p></td>
+                      <td style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#333333;font-size:12px;text-align:justify">PS Masz jakieś pytania lub wątpliwości? A możesz nie wiesz, jak zacząć działać? Chętnie odpowiemy na wszystkie Twoje pytania. Możesz po prostu odpowiedzieć na ten e-mail, lub napisać do nas na <a target="_blank" href="mailto:kontakt@sportoweswiry.com.pl" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#333333;font-size:12px;text-align:justify">kontakt@sportoweswiry.com.pl</a></p></td>
                      </tr>
                    </table></td>
                  </tr>
@@ -173,7 +149,7 @@ a[x-apple-data-detectors] {
                   <td align="left" style="padding:0;Margin:0;width:410px">
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td class="es-m-txt-c" align="center" bgcolor="#579956" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#ffffff;font-size:14px">©2022 Bartsch &amp; Bober<br>kontakt@sportoweswiry.com.pl</p></td>
+                      <td class="es-m-txt-c" align="center" bgcolor="#579956" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#ffffff;font-size:12px">©2022 Bartsch &amp; Bober<br>kontakt@sportoweswiry.com.pl</p></td>
                      </tr>
                    </table></td>
                  </tr>

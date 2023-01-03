@@ -1,10 +1,15 @@
 import datetime as dt
 import os
 
+
+from flask_login import login_required, current_user
+from start import db, app
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+
 from other.functions import send_email
 from config import Config
 from event.classes import Event
+
 
 
 cron = Blueprint("cron", __name__,
@@ -16,13 +21,41 @@ def cron_update_event_statuses():
     from event.classes import Event
 
     events = Event.query.all()
-    log =[]
+    log = []
 
     for event in events:
 
         event.update_status()
 
     return str(log)
+
+
+@cron.route("/cron/send_event_start_reminder", methods = ['POST'])
+def cron_send_event_start_reminder():
+
+    from event.classes import Event
+    from user.classes import User
+    from other.functions import send_email
+    from config import Config
+
+
+    if request.form['key'] != Config.CRON_KEY:
+        current_app.logger.warning(f"Event end reminder cron job requested with wrong key!")
+        return 'Access Denied!'
+
+
+    current_app.logger.info(f"Event start reminder cron job requested with correct key")
+
+    events = Event.query.all()
+    for event in events:
+
+
+        if event.start == dt.date.today() - dt.timedelta(days=1):
+            current_app.logger.info(f"Event {event.name} starts today. Reminders will be sent.")
+            for user in event.give_all_event_users('Objects'):
+                send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event)
+
+    return "Start event mails sent"
 
 @cron.route("/cron/send_event_end_reminder", methods = ['POST'])
 def cron_send_event_end_reminder():
@@ -44,6 +77,7 @@ def cron_send_event_end_reminder():
                     send_email(user.mail, f"Wyzwanie {event.name} kończy się dzisiaj!",'emails/event_end', event = event, user = user)
 
     return 'End event mails sent!'
+
 
 
 @cron.route("/cron/send_weekly_summary", methods = ['POST'])

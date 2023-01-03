@@ -213,7 +213,7 @@ class Event(db.Model):
 
         from other.functions import send_email
 
-        send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'welcome', event=self)
+        send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'welcome', event = self, user = current_user)
 
         message = '''
         Czołem  {} {}!,

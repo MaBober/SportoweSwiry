@@ -49,7 +49,7 @@ def cron_send_event_start_reminder():
     events = Event.query.all()
     for event in events:
 
-        if event.start == dt.date.today():
+        if event.start == dt.date.today() - dt.timedelta(days=1):
             current_app.logger.info(f"Event {event.name} starts today. Reminders will be sent.")
             for user in event.give_all_event_users('Objects'):
                 send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event)
@@ -79,12 +79,14 @@ def cron_send_weekly_summary():
               Sumary for : {str(summary.start_date)} - {str(summary.end_date)}
               Admins: {str(admins)}'''
               
+
 @cron.route("/cron/error_summary", methods = ['POST'])
 def cron_errors_summary():
 
     report = generate_error_summary(7)
 
     return report
+
 
 def generate_error_summary(days = 7):
 

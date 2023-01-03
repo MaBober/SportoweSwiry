@@ -41,7 +41,7 @@ def cron_send_event_end_reminder():
                 if user.name == "Konto" and user.last_name == "Usunięte":
                     pass
                 else:
-                    send_email(user.mail, f"Wyzwanie {event.name} kończy się dzisiaj!",'emails/event_end', event = event)
+                    send_email(user.mail, f"Wyzwanie {event.name} kończy się dzisiaj!",'emails/event_end', event = event, user = user)
 
     return 'End event mails sent!'
 

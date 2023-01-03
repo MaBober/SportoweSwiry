@@ -283,14 +283,13 @@ def event_beers(event_id):
 def create_event():
 
     event_form = EventForm()
-    distances_form = DistancesForm()
 
     if len(Event.query.filter(Event.status.in_(['0','1','2','3'])).filter(Event.admin_id == current_user.id).all()) < MAX_EVENTS_AS_ADMIN:
 
-        if event_form.validate_on_submit() and distances_form.validate_on_submit():
+        if event_form.validate_on_submit():
 
             new_event = Event()
-            message, status, action = new_event.add_to_db(event_form, distances_form)
+            message, status, action = new_event.add_to_db(event_form)
 
             CoefficientsList.create_coeffciet_set_with_default_values(new_event)
         
@@ -300,12 +299,56 @@ def create_event():
         return render_template("/pages/new_event.html",
                         title_prefix = "Nowe wydarzenie",
                         form = event_form,
-                        formDist = distances_form,
                         menu_mode="mainApp",
                         mode = "create")
     else: 
             flash('Jesteś już administratorem 3 trwających wyzwań. W tym momencie nie możesz stworzyć kolejnych!', 'danger')
             return redirect(url_for('other.hello'))
+
+
+@account_confirmation_check
+@event.route("/new_event_targets/<int:event_id>", methods=['POST','GET'])
+@account_confirmation_check
+@login_required
+def define_event_targets(event_id):
+
+    new_event = Event.query.filter(Event.id == event_id).first()
+    if not current_user.is_admin and new_event.admin_id != current_user.id:
+        flash("Nie masz uprawnień do tej zawartości!")
+        return redirect(url_for('other.hello'))
+
+    distance_set = DistancesTable.query.filter(DistancesTable.event_id == new_event.id).all()
+    distance_form = DistancesForm(w1 = distance_set[0].target,
+    w2 = distance_set[1].target,
+    w3 = distance_set[2].target,
+    w4 = distance_set[3].target,
+    w5 = distance_set[4].target,
+    w6 = distance_set[5].target,
+    w7 = distance_set[6].target,
+    w8 = distance_set[7].target,
+    w9 = distance_set[8].target,
+    w10 = distance_set[9].target,
+    w11 = distance_set[10].target,
+    w12 = distance_set[11].target,
+    w13 = distance_set[12].target,
+    w14 = distance_set[13].target,
+    w15 = distance_set[14].target)
+
+    if distance_form.validate_on_submit():
+
+            message, status, action = message, status, action = new_event.modify_targets(distance_form)
+        
+            flash(message, status)
+            return action
+
+    return render_template("/pages/new_event_targets.html",
+                    event = new_event,
+                    title_prefix = "Nowe wydarzenie",
+                    distance_form = distance_form,
+                    menu_mode="mainApp",
+                    mode = "create")
+
+
 
 
 @event.route("/modify_event/<int:event_id>", methods=['POST','GET'])
@@ -335,7 +378,7 @@ def modify_event(event_id):
             participatns = len(event.give_all_event_users('Objects')))
 
 
-    formDist = DistancesForm(w1 = distance_set[0].target,
+    distance_form = DistancesForm(w1 = distance_set[0].target,
     w2 = distance_set[1].target,
     w3 = distance_set[2].target,
     w4 = distance_set[3].target,
@@ -356,9 +399,16 @@ def modify_event(event_id):
 
     coefficientsSet = CoefficientsList.query.filter(CoefficientsList.event_id == event.id).all()
 
-    if form.validate_on_submit() and formDist.validate_on_submit():
+    if form.validate_on_submit():
 
-        message, status, action = event.modify(form, formDist)
+        message, status, action = event.modify(form, distance_form)
+    
+        flash(message, status)
+        return action
+
+    if distance_form.validate_on_submit():
+
+        message, status, action = event.modify_targets(distance_form)
     
         flash(message, status)
         return action
@@ -366,7 +416,7 @@ def modify_event(event_id):
     return render_template("/pages/modify_event.html",
                     title_prefix = "Modfyfikuj wydarzenie",
                     form = form,
-                    formDist = formDist,
+                    distance_form = distance_form,
                     new_sport_form = new_sport_form,
                     mode = "edit",
                     event = event,
@@ -403,6 +453,7 @@ def add_new_sport_to_event(event_id):
 @login_required #This page needs to be login
 def delete_coefficient(event_id, activity_type_id):
 
+    event = Event.query.filter(Event.id == event_id).first()
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej zawartości!")
         return redirect(url_for('other.hello'))
@@ -423,6 +474,7 @@ def delete_coefficient(event_id, activity_type_id):
 @login_required #This page needs to be login
 def modify_coefficient(event_id, activity_type_id):
 
+    event = Event.query.filter(Event.id == event_id).first()
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
@@ -432,7 +484,7 @@ def modify_coefficient(event_id, activity_type_id):
         return redirect(url_for('event.event_main', event_id = event_id))
 
     coefficient_to_modify = CoefficientsList.query.filter(CoefficientsList.event_id==event_id).filter(CoefficientsList.activity_type_id==activity_type_id).first()
-    event = Event.query.filter(Event.id == event_id).first()
+
 
     coefficient_form = CoeficientsForm(event_name = coefficient_to_modify.event,
         activity_name = coefficient_to_modify.sport,

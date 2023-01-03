@@ -58,18 +58,18 @@ def send_message():
     if form.validate_on_submit():
 
         if current_user.is_authenticated:
-            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(current_user.name, current_user.last_name, form.subject.data),'message', 
+            send_email("admin@sportoweswiry.com.pl", "Wiadomość od użytkownika {} {} - {}".format(current_user.name, current_user.last_name, form.subject.data),'message', 
                         name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data)
         else:
-            send_email("admin@sportoweswiry.atthost24.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.last_name.data, form.subject.data),'message', 
+            send_email("admin@sportoweswiry.com.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.last_name.data, form.subject.data),'message', 
                         name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data)
 
         admins = User.query.filter(User.is_admin == True).all()
         for admin in admins:
             if current_user.is_authenticated:
-                new_message = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, senderName=current_user.name+" "+current_user.last_name, receiver = admin.mail, receiverName = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, sendByApp = False, sendByEmail= True, messageReaded=False, multiple_message=True)
+                new_message = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, sender_name=current_user.name+" "+current_user.last_name, receiver = admin.mail, receiver_name = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, send_by_app = False, send_by_email= True, message_readed=False, multiple_message=True)
             else:
-                new_message = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, senderName=form.name.data, receiver = admin.mail, receiverName = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, sendByApp = False, sendByEmail= True, messageReaded=False, multiple_message=True)
+                new_message = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, sender_name=form.name.data, receiver = admin.mail, receiver_name = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, send_by_app = False, send_by_email= True, message_readed=False, multiple_message=True)
             send_message_from_contact_form_to_db(new_message)
         
         flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")

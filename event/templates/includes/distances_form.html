@@ -1,0 +1,194 @@
+<div class="container-xl px-4 mt-4">
+
+        <div class="card mb-4 mb-xl-0 Event-Main-Box">
+            <form method ="post" action="{{ url_for('event.define_event_targets', event_id = event.id) }}">
+            {{ distance_form.csrf_token}}
+            <div class="card-header Event-Title-Box">Określ cele na poszczególne tygodnie wyzwania</div>
+
+            <div class="card-body">
+                <div class="row justify-content-left">
+
+                    {% if event.length_weeks > 0 %}   
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w1.label}}</label> </br>
+                        {{ distance_form.w1(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w1.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>  
+                    {% endif %}  
+
+                    {% if event.length_weeks > 1 %}   
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w2.label}}</label> </br>
+                        {{ distance_form.w2(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w2.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>  
+                    {% endif %}  
+
+                    {% if event.length_weeks > 2 %}   
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w3.label}}</label> </br>
+                        {{ distance_form.w3(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w3.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div> 
+                    {% endif %}  
+
+                    {% if event.length_weeks > 3 %}   
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w4.label}}</label> </br>
+                        {{ distance_form.w4(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w4.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>  
+                    {% endif %}  
+
+                    {% if event.length_weeks > 4 %}  
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w5.label}}</label> </br>
+                        {{ distance_form.w5(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w5.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>  
+                    {% endif %}  
+                </div>  
+            
+            
+                <div class="row justify-content-left">
+                    {% if event.length_weeks > 5 %}  
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w6.label}}</label> </br>
+                        {{ distance_form.w6(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w6.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>  
+                    {% endif %}  
+
+                    {% if event.length_weeks > 6 %}  
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w7.label}}</label> </br>
+                        {{ distance_form.w7(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w7.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div> 
+                    {% endif %}  
+
+                    {% if event.length_weeks > 7 %}  
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w8.label}}</label> </br>
+                        {{ distance_form.w8(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w8.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div> 
+                    {% endif %}  
+                    
+                    {% if event.length_weeks > 8 %} 
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w9.label}}</label> </br>
+                        {{ distance_form.w9(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w9.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div> 
+                    {% endif %}  
+
+
+                    {% if event.length_weeks > 9 %} 
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w10.label}}</label> </br>
+                        {{ distance_form.w10(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w10.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}  
+                </div>  
+            
+                <div class="row justify-content-left">
+                    {% if event.length_weeks > 10 %}
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w11.label}}</label> </br>
+                        {{ distance_form.w11(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w11.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div> 
+                    {% endif %} 
+                    
+                    {% if event.length_weeks > 11 %}  
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w12.label}}</label> </br>
+                        {{ distance_form.w12(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w12.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %} 
+
+                    {% if event.length_weeks > 12 %}  
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w13.label}}</label> </br>
+                        {{ distance_form.w13(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w13.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %} 
+                    
+                    {% if event.length_weeks > 13 %}
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w14.label}}</label> </br>
+                        {{ distance_form.w14(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w14.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}  
+
+                    {% if event.length_weeks > 14 %}
+                    <div class="col-md-2"><label class="form-label">{{ distance_form.w15.label}}</label> </br>
+                        {{ distance_form.w15(class_="form-control form-control-sm") }}
+                        <ul>
+                            {% for error in distance_form.w15.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </ul>
+                    </div>  
+                    {% endif %}
+            
+            
+                <div class="row justify-content-left">
+                    <div class="col-3"><button class="btn btn-dark btn-lg Main-Button" style="height: max-content; min-width: 170px;" type="submit">
+                        Zapisz!
+
+                    </button></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>

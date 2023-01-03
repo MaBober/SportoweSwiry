@@ -1,22 +1,19 @@
 import datetime as dt
-import csv
 import os
+
 
 from flask_login import login_required, current_user
 from start import db, app
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 
+from other.functions import send_email
+from config import Config
+from event.classes import Event
+
+
 
 cron = Blueprint("cron", __name__,
     template_folder='templates')
-
-@cron.route("/cron/test", methods = ['POST'])
-def cron_test_post():
-
-    with open("cron_users.txt", "a") as file:
-        file.write('dad' +"\n")
-
-    return "crom"
 
 @cron.route("/cron/update_events_statuses", methods = ['POST'])
 def cron_update_event_statuses():
@@ -32,6 +29,7 @@ def cron_update_event_statuses():
 
     return str(log)
 
+
 @cron.route("/cron/send_event_start_reminder", methods = ['POST'])
 def cron_send_event_start_reminder():
 
@@ -40,9 +38,11 @@ def cron_send_event_start_reminder():
     from other.functions import send_email
     from config import Config
 
+
     if request.form['key'] != Config.CRON_KEY:
         current_app.logger.warning(f"Event end reminder cron job requested with wrong key!")
         return 'Access Denied!'
+
 
     current_app.logger.info(f"Event start reminder cron job requested with correct key")
 
@@ -55,6 +55,7 @@ def cron_send_event_start_reminder():
                 send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event)
 
     return "Start event mails sent"
+
 
 
 
@@ -118,6 +119,7 @@ def generate_error_summary(days = 7):
             report[file.split('-')[0] + file.split('-')[1] + file.split('-')[2].split(".")[0]] = day
 
     return report
+
 
 class StatisticalSummary():
 

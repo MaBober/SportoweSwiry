@@ -301,7 +301,7 @@ class User(db.Model, UserMixin):
         try:
             s = Serializer(current_app.config['SECRET_KEY'], expiration)
             token = s.dumps({'resetPassword': self.id}).decode('utf-8')
-            send_email(self.mail, 'Zresetuj hasło','reset', user = self, token = token)
+            send_email(self.mail, 'Zresetuj hasło','emails/reset', user = self, token = token)
 
             current_app.logger.info(f"User {self.id} generated reset token")
             message = f'Na Twój adres e-mail ({self.mail}) wysłaliśmy link do resetowania hasła'
@@ -402,7 +402,7 @@ class User(db.Model, UserMixin):
     @staticmethod
     def reset_password(token, new_password):
 
-        current_app.logger.infor(f"User tries to reset password")
+        current_app.logger.info(f"User tries to reset password")
         s = Serializer(current_app.config['SECRET_KEY'])
 
         try:

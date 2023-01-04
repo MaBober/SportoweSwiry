@@ -530,6 +530,39 @@ class User(db.Model, UserMixin):
             message = "Wystąpił błąd! Nie zapsiano do newsletter'a!"
             return message, 'success', redirect(url_for('other.hello'))
 
+        
+    def events_weeks_status(self):
+
+        user_events = self.current_events
+        all_events_weeks ={}
+        for event in user_events:
+
+            event_weeks = []
+            all_event_activities = event.give_all_event_activities(calculated_values = True)
+            split_list = event.give_overall_weekly_summary(all_event_activities)
+
+            for week in range(1, event.length_weeks+1):
+
+                event.week_done =  split_list[week-1].loc['target_done']['calculated_distance'][current_user.id][0]
+                event_weeks.append(event.week_done)
+            
+            all_events_weeks[event.id] =  event_weeks
+
+        return all_events_weeks
+
+
+    def show_events_weeks_changes(self, all_events_weeks):
+        user_events = self.current_events
+        for event in user_events:
+
+            all_event_activities = event.give_all_event_activities(calculated_values = True)
+            split_list = event.give_overall_weekly_summary(all_event_activities)
+
+            for week in range(1, event.length_weeks+1):
+
+                event.week_done =  split_list[week-1].loc['target_done']['calculated_distance'][current_user.id][0]
+                if all_events_weeks[event.id][week-1] == 0 and event.week_done == 1:
+                    send_email(current_user.mail, f"Cel na tydzień wypełniony! Gratulacje!", "emails/fulfill_week_target", user = current_user, event = event)
 
 
     @property

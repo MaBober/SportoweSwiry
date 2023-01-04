@@ -7,37 +7,41 @@
 
 <div class="container">
     <div class="row justify-content-md-center">
-        <div class="col-md-10 Extra-Margin-Activities">
-            <div class="table-responsive-md">
-                <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Osoba</th>
-                        <th scope="col">Data</th>
-                        <th scope="col">Aktywność</th>
-                        <th scope="col">Dystans</th>
-                        <th scope="col">Przeliczone</th>
-                        <th scope="col">Czas</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for index, activity in activities.iterrows(): %}
-                        <tr>
-                            <td scope="row">{{loop.index}}</td>
-                            <td>{{activity['name']}} {{activity['last_name']}}</td>
-                            <td>{{activity.date}}</td>
-                            <td>{{activity.name_sport}}</td>
-                            <td>{{activity.distance}}</td>
-                            <td>{{activity.calculated_distance}}</td>
-                            <td>{{sec_to_H_M_S(activity.time)}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <div class="col-md-10 Extra-Margin">
+            <div class="card mb-4 mb-xl-0 Event-Main-Box">
+                <div class="card-body"> 
+                    <div class="table-responsive-md">
+                        <table class="table table-striped table-hover" style="border-radius: 50px;">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Osoba</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Aktywność</th>
+                                <th scope="col">Dystans</th>
+                                <th scope="col">Przeliczone</th>
+                                <th scope="col">Czas</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for index, activity in activities.iterrows(): %}
+                                <tr>
+                                    <td scope="row">{{loop.index}}</td>
+                                    <td>{{activity['name']}} {{activity['last_name']}}</td>
+                                    <td>{{activity.date}}</td>
+                                    <td>{{activity.name_sport}}</td>
+                                    <td>{{activity.distance}}</td>
+                                    <td>{{activity.calculated_distance}}</td>
+                                    <td>{{sec_to_H_M_S(activity.time)}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 

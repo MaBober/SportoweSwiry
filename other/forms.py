@@ -22,7 +22,7 @@ class AppMailForm(FlaskForm):
     receiver_email=SelectField("Adresat", choices=[])
     subject=StringField("Temat", validators=[DataRequired("Pole nie może być puste")], default="")
     message = TextAreaField("Wiadomość", validators=[DataRequired("Pole nie może być puste")], default="")
-    send_by_app=BooleanField("Wiadomość w aplikacji", default=True, validators=[ValidateSendByApp])
+    send_by_app=BooleanField("Wiadomość w aplikacji", default=True)
     send_by_email=BooleanField("Wiadomość na maila", default=False)
 
 

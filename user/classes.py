@@ -562,7 +562,7 @@ class User(db.Model, UserMixin):
 
                 event.week_done =  split_list[week-1].loc['target_done']['calculated_distance'][current_user.id][0]
                 if all_events_weeks[event.id][week-1] == 0 and event.week_done == 1:
-                    print (f"WEEK {week} in event {event.name} finished!")
+                    send_email(current_user.mail, f"Cel na tydzień wypełniony! Gratulacje!", "emails/fulfill_week_target", user = current_user, event = event)
 
 
     @property

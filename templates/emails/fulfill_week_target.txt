@@ -1,0 +1,12 @@
+Cześć {{user.name}},
+
+Brawo, gratulacje! Ukończył*ś cel na ten tydzień w wyzwaniu "{{ event.name}}"! Aby zobaczyć szcegóły swoich aktywności, wejdź w link poniżej:
+https://sportoweswiry.com.pl/my_activities
+
+ - Cel na kolejny tydzień: {{event.week_targets[event.week_targets['week'] == event.current_week+1]['target'].values[0]}} km
+
+Wspomóż działalność Sportowych Świrów.
+Jeżeli wyzwanie i aplikacja Sportowe Świry Ci się podobały to będzie nam niezmiernie miło, jeżeli nas wesprzesz lub udostępnisz informacje o naszej inicjatywie w swoich socialmediach.
+
+Możesz również wspomóc utrzymanie i rozwój Sportowych Świrów, poprzez postawienie nam „wirtualnej kawy”!
+https://www.buymeacoffee.com/SportoweSwiry

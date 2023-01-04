@@ -25,6 +25,7 @@ activity = Blueprint("activity", __name__,
 def add_activity():
 
     form = ActivityForm()
+    form.fill_sports_to_select()
 
     if form.validate_on_submit():
 
@@ -36,7 +37,7 @@ def add_activity():
         flash(message, status)
         return redirect(url_for(url))
 
-    form.fill_sports_to_select()
+    
     user_events = current_user.current_events
 
     for event in user_events:

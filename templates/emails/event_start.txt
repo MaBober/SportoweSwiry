@@ -1,1 +1,21 @@
-123
+Cześć {user.name}}, 
+
+Twoje wyzwanie {{event.name}} zaczyna się już jutro!
+
+Szykuj buty, wygodne ciuchy, wyciągaj rower z piwnicy lub pakuj kąpielówki! Wyzwanie, do którego się zapisał*ś rozpoczyna się już jutro!
+Niezależnie, od której aktywności zaczniesz, najważniejsze żebyć się dobrze bawił!
+
+eżeli potrzebujesz przypomnieć sobie jaki przelicznik ma Twoja ulubiona aktywność fizyczna lub kto bierze udział w Twoim wyzwaniu – garść informacji znajdziesz
+tutaj: https://sportoweswiry.com.pl/{{url_for('event.event_main', event_id=event.id )}}
+
+Szczegóły wyzwania
+-  Data rozpoczęcia: {{ event.start }}
+ - Koniec wyzwania: {{event.end}}
+ - Ilość uczestników:  {{event.give_all_event_users('Objects') | length }}
+ - Cel na pierwszy tydzień: {{ event.current_week_target }}
+
+Do zobaczenia na trasie!
+Zespół Sportowych Świrów
+
+PS Masz jakieś pytania lub wątpliwości? A możesz nie wiesz, jak zacząć działać? Chętnie odpowiemy na wszystkie Twoje pytania.
+Możesz po prostu odpowiedzieć na ten e-mail, lub napisać do nas na kontakt@sportoweswiry.com.pl

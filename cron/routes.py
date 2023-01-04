@@ -49,11 +49,13 @@ def cron_send_event_start_reminder():
     events = Event.query.all()
     for event in events:
 
-
         if event.start == dt.date.today() - dt.timedelta(days=1):
             current_app.logger.info(f"Event {event.name} starts today. Reminders will be sent.")
             for user in event.give_all_event_users('Objects'):
-                send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event)
+                if user.name == "Konto" and user.last_name == "Usunięte":
+                    pass
+                else:
+                    send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event, user = user)
 
     return "Start event mails sent"
 

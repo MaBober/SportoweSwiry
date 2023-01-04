@@ -38,7 +38,20 @@
         {% else %}
             <a class="nav-link" href="{{ url_for('event.event_beers', event_id=event.id) }}" style="color: white;">Nagrody!</a>
         {% endif %}
+
+
+        <a class="nav-link" href="#" onclick="copyText()" style="color: white;">Udostępnij!</a>
         
     </nav>
 
 </div>
+
+<script>
+    function copyText() {
+    
+        /* Copy text into clipboard */
+        navigator.clipboard.writeText
+            ("https://sportoweswiry.com.pl{{ url_for('event.event_preview', event_id=event.id) }}");
+        alert("Skopiowano link do wydarzenia!")
+    }
+</script>

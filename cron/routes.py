@@ -49,6 +49,7 @@ def cron_send_event_start_reminder():
     events = Event.query.all()
     for event in events:
 
+
         if event.start == dt.date.today() - dt.timedelta(days=1):
             current_app.logger.info(f"Event {event.name} starts today. Reminders will be sent.")
             for user in event.give_all_event_users('Objects'):
@@ -56,6 +57,26 @@ def cron_send_event_start_reminder():
 
     return "Start event mails sent"
 
+@cron.route("/cron/send_event_end_reminder", methods = ['POST'])
+def cron_send_event_end_reminder():
+
+    if request.form['key'] != Config.CRON_KEY:
+        current_app.logger.warning(f"Event end reminder cron job requested with wrong key!")
+        return 'Access Denied!'
+
+    events = Event.query.all()
+    current_app.logger.info(f"Event end reminder cron job requested with correct key")
+
+    for event in events:
+        if event.end == dt.date.today() and Config.CRON_KEY:
+            current_app.logger.info(f"Event {event.name} ends today. Reminder will be sent.")
+            for user in event.give_all_event_users('Objects'):
+                if user.name == "Konto" and user.last_name == "Usunięte":
+                    pass
+                else:
+                    send_email(user.mail, f"Wyzwanie {event.name} kończy się dzisiaj!",'emails/event_end', event = event, user = user)
+
+    return 'End event mails sent!'
 
 
 

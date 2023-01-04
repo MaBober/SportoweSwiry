@@ -1,0 +1,16 @@
+Cześć {{user.name}},
+
+Wpadamy na Twoją skrzynkę z tym e-mailem tylko na chwilę, ale chcielibyśmy Ci przypomnieć, że wyzwanie do, którego się zapisał*ś zaczyna się już za tydzień!
+
+Jeżeli potrzebujesz się przypomnieć sobie szczegóły wyzwania "{{event.name}}", garść informacji znajdziesz poniżej. Po więcej sczegółów wejdź w link : https://sportoweswiry.com.pl{{ url_for('event.event_main', event_id=event.id )}}
+
+ - Data rozpoczęcia: {{ event.start }}
+ - Koniec wyzwania: {{event.end}}
+ - Ilość uczestników:  {{event.give_all_event_users('Objects') | length }}
+ - Cel na pierwszy tydzień: {{event.week_targets[event.week_targets['week'] == 1]['target'].values[0] }} km
+
+Do zobaczenia na trasie!
+Zespół Sportowych Świrów
+
+PS Masz jakieś pytania lub wątpliwości? A możesz nie wiesz, jak zacząć działać?
+Chętnie odpowiemy na wszystkie Twoje pytania. Możesz po prostu odpowiedzieć na ten e-mail, lub napisać do nas naa kontakt@sportoweswiry.com.pl

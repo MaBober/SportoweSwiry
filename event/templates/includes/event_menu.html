@@ -34,9 +34,9 @@
 
         
         {% if mode=='eventBeers': %}
-            <a class="nav-link" href="{{ url_for('event.event_beers', event_id=event.id) }}" style="color: white; background-color: #579956;">Piwa!</a>
+            <a class="nav-link" href="{{ url_for('event.event_beers', event_id=event.id) }}" style="color: white; background-color: #579956;">Nagrody!</a>
         {% else %}
-            <a class="nav-link" href="{{ url_for('event.event_beers', event_id=event.id) }}" style="color: white;">Piwa!</a>
+            <a class="nav-link" href="{{ url_for('event.event_beers', event_id=event.id) }}" style="color: white;">Nagrody!</a>
         {% endif %}
         
     </nav>

@@ -254,6 +254,9 @@ def delete_user(user_id):
 @user.route("/login", methods=['POST', 'GET'])
 def login():
 
+    if current_user.is_authenticated:
+        return redirect(url_for('other.hello'))
+
     logForm = LoginForm()
     if logForm.validate_on_submit():
 

@@ -31,12 +31,13 @@ import string
 
 def check_next_url():
     next = request.args.get('next')
+
     if next and is_safe_url(next):
-        #flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name))
-        return redirect(next)
+        return next
+        
     else:
-        #flash("Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name))
         pass
+
     return None
 
 def is_safe_url(target): 

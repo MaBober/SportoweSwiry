@@ -121,8 +121,8 @@
 <br>
 {% if usersAmount !=0 %}
 <div class="container-xl px-4 mt-4">
-    <div class="row justify-content-md-center">
-        <div class="col-md-12 Extra-Box">
+
+        <div class="card mb-4 Event-Main-Box">
 
             <!-- Actiities summary -->
             <div class="card mb-12 mb-xl-0 Event-Table-Box">
@@ -131,13 +131,13 @@
                         <div class="table-responsive-md Table-Box">
 
                             {% for week in processed_data: %}
-                            <table class="table table-sm table-secondary table-striped table-hover" style="border-radius: 50px;">
+                            <table class="table table-striped table-hover" style="border-radius: 50px;">
                                 <thead>
                                     <tr>
                                         <td><b>Tydzień {{loop.index}}</b></td>
 
                                         {% for user in range(0, usersAmount) %}
-                                            <td><b><img src="{{ eventUsers[week.columns[user][1]].give_avatar_path() }} " width="40"> <br> 
+                                            <td><b><img class="img-account-profile" src="{{ eventUsers[week.columns[user][1]].give_avatar_path() }} " width="40" style="border-radius: 10px;"> <br> 
 
                                                 {{ week.columns[user][2] }} 
                                                 {{ week.columns[user][3] }} </b> </td>
@@ -163,7 +163,7 @@
                                         {% for user in range(0,usersAmount) %}
 
                                             {% if week.loc['target_done'][user]  %}
-                                            <th scope="col" style="background-color: rgb(111, 245, 111);">
+                                            <th scope="col" style="background-color: #579956;">
                                             {% else %}
                                             <th scope="col" style="background-color: rgb(245, 73, 11);">
                                             {% endif %}

@@ -8,7 +8,7 @@ from wtforms.validators import DataRequired, Email, ValidationError
 class MessageForm(FlaskForm):
     name=StringField("Imię", validators=[DataRequired("Pole nie może być puste")])
     last_name=StringField("Nazwisko", validators=[DataRequired("Pole nie może być puste")])
-    mail=EmailField("E-mail", validators=[DataRequired("Pole nie może być puste"), Email("Wpisz e-mail w poprawnej formie")])
+    mail=EmailField("E-mail", validators=[DataRequired("Pole nie może być puste"), Email("Wpisz adres e-mail w poprawnej formie")])
     subject=StringField("Temat", validators=[DataRequired("Pole nie może być puste")])
     message = TextAreaField("Wiadomość", validators=[DataRequired("Pole nie może być puste")])
 

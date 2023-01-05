@@ -3,7 +3,7 @@
 <div class="container-xl px-4 mt-4 eventMenu-Main-Box">
     
     <nav class="nav nav-borders rounded eventMenu-Navbar" style="background-color: rgba(224, 153, 94);">
-        <span class="nav-link"  style="color: #579956;"><b>{{event.name}}</b></span> 
+        <span class="nav-link"  style="color: #579956; word-break: break-all "><b>{{event.name}}</b></span> 
 
         {% if mode=='eventView': %}
             <a class="nav-link" href="{{ url_for('event.event_main', event_id=event.id)}}"  style="color: white; background-color: #579956;">Strona Główna</a>

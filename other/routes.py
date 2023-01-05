@@ -132,15 +132,19 @@ def mailbox(actionName):
 @other.route("/accept_cookies", methods=['POST','GET'])
 def accept_cookies():
 
+    source = ''
+    if 'source' in request.args:
+        source = request.args['source']
+
     if request.method == 'POST':
 
         expire_date = datetime.datetime.now() + datetime.timedelta(days=365)
-        response = make_response(redirect(url_for('other.hello')))
+        response = make_response(redirect(source))
         response.set_cookie(key='cookie_consent', value='true', expires=expire_date)
 
         return response
     
-    return redirect(url_for('other.hello'))
+    return redirect(source)
 
 @other.route("/polityka_prywatnosci")
 def privacy_policy():

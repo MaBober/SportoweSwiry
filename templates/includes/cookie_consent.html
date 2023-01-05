@@ -11,9 +11,8 @@
             Używamy plików cookie, żeby zapewnić Ci usługi na najwyższym poziomie. Dalsze korzystanie ze strony oznacza, że zgadzasz się na ich użycie.
         </span>
 
-
     <div class="row">
-        <form action = "{{ url_for('other.accept_cookies')}}" method = "POST">
+        <form action = "{{ url_for('other.accept_cookies', source = request.path)}}" method = "POST">
             <button class="cookie-button"  type="submit">
                 <span class="cookie-button-text"> Zgoda!</span>
                 

@@ -25,10 +25,18 @@
         {{ form.csrf_token }}
         
         <div class="Special-Row-Input">
+
             {{ form.name(class_="form-control Input-Row-Box", placeholder="Imię i nazwisko" ) }}
 
             {{ form.mail(class_="form-control Input-Row-Box", placeholder="Adres e-mail" ) }}
+
         </div>
+        <p class="Error-Message">
+            {% for error in form.mail.errors %}
+                {{ error }}
+            {% endfor %}
+        </p>
+
 
         {{ form.subject(class_="form-control Input-Box", placeholder="Temat wiadomości" ) }}
         <p class="Error-Message">

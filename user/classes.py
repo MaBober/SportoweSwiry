@@ -210,10 +210,13 @@ class User(db.Model, UserMixin):
 
             try:
                 login_user(self, remember)
-                check_next_url()
+                next = check_next_url()
                 message = "Jesteś zalogowany jako: {} {}".format(current_user.name, current_user.last_name)
                 current_app.logger.info(f"User ({self.id}) loged in!")
-                return message, "success", redirect(url_for('user.dashboard'))
+                if next != None:
+                    return message, "success", redirect(next)
+                else:
+                    return message, "success", redirect(url_for('other.hello'))
             
             except:
                 message = "NIE ZALOGOWOANO! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"

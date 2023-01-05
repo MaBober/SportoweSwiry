@@ -46,41 +46,45 @@
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col-md-10 Extra-Margin">
-            <div class="table-responsive-md">
-                <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 30px; border-radius: 50px;">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Uczestnik</th>
+            <div class="card mb-4 mb-xl-0 Event-Main-Box">
+                <div class="card-body"> 
+                    <div class="table-responsive-md">
+                        <table class="table table-striped table-hover" style="border-radius: 50px;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Uczestnik</th>
 
-                            {% if current_user.is_admin or event.admin_id == current_user.id %}
-                            <th scope="col">Akcje</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in eventUsers: %}
-                        <tr>
-                            <td scope="row">{{loop.index}}</td>
-                            <td>             
-                                <b><img src="{{ eventUsers[user].give_avatar_path() }} " width="40">     {{eventUsers[user].name}} {{eventUsers[user].last_name}} </b>
-                        
-                                {% if current_user.is_admin or event.admin_id == current_user.id %}
-                                    <td>
-                                    <!-- Button trigger modal -->
-                                        <a type="button" class="btn btn-danger btn-sm delete-confirm" 
-                                        data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                                        data-desc="Napewno chcesz usunać użytkownika: {{eventUsers[user].name}} {{eventUsers[user].last_name}}?"
-                                        data-url="{{ url_for('event.admin_delete_contestant', event_id = event.id, user_id = eventUsers[user].id)}}">
-                                            Usuń
-                                        </a>
+                                    {% if current_user.is_admin or event.admin_id == current_user.id %}
+                                    <th scope="col">Akcje</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in eventUsers: %}
+                                <tr>
+                                    <td scope="row">{{loop.index}}</td>
+                                    <td>             
+                                        <b><img class="img-account-profile" src="{{ eventUsers[user].give_avatar_path() }} " width="40"  style="border-radius: 10px;">     {{eventUsers[user].name}} {{eventUsers[user].last_name}} </b>
+                                
+                                        {% if current_user.is_admin or event.admin_id == current_user.id %}
+                                            <td>
+                                            <!-- Button trigger modal -->
+                                                <a type="button" class="btn btn-danger btn-sm delete-confirm" 
+                                                data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                                data-desc="Napewno chcesz usunać użytkownika: {{eventUsers[user].name}} {{eventUsers[user].last_name}}?"
+                                                data-url="{{ url_for('event.admin_delete_contestant', event_id = event.id, user_id = eventUsers[user].id)}}">
+                                                    Usuń
+                                                </a>
+                                            </td>
+                                        {% endif %}
                                     </td>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

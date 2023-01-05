@@ -459,35 +459,56 @@ def loginFacebook():
 
 @user.route("/fb-callback", methods=['GET'])
 def callback():
-    facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback")
 
-	# we need to apply a fix for Facebook here
-    facebook = facebook_compliance_fix(facebook)
 
-    facebook.fetch_token(FB_TOKEN_URL, client_secret=FB_CLIENT_SECRET, authorization_response=flask.request.url)
+    try:
+        if "error" not in request.args:
 
-	# Fetch a protected resource, i.e. user profile, via Graph API
-    facebook_user_data = facebook.get("https://graph.facebook.com/me?fields=id,name,email,picture{url}").json()
+            facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback")
+
+            # we need to apply a fix for Facebook here
+            facebook = facebook_compliance_fix(facebook)
+
+            facebook.fetch_token(FB_TOKEN_URL, client_secret=FB_CLIENT_SECRET, authorization_response=flask.request.url)
+
+            # Fetch a protected resource, i.e. user profile, via Graph API
+            facebook_user_data = facebook.get("https://graph.facebook.com/me?fields=id,name,email,picture{url}").json()
+            
+            email = facebook_user_data["email"]
+            name = facebook_user_data["name"]
+            picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
+            
+            user = User.query.filter(User.mail == email).first()
+            if user != None:
+                message, status, action = user.standard_login(remember=True, social_media_login = True)
+                flash(message, status)
+                return action
+
+            else:
+                full_name = str(name).split(" ")
+                first_name = full_name[0]
+                last_name = full_name[1]
+
+                message, status, action = User.create_account_from_social_media(first_name, last_name, email, "Facebook")
+                flash(message, status)
+
+                return action
+
+        else:
+            message = "Nie udało się połączyć z Facebook. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+            # current_app.logger.warning(f"User {current_user.id} failed to add activity with Strava")
+            return message, 'danger', redirect(url_for('user.login'))
+
+    except:
+        message = "W czasie synchronizacji z Facebook pojawił się nieoczekiwany błąd. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+        # current_app.logger.exception(f"User {current_user.id} failed to add activity with Strava")
+        return message, 'danger', redirect(url_for('user.login'))
+
+
+
+
+
     
-    email = facebook_user_data["email"]
-    name = facebook_user_data["name"]
-    picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
-    
-    user = User.query.filter(User.mail == email).first()
-    if user != None:
-        message, status, action = user.standard_login(remember=True, social_media_login = True)
-        flash(message, status)
-        return action
-
-    else:
-        full_name = str(name).split(" ")
-        first_name = full_name[0]
-        last_name = full_name[1]
-
-        message, status, action = User.create_account_from_social_media(first_name, last_name, email, "Facebook")
-        flash(message, status)
-
-        return action
 
 
 # @login_from_messenger_check

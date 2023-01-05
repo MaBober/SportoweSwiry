@@ -637,10 +637,6 @@ img.icon-add-activity {
 @media (min-width: 1600px) {
 
 
-  .Alert-Message {
-    margin-left: 130px !important;
-  }
-
   .add-activity a {
     width: 100% !important;
     padding-left: 0 !important;

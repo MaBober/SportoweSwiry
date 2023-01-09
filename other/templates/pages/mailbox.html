@@ -46,7 +46,7 @@
 						</ul>
 					</div>
 
-						<div class="form-group Checkbox-Input">
+						<!-- <div class="form-group Checkbox-Input">
 							<label class="form-label"> {{ form.send_by_app.label }} </label>
 							{{ form.send_by_app(class_="form-check-input", id="checkboxAppId") }}
 						</div>
@@ -54,7 +54,7 @@
 						<div class="form-group Checkbox-Input">
 							<label class="form-label"> {{ form.send_by_email.label }} </label>
 							{{ form.send_by_email(class_="form-check-input", id="checkboxEmailId") }}
-						</div>
+						</div> -->
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmWriteMessageForm">
@@ -84,7 +84,7 @@
 				</div>
 				<div class="modal-footer">
 					<form method="GET" id="confirmReadMessage">
-						<button type="submit" class="btn btn-dark" style="background-color: #579956;">Oznacz jako przeczytana</button>
+						<!-- <button type="submit" class="btn btn-dark" style="background-color: #579956;">Oznacz jako przeczytana</button> -->
 					</form>
 				</div>
 
@@ -117,30 +117,42 @@
     </script>
 
 
+
+
 	<script>
 		//Read Message
 		$(document).ready(function () { 
+			var url_2 = '22'
 			// For a write and sent new message
 			// This function is applied to all elements with class ending with ".writeAndSendMessage 
 			$('.readMessageConfirm').click(function () { 
 				// get attributes of the found element 
 				var desc = $(this).attr('data-desc'); 
 				var url = $(this).attr('data-url'); 
+				url_2 = $(this).attr('data-url'); 
 				// the #... designates id of an element - change the text in the modal window 
 				$('#idReadMessageModalBody').text(desc); 
 				$("#confirmReadMessage").attr("action", url); 
 			}); 
+			$(document).on('hide.bs.modal', '#readMessageModal', function () {
+				var url = $('.readMessageModal').attr('data-url'); 
+				window.location.replace(url_2)
+
+			})
 		}); 
 	</script>
 
 	<script>
 		// Checking of checkboxes
 		$("#idMessageModalBody").change(function() {
-			if($("#checkboxAppId").prop('checked') || $("#checkboxEmailId").prop('checked')) {
+			if($true) {
 				$("#sendButtonId").attr("disabled", false);
-			} else {
-				$("#sendButtonId").attr("disabled", true);
-			}
+			} 
+			// if($("#checkboxAppId").prop('checked') || $("#checkboxEmailId").prop('checked')) {
+			// 	$("#sendButtonId").attr("disabled", false);
+			// } else {
+			// 	$("#sendButtonId").attr("disabled", true);
+			// }
     	});
 	</script>
 

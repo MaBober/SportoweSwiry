@@ -1,22 +1,19 @@
 import datetime as dt
-import csv
 import os
+
 
 from flask_login import login_required, current_user
 from start import db, app
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+
+from other.functions import send_email
+from config import Config
+from event.classes import Event
+
 
 
 cron = Blueprint("cron", __name__,
     template_folder='templates')
-
-@cron.route("/cron/test", methods = ['POST'])
-def cron_test_post():
-
-    with open("cron_users.txt", "a") as file:
-        file.write('dad' +"\n")
-
-    return "crom"
 
 @cron.route("/cron/update_events_statuses", methods = ['POST'])
 def cron_update_event_statuses():
@@ -24,13 +21,96 @@ def cron_update_event_statuses():
     from event.classes import Event
 
     events = Event.query.all()
-    log =[]
+    log = []
 
     for event in events:
 
         event.update_status()
 
     return str(log)
+
+
+@cron.route("/cron/send_event_start_reminder", methods = ['POST'])
+def cron_send_event_start_reminder():
+
+    from event.classes import Event
+    from user.classes import User
+    from other.functions import send_email
+    from config import Config
+
+
+    if request.form['key'] != Config.CRON_KEY:
+        current_app.logger.warning(f"Event start reminder cron job requested with wrong key!")
+        return 'Access Denied!'
+
+
+    current_app.logger.info(f"Event start reminder cron job requested with correct key")
+
+    events = Event.query.all()
+    for event in events:
+
+        if event.start == dt.date.today() + dt.timedelta(days=1):
+            current_app.logger.info(f"Event {event.name} starts today. Reminders will be sent.")
+            for user in event.give_all_event_users('Objects'):
+                if user.name == "Konto" and user.last_name == "Usunięte":
+                    pass
+                else:
+                    send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event, user = user)
+
+    return "Start event mails sent"
+
+
+@cron.route("/cron/send_event_week_before_start_reminder", methods = ['POST'])
+def cron_send_event_week_before_start_reminder():
+
+    from event.classes import Event
+    from user.classes import User
+    from other.functions import send_email
+    from config import Config
+
+
+    if request.form['key'] != Config.CRON_KEY:
+        current_app.logger.warning(f"Event start in week reminder cron job requested with wrong key!")
+        return 'Access Denied!'
+
+
+    current_app.logger.info(f"Event start in week reminder cron job requested with correct key")
+
+    events = Event.query.all()
+    for event in events:
+
+        if event.start == dt.date.today() + dt.timedelta(days=7):
+            current_app.logger.info(f"Event {event.name} starts today. Reminders will be sent.")
+            for user in event.give_all_event_users('Objects'):
+                if user.name == "Konto" and user.last_name == "Usunięte":
+                    pass
+                else:
+                    send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się za tydzień!",'emails/event_start_in_week', event = event, user = user)
+
+    return "Start in week event mails sent"
+
+
+@cron.route("/cron/send_event_end_reminder", methods = ['POST'])
+def cron_send_event_end_reminder():
+
+    if request.form['key'] != Config.CRON_KEY:
+        current_app.logger.warning(f"Event end reminder cron job requested with wrong key!")
+        return 'Access Denied!'
+
+    events = Event.query.all()
+    current_app.logger.info(f"Event end reminder cron job requested with correct key")
+
+    for event in events:
+        if event.end == dt.date.today() and Config.CRON_KEY:
+            current_app.logger.info(f"Event {event.name} ends today. Reminder will be sent.")
+            for user in event.give_all_event_users('Objects'):
+                if user.name == "Konto" and user.last_name == "Usunięte":
+                    pass
+                else:
+                    send_email(user.mail, f"Wyzwanie {event.name} kończy się dzisiaj!",'emails/event_end', event = event, user = user)
+
+    return 'End event mails sent!'
+
 
 
 @cron.route("/cron/send_weekly_summary", methods = ['POST'])
@@ -54,12 +134,14 @@ def cron_send_weekly_summary():
               Sumary for : {str(summary.start_date)} - {str(summary.end_date)}
               Admins: {str(admins)}'''
               
+
 @cron.route("/cron/error_summary", methods = ['POST'])
 def cron_errors_summary():
 
     report = generate_error_summary(7)
 
     return report
+
 
 def generate_error_summary(days = 7):
 
@@ -91,6 +173,7 @@ def generate_error_summary(days = 7):
             report[file.split('-')[0] + file.split('-')[1] + file.split('-')[2].split(".")[0]] = day
 
     return report
+
 
 class StatisticalSummary():
 

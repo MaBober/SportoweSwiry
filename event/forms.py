@@ -20,7 +20,7 @@ class EventForm(FlaskForm):
             raise ValidationError("Istnieje już aktywne wyzwanie o takiej nazwie. Wybierz proszę inną nazwę.")
 
     def validate_participants_amount(form,field):
-        if field.data < form.participatns.data:
+        if form.participatns.data != None and field.data < form.participatns.data:
             raise ValidationError(f'Do wyzwania już zapisało się {form.participatns.data} uczestników. Wybierz większą liczbę.')
 
     name = StringField("Nazwa", validators=[DataRequired("Pole nie może być puste"), validate_name_is_free])

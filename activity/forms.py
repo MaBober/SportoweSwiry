@@ -13,12 +13,17 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 # Defines form for activities
 class ActivityForm(FlaskForm):
 
-    def ValidateFutureDate (form, field):
+    def validate_future_date (form, field):
         today=datetime.date.today()
         if field.data>today:
             raise ValidationError("Nie możesz podać daty z przyszłości")
 
-    date = DateField("Data aktywności", validators=[InputRequired("Musisz podać date"), ValidateFutureDate], default=datetime.date.today())
+    def validate_not_to_old(form, field):
+        today = datetime.date.today()
+        if field.data < today - datetime.timedelta(days=10):
+            raise ValidationError("Nie możesz dodać aktywności starszej niż 10 dni!")
+
+    date = DateField("Data aktywności", validators=[InputRequired("Musisz podać date"), validate_future_date, validate_not_to_old], default=datetime.date.today())
     activity = SelectField("Rodzaj aktywności", default=1, choices=[])
     distance = DecimalField("Dystans", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=0)
     time = DateTimeField("Czas", format='%H:%M:%S', default=datetime.time(), validators=[DataRequired(message='Podaj proszę czas w formacie HH:MM:SS')])

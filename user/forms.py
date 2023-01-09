@@ -33,6 +33,7 @@ class UserForm(FlaskForm):
     isAdmin=BooleanField("Admin", default=False)
     avatar=BooleanField("Avatar", default=False)
     statute_acceptance=BooleanField("Akceptuję regulamin serwisu",validators=[DataRequired("Musisz zaakceptować regulamin!")], default=False)
+    subscribe_newsletter = BooleanField("Zapisz się na newsletter.", default=False)
 
 
 class VerifyEmailForm(FlaskForm):
@@ -43,6 +44,10 @@ class VerifyEmailForm(FlaskForm):
                 raise ValidationError("Tego adresu email nie ma w naszej bazie danych")
 
     mail=EmailField("E-mail", validators=[DataRequired("Pole nie może być puste"), Email("Wpisz e-mail w poprawnej formie"), ValidateMailisExist])
+
+
+class SubscribeNewsletter(FlaskForm):
+    policy_acceptance=BooleanField("Akceptuję politykę prywatności serwisu",validators=[DataRequired("Musisz zaakceptować politykę prywatności!")], default=False)
 
 
 class NewPasswordForm(FlaskForm):

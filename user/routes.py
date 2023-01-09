@@ -389,6 +389,10 @@ def rotate_avatar_left():
 @user.route("/google-login")
 def loginGoogle():
 
+    if "127.0.0.1:5000" or "test" in request.base_url:
+        flash("Ta funkcjonalność dostępna wyłącznie w aplikacji produkcyjnej.", 'danger')
+        return redirect(url_for('user.login'))
+
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     flow = Flow.from_client_config(client_config = google_client_config,
@@ -451,6 +455,10 @@ def callbackGoogle():
 @user.route("/fb-login")
 def loginFacebook():
 
+    if "127.0.0.1:5000" or "test" in request.base_url:
+        flash("Ta funkcjonalność dostępna wyłącznie w aplikacji produkcyjnej.", 'danger')
+        return redirect(url_for('user.login'))
+
     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
     authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
 
@@ -459,7 +467,6 @@ def loginFacebook():
 
 @user.route("/fb-callback", methods=['GET'])
 def callback():
-
 
     try:
         if "error" not in request.args:

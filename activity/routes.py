@@ -30,12 +30,16 @@ def add_activity():
     if form.validate_on_submit():
 
         newActivity = Activities()
+        all_events_weeks = current_user.events_weeks_status()
         message, status, url = newActivity.add_to_db(form)
+        current_user.show_events_weeks_changes(all_events_weeks)
 
         flash(message, status)
         return redirect(url_for(url))
 
+    
     user_events = current_user.current_events
+
     for event in user_events:
 
         all_event_activities = event.give_all_event_activities(calculated_values = True)
@@ -78,16 +82,18 @@ def modify_activity(activity_id):
                             distance = activity_to_modify.distance,
                             time = (dt.datetime(1970,1,1) + dt.timedelta(seconds=activity_to_modify.time)).time())
 
-        form.fill_sports_to_select()
-
         if form.validate_on_submit():
 
+            all_events_weeks = current_user.events_weeks_status()
             message, status, url = activity_to_modify.modify(form)
+            current_user.show_events_weeks_changes(all_events_weeks)
             flash(message, status)
         
             return redirect(url_for(url))
 
+        form.fill_sports_to_select()
         user_events = current_user.current_events
+
         for event in user_events:
 
             all_event_activities = event.give_all_event_activities(calculated_values = True)

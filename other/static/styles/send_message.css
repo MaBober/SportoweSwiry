@@ -40,7 +40,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     margin: auto;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
   }
 
   .Input-Box {
@@ -109,8 +109,11 @@ body {
   }
 
   .Error-Message {
-    width: 100%;
+    width: 80%;
     text-align: center;
+    font-size: 15px;
+    color: white;
+    margin: auto;
   }
 
 

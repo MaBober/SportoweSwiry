@@ -6,7 +6,7 @@
   <meta name="x-apple-disable-message-reformatting">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="telephone=no" name="format-detection">
-  <title>Wiadomoc ze skrzynki</title><!--[if (mso 16)]>
+  <title>Wyzwanie zaczyna si za tydzie</title><!--[if (mso 16)]>
     <style type="text/css">
     a {text-decoration: none;}
     </style>
@@ -70,7 +70,7 @@ a[x-apple-data-detectors] {
                   <td align="center" valign="top" style="padding:0;Margin:0;width:410px">
                    <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#ffffff" role="presentation">
                      <tr>
-                      <td class="es-m-txt-c" align="center" style="padding:0;Margin:0;font-size:0px"><img src="https://zomrdt.stripocdn.email/content/guids/CABINET_5870bfa4c49a6bda5fe4c3ba40625dcb/images/logo.png" alt width="108" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></td>
+                      <td class="es-m-txt-c" align="center" style="padding:0;Margin:0;font-size:0px"><img src="https://zomrdt.stripocdn.email/content/guids/CABINET_091b4cca0e704e0be4a3a7144f5cbb77da8463d3bc6ef65117054a4e7abb19ec/images/logo.png" alt width="108" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></td>
                      </tr>
                    </table></td>
                  </tr>
@@ -90,42 +90,41 @@ a[x-apple-data-detectors] {
                   <td valign="top" align="center" style="padding:0;Margin:0;width:410px">
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong><span style="font-size:18px">Cześć!</span></strong></p></td>
+                      <td align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong><span style="font-size:18px">Cześć {{user.name}},</span></strong></p></td>
                      </tr>
                      <tr>
-                      <td align="left" style="padding:0;Margin:0;padding-top:15px"><h3 style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:20px;font-style:normal;font-weight:bold;color:#333333">Użytkownik {{name}} {{last_name}} ({{mail}}) przesyła wiadomość:</h3></td>
-                     </tr>
-                     <tr>
-                      <td align="center" style="padding:20px;Margin:0;font-size:0">
-                       <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                         <tr>
-                          <td style="padding:0;Margin:0;border-bottom:1px solid #cccccc;background:unset;height:1px;width:100%;margin:0px"></td>
-                         </tr>
-                       </table></td>
-                     </tr>
-                     <tr>
-                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify"><em><strong>Temat: {{topic}}<br></strong><br>{{message}}</em></p></td>
-                     </tr>
-                     <tr>
-                      <td align="center" style="padding:20px;Margin:0;font-size:0">
-                       <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                         <tr>
-                          <td style="padding:0;Margin:0;border-bottom:1px solid #cccccc;background:unset;height:1px;width:100%;margin:0px"></td>
-                         </tr>
-                       </table></td>
+                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify">Wpadamy na Twoją skrzynkę z tym e-mailem tylko na chwilę, ale chcielibyśmy Ci przypomnieć, że wyzwanie do, którego się zapisał*ś zaczyna się już za tydzień!<br><br>Jeżeli potrzebujesz się przypomnieć sobie szczegóły wyzwania "<strong>{{event.name}}",</strong> garść informacji znajdziesz poniżej. Po więcej szczegółów kliknij&nbsp;<a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#5C68E2;font-size:14px;text-align:justify" href="https://sportoweswiry.com.pl{{ url_for('event.event_main', event_id=event.id )}}">TUTAJ</a> (lub&nbsp;w przycisk poniżej).</p></td>
                      </tr>
                    </table></td>
                  </tr>
                </table></td>
              </tr>
              <tr>
-              <td align="left" style="padding:0;Margin:0;padding-bottom:5px;padding-left:20px;padding-right:20px">
-               <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+              <td class="esdev-adapt-off" align="left" style="Margin:0;padding-top:5px;padding-bottom:5px;padding-left:20px;padding-right:20px">
+               <table cellspacing="0" cellpadding="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                  <tr>
-                  <td valign="top" align="center" style="padding:0;Margin:0;width:410px">
+                  <td class="es-m-p0r" align="center" style="padding:0;Margin:0;width:410px">
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px;text-align:justify">Uwaga: Wiadomość przesłana za pośrednictwem formularza kontaktowego.</p></td>
+                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;- <strong>Data rozpoczęcia:</strong> {{ event.start }}</p></td>
+                     </tr>
+                     <tr>
+                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;-&nbsp;<strong>Koniec wyzwania:&nbsp;</strong>{{event.end}}</p></td>
+                     </tr>
+                     <tr>
+                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;- <strong>Ilość uczestników:&nbsp;&nbsp;</strong>{{event.give_all_event_users('Objects') | length }}</p></td>
+                     </tr>
+                     <tr>
+                      <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">&nbsp;- <strong>Cel na pierwszy tydzień: </strong>{{event.week_targets[event.week_targets['week'] == 1]['target'].values[0] }} km</p></td>
+                     </tr>
+                     <tr>
+                      <td align="center" style="padding:5px;Margin:0"><!--[if mso]><a href="https://sportoweswiry.com.pl{{ url_for('event.event_main', event_id=event.id )}}" target="_blank" hidden>
+	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://sportoweswiry.com.pl{{ url_for('event.event_main', event_id=event.id )}}" 
+                style="height:48px; v-text-anchor:middle; width:281px" arcsize="21%" stroke="f"  fillcolor="#579956">
+		<w:anchorlock></w:anchorlock>
+		<center style='color:#ffffff; font-family:arial, "helvetica neue", helvetica, sans-serif; font-size:19px; font-weight:400; line-height:19px;  mso-text-raise:1px'>Szczegóły wyzwania</center>
+	</v:roundrect></a>
+<![endif]--><!--[if !mso]><!-- --><span class="msohide es-button-border" style="border-style:solid;border-color:#2CB543;background:#579956;border-width:0px;display:inline-block;border-radius:10px;width:auto;mso-hide:all"><a href="https://sportoweswiry.com.pl{{ url_for('event.event_main', event_id=event.id )}}" class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:24px;border-style:solid;border-color:#579956;border-width:10px 30px 10px 30px;display:inline-block;background:#579956;border-radius:10px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:29px;width:auto;text-align:center">Szczegóły wyzwania</a></span><!--<![endif]--></td>
                      </tr>
                    </table></td>
                  </tr>
@@ -141,6 +140,17 @@ a[x-apple-data-detectors] {
              <tr>
               <td align="left" bgcolor="#ffffff" style="padding:0;Margin:0;padding-top:10px;padding-left:20px;padding-right:20px;background-color:#ffffff">
                <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                 <tr>
+                  <td align="center" valign="top" style="padding:0;Margin:0;width:410px">
+                   <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                     <tr>
+                      <td style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#333333;font-size:12px;text-align:justify"><em>Do zobaczenia na trasie!<br>Zespół Sportowych Świrów</em></p></td>
+                     </tr>
+                     <tr>
+                      <td style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#333333;font-size:12px;text-align:justify">PS Masz jakieś pytania lub wątpliwości? A możesz nie wiesz, jak zacząć działać? Chętnie odpowiemy na wszystkie Twoje pytania. Możesz po prostu odpowiedzieć na ten e-mail, lub napisać do nas naa <a target="_blank" href="mailto:kontakt@sportoweswiry.com.pl" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#333333;font-size:12px;text-align:justify">kontakt@sportoweswiry.com.pl</a></p></td>
+                     </tr>
+                   </table></td>
+                 </tr>
                  <tr>
                   <td align="left" style="padding:0;Margin:0;width:410px">
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">

@@ -1,0 +1,11 @@
+Cześć {{user.name}}, 
+
+Twoje wyzwanie {{event.name}} kończy się dziś!
+
+Gratulacje! Przez {{event.length_weeks}} tygodni rywalizował*ś ze swoimi znajomymi, a co najważniejsze mamy nadzieję, że dobrze się bawił*ś!
+Teraz pora na zasłużony odpoczynek i odebranie nagród!
+
+Pamiętaj, żeby DODAĆ BRAKUJĄCE AKTYWNOŚCI, sprawdzić w jaki sposób odebrać, lub przekazać, nagrody za realizacje tygodniowych celi.
+Na dodanie brakujących aktywności masz czas jeszcze tydzień!
+
+Już dziś rozejrzyj się za nowym wyzwaniem!

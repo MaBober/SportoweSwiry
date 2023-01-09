@@ -1,0 +1,15 @@
+<div class="card mb-4 Single-Card-Box">
+    <div class="card-header">Newsletter</div>
+    <form method="POST" enctype="multipart/form-data">
+        {{ newsletter_form.csrf_token }}
+        <div class="card-body"> 
+            <div class="row justify-content-center" style="padding-left: 40px; padding-right: 40px; margin-bottom: 15px;">
+                <button class="btn btn-dark Account-Settings-Main-Button" style="background-color: #182c07e8;" type="submit">Zapisz do Newsletter'a</button>
+            </div>
+
+                <div style="padding-left: 40px; padding-right: 40px; margin-bottom: 10px;">
+                    {{newsletter_form.policy_acceptance}} Zapisz się na nasz Newsletter, aby otrzymwać wszystkie nowości dotyczące Sportowych Świrów! Dodając się, zgadzasz się z naszą  <a href="{{url_for('other.privacy_policy')}}">polityką prywatności</a>
+                </div>
+            </div>
+    </form>
+</div>

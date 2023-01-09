@@ -101,6 +101,10 @@
                         </div>
                         {% if event.status in ["0"] %}
                         <div class = 'row'>
+                            <a href="#" type="button" class="btn Main-Button" style="color:white" onclick="copyText()">Udostępnij!</a>
+                        </div>
+                        
+                        <div class = 'row'>
                             <a type="button" class="btn btn-danger btn delete-confirm"
                             data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                             data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?"
@@ -112,8 +116,20 @@
                     </div>
                 </div>
             </div> 
+
+            <script>
+                function copyText() {
+                
+                    /* Copy text into clipboard */
+                    navigator.clipboard.writeText
+                        ("https://sportoweswiry.com.pl{{ url_for('event.event_preview', event_id=event.id) }}");
+                    alert("Skopiowano link do wydarzenia!")
+                }
+            </script>
         {% endfor %}
     {% endif %}
 </div>
+
+
 
 {% endblock %}

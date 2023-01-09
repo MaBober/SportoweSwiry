@@ -393,6 +393,10 @@ def loginGoogle():
         flash("Ta funkcjonalność dostępna wyłącznie w aplikacji produkcyjnej.", 'danger')
         return redirect(url_for('user.login'))
 
+    if "FB_IAB" in request.headers.get('User-Agent'):
+        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger", 'danger')
+        return redirect(url_for('user.login'))
+
     #Gogole
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     flow = Flow.from_client_config(client_config = google_client_config,
@@ -457,6 +461,10 @@ def loginFacebook():
 
     if "127.0.0.1:5000" or "test" in request.base_url:
         flash("Ta funkcjonalność dostępna wyłącznie w aplikacji produkcyjnej.", 'danger')
+        return redirect(url_for('user.login'))
+
+    if "FB_IAB" in request.headers.get('User-Agent'):
+        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger", 'danger')
         return redirect(url_for('user.login'))
 
     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)

@@ -1,9 +1,4 @@
-from importlib_metadata import metadata
 from start import app, db
-from sqlalchemy.ext.declarative import declarative_base
-
-# Base = declarative_base()
-# Base.metadata.create_all(db.get_engine(app))
 
 from user.routes import user
 from other.routes import other
@@ -17,11 +12,7 @@ app.register_blueprint(event)
 app.register_blueprint(activity)
 app.register_blueprint(cron)
 
-from user.classes import User
-
 from startupFunctions import checkIfIsAdmin
-#from event.functions import createCofficientTemplate
-
 
 app.debug = True
 
@@ -29,7 +20,7 @@ app.debug = True
 def appStartup():
     db.create_all()
     checkIfIsAdmin()
-    #createCofficientTemplate()
+    
 
 @app.after_request
 def add_header(response):

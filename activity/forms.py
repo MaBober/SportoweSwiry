@@ -6,8 +6,7 @@ from wtforms.fields import StringField, EmailField, DecimalField, DateField, Sel
 from wtforms.validators import DataRequired, Email, ValidationError, NumberRange, InputRequired, NumberRange
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
-
-
+from config import Config
 
 # Defines form for activities
 class ActivityForm(FlaskForm):
@@ -19,7 +18,7 @@ class ActivityForm(FlaskForm):
 
     def validate_not_to_old(form, field):
         today = datetime.date.today()
-        if field.data < today - datetime.timedelta(days=10):
+        if field.data < today - datetime.timedelta(days = Config.DAYS_TO_ADD_ACTIVITY):
             raise ValidationError("Nie możesz dodać aktywności starszej niż 10 dni!")
 
     date = DateField("Data aktywności", validators=[InputRequired("Musisz podać date"), validate_future_date, validate_not_to_old], default=datetime.date.today())

@@ -1,25 +1,24 @@
-import pandas as pd
-import pygal
-
 from start import db, app
+from flask import current_app, redirect, url_for, render_template
 from flask_login import UserMixin, current_user, login_user, logout_user
 from sqlalchemy.exc import SQLAlchemyError
+from config import Config
+
 from other.functions import send_email
-import hashlib
-import binascii
-from flask import current_app, redirect, url_for, render_template
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from other.classes import MailboxMessage
+from .functions import password_generator
+
 import os
 import requests
 import datetime as dt
-from config import Config
+import pandas as pd
+import pygal
+import hashlib
+import binascii
 
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from PIL import Image, UnidentifiedImageError
-from other.classes import MailboxMessage
-from event.classes import Event
-from .functions import password_generator
-
 
 
 class User(db.Model, UserMixin):

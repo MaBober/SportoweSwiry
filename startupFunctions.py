@@ -1,7 +1,6 @@
 from start import db
 from flask import current_app
 from user.classes import User
-from event.classes import Event
 
 def checkIfIsAdmin():
     #checking if admin already exist

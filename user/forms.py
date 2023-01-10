@@ -1,8 +1,10 @@
-from .classes import User
+
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, EmailField, PasswordField, BooleanField, DecimalField, DateField, IntegerField, SelectField, DateTimeField, SubmitField, HiddenField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, ValidationError, NumberRange, InputRequired, NumberRange, EqualTo
+from wtforms.fields import StringField, EmailField, PasswordField, BooleanField
+from wtforms.validators import DataRequired, Length, Email, ValidationError
 from flask_wtf.file import FileField, FileAllowed, FileRequired
+
+from .classes import User
 
 MAX_AVATAR_SIZE_IN_MB = 5
 

@@ -1,23 +1,16 @@
 from start import app, db
-from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort, current_app
-
-
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from urllib.parse import urlparse, urljoin
-from sqlalchemy.exc import SQLAlchemyError
-import os
-
+from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort
+from flask_login import LoginManager, logout_user, login_required, current_user
+from flask_avatars import Avatars
 
 from .classes import User, DashboardPage, UserBans
 from .forms import UserForm, LoginForm, NewPasswordForm, VerifyEmailForm, UploadAvatarForm, BanReason, SubscribeNewsletter
-import functools
-from .functions import save_avatar_from_facebook, account_confirmation_check, login_from_messenger_check
+from .functions import account_confirmation_check, login_from_messenger_check
 
-from werkzeug.utils import secure_filename
+from urllib.parse import urlparse, urljoin
 
+import os
 
-from PIL import Image
-from flask_avatars import Avatars
 
 #Google and Facebook authorization
 import requests_oauthlib
@@ -519,76 +512,7 @@ def callback():
         # current_app.logger.exception(f"User {current_user.id} failed to add activity with Strava")
         return message, 'danger', redirect(url_for('user.login'))
 
-
-
-
-
-    
-
-
-# @login_from_messenger_check
-# @user.route("/fb-login-connect")
-# def loginConnectFacebook():
-
-#     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-#     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback-connect", scope=FB_SCOPE)
-#     authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
-
-#     return flask.redirect(authorization_url)
-
-
-# @user.route("/fb-callback-connect", methods=['GET'])
-# @login_required #This page needs to be login
-# def callbackConnect():
-#     facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback-connect")
-
-# 	# we need to apply a fix for Facebook here
-#     facebook = facebook_compliance_fix(facebook)
-
-#     facebook.fetch_token(FB_TOKEN_URL, client_secret = FB_CLIENT_SECRET, authorization_response = flask.request.url)
-
-# 	# Fetch a protected resource, i.e. user profile, via Graph API
-#     facebook_user_data = facebook.get("https://graph.facebook.com/me?fields=id,name,email,picture{url}").json()
-    
-#     email = facebook_user_data["email"]
-#     name = facebook_user_data["name"]
-#     picture_url = facebook_user_data.get("picture", {}).get("data", {}).get("url")
-
-#     checkingExistUser=User.query.filter(User.mail == email).first()
-
-#     if checkingExistUser:
-#         flash("Konto facebook ({}) jest już wykorzystywane przez innego użytkownika. Użyj innego konta facebook".format(email))
-
-#     else:
-#         user = User.query.filter(User.id == current_user.id).first()
-#         fullName = str(name).split(" ")
-#         firstName = fullName[0]
-#         last_name = fullName[1]
-#         user.name = firstName
-#         user.last_name = last_name
-#         user.mail = email
-#         db.session.commit()
-#         save_avatar_from_facebook(picture_url, current_user.id)
-#         flash("Twoje konto zostało połączone z kontem na facebooku: {} ({})".format(name,email))
-
-#     return redirect(url_for('user.settings'))
-
-
-# @login_from_messenger_check
-# @user.route("/google-login-connect")
-# def googleLoginConnect():
-
-#     #Gogole
-#     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-#     flow = Flow.from_client_config(client_config = google_client_config,
-#                                     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-#                                     redirect_uri="https://sportoweswiry.com.pl/callback")
-    
-#     authorization_url, state = flow.authorization_url() 
-#     session["state"] = state   
-
-#     return redirect(authorization_url)
-
+        
 
 @user.route("/subscribe_newsletter", methods=['GET'])
 @login_required

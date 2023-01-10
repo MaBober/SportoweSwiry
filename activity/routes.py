@@ -8,8 +8,6 @@ from user.functions import account_confirmation_check
 
 import datetime as dt
 
-
-
 activity = Blueprint("activity", __name__,
             template_folder='templates',
             static_folder='static',

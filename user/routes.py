@@ -1,5 +1,6 @@
 from start import app, db
-from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort
+from sqlalchemy.exc import SQLAlchemyError
+from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort, current_app
 from flask_login import LoginManager, logout_user, login_required, current_user
 from flask_avatars import Avatars
 
@@ -460,10 +461,24 @@ def loginFacebook():
         flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger", 'danger')
         return redirect(url_for('user.login'))
 
-    facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
-    authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
+    try:
+        if "error" not in request.args:
 
-    return flask.redirect(authorization_url)
+            facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, redirect_uri=URL + "/fb-callback", scope=FB_SCOPE)
+            authorization_url, _ = facebook.authorization_url(FB_AUTHORIZATION_BASE_URL)
+
+            return flask.redirect(authorization_url)
+
+        else:
+                message = "Nie udało się połączyć z Facebook. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+                current_app.logger.warning(f"User {current_user.id} failed in login by facebook")
+                return message, 'danger', redirect(url_for('user.login'))
+
+    except:
+        message = "W czasie synchronizacji z Facebook pojawił się nieoczekiwany błąd. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+        current_app.logger.exception(f"User {current_user.id} failed in login by facebook")
+        return message, 'danger', redirect(url_for('user.login'))
+    
 
 
 @user.route("/fb-callback", methods=['GET'])
@@ -504,12 +519,12 @@ def callback():
 
         else:
             message = "Nie udało się połączyć z Facebook. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
-            # current_app.logger.warning(f"User {current_user.id} failed to add activity with Strava")
+            current_app.logger.warning(f"User {current_user.id} failed in login by facebook")
             return message, 'danger', redirect(url_for('user.login'))
 
     except:
         message = "W czasie synchronizacji z Facebook pojawił się nieoczekiwany błąd. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
-        # current_app.logger.exception(f"User {current_user.id} failed to add activity with Strava")
+        current_app.logger.exception(f"User {current_user.id} failed in login by facebook")
         return message, 'danger', redirect(url_for('user.login'))
 
         

@@ -1,16 +1,13 @@
-from start import  db, app
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 
-from activity.classes import Activities
-from activity.forms import ActivityForm
-from user.functions import account_confirmation_check
+from .classes import Activities
+from .forms import ActivityForm
 from .strava import serve_strava_callback
-from .classes import Activities, Sport
-from event.classes import Event
+from user.functions import account_confirmation_check
 
 import datetime as dt
-import csv
+
 
 
 activity = Blueprint("activity", __name__,

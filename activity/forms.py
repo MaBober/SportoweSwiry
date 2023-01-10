@@ -1,7 +1,6 @@
 #from datetime import datetime
 import datetime
 
-from start import db
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, EmailField, DecimalField, DateField, SelectField, DateTimeField, TextAreaField
 from wtforms.validators import DataRequired, Email, ValidationError, NumberRange, InputRequired, NumberRange

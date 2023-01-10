@@ -1,16 +1,16 @@
 from flask_login import current_user
 from flask import redirect, url_for, current_app
-import hashlib
-import binascii
 from start import db
+
+from activity.classes import Activities, Sport
+
 import datetime as dt
 import pandas as pd
-from activity.classes import Activities
 import numpy as np
 
-
-from activity.classes import Sport
 import math
+import hashlib
+import binascii
 
 #Defines event table
 class Event(db.Model):

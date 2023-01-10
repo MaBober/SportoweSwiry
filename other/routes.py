@@ -1,10 +1,5 @@
 from flask_login import current_user, login_required
-from flask import Blueprint, make_response, render_template, redirect, url_for, blueprints, request
-
-from flask import flash
-
-from datetime import datetime, timedelta
-import datetime
+from flask import Blueprint, make_response, render_template, redirect, url_for, request, flash
 
 from .classes import MailboxMessage
 from .forms import MessageForm,  AppMailForm, AppMailToRead
@@ -12,7 +7,8 @@ from .functions import send_email, send_message_from_contact_form_to_db
 from user.classes import User
 from user.functions import account_confirmation_check
 
-from start import db    
+import datetime as dt
+  
 
 other = Blueprint("other", __name__,
     template_folder = 'templates',
@@ -67,9 +63,9 @@ def send_message():
         admins = User.query.filter(User.is_admin == True).all()
         for admin in admins:
             if current_user.is_authenticated:
-                new_message = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, sender_name=current_user.name+" "+current_user.last_name, receiver = admin.mail, receiver_name = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, send_by_app = False, send_by_email= True, message_readed=False, multiple_message=True)
+                new_message = MailboxMessage(date = dt.date.today(), sender=form.mail.data, sender_name=current_user.name+" "+current_user.last_name, receiver = admin.mail, receiver_name = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, send_by_app = False, send_by_email= True, message_readed=False, multiple_message=True)
             else:
-                new_message = MailboxMessage(date=datetime.date.today(), sender=form.mail.data, sender_name=form.name.data, receiver = admin.mail, receiver_name = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, send_by_app = False, send_by_email= True, message_readed=False, multiple_message=True)
+                new_message = MailboxMessage(date = dt.date.today(), sender=form.mail.data, sender_name=form.name.data, receiver = admin.mail, receiver_name = admin.name+" "+admin.last_name, subject = "Formularz kontaktowy: "+form.subject.data, message = form.message.data, send_by_app = False, send_by_email= True, message_readed=False, multiple_message=True)
             send_message_from_contact_form_to_db(new_message)
         
         flash("Wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.")
@@ -138,7 +134,7 @@ def accept_cookies():
 
     if request.method == 'POST':
 
-        expire_date = datetime.datetime.now() + datetime.timedelta(days=365)
+        expire_date = dt.datetime.now() + dt.timedelta(days=365)
         response = make_response(redirect(source))
         response.set_cookie(key='cookie_consent', value='true', expires=expire_date)
 

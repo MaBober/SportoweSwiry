@@ -1,14 +1,14 @@
 from start import db
 from flask import redirect, url_for, current_app
 from flask_login import current_user
+from config import Config
+
 from activity.classes import Activities, Sport
 
 import requests
 import pandas as pd
 import datetime as dt
 import urllib3
-
-from config import Config
 
 def serve_strava_callback(request):
     try:

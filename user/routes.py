@@ -1,5 +1,5 @@
 from start import app, db
-from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort
+from flask import Blueprint, render_template, flash , redirect, url_for, request, session, abort, current_app
 
 
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -459,8 +459,12 @@ def callbackGoogle():
 @user.route("/fb-login")
 def loginFacebook():
 
+    print(request.base_url)
+    current_app.logger.warning(f"request.base_url {request.base_url} , '127.0.0.1:5000' or 'test' in request.base_url {'127.0.0.1:5000' or 'test' in request.base_url}")
+
+    print('elo' in request.base_url )
     if "127.0.0.1:5000" or "test" in request.base_url:
-        flash("Ta funkcjonalność dostępna wyłącznie w aplikacji produkcyjnej.", 'danger')
+        flash("Ta funkcjonalność dostępna jest wyłącznie w aplikacji produkcyjnej.", 'danger')
         return redirect(url_for('user.login'))
 
     if "FB_IAB" in request.headers.get('User-Agent'):

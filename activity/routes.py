@@ -1,16 +1,13 @@
-from start import  db, app
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 
-from activity.classes import Activities
-from activity.forms import ActivityForm
-from user.functions import account_confirmation_check
+from .classes import Activities
+from .forms import ActivityForm
 from .strava import serve_strava_callback
-from .classes import Activities, Sport
-from event.classes import Event
+from user.functions import account_confirmation_check
 
 import datetime as dt
-import csv
+
 
 
 activity = Blueprint("activity", __name__,
@@ -196,8 +193,10 @@ def my_activities():
 @activity.route("/strava_login")
 @login_required
 def strava_login():
+
     current_app.logger.info(f'User {current_user.id} clicked "Connect with Strava" button')
-    return redirect('https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=http://127.0.0.1:5000/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all')
+    url = 'https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=' + request.base_url.replace('/strava_login', '') + '/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all'
+    return redirect(url) 
 
 
 @activity.route("/strava-callback",methods=['GET'])

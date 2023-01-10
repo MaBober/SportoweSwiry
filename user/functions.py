@@ -1,32 +1,16 @@
-from start import app, db
+from start import app
 from flask import redirect, url_for, request, flash
-from flask_login import current_user, login_user
-
-# from .classes import User
+from flask_login import current_user
 
 from urllib.parse import urlparse, urljoin
 from werkzeug.utils import secure_filename
 from functools import wraps
+from PIL import Image
+
 import urllib.request
 import os
-from PIL import Image
 import random
 import string
-
-
-
-
-# def standard_login(user, remember=True):
-#     login_user(user, remember)
-#     check_next_url()
-#     return None
-
-
-# def login_from_facebook(user, picture_url, remember=True):
-#     login_user(user, remember)
-#     save_avatar_from_facebook(picture_url)
-#     check_next_url()
-#     return None
 
 
 def check_next_url():
@@ -51,45 +35,6 @@ def save_avatar_from_facebook(picture_url):
     urllib.request.urlretrieve(picture_url, os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
     return True
 
-
-# def create_standard_account(form):
-#         #Rewriting data from the form
-#         newUser=User(name=form.name.data, last_name=form.lastName.data, mail=form.mail.data, 
-#                     id=form.name.data[0:3]+form.lastName.data[0:3], password=form.password.data)
-
-#         #Generatin new user ID
-#         newUser.id = newUser.generate_ID()
-#         newUser.id = newUser.removeAccents()
-
-#         #Hash of password       
-#         newUser.password=newUser.hash_password()
-
-#         #adding admins to datebase 
-#         db.session.add(newUser)
-#         db.session.commit()
-
-#         return newUser
-
-
-# def create_account_from_social_media(first_name, last_name, email):
-
-#     from .classes import User
-    
-#     newUser=User(name=first_name, last_name=last_name, mail=email, 
-#                 id=first_name[0:3]+last_name[0:3], password=password_generator(), isAdmin=False, confirmed=True, isAddedByGoogle=True)
-
-#     #Generatin new user ID
-#     newUser.id = newUser.generate_ID()
-#     newUser.id = newUser.removeAccents()
-
-#     #Hash of password       
-#     newUser.password=newUser.hash_password()
-
-#     #adding admins to datebase 
-#     db.session.add(newUser)
-#     db.session.commit()
-
-    return True
 
 def password_generator():
     characters=[]
@@ -136,3 +81,6 @@ def login_from_messenger_check(initial_function):
 		
         return initial_function(*args, **kwargs)
     return wrapped_function
+
+
+

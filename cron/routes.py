@@ -1,15 +1,12 @@
-import datetime as dt
-import os
 
-
-from flask_login import login_required, current_user
-from start import db, app
-from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+from flask import Blueprint, request, current_app
+from config import Config
 
 from other.functions import send_email
-from config import Config
 from event.classes import Event
 
+import datetime as dt
+import os
 
 
 cron = Blueprint("cron", __name__,

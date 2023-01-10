@@ -1,16 +1,14 @@
-import datetime as dt
-import csv
 
 from flask_login import login_required, current_user
-from start import db, app
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 
 from .classes import *
 from .forms import CoeficientsForm, DistancesForm, EventForm, NewSportToEventForm, EventPassword
-from activity.classes import Activities, Sport
+from activity.classes import Sport
 from user.functions import account_confirmation_check
 from user.classes import User
 
+import datetime as dt
 
 MAX_EVENTS_AS_ADMIN = 3
 

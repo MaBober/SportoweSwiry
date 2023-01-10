@@ -632,7 +632,16 @@ class Event(db.Model):
 
         users = self.give_all_event_users(scope = 'Objects')
         for user in users:
-            activites_list = activites_list.append({'user_id': user.id, 'activity_type_id':1, 'date':self.start, 'distance':1, 'time':0, 'calculated_distance':0, 'name':user.name, 'last_name':user.last_name}, ignore_index=True)
+            
+            data = {'user_id': user.id,
+                    'activity_type_id':1,
+                    'date':self.start,
+                    'distance':1,
+                    'time':0,
+                    'calculated_distance':0,
+                    'name':user.name,
+                    'last_name':user.last_name}
+            activites_list = pd.concat([activites_list, pd.DataFrame(data, index = [0])], ignore_index=True)
 
         # CREATE PIVOT TABLE FOR WHOLE EVENT
         activities_pivot = activites_list.pivot_table(index="date", columns =['user_id','name','last_name'], values=['calculated_distance'], aggfunc='sum')
@@ -648,10 +657,11 @@ class Event(db.Model):
         event_days = {"date" : event_days_timestamps}
         event_days = pd.DataFrame(event_days)
 
-        tt = activites_list['date'].append(event_days['date']).unique()
-        
+        tt = pd.concat([activites_list['date'],event_days['date']]).unique()
+
         activities_pivot = activities_pivot.reindex(tt, fill_value=0)
         activities_pivot = activities_pivot.sort_values('date')
+        
 
         # SPLIT PIVOT TABLES FOR WEEK SUB-TABLES
         split_list =  np.array_split(activities_pivot, self.length_weeks)

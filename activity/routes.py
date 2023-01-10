@@ -196,8 +196,10 @@ def my_activities():
 @activity.route("/strava_login")
 @login_required
 def strava_login():
+
     current_app.logger.info(f'User {current_user.id} clicked "Connect with Strava" button')
-    return redirect('https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=http://127.0.0.1:5000/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all')
+    url = 'https://www.strava.com/oauth/authorize?client_id=87931&response_type=code&redirect_uri=' + request.base_url.replace('/strava_login', '') + '/strava-callback&approval_prompt=force&scope=profile:read_all,activity:read_all'
+    return redirect(url) 
 
 
 @activity.route("/strava-callback",methods=['GET'])

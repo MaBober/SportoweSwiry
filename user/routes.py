@@ -457,10 +457,6 @@ def loginFacebook():
         flash("Ta funkcjonalność dostępna jest wyłącznie w aplikacji produkcyjnej.", 'danger')
         return redirect(url_for('user.login'))
 
-    if "FB_IAB" in request.headers.get('User-Agent'):
-        flash("Autoryzacja Google nie działa bezpośrednio z aplikacji Messenger", 'danger')
-        return redirect(url_for('user.login'))
-
     try:
         if "error" not in request.args:
 
@@ -470,16 +466,15 @@ def loginFacebook():
             return flask.redirect(authorization_url)
 
         else:
-                message = "Nie udało się połączyć z Facebook. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
-                current_app.logger.warning(f"User {current_user.id} failed in login by facebook")
-                return message, 'danger', redirect(url_for('user.login'))
+            message = "Nie udało się połączyć z Facebook. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
+            current_app.logger.warning(f"User {current_user.id} failed in login by facebook")
+            return message, 'danger', redirect(url_for('user.login'))
 
     except:
         message = "W czasie synchronizacji z Facebook pojawił się nieoczekiwany błąd. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
         current_app.logger.exception(f"User {current_user.id} failed in login by facebook")
         return message, 'danger', redirect(url_for('user.login'))
     
-
 
 @user.route("/fb-callback", methods=['GET'])
 def callback():

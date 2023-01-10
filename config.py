@@ -32,3 +32,4 @@ class Config:
     STRAVA_CLIENT_SECRET = os.environ.get('STRAVA_CLIENT_SECRET')
     CRON_KEY = os.environ.get('CRON_KEY')
     MAILERLITE_TOKEN = os.environ.get('MAILERLITE_TOKEN')
+    DAYS_TO_ADD_ACTIVITY = 10

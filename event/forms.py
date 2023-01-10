@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, BooleanField, DecimalField, DateField, IntegerField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, NumberRange,NumberRange, Length, ValidationError
+from wtforms.validators import DataRequired, NumberRange,NumberRange, ValidationError
+
 from .classes import Event
+
 import datetime as dt
 
 

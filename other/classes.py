@@ -1,12 +1,11 @@
 
-from start import app
-from start import db
-
-import datetime
+from start import app, db
 from flask_login import current_user
 from flask import current_app
 
 from event.classes import Event
+
+import datetime
 
 
 

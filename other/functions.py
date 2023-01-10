@@ -1,10 +1,7 @@
 
-from start import db
+from start import db, app
 from flask import render_template, current_app, request
 from flask_mail import Mail, Message
-from start import app
-from .classes import MailboxMessage
-
 
 
 mail = Mail(app)

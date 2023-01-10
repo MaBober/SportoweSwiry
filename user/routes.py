@@ -389,7 +389,7 @@ def rotate_avatar_left():
 @user.route("/google-login")
 def loginGoogle():
 
-    if "127.0.0.1:5000" or "test" in request.base_url:
+    if '127.0.0.1:5000' in request.base_url or 'test' in request.base_url:
         flash("Ta funkcjonalność dostępna wyłącznie w aplikacji produkcyjnej.", 'danger')
         return redirect(url_for('user.login'))
 
@@ -459,11 +459,7 @@ def callbackGoogle():
 @user.route("/fb-login")
 def loginFacebook():
 
-    print(request.base_url)
-    current_app.logger.warning(f"request.base_url {request.base_url} , '127.0.0.1:5000' or 'test' in request.base_url {'127.0.0.1:5000' or 'test' in request.base_url}")
-
-    print('elo' in request.base_url )
-    if "127.0.0.1:5000" or "test" in request.base_url:
+    if '127.0.0.1:5000' in request.base_url or 'test' in request.base_url:
         flash("Ta funkcjonalność dostępna jest wyłącznie w aplikacji produkcyjnej.", 'danger')
         return redirect(url_for('user.login'))
 

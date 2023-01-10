@@ -112,7 +112,7 @@ def add_strava_activities_to_db (activities_frame):
         if new_activity_sport == None:
             new_activity_sport = Sport.query.filter(Sport.strava_name == single_activity["activity_type_id"]).first()
             if new_activity_sport == None:
-                new_activity_sport_id = 30
+                new_activity_sport_id = Sport.query.filter(Sport.name == 'Inny').first().id
             else:
                 new_activity_sport_id = new_activity_sport.id
         else:

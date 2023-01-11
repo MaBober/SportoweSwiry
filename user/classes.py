@@ -441,7 +441,7 @@ class User(db.Model, UserMixin):
     
     def rotate_avatar(self, angle):
 
-        current_app.logger.infor(f"User tries to rotate avatar ({angle})")
+        current_app.logger.info(f"User tries to rotate avatar ({angle})")
         try:
 
             filename = secure_filename(self.id + '.jpg')

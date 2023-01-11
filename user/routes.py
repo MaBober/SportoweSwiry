@@ -484,10 +484,8 @@ def loginFacebook():
 @user.route("/fb-callback", methods=['GET'])
 def callback():
 
-    current_app.logger.info("Zaczynam fb-callback!")
     try:
         if "error" not in request.args:
-            current_app.logger.info("Jestem w if error!")
 
             facebook = requests_oauthlib.OAuth2Session(FB_CLIENT_ID, scope=FB_SCOPE, redirect_uri=URL + "/fb-callback")
 
@@ -506,6 +504,7 @@ def callback():
             user = User.query.filter(User.mail == email).first()
             if user != None:
                 message, status, action = user.standard_login(remember=True, social_media_login = True)
+                current_app.logger.info(f"User {current_user.id} loged in with FB!")
                 flash(message, status)
                 return action
 
@@ -520,16 +519,18 @@ def callback():
                 return action
 
         else:
-            current_app.logger.info("Jestem w if else!")
+
             message = "Nie udało się połączyć z Facebook. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
             current_app.logger.warning(f"User failed in login by facebook")
-            return message, 'danger', redirect(url_for('user.login'))
+            flash(message, 'danger')
+            return redirect(url_for('user.login'))
 
     except:
-        current_app.logger.info("Jestem w if except!")
+
         message = "W czasie synchronizacji z Facebook pojawił się nieoczekiwany błąd. Spróbuj ponownie za chwilę, lub skontaktuj się z administratorem."
         current_app.logger.exception(f"User failed in login by facebook")
-        return message, 'danger', redirect(url_for('user.login'))
+        flash(message, 'danger')
+        return redirect(url_for('user.login'))
 
         
 

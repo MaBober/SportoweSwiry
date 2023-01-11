@@ -88,10 +88,10 @@ class LoginForm(FlaskForm):
         temp_user_login = User.query.filter(User.id==self.name.data).first()
         if temp_user_mail != None:
             if (not temp_user_mail.verify_password(field.data)):
-                raise ValidationError("Błędne hasło dla tego adresu e-mail!")
+                raise ValidationError("Błędne dane logowania")
         if temp_user_login != None:
             if (not temp_user_login.verify_password(field.data)):
-                raise ValidationError("Błędne hasło dla tego adresu e-mail!")
+                raise ValidationError("Błędne dane logowania")
 
     name = StringField("Adres mailowy", validators=[validate_login_is_correct])
     password = PasswordField("Hasło", validators=[validate_password])

@@ -367,7 +367,8 @@ def dashboard():
 @login_required #This page needs to be login
 def rotate_avatar_right():
 
-    action = current_user.rotate_avatar(angle = -90)
+    message, status, action = current_user.rotate_avatar(angle = -90)
+    flash(message, status)
     return action
 
 
@@ -375,7 +376,8 @@ def rotate_avatar_right():
 @login_required #This page needs to be login
 def rotate_avatar_left():
 
-    action = current_user.rotate_avatar(angle = 90)
+    message, status, action = current_user.rotate_avatar(angle = 90)
+    flash(message, status)
     return action
 
 

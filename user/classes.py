@@ -449,9 +449,9 @@ class User(db.Model, UserMixin):
             rotatedAvatar = avatar.rotate(angle, expand = True)
             rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
 
-            message = 'Avatar obrócony. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            message = 'Avatar obrócony!'
             current_app.logger.info(f"User {self.id} rotated avatar ({angle})")
-            return message, 'danger', redirect(url_for('user.settings'))
+            return message, 'success', redirect(url_for('user.settings'))
 
         except:
             message = 'AVATAR NIE OBRÓCONY. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'

@@ -128,9 +128,12 @@ def mailbox(actionName):
 @other.route("/accept_cookies", methods=['POST','GET'])
 def accept_cookies():
 
-    source = ''
+    
     if 'source' in request.args:
         source = request.args['source']
+    
+    else:
+        source = url_for('other.hello')
 
     if request.method == 'POST':
 

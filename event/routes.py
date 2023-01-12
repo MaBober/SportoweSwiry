@@ -45,10 +45,13 @@ def join_event(event_id):
         password = request.form['password']
 
     event = Event.query.filter(Event.id == event_id).first()
-        
-    flash_message, status, action  = event.add_partcipant(user = current_user, provided_password = password)
-    flash(flash_message, status)
 
+    if event == None:
+        flash_message, status, action  = Event.join_to_not_existing()
+    else:
+        flash_message, status, action  = event.add_partcipant(user = current_user, provided_password = password)
+
+    flash(flash_message, status)
     return action
     
 

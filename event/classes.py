@@ -779,6 +779,15 @@ class Event(db.Model):
         inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
 
         return len(inserts)
+
+    @staticmethod
+    def join_to_not_existing():
+        message = "Podane wyzwanie nie istnieje!"
+        current_app.logger.warning(f"User {current_user.id} tries to join not existing event!")
+        return message, "danger", redirect(url_for('event.explore_events'))
+
+                
+
         
 # Defines tabele, which connect users with events
 class Participation(db.Model):

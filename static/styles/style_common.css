@@ -227,6 +227,12 @@ body {
 
 }
 
+.cookie-box-content{
+  flex-direction: row;
+  justify-content: center;
+  display: flex;
+}
+
 .cookie-box-text{
   margin-top: 15px;
   margin-bottom: 15px;
@@ -496,6 +502,9 @@ img.icon-add-activity {
     left:195px;
   }
   
+  .cookie-box-content{
+    flex-direction: column;
+  }
   
 }
 

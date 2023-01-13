@@ -227,31 +227,27 @@ body {
 
 }
 
-
 .cookie-box-text{
-  margin-top: 31px;
-  margin-bottom: 28px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   margin-left: 17%;
   margin-right: 17%;
   font-family: Lato;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #000;
+  font-size: 22px;
+  text-decoration: none;
+
 }
 
 .cookie-button {
   /* width: 100px; */
+  min-width: 190px;
   padding-left: 15px;
   padding-right: 15px;
   margin-left: 20px;
   margin-right: 20px;
+  margin-bottom: 10px;
   height: 48px;
-  right: 100px;
+
   top: 57px;
   border-radius: 15px;
   border-width: 0;
@@ -261,6 +257,11 @@ body {
   align-items: center;
   text-decoration: none;
 }
+
+a.cookie-button{
+  text-decoration: none;
+}
+
 
 
 .cookie-button-text {
@@ -285,6 +286,7 @@ a.cookie-button-text {
 
 .cookie-button:hover {
   background-color: #000;
+  text-decoration: none;
 }
 
 

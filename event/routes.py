@@ -60,10 +60,13 @@ def join_event(event_id):
 def leave_event(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
-    message, staus, action = event.leave_event(current_user)
 
-    flash(message, staus)
+    if event == None:
+        message, status, action  = Event.leave_not_existing()
+    else:
+        message, status, action = event.leave_event(current_user)
 
+    flash(message, status)
     return action
 
 

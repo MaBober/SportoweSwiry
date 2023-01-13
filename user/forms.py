@@ -112,5 +112,5 @@ class UploadAvatarForm(FlaskForm):
 
     image = FileField('Wgraj zdjęcie (<=3MB)', validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'Zdjęcie może być wyłącznie w formacie .jpg lub .png'),
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Zdjęcie może być wyłącznie w formacie .jpg lub .png'),
         validate_avatar_size])

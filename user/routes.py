@@ -165,13 +165,21 @@ def reset_password(token):
     form = NewPasswordForm()
     del form.oldPassword
 
-    if form.validate_on_submit():
+    user = User.check_token(token)
 
-        message, status, action = User.reset_password(token, form.newPassword.data)
-        flash(message, status)
-        return action
+    if type(user) == User:
 
-    return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
+        if form.validate_on_submit():
+
+            message, status, action = user.reset_password(form.newPassword.data)
+            flash(message, status)
+            return action
+
+        return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
+    
+    message, status, action = user
+    flash(message, status)
+    return action
 
 @user.route("/ban_user/<user_id>", methods=['POST', 'GET'])
 def ban_user(user_id):

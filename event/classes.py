@@ -786,6 +786,12 @@ class Event(db.Model):
         current_app.logger.warning(f"User {current_user.id} tries to join not existing event!")
         return message, "danger", redirect(url_for('event.explore_events'))
 
+    @staticmethod
+    def leave_not_existing():
+        message = "Podane wyzwanie nie istnieje!"
+        current_app.logger.warning(f"User {current_user.id} tries to leave not existing event!")
+        return message, "danger", redirect(url_for('event.explore_events'))
+
                 
 
         

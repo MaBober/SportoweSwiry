@@ -52,7 +52,6 @@ class Event(db.Model):
         self.is_secret = False
         self.max_user_amount = form.max_users.data
         self.password = form.password.data
-        self.password = self.hash_password()
         self.description = form.description.data
         self.status = 0
 
@@ -121,7 +120,6 @@ class Event(db.Model):
             self.is_private = form.isPrivate.data
             self.description = form.description.data
             self.password = form.password.data
-            self.password = self.hash_password()
             self.max_user_amount  = form.max_users.data
 
             self.update_status()
@@ -194,7 +192,7 @@ class Event(db.Model):
             return message, 'danger', redirect(url_for('event.explore_events'))
 
         event_password = self.password
-        verify = Event.verify_password(event_password, provided_password)
+        verify = event_password == provided_password
 
         if self.is_private and verify is not True:
             message = "Podałeś/aś złe hasło do wyzwania. Spróbuj jeszcze raz!"
@@ -320,27 +318,6 @@ class Event(db.Model):
             
         else:
             return True
-
-        
-    def hash_password(self):
-        """Hash a password for storing."""
-        # the value generated using os.urandom(60)
-        os_urandom_static = b"ID_\x12p:\x8d\xe7&\xcb\xf0=H1\xc1\x16\xac\xe5BX\xd7\xd6j\xe3i\x11\xbe\xaa\x05\xccc\xc2\xe8K\xcf\xf1\xac\x9bFy(\xfbn.`\xe9\xcd\xdd'\xdf`~vm\xae\xf2\x93WD\x04"
-        #os_urandom_static = b"ID_\x12p:\x8d\xe7&\xcb\xf0=H1"
-        salt = hashlib.sha256(os_urandom_static).hexdigest().encode('ascii')
-        pwdhash = hashlib.pbkdf2_hmac('sha512', self.password.encode('utf-8'), salt, 100000)
-        pwdhash = binascii.hexlify(pwdhash)
-        return (salt + pwdhash).decode('ascii') 
-
-
-    def verify_password(stored_password, provided_password):
-        """Verify a stored password against one provided by user"""
-        salt = stored_password[:64]
-        stored_password = stored_password[64:]
-        pwdhash = hashlib.pbkdf2_hmac('sha512', provided_password.encode('utf-8'),
-        salt.encode('ascii'), 100000)
-        pwdhash = binascii.hexlify(pwdhash).decode('ascii')
-        return pwdhash == stored_password
 
 
     @property

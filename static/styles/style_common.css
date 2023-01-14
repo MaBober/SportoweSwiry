@@ -367,6 +367,10 @@ img.icon-add-activity {
   
 }
 
+.Alert-Message:hover {
+  color: white;
+}
+
 .nav-link {
   color: white;
 }

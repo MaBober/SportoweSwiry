@@ -434,6 +434,8 @@ def modify_event(event_id):
 @login_required #This page needs to be login
 def add_new_sport_to_event(event_id):
 
+    event = Event.query.filter(Event.id == event_id).first()
+
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej akcji")
         return redirect(url_for('other.hello'))
@@ -444,8 +446,6 @@ def add_new_sport_to_event(event_id):
         
     
     sport_to_add = Sport.query.filter(Sport.id == request.form['activity_type']).first()
-    event = Event.query.filter(Event.id == event_id).first()
-
     message, status, action = event.add_sport(sport_to_add)
 
     flash(message, status)

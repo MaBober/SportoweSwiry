@@ -84,12 +84,11 @@
                                 </td>
                                 <td>
                                     
-                                    <a href="{{ url_for('event.modify_coefficient', event_id = activity.event_id, activity_type_id = activity.activity_type_id ) }}"  type="button" class="btn btn-sm Main-Button" style="height: max-content;">
+                                    <a href="{{ url_for('event.modify_coefficient', event_id = activity.event_id, activity_type_id = activity.activity_type_id ) }}"  type="button" class="btn btn-sm Main-Button">
                                         Edytuj
                                     </a>
 
-                                    <a type="button" class="btn btn-danger btn-sm delete-confirm Main-Button"
-                                    style="background-color: #e63119; border: solid 2px #e63119;" 
+                                    <a type="button" class="btn btn-danger btn-sm delete-confirm Main-Button Delete-Button"
                                     data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                                     data-desc="{{ 'Napewno chcesz usunać współczynnik dla : {}?'.format(activity.sport) }}"
                                     data-url="{{ url_for('event.delete_coefficient', event_id = activity.event_id, activity_type_id = activity.activity_type_id )}}">

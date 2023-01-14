@@ -443,7 +443,10 @@ def add_new_sport_to_event(event_id):
     if not current_user.is_admin and event.status != '0':
         flash("Nie możesz modyfikować wyzwania, które już się rozpoczęło!")
         return redirect(url_for('event.event_main', event_id = event_id))
-        
+
+    if not 'activity_type' in request.form:
+        flash("Błędne wywołanie funkcji!")
+        return redirect(url_for('other.hello'))
     
     sport_to_add = Sport.query.filter(Sport.id == request.form['activity_type']).first()
     message, status, action = event.add_sport(sport_to_add)

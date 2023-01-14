@@ -52,7 +52,19 @@ body {
     justify-content: center;
   }
 
+.Delete-Button {
+    background-color: #e63119;
+    border: solid 2px #e63119
+}
+
+.Delete-Button:hover {
+
+    background-color: #000 !important;
+    border: solid 2px rgb(0, 0, 0);
+}
+
   .Main-Button:hover {
     color: white;
     background-color: #000 !important;
+    border: solid 2px rgb(0, 0, 0);
   }

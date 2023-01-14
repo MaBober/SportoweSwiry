@@ -20,7 +20,7 @@
                 <div class="row justify-content-left">
                     <div class="col-md-6">
                         <label class="form-label"><b>{{ form.name.label()}} </b></label> 
-                        {{ form.name(class_="form-control form-control-sm" ) }}
+                        {{ form.name(class_="form-control form-control-sm Input-Box" ) }}
                         <ul>
                             {% for error in form.name.errors %}
                                 {{ error }}
@@ -30,7 +30,7 @@
                     
                         <div class="row">
                             <div class="col-md-6"><label class="form-label"><b>{{ form.start.label()}}</b></label> 
-                                {{ form.start(class_="form-control form-control-sm" ) }} 
+                                {{ form.start(class_="form-control form-control-sm Input-Box" ) }} 
                                 <ul>
                                     {% for error in form.start.errors %}
                                         {{ error }}
@@ -39,7 +39,7 @@
                                 <hr>
                             </div>  
                             <div class="col-md-6"><label class="form-label"><b>{{ form.length.label}}</b></label>
-                                {{ form.length(class_="form-control form-control-sm") }}
+                                {{ form.length(class_="form-control form-control-sm Input-Box") }}
                                 <ul>
                                     {% for error in form.length.errors %}
                                         {{ error }}
@@ -50,7 +50,7 @@
                     
                         <div class="row justify-content-left">
                             <div class="col-md-6"><label class="form-label"><b>{{ form.isPrivate.label}}</b></br></label> </br>
-                                {{ form.isPrivate(class="form-check-input") }}
+                                {{ form.isPrivate(class="Checkbox-Box form-check-input") }}
                                 <ul>
                                     {% for error in form.isPrivate.errors %}
                                         {{ error }}
@@ -59,7 +59,7 @@
                             </div>  
                             
                             <div class="col-md-6"><label class="form-label"><b>{{ form.password.label}}</b></label>
-                                {{ form.password(class_="form-control form-control-sm" ) }}
+                                {{ form.password(class_="form-control form-control-sm Input-Box" ) }}
                                 <ul>
                                     {% for error in form.password.errors %}
                                         {{ error }}
@@ -72,7 +72,7 @@
                     <div class="col-md-6">
                         <div class="col-md-6">
                             <label class="form-label"><b>{{ form.max_users.label}}</b></label>
-                            {{ form.max_users(class_="form-control form-control-sm") }}
+                            {{ form.max_users(class_="form-control form-control-sm Input-Box") }}
                             <ul>
                                 {% for error in form.max_users.errors %}
                                     {{ error }}
@@ -81,7 +81,7 @@
                         </div>
 
                         <label class="form-label"><b>{{ form.description.label}}</b></label>
-                            {{ form.description(class_="form-control form-control-sm" ) }} 
+                            {{ form.description(class_="form-control form-control-sm Input-Box", style="height:128px;" ) }} 
                             <ul>
                                 {% for error in form.description.errors %}
                                     {{ error }}

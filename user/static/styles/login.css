@@ -144,6 +144,45 @@ body {
     margin-right: auto;
   }
 
+  .Checkbox-Main-Box {
+    width: 399px;
+    display: flex;
+    flex-direction: row;
+    /* margin-left: 105px; */
+    justify-content: left;
+    margin: auto;
+  }
+
+
+  .Checkbox-Box {
+    width: 15px;
+    height: 15px;
+    flex-grow: 0;
+    margin: 0 7px 0 0;
+    border: solid 1px #000;
+    background-color: #efefef;
+    border-radius: 0 !important;
+  }
+
+  .Checkbox-Font {
+    height: 14px;
+    flex-grow: 0;
+    margin: 0 0 1px 7px;
+    font-family: Lato;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000;
+  }
+
+  .form-check-input:checked {
+    accent-color: #579956;
+    background-color: #579956;
+  }
 
   .form-control:focus {
     border-color: #579956;

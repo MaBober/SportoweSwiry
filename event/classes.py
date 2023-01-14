@@ -388,7 +388,7 @@ class Event(db.Model):
             except:
                 message = "NIE DODANO SPORTU! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
                 current_app.logger.exception(f"User {current_user.id} failed to add {sport_to_add.name} to event {self.id}")
-                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+                return message, "danger", redirect(url_for('event.modify_event', event_id = self.id))
 
         else:
             message = "Ten sport już znajduje się w wyzwaniu!"

@@ -70,15 +70,15 @@
                     </ul>
                 </div>
 
-                    <button class="btn btn-dark btn-lg Main-Button" style="background-color: #182c07e8;" type="submit">
-                        {% if mode == 'create' %}
-                            Dodaj
-                        {% endif %}
+                <button class="btn btn-dark btn-lg Main-Button-Add-Activity" type="submit">
+                    {% if mode == 'create' %}
+                        Dodaj
+                    {% endif %}
 
-                        {% if mode == 'edit' %}
-                            Edytuj
-                        {% endif %}
-                    </button>
+                    {% if mode == 'edit' %}
+                        Edytuj
+                    {% endif %}
+                </button>
             </form>
             {% if mode == 'create' %}
             <a href="{{ url_for('activity.strava_login')}}">

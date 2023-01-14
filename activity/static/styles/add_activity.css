@@ -44,7 +44,7 @@ body {
     margin-top: 25px;
 }
 
-.Main-Button {
+.Main-Button-Add-Activity {
     display: flex;
     width: 60%;
     max-width: 399px;
@@ -57,9 +57,6 @@ body {
     border: solid 2px #579956;
     justify-content: center;
   }
-
-
-
 
   .Login-Main-Box {
     width: 40%;
@@ -100,7 +97,7 @@ body {
   }
 
 
-.Main-Button:hover {
+.Main-Button-Add-Activity:hover {
     background-color: #000 !important;
   }
 
@@ -134,7 +131,7 @@ body {
         margin-bottom: 100px !important;
     }
 
-    .Main-Button {
+    .Main-Button-Add-Activity {
         width: 80%;
       }
 

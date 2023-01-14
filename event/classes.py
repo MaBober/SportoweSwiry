@@ -603,6 +603,12 @@ class Event(db.Model):
         else:
             return False
 
+
+    @property
+    def current_users_amount(self):
+        return len(self.participants.all()) 
+
+
     def give_overall_weekly_summary(self, activites_list):
 
         #CREATE EMPTY ACTIVITIES FOR ALL USERS

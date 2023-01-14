@@ -743,6 +743,19 @@ class DashboardPage:
         except:
                 current_app.logger.exception("self.event_week_distance < self.current_week_target")
 
+
+        try:
+
+            if self.event.current_users_amount < self.event.max_user_amount:
+                self.d3 = self.event.current_users_amount / self.event.max_user_amount * 100
+                self.d3 = round(self.d3, 0)
+            
+            else:
+                self.d3=100
+        except:
+                current_app.logger.exception("self.event.current_users_amount < self.event.max_user_amount")
+
+
         return None
 
 

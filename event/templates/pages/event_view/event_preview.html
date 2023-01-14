@@ -57,20 +57,17 @@
             <div class="col-12">
 
                 {% if event.is_private %}
-                <a type="button" class="btn btn-success Main-Button delete-confirm"
+                <a type="button" class="btn btn-success Join-Button delete-confirm"
                 data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
                 data-desc='WWWW ',
                 data-url="{{ url_for('event.join_event', event_id = event.id )}}">
                 Zapisz się!</a>
 
                 {% else %}
-                <a href="{{ url_for('event.join_event', event_id = event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a>
+                <a href="{{ url_for('event.join_event', event_id = event.id )}}" type="button" class="btn btn-success Join-Button">Zapisz się!</a>
                 {% endif %}
 
             </div>
-            
-
-
 
 
             <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,15 +90,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
         </div>
 
         

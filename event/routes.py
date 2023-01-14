@@ -377,6 +377,7 @@ def modify_event(event_id):
             length = event.length_weeks,
             isPrivate = event.is_private,
             description = event.description,
+            password = event.password,
             max_users = event.max_user_amount,
             old_name = event.name,
             participatns = len(event.give_all_event_users('Objects')))

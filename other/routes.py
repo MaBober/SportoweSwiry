@@ -50,6 +50,10 @@ def send_message():
         form=MessageForm()
         form.last_name.data="-"
 
+    if 'sport_proposal' in request.args and request.args['sport_proposal'] == 'True':
+        form.subject.data = "Propozycja dodania nowego sportu"
+        form.message.data = '''Cześć,\nProponuję dodać do aplikacji sport : [PODAJ NAZWĘ SPORTU],\nze [STAŁĄ/WSPÓŁCZYNNIKIEM] o wartości [PODAJ PROPONOWANĄ WARTOŚĆ].'''
+
 
     if form.validate_on_submit():
 

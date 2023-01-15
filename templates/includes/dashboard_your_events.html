@@ -51,7 +51,9 @@
     {% endif %}
     {% if dashboard.future_events != [] %}
         <div class="card-header Event-Title-Box">Twoje przyszłe wyzwania</div>
+        
         {% for event in dashboard.future_events %}
+        <div class="Event-Box-Row">
             <div class="card-body">
                 <div class="Event-Box">
                     <div class="row">
@@ -63,7 +65,9 @@
                     </div>
                 </div>
             </div>
+        </div>
         {% endfor %}
+        
     {% endif %}
    
 </div>

@@ -258,24 +258,24 @@ class Event(db.Model):
         if self.admin_id == user.id:
             message = "Administrator nie może opuścić swojego wyzwania!"
             current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
-            return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+            return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
         if current_user.is_admin != True:
             
             if current_user.id != user.id:
                 message = "Nie można usunąć innego użytkownika z wyzwania!"
                 current_app.logger.warning(f"User {current_user.id} tries to delete other user from event {self.id}!")
-                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
+                return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
             if is_participating != None and self.status != "0":
                 message = "Nie możesz się wypisać z rozpoczętego wyzwania!"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Event is on going!")
-                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
+                return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
             
             if is_participating == None:
                 message = "Nie jesteś zapisany na to wyzwanie!"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Does not take part in it!")
-                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
+                return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
             try:
                 db.session.delete(is_participating)
@@ -283,12 +283,12 @@ class Event(db.Model):
             
                 message = f"Wypisano z wyzwania {self.name}!"
                 current_app.logger.info(f"User {current_user.id} left event {self.id}")
-                return message, "success", redirect(url_for('event.explore_events'))
+                return message, "success", redirect(url_for('event.your_events', mode = 'future'))
 
             except:
                 message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
                 current_app.logger.exception(f"User {current_user.id} failed to leave event {self.id}")
-                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
+                return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
         else:
 

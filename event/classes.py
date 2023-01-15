@@ -337,6 +337,14 @@ class Event(db.Model):
 
         return statuses[self.status]
 
+    @property
+    def has_all_sports(self):
+
+        if len(self.give_all_event_activities_types()) == len(Sport.all_sports()):
+            return True
+        
+        else:
+            return False
 
     def update_status(self):
 
@@ -408,18 +416,18 @@ class Event(db.Model):
                 db.session.commit()
 
                 message = f'Usunięto sport z wyzwania!'
-                current_app.logger.info(f"User {current_user.id} deleted {sport_to_delete} from event {self.id}.")
+                current_app.logger.info(f"User {current_user.id} deleted sport {sport_to_delete} from event {self.id}.")
                 return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
 
 
             except:
                 message = "NIE USUNIĘTO SPORTU! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
-                current_app.logger.exception(f"User {current_user.id} failed to delete {sport_to_delete} from event {self.id}")
+                current_app.logger.exception(f"User {current_user.id} failed to delete sport {sport_to_delete} from event {self.id}")
                 return message, "danger", redirect(url_for('event.modify_event', event_id = self.id))
 
         else:
             message = f'Sport nie znajduje się w wyzwaniu!'
-            current_app.logger.warning(f"User {current_user.id} tried delete {sport_to_delete} from event {self.id}. There is no such sport in this event!")
+            current_app.logger.warning(f"User {current_user.id} tried delete sport {sport_to_delete} from event {self.id}. There is no such sport in this event!")
             return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
 
 
@@ -433,17 +441,17 @@ class Event(db.Model):
                 db.session.commit()
 
                 message = f'Zmodyfikowano współczynnik wyzwania!'
-                current_app.logger.info(f"User {current_user.id} modified {sport_to_modify.activity_type_id} in event {self.id}.")
+                current_app.logger.info(f"User {current_user.id} modified sport {sport_to_modify.activity_type_id} in event {self.id}.")
                 return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
 
             except:
                 message = "NIE ZMIENIONO WSPÓŁCZYNNIKA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
-                current_app.logger.exception(f"User {current_user.id} failed to modifiy {sport_to_modify.activity_type_id} in event {self.id}")
+                current_app.logger.exception(f"User {current_user.id} failed to modifiy sport {sport_to_modify.activity_type_id} in event {self.id}")
                 return message, "danger", redirect(url_for('event.modify_event', event_id = self.id))
         
         else:
             message = f'Sport nie znajduje się w wyzwaniu!'
-            current_app.logger.warning(f"User {current_user.id} tried delete {sport_to_modify.activity_type_id} in event {self.id}. There is no such sport in this event!")
+            current_app.logger.warning(f"User {current_user.id} tried delete sport {sport_to_modify.activity_type_id} in event {self.id}. There is no such sport in this event!")
             return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
 
         

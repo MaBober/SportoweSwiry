@@ -1,0 +1,40 @@
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dashboard_your_events.css') }}">
+
+<div class="card Event-Main-Box">
+    <div class="card-header Event-Title-Box">Twoje wyzwania</div>
+    
+    <div class="card-body">
+        {% for event in events: %}
+
+            <div class="Event-Box" style="margin-bottom: 15px;" >
+                <div class="row">
+
+                    <div class="col-4 Event-Box-Value-Title">
+                        <h5>{{event.name}}</h5>
+                        <h6>Tydzień <br> 
+                        {{event.current_week}} / {{event.length_weeks}} </h6>
+                    </div>
+
+                    <div class="col-4 Event-Box-Add-Activity-Border">
+                        <h5>Dystans</h5>
+                        {% if event.event_week_distance >= event.current_week_target %}
+                        <span style="color:rgb(47, 129, 20)"><h6>{{event.event_week_distance}} / <br> {{event.current_week_target}} km</h6></span>
+                        {% endif %}
+    
+                        {% if event.event_week_distance < event.current_week_target %}
+                        <span style="color:rgb(146, 40, 7)"><h6>{{event.event_week_distance}} / <br> {{event.current_week_target}} km</h6></span>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-4 Event-Box-Value-Title">
+                        <a href="{{ url_for('event.event_main', event_id=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button">Szczegóły  </a>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+    
+   
+</div>
+

@@ -105,6 +105,13 @@
     border-left: 2px solid #fff;
 }
 
+.Event-Box-Add-Activity-Border{
+    margin: auto;
+    text-align: center;
+    border-right: 2px solid rgb(0, 0, 0);
+    border-left: 2px solid rgb(0, 0, 0);
+}
+
 .Main-Button {
     display: flex;
     width: 60%;

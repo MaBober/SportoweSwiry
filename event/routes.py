@@ -400,8 +400,15 @@ def modify_event(event_id):
     w15 = distance_set[14].target)
 
     new_sport_form = NewSportToEventForm()
-    new_sport_form.activity_type.choices = Sport.all_sports()
+    available_sports = Sport.all_sports()
+    
 
+    for sport in Sport.all_sports():
+        if sport[0] in event.give_all_event_activities_types():
+            available_sports.remove((sport[0], sport[1]))
+
+
+    new_sport_form.activity_type.choices = available_sports
     coefficientsSet = CoefficientsList.query.filter(CoefficientsList.event_id == event.id).all()
 
     if form.validate_on_submit():

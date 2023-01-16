@@ -57,6 +57,28 @@ def cron_send_event_start_reminder():
     return "Start event mails sent"
 
 
+@cron.route("/cron/test_all_mails", methods = ['POST'])
+def cron_test():
+
+    if request.form['key'] != Config.CRON_KEY:
+        current_app.logger.warning(f"Event start reminder cron job requested with wrong key!")
+        return 'Access Denied!'
+
+    from user.classes import User
+    from other.functions import send_email
+    from event.classes import Event
+    event = Event.query.filter(Event.id == 54).first()
+    
+
+    user = User.query.filter(User.id == "MaBober").first()
+
+    send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się za tydzień!",'emails/event_start_in_week', event = event, user = user)
+    send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się jutro!",'emails/event_start', event = event, user = user)
+    send_email(user.mail, f"Wyzwanie {event.name} kończy się dzisiaj!",'emails/event_end', event = event, user = user)
+
+
+    return "DONE"
+
 @cron.route("/cron/send_event_week_before_start_reminder", methods = ['POST'])
 def cron_send_event_week_before_start_reminder():
 

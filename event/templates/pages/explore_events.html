@@ -58,6 +58,7 @@
                         <h6><b>Koniec: </b> {{event.end}}</h6> 
                         <h6><b>Długość: </b> {{event.length_weeks}} tygodni</h6> 
                         <h6><b>Ilość uczestników: </b> {{ event.give_all_event_users()|length }} / {{event.max_user_amount}}</h6>
+                        <h6><b>Organizator: </b> {{event.admin.name}} {{event.admin.last_name}} </h6>
                         
 
                     </div>
@@ -74,7 +75,7 @@
                                 Zapisz się!</a>
 
                             {% else %}
-                            <a href="{{ url_for('event.join_event', event_id = event.id )}}" type="button" class="btn btn-success Main-Button" style="background-color: #182c07e8;">Zapisz się!</a>
+                            <a href="{{ url_for('event.join_event', event_id = event.id )}}" type="button" class="btn btn-success Main-Button">Zapisz się!</a>
                             {% endif %}
                         </div>
 
@@ -88,11 +89,11 @@
                                     <div class="modal-body" id="idDeleteModalBody">
                                         Wyzwanie jest prywatne. Podaj proszę hasło:
                                 <form method ="post" action="" id="confirmDeleteForm">
-                                        {{ form.password(class_="form-control form-control-sm" ) }}
+                                        {{ form.password(class_="form-control form-control-sm Input-Box" ) }}
                                     </div>
                                     <div class="modal-footer">
-                                            <button type="submit" class="btn btn-success">Zapisz się!</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                                            <button type="submit" class="btn btn-success Main-Button" style="margin-bottom: 4px;">Zapisz się!</button>
+                                            <button type="button" class="btn btn-secondary Details-Button" data-bs-dismiss="modal">Zamknij</button>
                                 </form>
                                     </div>
                                 </div>
@@ -101,7 +102,7 @@
 
 
                         <div class = 'row'>
-                            <a href="{{ url_for('event.event_preview', event_id = event.id )}}" type="button" class="btn btn Details-Button" style="background-color: rgba(224, 153, 94);">Szczegóły</a>
+                            <a href="{{ url_for('event.event_preview', event_id = event.id )}}" type="button" class="btn btn Details-Button">Szczegóły</a>
                         </div>
                     </div>
                 </div>

@@ -50,14 +50,18 @@ def send_message():
         form=MessageForm()
         form.last_name.data="-"
 
+    if 'sport_proposal' in request.args and request.args['sport_proposal'] == 'True':
+        form.subject.data = "Propozycja dodania nowego sportu"
+        form.message.data = '''Cześć,\nProponuję dodać do aplikacji sport : [PODAJ NAZWĘ SPORTU],\nze [STAŁĄ/WSPÓŁCZYNNIKIEM] o wartości [PODAJ PROPONOWANĄ WARTOŚĆ].'''
+
 
     if form.validate_on_submit():
 
         if current_user.is_authenticated:
-            send_email("admin@sportoweswiry.com.pl", "Wiadomość od użytkownika {} {} - {}".format(current_user.name, current_user.last_name, form.subject.data),'message', 
+            send_email("kontakt@sportoweswiry.com.pl", "Wiadomość od użytkownika {} {} - {}".format(current_user.name, current_user.last_name, form.subject.data),'message', 
                         name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data, topic = form.subject.data)
         else:
-            send_email("admin@sportoweswiry.com.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.last_name.data, form.subject.data),'message', 
+            send_email("kontakt@sportoweswiry.com.pl", "Wiadomość od użytkownika {} {} - {}".format(form.name.data, form.last_name.data, form.subject.data),'message', 
                         name=form.name.data, last_name=form.last_name.data, mail=form.mail.data, message=form.message.data, topic = form.subject.data)
 
         admins = User.query.filter(User.is_admin == True).all()
@@ -128,9 +132,12 @@ def mailbox(actionName):
 @other.route("/accept_cookies", methods=['POST','GET'])
 def accept_cookies():
 
-    source = ''
+    
     if 'source' in request.args:
         source = request.args['source']
+    
+    else:
+        source = url_for('other.hello')
 
     if request.method == 'POST':
 

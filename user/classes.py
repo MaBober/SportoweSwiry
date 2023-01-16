@@ -158,6 +158,7 @@ class User(db.Model, UserMixin):
             return message, 'danger', redirect(url_for('user.settings'))
 
         try:
+            self.delete_avatar()
             db.session.delete(self)
             db.session.commit()
             message = "Użytkownik {} {} został usunięty z bazy danych".format(self.name, self.last_name)
@@ -170,6 +171,7 @@ class User(db.Model, UserMixin):
             self.name = "Konto"
             self.last_name = 'Usunięte'
             self.mail = password_generator()
+            self.delete_avatar()
             db.session.commit()
 
             message = f"Konto usunięte!"
@@ -382,8 +384,18 @@ class User(db.Model, UserMixin):
             return message, "danger", redirect(url_for('user.settings'))
 
 
+    def delete_avatar(self):
 
-    def avatarCheck(self, path):
+        avatars_location = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
+
+        if self.avatar_check(avatars_location):
+            os.remove(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'],self.id+'.jpg'))
+            current_app.logger.info(f"User {self.id} avatar deleted!")
+
+        return True
+
+
+    def avatar_check(self, path):
         filename = self.id+'.jpg'
         path = os.path.join(path, filename)
         return os.path.isfile(path)
@@ -393,7 +405,7 @@ class User(db.Model, UserMixin):
 
         avatars_location = os.path.join(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH']))
 
-        if self.avatarCheck(avatars_location):
+        if self.avatar_check(avatars_location):
             avatar_path = '/static/avatars/{}'.format(self.id+'.jpg')
             return avatar_path
 
@@ -449,9 +461,9 @@ class User(db.Model, UserMixin):
             rotatedAvatar = avatar.rotate(angle, expand = True)
             rotatedAvatar.save(os.path.join(app.root_path, app.config['AVATARS_SAVE_PATH'], filename))
 
-            message = 'Avatar obrócony. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
+            message = 'Avatar obrócony!'
             current_app.logger.info(f"User {self.id} rotated avatar ({angle})")
-            return message, 'danger', redirect(url_for('user.settings'))
+            return message, 'success', redirect(url_for('user.settings'))
 
         except:
             message = 'AVATAR NIE OBRÓCONY. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'

@@ -52,7 +52,6 @@ class Event(db.Model):
         self.is_secret = False
         self.max_user_amount = form.max_users.data
         self.password = form.password.data
-        self.password = self.hash_password()
         self.description = form.description.data
         self.status = 0
 
@@ -121,7 +120,6 @@ class Event(db.Model):
             self.is_private = form.isPrivate.data
             self.description = form.description.data
             self.password = form.password.data
-            self.password = self.hash_password()
             self.max_user_amount  = form.max_users.data
 
             self.update_status()
@@ -194,7 +192,7 @@ class Event(db.Model):
             return message, 'danger', redirect(url_for('event.explore_events'))
 
         event_password = self.password
-        verify = Event.verify_password(event_password, provided_password)
+        verify = event_password == provided_password
 
         if self.is_private and verify is not True:
             message = "Podałeś/aś złe hasło do wyzwania. Spróbuj jeszcze raz!"
@@ -260,24 +258,24 @@ class Event(db.Model):
         if self.admin_id == user.id:
             message = "Administrator nie może opuścić swojego wyzwania!"
             current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
-            return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+            return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
         if current_user.is_admin != True:
             
             if current_user.id != user.id:
                 message = "Nie można usunąć innego użytkownika z wyzwania!"
                 current_app.logger.warning(f"User {current_user.id} tries to delete other user from event {self.id}!")
-                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
+                return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
             if is_participating != None and self.status != "0":
                 message = "Nie możesz się wypisać z rozpoczętego wyzwania!"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Event is on going!")
-                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
+                return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
             
             if is_participating == None:
                 message = "Nie jesteś zapisany na to wyzwanie!"
                 current_app.logger.warning(f"User {current_user.id} tries to leave event {self.id}. Does not take part in it!")
-                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
+                return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
             try:
                 db.session.delete(is_participating)
@@ -285,12 +283,12 @@ class Event(db.Model):
             
                 message = f"Wypisano z wyzwania {self.name}!"
                 current_app.logger.info(f"User {current_user.id} left event {self.id}")
-                return message, "success", redirect(url_for('event.explore_events'))
+                return message, "success", redirect(url_for('event.your_events', mode = 'future'))
 
             except:
                 message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
                 current_app.logger.exception(f"User {current_user.id} failed to leave event {self.id}")
-                return message, "danger", redirect(url_for('event.explore_events', event_id = self.id))
+                return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
         else:
 
@@ -321,27 +319,6 @@ class Event(db.Model):
         else:
             return True
 
-        
-    def hash_password(self):
-        """Hash a password for storing."""
-        # the value generated using os.urandom(60)
-        os_urandom_static = b"ID_\x12p:\x8d\xe7&\xcb\xf0=H1\xc1\x16\xac\xe5BX\xd7\xd6j\xe3i\x11\xbe\xaa\x05\xccc\xc2\xe8K\xcf\xf1\xac\x9bFy(\xfbn.`\xe9\xcd\xdd'\xdf`~vm\xae\xf2\x93WD\x04"
-        #os_urandom_static = b"ID_\x12p:\x8d\xe7&\xcb\xf0=H1"
-        salt = hashlib.sha256(os_urandom_static).hexdigest().encode('ascii')
-        pwdhash = hashlib.pbkdf2_hmac('sha512', self.password.encode('utf-8'), salt, 100000)
-        pwdhash = binascii.hexlify(pwdhash)
-        return (salt + pwdhash).decode('ascii') 
-
-
-    def verify_password(stored_password, provided_password):
-        """Verify a stored password against one provided by user"""
-        salt = stored_password[:64]
-        stored_password = stored_password[64:]
-        pwdhash = hashlib.pbkdf2_hmac('sha512', provided_password.encode('utf-8'),
-        salt.encode('ascii'), 100000)
-        pwdhash = binascii.hexlify(pwdhash).decode('ascii')
-        return pwdhash == stored_password
-
 
     @property
     def end(self):
@@ -360,6 +337,14 @@ class Event(db.Model):
 
         return statuses[self.status]
 
+    @property
+    def has_all_sports(self):
+
+        if len(self.give_all_event_activities_types()) == len(Sport.all_sports()):
+            return True
+        
+        else:
+            return False
 
     def update_status(self):
 
@@ -411,7 +396,7 @@ class Event(db.Model):
             except:
                 message = "NIE DODANO SPORTU! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
                 current_app.logger.exception(f"User {current_user.id} failed to add {sport_to_add.name} to event {self.id}")
-                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+                return message, "danger", redirect(url_for('event.modify_event', event_id = self.id))
 
         else:
             message = "Ten sport już znajduje się w wyzwaniu!"
@@ -431,18 +416,18 @@ class Event(db.Model):
                 db.session.commit()
 
                 message = f'Usunięto sport z wyzwania!'
-                current_app.logger.info(f"User {current_user.id} deleted {sport_to_delete} from event {self.id}.")
+                current_app.logger.info(f"User {current_user.id} deleted sport {sport_to_delete} from event {self.id}.")
                 return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
 
 
             except:
                 message = "NIE USUNIĘTO SPORTU! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
-                current_app.logger.exception(f"User {current_user.id} failed to delete {sport_to_delete} from event {self.id}")
+                current_app.logger.exception(f"User {current_user.id} failed to delete sport {sport_to_delete} from event {self.id}")
                 return message, "danger", redirect(url_for('event.modify_event', event_id = self.id))
 
         else:
             message = f'Sport nie znajduje się w wyzwaniu!'
-            current_app.logger.warning(f"User {current_user.id} tried delete {sport_to_delete} from event {self.id}. There is no such sport in this event!")
+            current_app.logger.warning(f"User {current_user.id} tried delete sport {sport_to_delete} from event {self.id}. There is no such sport in this event!")
             return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
 
 
@@ -456,17 +441,17 @@ class Event(db.Model):
                 db.session.commit()
 
                 message = f'Zmodyfikowano współczynnik wyzwania!'
-                current_app.logger.info(f"User {current_user.id} modified {sport_to_modify.activity_type_id} in event {self.id}.")
+                current_app.logger.info(f"User {current_user.id} modified sport {sport_to_modify.activity_type_id} in event {self.id}.")
                 return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
 
             except:
                 message = "NIE ZMIENIONO WSPÓŁCZYNNIKA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
-                current_app.logger.exception(f"User {current_user.id} failed to modifiy {sport_to_modify.activity_type_id} in event {self.id}")
+                current_app.logger.exception(f"User {current_user.id} failed to modifiy sport {sport_to_modify.activity_type_id} in event {self.id}")
                 return message, "danger", redirect(url_for('event.modify_event', event_id = self.id))
         
         else:
             message = f'Sport nie znajduje się w wyzwaniu!'
-            current_app.logger.warning(f"User {current_user.id} tried delete {sport_to_modify.activity_type_id} in event {self.id}. There is no such sport in this event!")
+            current_app.logger.warning(f"User {current_user.id} tried delete sport {sport_to_modify.activity_type_id} in event {self.id}. There is no such sport in this event!")
             return message, 'danger', redirect(url_for('event.modify_event', event_id = self.id))
 
         
@@ -712,7 +697,7 @@ class Event(db.Model):
         beers_to_buy = { i : 0 for i in event_participants.keys() }
         beers_to_recive = {i : 0 for i in event_participants.keys() }
 
-        for week in range(1, self.length_weeks):
+        for week in range(0, self.length_weeks):
             for user in event_participants:
                 if beer_summray.iloc[week]['calculated_distance',user][0] == 1:
                     try:
@@ -779,6 +764,21 @@ class Event(db.Model):
         inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
 
         return len(inserts)
+
+    @staticmethod
+    def join_to_not_existing():
+        message = "Podane wyzwanie nie istnieje!"
+        current_app.logger.warning(f"User {current_user.id} tries to join not existing event!")
+        return message, "danger", redirect(url_for('event.explore_events'))
+
+    @staticmethod
+    def leave_not_existing():
+        message = "Podane wyzwanie nie istnieje!"
+        current_app.logger.warning(f"User {current_user.id} tries to leave not existing event!")
+        return message, "danger", redirect(url_for('event.explore_events'))
+
+                
+
         
 # Defines tabele, which connect users with events
 class Participation(db.Model):

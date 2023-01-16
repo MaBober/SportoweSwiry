@@ -32,7 +32,7 @@
 
                 <div class="mb-3 Add-Activity-Input">
                     <label class="small mb-1" for="date">{{ form.date.label }}:</label>
-                    {{ form.date(class_="form-control") }}
+                    {{ form.date(class_="form-control form-control-sm Input-Box") }}
                     <ul>
                         {% for error in form.date.errors %}
                             {{ error }}
@@ -42,7 +42,7 @@
 
                 <div class="mb-3 Add-Activity-Input">
                     <label class="small mb-1" for="activity">{{ form.activity.label }}:</label>
-                    {{ form.activity(class_="form-control") }}
+                    {{ form.activity(class_="form-control form-control-sm Input-Box") }}
                     <ul>
                         {% for error in form.activity.errors %}
                             {{ error }}
@@ -52,7 +52,7 @@
 
                 <div class="mb-3 Add-Activity-Input">
                     <label class="small mb-1" for="distance">{{ form.distance.label }}:</label>
-                    {{ form.distance(class_="form-control") }}
+                    {{ form.distance(class_="form-control form-control-sm Input-Box") }}
                     <ul>
                         {% for error in form.distance.errors %}
                             {{ error }}
@@ -62,7 +62,7 @@
 
                 <div class="mb-3 Add-Activity-Input">
                     <label class="small mb-1" for="time">{{ form.time.label }}:</label>
-                    {{ form.time(class_="form-control") }}
+                    {{ form.time(class_="form-control form-control-sm Input-Box") }}
                     <ul>
                         {% for error in form.time.errors %}
                             {{ error }}
@@ -70,15 +70,15 @@
                     </ul>
                 </div>
 
-                    <button class="btn btn-dark btn-lg Main-Button" style="background-color: #182c07e8;" type="submit">
-                        {% if mode == 'create' %}
-                            Dodaj
-                        {% endif %}
+                <button class="btn btn-dark btn-lg Main-Button-Add-Activity" type="submit">
+                    {% if mode == 'create' %}
+                        Dodaj
+                    {% endif %}
 
-                        {% if mode == 'edit' %}
-                            Edytuj
-                        {% endif %}
-                    </button>
+                    {% if mode == 'edit' %}
+                        Edytuj
+                    {% endif %}
+                </button>
             </form>
             {% if mode == 'create' %}
             <a href="{{ url_for('activity.strava_login')}}">
@@ -88,7 +88,7 @@
                 
         </div>
         
-        <div class="col-md-5 mt-4">{% include "includes/dashboard_add_activity.html" %}</div>
+        <div class="col-md-6 mt-4">{% include "includes/add_activity_your_events.html" %}</div>
     </div>
 </div>
 

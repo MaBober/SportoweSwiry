@@ -144,13 +144,6 @@ body {
     margin-right: auto;
   }
 
-
-  .form-control:focus {
-    border-color: #579956;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #579956;
-  }
-
-
   .Checkbox-Main-Box {
     width: 399px;
     display: flex;
@@ -190,6 +183,12 @@ body {
     accent-color: #579956;
     background-color: #579956;
   }
+
+  .form-control:focus {
+    border-color: #579956;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #579956;
+  }
+
 
   .Main-Button {
     width: 399px;

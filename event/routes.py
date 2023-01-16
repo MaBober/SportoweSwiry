@@ -45,10 +45,13 @@ def join_event(event_id):
         password = request.form['password']
 
     event = Event.query.filter(Event.id == event_id).first()
-        
-    flash_message, status, action  = event.add_partcipant(user = current_user, provided_password = password)
-    flash(flash_message, status)
 
+    if event == None:
+        flash_message, status, action  = Event.join_to_not_existing()
+    else:
+        flash_message, status, action  = event.add_partcipant(user = current_user, provided_password = password)
+
+    flash(flash_message, status)
     return action
     
 
@@ -57,10 +60,13 @@ def join_event(event_id):
 def leave_event(event_id):
 
     event = Event.query.filter(Event.id == event_id).first()
-    message, staus, action = event.leave_event(current_user)
 
-    flash(message, staus)
+    if event == None:
+        message, status, action  = Event.leave_not_existing()
+    else:
+        message, status, action = event.leave_event(current_user)
 
+    flash(message, status)
     return action
 
 
@@ -371,6 +377,7 @@ def modify_event(event_id):
             length = event.length_weeks,
             isPrivate = event.is_private,
             description = event.description,
+            password = event.password,
             max_users = event.max_user_amount,
             old_name = event.name,
             participatns = len(event.give_all_event_users('Objects')))
@@ -393,8 +400,15 @@ def modify_event(event_id):
     w15 = distance_set[14].target)
 
     new_sport_form = NewSportToEventForm()
-    new_sport_form.activity_type.choices = Sport.all_sports()
+    available_sports = Sport.all_sports()
+    
 
+    for sport in Sport.all_sports():
+        if sport[0] in event.give_all_event_activities_types():
+            available_sports.remove((sport[0], sport[1]))
+
+
+    new_sport_form.activity_type.choices = available_sports
     coefficientsSet = CoefficientsList.query.filter(CoefficientsList.event_id == event.id).all()
 
     if form.validate_on_submit():
@@ -404,7 +418,7 @@ def modify_event(event_id):
         flash(message, status)
         return action
 
-    if distance_form.validate_on_submit():
+    if distance_form.validate_on_submit() and form.validate_on_submit():
 
         message, status, action = event.modify_targets(distance_form)
     
@@ -427,6 +441,8 @@ def modify_event(event_id):
 @login_required #This page needs to be login
 def add_new_sport_to_event(event_id):
 
+    event = Event.query.filter(Event.id == event_id).first()
+
     if not current_user.is_admin and event.admin_id != current_user.id:
         flash("Nie masz uprawnień do tej akcji")
         return redirect(url_for('other.hello'))
@@ -434,11 +450,12 @@ def add_new_sport_to_event(event_id):
     if not current_user.is_admin and event.status != '0':
         flash("Nie możesz modyfikować wyzwania, które już się rozpoczęło!")
         return redirect(url_for('event.event_main', event_id = event_id))
-        
+
+    if not 'activity_type' in request.form:
+        flash("Błędne wywołanie funkcji!")
+        return redirect(url_for('other.hello'))
     
     sport_to_add = Sport.query.filter(Sport.id == request.form['activity_type']).first()
-    event = Event.query.filter(Event.id == event_id).first()
-
     message, status, action = event.add_sport(sport_to_add)
 
     flash(message, status)

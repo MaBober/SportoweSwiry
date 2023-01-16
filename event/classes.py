@@ -697,7 +697,7 @@ class Event(db.Model):
         beers_to_buy = { i : 0 for i in event_participants.keys() }
         beers_to_recive = {i : 0 for i in event_participants.keys() }
 
-        for week in range(1, self.length_weeks):
+        for week in range(0, self.length_weeks):
             for user in event_participants:
                 if beer_summray.iloc[week]['calculated_distance',user][0] == 1:
                     try:

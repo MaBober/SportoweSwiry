@@ -5,7 +5,7 @@ Twoje wyzwanie {{event.name}} zaczyna się już jutro!
 Szykuj buty, wygodne ciuchy, wyciągaj rower z piwnicy lub pakuj kąpielówki! Wyzwanie, do którego się zapisał*ś rozpoczyna się już jutro!
 Niezależnie, od której aktywności zaczniesz, najważniejsze żebyć się dobrze bawił!
 
-eżeli potrzebujesz przypomnieć sobie jaki przelicznik ma Twoja ulubiona aktywność fizyczna lub kto bierze udział w Twoim wyzwaniu – garść informacji znajdziesz
+Jeżeli potrzebujesz przypomnieć sobie jaki przelicznik ma Twoja ulubiona aktywność fizyczna lub kto bierze udział w Twoim wyzwaniu – garść informacji znajdziesz
 tutaj: https://sportoweswiry.com.pl/{{url_for('event.event_main', event_id=event.id )}}
 
 Szczegóły wyzwania

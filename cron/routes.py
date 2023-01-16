@@ -52,7 +52,7 @@ def cron_send_event_start_reminder():
                 if user.name == "Konto" and user.last_name == "Usunięte":
                     pass
                 else:
-                    send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się dzisiaj!",'emails/event_start', event = event, user = user)
+                    send_email(user.mail, f"Wyzwanie {event.name} rozpoczyna się jutro!",'emails/event_start', event = event, user = user)
 
     return "Start event mails sent"
 

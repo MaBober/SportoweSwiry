@@ -423,7 +423,7 @@ class User(db.Model, UserMixin):
             data = s.loads(token.encode('utf-8'))
 
         except:
-            message = 'Hasło nie zostało zmienione. Podano nie poprawny link!'
+            message = 'Hasło nie zostało zmienione. Podano niepoprawny link!'
             current_app.logger.warning(f"User didn't reset password")
             return message, 'danger', redirect(url_for('other.hello'))
 

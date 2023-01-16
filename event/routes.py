@@ -418,7 +418,7 @@ def modify_event(event_id):
         flash(message, status)
         return action
 
-    if distance_form.validate_on_submit():
+    if distance_form.validate_on_submit() and form.validate_on_submit():
 
         message, status, action = event.modify_targets(distance_form)
     

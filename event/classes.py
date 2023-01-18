@@ -261,6 +261,20 @@ class Event(db.Model):
             current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
             return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
 
+        if current_user.id == self.admin_id and self.status == "0":
+            try:
+                db.session.delete(is_participating)
+                db.session.commit()
+
+                message = f"Usunięto użytkownika {user.name} {user.last_name} z wyzwania!"
+                current_app.logger.info(f"User {current_user.id} erase {user.id} from event {self.id}")
+                return message, "success", redirect(url_for('event.event_contestants', event_id = self.id))
+
+            except:
+                message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User {current_user.id} failed to erase {user.id} from event {self.id}")
+                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
+
         if current_user.is_admin != True:
             
             if current_user.id != user.id:

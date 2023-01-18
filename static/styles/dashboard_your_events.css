@@ -51,8 +51,6 @@
 }
 
 
-
-
 .Details-Of-Event-Button {
     width: 80%;
     height: 50px;
@@ -128,7 +126,7 @@
   }
 
   .Main-Button:hover {
-    background-color: rgb(12, 75, 15) !important;
+    background-color: rgb(0, 0, 0) !important;
   }
 
 

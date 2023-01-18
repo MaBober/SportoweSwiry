@@ -11,7 +11,12 @@
 
         <div class="row pt-3"></div>
         <div class="col-md-8"><label class="form-label"><b>{{ form.activity_name.label()}}</b></label> 
-            <br>{{ form.activity_name(class_="form-control form-control-sm" )}} 
+            <br>{{ form.activity_name(class_="form-control form-control-sm" )}}
+            <ul>
+            {% for error in  form.activity_name.errors %}
+                {{ error }}
+            {% endfor %} 
+            </ul>
         </div>
 
         <div class="row pt-3"></div>
@@ -26,6 +31,11 @@
         <div class="row pt-3"></div>
         <div class="col-md-4"><label class="form-label"><b>{{ form.strava_name.label()}}</b></label> 
             <br>{{ form.strava_name(class_="form-control form-control-sm" )}}
+            <ul>
+                {% for error in  form.strava_name.errors %}
+                    {{ error }}
+                {% endfor %} 
+                </ul>
             <br>
             <a href="https://support.strava.com/hc/en-us/articles/216919407-Supported-Sport-Types-on-Strava"> LISTA NAZW AKTYWNOŚCI W STRAVA </a>
         </div>

@@ -3,6 +3,7 @@ from wtforms.fields import StringField, BooleanField, DecimalField, DateField, I
 from wtforms.validators import DataRequired, NumberRange,NumberRange, ValidationError
 
 from .classes import Event
+from activity.classes import Sport
 
 import datetime as dt
 
@@ -42,10 +43,24 @@ class EventPassword(FlaskForm):
 
 class CoeficientsForm(FlaskForm):
 
+    def validate_name(form, field):
+        print(field.data)
+        if Sport.query.filter(Sport.name == field.data).first() is not None:
+            raise ValidationError("Istnieje już sport o takiej nazwie. Wybierz proszę inną nazwę.")
+        else:
+            pass
+
+    def validate_strava_name(form, field):
+        if Sport.query.filter(Sport.strava_name == field.data).first() is not None and field.data != "":
+            raise ValidationError("Istnieje już sport o takiej nazwie w strava. Wybierz proszę inną nazwę Strava.")
+        else:
+            pass            
+
+
     event_name = StringField("Wyzwanie", validators=[DataRequired("Pole nie może być puste")])
-    activity_name = StringField("Nazwa aktywności", validators=[DataRequired("Pole nie może być puste")])
+    activity_name = StringField("Nazwa aktywności", validators=[DataRequired("Pole nie może być puste"), validate_name])
     is_constant = BooleanField("Stała wartość?", default=False)
-    strava_name = StringField("Nazwa aktywności w Strava [ENG]")
+    strava_name = StringField("Nazwa aktywności w Strava [ENG]", validators=[validate_strava_name])
     value = DecimalField("Współczynnik", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
 
 class NewSportToEventForm(FlaskForm):

@@ -18,7 +18,7 @@ event = Blueprint("event", __name__,
     static_url_path='/event/static')
 
 
-@account_confirmation_check
+
 @event.route("/explore_events")
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -34,7 +34,6 @@ def explore_events():
                         form=password_form )
 
 
-@account_confirmation_check
 @event.route("/join_event/<int:event_id>", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -56,6 +55,7 @@ def join_event(event_id):
     
 
 @event.route("/leave_event/<int:event_id>")
+@account_confirmation_check
 @login_required
 def leave_event(event_id):
 
@@ -71,6 +71,7 @@ def leave_event(event_id):
 
 
 @event.route("/your_events/<mode>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def your_events(mode):
 
@@ -96,8 +97,9 @@ def your_events(mode):
 
 ###############################
 
-@account_confirmation_check
+
 @event.route("/event_main/<int:event_id>")
+@account_confirmation_check
 @login_required
 def event_main(event_id):
 
@@ -143,8 +145,9 @@ def event_main(event_id):
         return redirect(url_for('event.explore_events'))
 
 
-@account_confirmation_check
+
 @event.route("/event_activities/<int:event_id>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def event_activities(event_id):
 
@@ -168,8 +171,9 @@ def event_activities(event_id):
         return redirect(url_for('event.explore_events'))
 
 
-@account_confirmation_check
+
 @event.route("/event_preview/<int:event_id>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def event_preview(event_id):
 
@@ -186,8 +190,9 @@ def event_preview(event_id):
                     form=password_form) 
 
 
-@account_confirmation_check
+
 @event.route("/event_statistics/<int:event_id>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def event_statistics(event_id):
 
@@ -217,8 +222,9 @@ def event_statistics(event_id):
         return redirect(url_for('event.explore_events'))
 
 
-@account_confirmation_check
+
 @event.route("/event_contestants/<int:event_id>")
+@account_confirmation_check
 @login_required
 def event_contestants(event_id):
 
@@ -242,8 +248,9 @@ def event_contestants(event_id):
         return redirect(url_for('event.explore_events'))
 
 
-@account_confirmation_check
+
 @event.route("/event_beers/<int:event_id>")
+@account_confirmation_check
 @login_required
 def event_beers(event_id):
 
@@ -280,7 +287,7 @@ def event_beers(event_id):
 ###############################
 
 
-@account_confirmation_check
+
 @event.route("/new_event", methods=['POST','GET'])
 @account_confirmation_check
 @login_required
@@ -310,7 +317,7 @@ def create_event():
             return redirect(url_for('other.hello'))
 
 
-@account_confirmation_check
+
 @event.route("/new_event_targets/<int:event_id>", methods=['POST','GET'])
 @account_confirmation_check
 @login_required
@@ -522,7 +529,7 @@ def modify_coefficient(event_id, activity_type_id):
 
 ###############################
 
-@account_confirmation_check
+
 @event.route("/admin_event_list")
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -538,7 +545,7 @@ def admin_list_of_events():
                     title_prefix = "Lista wyzwań")
 
 
-@account_confirmation_check
+
 @event.route("/admin_list_of_sports")
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -555,6 +562,7 @@ def admin_list_of_sports():
     
 
 @event.route("/admin_delete_contestant/<int:event_id>/<user_id>")
+@account_confirmation_check
 @login_required
 def admin_delete_contestant(event_id, user_id):
 
@@ -567,8 +575,8 @@ def admin_delete_contestant(event_id, user_id):
     return action
 
 
-@account_confirmation_check
 @event.route("/delete_event/<int:event_id>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def admin_delete_event(event_id):
     

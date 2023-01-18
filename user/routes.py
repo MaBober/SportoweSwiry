@@ -173,7 +173,9 @@ def reset_password(token):
 
     return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
 
+
 @user.route("/ban_user/<user_id>", methods=['POST', 'GET'])
+@account_confirmation_check
 def ban_user(user_id):
 
     if not current_user.is_admin:
@@ -194,6 +196,7 @@ def ban_user(user_id):
     return redirect(url_for('other.hello'))
 
 @user.route("/unban_user/<user_id>", methods=['POST', 'GET'])
+@account_confirmation_check
 def unban_user(user_id):
 
     if not current_user.is_admin:
@@ -364,6 +367,7 @@ def dashboard():
         
   
 @user.route("/rotate_avatar_right")
+@account_confirmation_check
 @login_required #This page needs to be login
 def rotate_avatar_right():
 
@@ -373,6 +377,7 @@ def rotate_avatar_right():
 
 
 @user.route("/rotate_avatar_left")
+@account_confirmation_check
 @login_required #This page needs to be login
 def rotate_avatar_left():
 
@@ -532,6 +537,7 @@ def callback():
         
 
 @user.route("/subscribe_newsletter", methods=['GET'])
+@account_confirmation_check
 @login_required
 def subscribe_newsletter():
 

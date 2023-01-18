@@ -369,7 +369,8 @@ a.cookie-button-text {
 }
 
 .add-activity:hover {
-  background-color: #183a18;
+  background-color: #000000;
+  border: 2px solid #579956;
   border-radius: 15px;
 }
 

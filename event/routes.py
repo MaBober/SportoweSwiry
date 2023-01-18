@@ -313,7 +313,7 @@ def create_event():
                         menu_mode="mainApp",
                         mode = "create")
     else: 
-            flash('Jesteś już administratorem 3 trwających wyzwań. W tym momencie nie możesz stworzyć kolejnych!', 'danger')
+            flash('Jesteś już organizatorem 3 trwających wyzwań. W tym momencie nie możesz stworzyć kolejnych!', 'danger')
             return redirect(url_for('other.hello'))
 
 

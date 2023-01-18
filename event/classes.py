@@ -490,19 +490,7 @@ class Event(db.Model):
             event_activities_calculated_values = all_event_activities.merge(event_coefficients_set, on = ['activity_type_id'])
 
             if event_activities_calculated_values.empty:
-
-                data = {'user_id' : '---',
-                         'date' : '---',
-                         'distance' : 0,
-                         'time' : 0,
-                         'strava_id' : '---',
-                         'added_on': "NaN",
-                         'activity_type_id' : '---',
-                         'value' : 0,
-                         'is_constant' : False }
-
-                event_activities_calculated_values = pd.DataFrame(data, index = [0])
-
+                event_activities_calculated_values = event_activities_calculated_values.append({'user_id' : '---', 'date' : '---', 'distance' : 0, 'time' : 0, 'strava_id' : '---', 'activity_type_id' : '---', 'value' : 0, 'is_constant' : False } ,ignore_index=True)
                 event_activities_calculated_values['calculated_distance'] = 0
 
             else:

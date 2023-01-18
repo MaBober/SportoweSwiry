@@ -210,8 +210,7 @@ class Event(db.Model):
             return message, 'danger', redirect(url_for('event.explore_events'))
 
         from other.functions import send_email
-
-        send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'emails/welcome', event = self, user = current_user)
+    
 
         message = '''
         Czołem  {} {}!,
@@ -239,6 +238,8 @@ class Event(db.Model):
             participation = Participation(user_id = user.id, event_id = self.id)
             db.session.add(participation)
             db.session.commit()
+
+            send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'emails/welcome', event = self, user = current_user)
 
             message = "Zapisano do wyzwania " + self.name + "!"
             current_app.logger.info(f"User {current_user.id} joined event {self.id}")

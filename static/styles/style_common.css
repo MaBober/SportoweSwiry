@@ -307,7 +307,7 @@ a.cookie-button-text {
 }
 
 
-.add-activity {
+a .add-activity {
   width: 206px;
   height: 46px;
   display: flex;
@@ -316,7 +316,14 @@ a.cookie-button-text {
   border-radius: 15px;
   background-color: #579956;
   position: relative;
-  margin-right: -3px;
+  margin-right: -12px;
+  border: 2px solid transparent;
+}
+
+
+a .add-activity:hover {
+  background-color: #000;
+  border: 2px solid #579956;
 }
 
 
@@ -329,7 +336,7 @@ img.icon-add-activity {
   margin: auto;
 }
 
-.add-activity a {
+.add-activity p {
   text-align: left;
   margin-top:auto;
   margin-bottom: auto;
@@ -356,23 +363,18 @@ img.icon-add-activity {
   border-radius: 15px;
 }
 
-.Main-Menu-Message {
-  display: flex;
-  flex-direction: row;
-}
 
 .Alert-Message {
-  position: absolute;
   background-color: red; 
-  padding-left: 5px;
-  padding-right: 5px;
+  width: 20px;
   border-radius: 5px; 
   font-size: 10px;
   margin-left: 113px !important;
-  margin-top: 13px !important;
+  margin-top: -27px !important;
+  margin-bottom: 10px;
   text-decoration: none !important;
   color: white;
-  
+  text-align: center;
 }
 
 .Alert-Message:hover {
@@ -591,7 +593,7 @@ img.icon-add-activity {
   .navbar-toggler:hover
   {
       border: 3px solid #579956  !important;
-      border-radius: 10px;
+      border-radius: 10px !important;
       box-shadow: none !important;
   }
 
@@ -599,22 +601,22 @@ img.icon-add-activity {
   .navbar-toggler:focus
   {
       border: 3px solid #579956  !important;
-      border-radius: 10px;
+      border-radius: 10px !important;
       box-shadow: none !important;
   }
 
   .navbar-collapse {
     background-color: #000;
-    border-radius: 15px;
+    border-radius: 15px !important;
     border: 2px solid #579956 !important;
     box-shadow: none !important;
   }
 
 
-  .add-activity {
+  a .add-activity {
     width: 100%;
     margin-left: 0px !important;
-    margin-top:-1px;
+    margin-top:-10px;
   
   }
 
@@ -623,12 +625,12 @@ img.icon-add-activity {
     margin-right: 0 !important;
   }
 
-  .add-activity a {
+  .add-activity p {
     margin-left: 0 !important;
     margin-right: 0 !important; 
   }
 
-  .nav-item a {
+  .nav-item p {
     margin-left: 20px;
   }
 
@@ -637,7 +639,6 @@ img.icon-add-activity {
     width: 60%;
   
   }
-
 
 }
 
@@ -652,19 +653,12 @@ img.icon-add-activity {
     justify-content: right !important;
   }
 
-  .Alert-Message {
-    position: absolute;
-    background-color: red; 
-    padding-left: 5px;
-    padding-right: 5px;
-    border-radius: 5px; 
-    font-size: 8px !important;
-    margin-left: 87px !important;
-    margin-top: 8px !important;
-    margin: auto;
-    
-  }
 
+  .Alert-Message {
+    margin-top: -23px !important;
+    font-size: 8px;
+    margin-left: 100px;
+  }
 
 }
 
@@ -679,17 +673,9 @@ img.icon-add-activity {
   }
 
   .Alert-Message {
-    position: absolute;
-    background-color: red; 
-    padding-left: 5px;
-    padding-right: 5px;
-    border-radius: 5px; 
-    font-size: 10px !important;
-    margin-left: 98px !important;
-    margin-top: 13px !important;
-    
+    margin-top: -23px !important;
+    font-size: 8px;
   }
-
 
 }
 
@@ -697,7 +683,7 @@ img.icon-add-activity {
 @media (min-width: 1600px) {
 
 
-  .add-activity a {
+  .add-activity p {
     width: 100% !important;
     padding-left: 0 !important;
     padding-right: 0 !important;

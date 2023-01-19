@@ -307,36 +307,13 @@ a.cookie-button-text {
 }
 
 
-.add-activity {
-  width: 206px;
-  height: 46px;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  border-radius: 15px;
-  background-color: #579956;
-  position: relative;
-  margin-right: -3px;
-}
 
 
-img.icon-add-activity {
-  width: 29px;
-  height: 22px;
-  flex-grow: 0;
-  object-fit: contain;
-  text-align: center;
-  margin: auto;
-}
 
-.add-activity a {
-  text-align: left;
-  margin-top:auto;
-  margin-bottom: auto;
-  margin-right: 20px;
-  font-size: 16px;
-  color: #fff;
-}
+
+
+
+
 
 .Background-Line {
   background-color: #000;
@@ -355,6 +332,58 @@ img.icon-add-activity {
   background-color: #579956;
   border-radius: 15px;
 }
+
+.add-activity {
+  text-align: left;
+  margin-top:auto;
+  margin-bottom: auto;
+  margin-right: 20px;
+  font-size: 16px;
+  color: #fff;
+
+  width: 206px;
+  height: 46px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  border-radius: 15px;
+  background-color: #579956;
+  position: relative;
+  margin-right: -3px;
+}
+
+.add-activity a {
+  margin-top:auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+  margin-right: 20px;
+
+  text-align: left;
+  margin-top:auto;
+  margin-bottom: auto;
+  margin-right: 20px;
+  font-size: 16px;
+  color: #fff;
+
+
+}
+
+.add-activity:hover {
+  background-color: #000000;
+  border: 2px solid #579956;
+  border-radius: 15px;
+}
+
+img.icon-add-activity {
+  width: 29px;
+  height: 22px;
+  flex-grow: 0;
+  object-fit: contain;
+  text-align: center;
+  margin: auto;
+}
+
+
 
 .Main-Menu-Message {
   display: flex;

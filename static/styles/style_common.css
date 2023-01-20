@@ -510,6 +510,7 @@ img.icon-add-activity {
   .wrapper .tooltip {
   background: #ffffff;
   overflow: visible !important;
+  font-size: 13px;
   z-index: 2;
   border: solid 2px #579956;
   bottom: 50%;

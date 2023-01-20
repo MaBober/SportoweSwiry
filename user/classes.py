@@ -747,24 +747,33 @@ class DashboardPage:
         try:
 
             event_length_weeks = self.event.length_weeks
-            event_current_users_amount = self.event.current_users_amount
-
+            event_current_week = self.event.current_week
 
             all_event_activities = self.event.give_all_event_activities(calculated_values = True)
             split_list = self.event.give_overall_weekly_summary(all_event_activities)
-            beers_summary = self.event.give_beers_summary(split_list)
-            beers_to_buy = beers_summary['beers_to_buy'][current_user.id]
 
-            if beers_to_buy > 0:
+            weeks_done = 0
+            weeks_zero = 0
+            for week in split_list:
+                if week.loc['target_done','calculated_distance'].loc[current_user.id][0] and week.loc['total','calculated_distance'].loc[current_user.id][0]>0:
+                    weeks_done +=1
+                if week.loc['total','calculated_distance'].loc[current_user.id][0]==0 and week.loc['target_done','calculated_distance'].loc[current_user.id][0]:
+                    weeks_zero +=1
 
-                max_amount_beers_to_buy = event_length_weeks*(event_current_users_amount-1)
-                efficiency = 100-((beers_to_buy/max_amount_beers_to_buy)*100)
+
+            event_length_weeks = event_length_weeks - weeks_zero
+
+
+            if weeks_done < event_length_weeks:
+
+                current_event_offset = event_length_weeks - event_current_week
+                efficiency = (weeks_done/(event_length_weeks - current_event_offset))*100
                 self.d3 = round(efficiency, 0)
-            
+
             else:
                 self.d3=100
         except:
-                current_app.logger.exception("beers_to_buy > 0")
+                current_app.logger.exception("weeks_done < event_length_weeks")
 
 
         return None

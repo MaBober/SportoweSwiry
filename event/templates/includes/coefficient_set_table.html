@@ -42,56 +42,73 @@
         <div class="card-header Event-Title-Box">Modyfikuj współczynniki sportów</div>
             <div class="card-body">
 
-                {% if not event.has_all_sports %}
-                <form method ="post" action="{{ url_for('event.add_new_sport_to_event', event_id = event.id) }}">
-                    {{ new_sport_form.csrf_token}}
-                    <div class="row align-items-end">
+                
 
-                        <div class="col-md-4 justify-content-left">
-                            <label class="form-label"><b>{{ new_sport_form.activity_type.label()}}</b></label> 
-                                {{ new_sport_form.activity_type(class_="form-control form-control-sm Input-Box", style="margin-bottom:5px;") }}
-                        </div>
-
-                        <div class="col-md-2 justify-content-left">
-                                <button class="btn btn-dark btn-lg Main-Button" style="height: max-content; min-width: 140px; margin-top: 5px;" type="submit">Dodaj sport</button>
-                        </div>
-                        <div class="col" style="border: solid 2px; padding: 10px; margin: 10px; margin-bottom: 0px; margin-top: 5px;" >
-                            Zależy Ci na dodaniu do aplikacji dodatkowego sportu? Kliknij <b><a href="{{ url_for('other.send_message', sport_proposal = True )}}" target="_blank">TUTAJ</a></b> i daj nam znać!
-                        </div>
-                        
-                    </div>
-                    <div class="row pt-3"></div>
-                </form>
-                {% else %}
-                <div class="col" style="border: solid 2px; padding: 15px; margin: 5px; margin-bottom: 0px;" >
-                    <h6>W Twoim wyzwaniu znajdują się wszystkie sporty dostępne w aplikacji.</h6>
-                    <h7>Zależy Ci na dodaniu do aplikacji dodatkowego sportu? Kliknij <b><a href="{{ url_for('other.send_message', sport_proposal = True )}}" target="_blank">TUTAJ</a></b> i daj nam znać!</h7><br>
-                </div>
-                {% endif %}
-
-
-                <div class = 'table-responsive-sm'>
-                    <table class="table table-striped table-hover">
+                <div class = 'table-responsive-sm'  style="position: unset;">
+                    <table class="table table-striped table-hover" style="position: unset;">
                         <thead>
+                        {% if not event.has_all_sports %}
+                            <form method ="post" action="{{ url_for('event.add_new_sport_to_event', event_id = event.id) }}">
+                                {{ new_sport_form.csrf_token}}
+                                <div class="row align-items-end">
+
+                                    <div class="col-md-4 justify-content-left">
+                                        <label class="form-label"><b>{{ new_sport_form.activity_type.label()}}</b></label> 
+                                            {{ new_sport_form.activity_type(class_="form-control form-control-sm Input-Box", style="margin-bottom:5px;") }}
+                                    </div>
+
+                                    <div class="col-md-2 justify-content-left">
+                                            <button class="btn btn-dark btn-lg Main-Button" style="height: max-content; min-width: 140px; margin-top: 5px;" type="submit">Dodaj sport</button>
+                                    </div>
+                                    <div class="col" style="border: solid 2px; padding: 10px; margin: 13px; margin-bottom: 0px; margin-top: 5px;" >
+                                        Zależy Ci na dodaniu do aplikacji dodatkowego sportu? Kliknij <b><a href="{{ url_for('other.send_message', sport_proposal = True )}}" target="_blank">TUTAJ</a></b> i daj nam znać!
+                                    </div>
+                                    
+                                </div>
+                                <div class="row pt-3"></div>
+                            </form>
+                            {% else %}
+                            <div class="col" style="border: solid 2px; padding: 15px; margin: 5px; margin-bottom: 0px;" >
+                                <h6>W Twoim wyzwaniu znajdują się wszystkie sporty dostępne w aplikacji.</h6>
+                                <h7>Zależy Ci na dodaniu do aplikacji dodatkowego sportu? Kliknij <b><a href="{{ url_for('other.send_message', sport_proposal = True )}}" target="_blank">TUTAJ</a></b> i daj nam znać!</h7><br>
+                            </div>
+                        {% endif %}
                             <tr>
 
                                 <th scope="col">Aktywność</th>
+
+                                <th scope="col" >
+                                    <div class="wrapper">
+                                        <img src="/static/img/help.svg" style="height: 22px;">
+                                        Stała / Współczynnik
+
+                                        <div class="tooltip"><b>Stała</b> -> każda aktywność tego typu jest warta tyle samo km, bez względu na realny dystans<br><br>
+                                                            <b> Współczynnik</b> -> Rzeczywisty dystans jest mnożony przez współczynnik dla danego sportu </div>
+                                    </div>
+                                </th>
                                 <th scope="col">Wartość</th>
-                                <th scope="col">Stała / Współczynnik</th>
                                 <th scope="col">Akcje</th>
 
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="position: relative; overflow: hidden;">
                             {% for activity in CoefficientsSet: %}
                             <tr>
-                                <td>{{activity.sport}}</td>
-                                <td>{{activity.value}}</td>
+                                <td style="position: relative; overflow: hidden;">{{activity.sport}}</td>
+
                                 <td>
                                     {% if activity.is_constant == True %}
                                     Stała
                                     {% else %}
                                     Współczynnik
+                                    {% endif %}
+                                </td>
+                                
+                                <td>
+                                    {% if activity.is_constant == True %}
+                                    {{activity.value}}
+                                    {% else %}
+                                    x{{activity.value}}
                                     {% endif %}
                                 </td>
                                 <td>

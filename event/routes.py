@@ -511,10 +511,14 @@ def modify_coefficient(event_id, activity_type_id):
     coefficient_form = CoeficientsForm(event_name = coefficient_to_modify.event,
         activity_name = coefficient_to_modify.sport,
         value = coefficient_to_modify.value,
-        is_constant = coefficient_to_modify.is_constant)
+        is_constant = int(coefficient_to_modify.is_constant))
+
+    del coefficient_form.strava_name
+    coefficient_form.event_name.validators = []
+    coefficient_form.activity_name.validators = []
 
     if coefficient_form.validate_on_submit():
-    
+
         message, status, action = event.modifiy_sport_coefficient(coefficient_to_modify, coefficient_form)
     
         flash(message, status)

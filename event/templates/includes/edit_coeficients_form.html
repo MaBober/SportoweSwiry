@@ -17,18 +17,31 @@
                     </div> 
                     
                     <div class="row pt-3"></div>
-                    <div class="col-md-8"><label class="form-label"><b>{{ form.activity_name.label()}}</b></label> 
+                    <div class="col-md-8"><label class="form-label"><b>{{ form.activity_name.label()}} </b></label> 
                         <br>{{ form.activity_name.data}} 
                     </div>
 
                     <div class="row pt-3"></div>
+
+                    <div class="col-md-4"><label class="form-label">
+                        <div class="wrapper">
+                            <img src="/static/img/help.svg" style="height: 22px;">
+                            <b>{{ form.is_constant.label()}}</b>
+
+                            <div class="tooltip" style="left: 5px;">
+                                <b>Stała</b> -> każda aktywność tego typu jest warta tyle samo km, bez względu na realny dystans<br><br>
+                                                <b> Współczynnik</b> -> Rzeczywisty dystans jest mnożony przez współczynnik dla danego sportu
+                            </div>
+                        </div>
+                    </label> 
+                        <br>{{ form.is_constant(class="form-control form-control-sm Input-Box") }} 
+                    </div>
+
                     <div class="col-md-4"><label class="form-label"><b>{{ form.value.label()}}</b></label> 
                         <br>{{ form.value(class_="form-control form-control-sm Input-Box" ) }} 
                     </div>
 
-                    <div class="col-md-4"><label class="form-label"><b>{{ form.is_constant.label()}}</b></label> 
-                        <br>{{ form.is_constant(class="Checkbox-Box form-check-input") }} 
-                    </div>
+
 
                 <div class="row pt-3"></div>
                 <div class="row justify-content-left">

@@ -449,6 +449,11 @@ class Event(db.Model):
     def modifiy_sport_coefficient(self, sport_to_modify, coefficient_form):
         current_app.logger.info(f"User {current_user.id} tries to modify {sport_to_modify} in event {self.id}.")
 
+        if coefficient_form.is_constant.data == '1':
+            coefficient_form.is_constant.data = True
+        else:
+            coefficient_form.is_constant.data = False
+
         if sport_to_modify != None:
             try:
                 sport_to_modify.value = coefficient_form.value.data

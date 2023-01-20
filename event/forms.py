@@ -59,9 +59,9 @@ class CoeficientsForm(FlaskForm):
 
     event_name = StringField("Wyzwanie", validators=[DataRequired("Pole nie może być puste")])
     activity_name = StringField("Nazwa aktywności", validators=[DataRequired("Pole nie może być puste"), validate_name])
-    is_constant = BooleanField("Stała wartość?", default=False)
+    is_constant = SelectField("Stała / Współczynnik", choices =[(1, "Stała"), (0, "Współczynnik")])
     strava_name = StringField("Nazwa aktywności w Strava [ENG]", validators=[validate_strava_name])
-    value = DecimalField("Współczynnik", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
+    value = DecimalField("Wartość", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
 
 class NewSportToEventForm(FlaskForm):
     

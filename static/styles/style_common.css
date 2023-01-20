@@ -308,7 +308,38 @@ a.cookie-button-text {
 
 
 
-a .add-activity {
+
+
+
+
+
+
+
+.Background-Line {
+  background-color: #000;
+  margin-right: 5%;
+}
+
+
+.nav-item a {
+  margin-top:auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.nav-item:hover {
+  background-color: #579956;
+  border-radius: 15px;
+}
+
+.add-activity {
+  text-align: left;
+  margin-top:auto;
+  margin-bottom: auto;
+  margin-right: 20px;
+  font-size: 16px;
+  color: #fff;
 
   width: 206px;
   height: 46px;
@@ -318,27 +349,14 @@ a .add-activity {
   border-radius: 15px;
   background-color: #579956;
   position: relative;
-  margin-right: -12px;
-  border: 2px solid transparent;
+  margin-right: -3px;
 }
 
-
-a .add-activity:hover {
-  background-color: #000;
-  border: 2px solid #579956;
-}
-
-
-img.icon-add-activity {
-  width: 29px;
-  height: 22px;
-  flex-grow: 0;
-  object-fit: contain;
-  text-align: center;
-  margin: auto;
-}
-
-.add-activity p {
+.add-activity a {
+  margin-top:auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+  margin-right: 20px;
 
   text-align: left;
   margin-top:auto;
@@ -356,18 +374,34 @@ img.icon-add-activity {
   border-radius: 15px;
 }
 
+img.icon-add-activity {
+  width: 29px;
+  height: 22px;
+  flex-grow: 0;
+  object-fit: contain;
+  text-align: center;
+  margin: auto;
+}
+
+
+
+.Main-Menu-Message {
+  display: flex;
+  flex-direction: row;
+}
 
 .Alert-Message {
+  position: absolute;
   background-color: red; 
-  width: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
   border-radius: 5px; 
   font-size: 10px;
   margin-left: 113px !important;
-  margin-top: -27px !important;
-  margin-bottom: 10px;
+  margin-top: 13px !important;
   text-decoration: none !important;
   color: white;
-  text-align: center;
+  
 }
 
 .Alert-Message:hover {
@@ -664,7 +698,7 @@ img.icon-add-activity {
   .navbar-toggler:hover
   {
       border: 3px solid #579956  !important;
-      border-radius: 10px !important;
+      border-radius: 10px;
       box-shadow: none !important;
   }
 
@@ -672,22 +706,22 @@ img.icon-add-activity {
   .navbar-toggler:focus
   {
       border: 3px solid #579956  !important;
-      border-radius: 10px !important;
+      border-radius: 10px;
       box-shadow: none !important;
   }
 
   .navbar-collapse {
     background-color: #000;
-    border-radius: 15px !important;
+    border-radius: 15px;
     border: 2px solid #579956 !important;
     box-shadow: none !important;
   }
 
 
-  a .add-activity {
+  .add-activity {
     width: 100%;
     margin-left: 0px !important;
-    margin-top:-10px;
+    margin-top:-1px;
   
   }
 
@@ -696,12 +730,12 @@ img.icon-add-activity {
     margin-right: 0 !important;
   }
 
-  .add-activity p {
+  .add-activity a {
     margin-left: 0 !important;
     margin-right: 0 !important; 
   }
 
-  .nav-item p {
+  .nav-item a {
     margin-left: 20px;
   }
 
@@ -710,6 +744,7 @@ img.icon-add-activity {
     width: 60%;
   
   }
+
 
 }
 
@@ -724,12 +759,19 @@ img.icon-add-activity {
     justify-content: right !important;
   }
 
-
   .Alert-Message {
-    margin-top: -23px !important;
-    font-size: 8px;
-    margin-left: 100px;
+    position: absolute;
+    background-color: red; 
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px; 
+    font-size: 8px !important;
+    margin-left: 87px !important;
+    margin-top: 8px !important;
+    margin: auto;
+    
   }
+
 
 }
 
@@ -744,9 +786,17 @@ img.icon-add-activity {
   }
 
   .Alert-Message {
-    margin-top: -23px !important;
-    font-size: 8px;
+    position: absolute;
+    background-color: red; 
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px; 
+    font-size: 10px !important;
+    margin-left: 98px !important;
+    margin-top: 13px !important;
+    
   }
+
 
 }
 
@@ -754,7 +804,7 @@ img.icon-add-activity {
 @media (min-width: 1600px) {
 
 
-  .add-activity p {
+  .add-activity a {
     width: 100% !important;
     padding-left: 0 !important;
     padding-right: 0 !important;

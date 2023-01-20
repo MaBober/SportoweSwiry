@@ -22,12 +22,10 @@
         <div class="collapse navbar-collapse justify-content-end" id="MainMenu">
             <ul class="nav navbar-nav">
 
-                <a class="nav-link" href="{{ url_for('activity.add_activity') }}">
-                    <li class="nav-item add-activity">
-                        <img src="/static/img/icon-Add.webp" class="icon-add-activity">
-                        <p>Dodaj aktywność</p>
-                    </li>
-                </a>
+                <li class="nav-item add-activity">
+                    <img src="/static/img/icon-Add.webp" class="icon-add-activity">
+                    <a class="nav-link" href="{{ url_for('activity.add_activity') }}">Dodaj aktywność</a>
+                </li>
             </ul>
             <ul class="nav navbar-nav Background-Line">
 
@@ -50,13 +48,13 @@
                 </li>
 
 
-                <li class="nav-item">
-                    <a class="nav-link Messages" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
-                    <p class="Alert-Message">
+                <li class="nav-item Main-Menu-Message">
+                    <a class="nav-link Main-Menu-Message" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
+                    <a class="Alert-Message">
                         {% if current_user.count_not_readed_messages()>0 %} 
                             {{ current_user.count_not_readed_messages() }}
                         {% endif %}
-                    </p>
+                    </a>
                 </li>
 
 

@@ -45,11 +45,12 @@
 
                 <li class="nav-item">
                     <a class="nav-link Messages" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
+                    
+                    {% if current_user.count_not_readed_messages()>0 %}
                     <p class="Alert-Message">
-                        {% if current_user.count_not_readed_messages()>0 %} 
-                            {{ current_user.count_not_readed_messages() }}
-                        {% endif %}
-                    </p>
+                        {{ current_user.count_not_readed_messages() }}
+                    </p> 
+                    {% endif %}
                 </li>
 
 

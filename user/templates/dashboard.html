@@ -66,9 +66,9 @@
 
 <script>  
     var options = {
-        series: ['{{ dashboard.d1}}','{{ dashboard.d2}}'],
+        series: ['{{ dashboard.d1}}','{{ dashboard.d2}}', '{{ dashboard.d3}}'],
         chart: {
-        height: '315px',
+        height: '350px',
         type: 'radialBar',
     },
     plotOptions: {
@@ -88,10 +88,11 @@
         dataLabels: {
             name: {
                 show: true,
+                fontSize: '13px',
             },
             value: {
                 show: true,
-                fontSize: '16px',
+                fontSize: '14px',
                 color: '#fff',
             },
             total: {
@@ -103,12 +104,12 @@
         }
         }
     },
-    colors: ['#579956', '#21ce1e'],
-    labels: ['Wyzwanie', 'Tydzień'],
+    colors: ['#579956', '#21ce1e', '#8BDF32'],
+    labels: ['Postęp wyzwania', 'Cel tygodniowy', 'Skuteczność'],
     legend: {
         show: true,
         floating: true,
-        fontSize: '16px',
+        fontSize: '17px',
         position: 'left',
         offsetX: 120,
         offsetY: 00,
@@ -119,7 +120,7 @@
         size: 0
         },
         formatter: function(seriesName, opts) {
-        return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex] + "%"
+        return seriesName
         },
         itemMargin: {
         vertical: 5
@@ -149,7 +150,7 @@
             floating: true,
             offsetX: 40,
             offsetY: 0,
-            fontSize: '16px',
+            fontSize: '14px',
             itemMargin: {
             vertical: 3
             }
@@ -174,31 +175,31 @@
         }
     },
     {
-        breakpoint: 1200,
-        options: {
-        legend: {
-            show: true,
-            floating: true,
-            offsetX: 20,
-            offsetY: 13,
-            fontSize: '16px',
-            itemMargin: {
-            vertical: 3
-            }
-        }
-        }
-    },
-    {
         breakpoint: 1000,
         options: {
         legend: {
             show: true,
             floating: true,
-            offsetX: 0,
-            offsetY: 5,
-            fontSize: '14px',
+            offsetX: 30,
+            offsetY: 10,
+            fontSize: '16px',
             itemMargin: {
             vertical: 2
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1200,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 30,
+            offsetY: 13,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
             }
         }
         }

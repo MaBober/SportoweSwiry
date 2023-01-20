@@ -38,6 +38,7 @@ body {
   position: absolute;
   top: 29px;
   left: 100px;
+  z-index: 1;
 }
 
 .Login-Button {
@@ -304,6 +305,7 @@ a.cookie-button-text {
   height: 39px;
   margin-top: 30px;
   padding:0;
+  margin-left: 200px;
 }
 
 

@@ -54,6 +54,7 @@ body {
 
 .Main-Button:hover {
   background-color: rgb(0, 0, 0) !important;
+  border: 2px solid #579956;
 }
 
 

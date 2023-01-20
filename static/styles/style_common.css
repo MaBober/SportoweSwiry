@@ -527,6 +527,8 @@ img.icon-add-activity {
 .wrapper {
   cursor: help;
   position: relative;
+  overflow: visible !important;
+  display: inline;
   flex-direction: row;
   -webkit-transform: translateZ(0); /* webkit flicker fix */
   -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
@@ -534,19 +536,21 @@ img.icon-add-activity {
   
   .wrapper .tooltip {
   background: #ffffff;
-  overflow: visible;
+  overflow: visible !important;
   z-index: 2;
   border: solid 2px #579956;
-  bottom: 100%;
+  bottom: 50%;
   color: rgb(0, 0, 0);
   display: block;
-  left: -20px;
+  left: -105px;
   margin-bottom: 15px;
   opacity: 0;
   padding: 20px;
   pointer-events: none;
   position: absolute;
-  width: 100%;
+  /* min-width: 300px; */
+  width: 75vw;
+  max-width: 600px;
   -webkit-transform: translateY(10px);
     -moz-transform: translateY(10px);
     -ms-transform: translateY(10px);
@@ -574,20 +578,7 @@ img.icon-add-activity {
   position: absolute;
   width: 100%;
   }
-  
-  /* CSS Triangles - see Trevor's post */
-  .wrapper .tooltip:after {
-  border-left: solid transparent 10px;
-  border-right: solid transparent 10px;
-  border-top: solid #ffffff 10px;
-  bottom: -10px;
-  content: " ";
-  height: 0;
-  left: 50%;
-  margin-left: -13px;
-  position: absolute;
-  width: 0;
-  }
+
   
   .wrapper:hover .tooltip {
   opacity: 1;
@@ -673,6 +664,10 @@ img.icon-add-activity {
 @media(max-width: 500px) {
   .Strava-logo{
     left:140px;
+  }
+
+  .wrapper .tooltip {
+    font-size: 12px;
   }
 }
 

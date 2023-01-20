@@ -8,7 +8,7 @@
             </div>
 
                 <div style="padding-left: 40px; padding-right: 40px; margin-bottom: 10px;">
-                    {{newsletter_form.policy_acceptance}} Zapisz się na nasz Newsletter, aby otrzymwać wszystkie nowości dotyczące Sportowych Świrów! Dodając się, zgadzasz się z naszą  <a href="{{url_for('other.privacy_policy')}}">polityką prywatności</a>
+                    {{newsletter_form.policy_acceptance(class_="Checkbox-Box form-check-input", style="margin:revert;" )}} Zapisz się na nasz Newsletter, aby otrzymwać wszystkie nowości dotyczące Sportowych Świrów! Dodając się, zgadzasz się z naszą  <a href="{{url_for('other.privacy_policy')}}">polityką prywatności</a>
                 </div>
             </div>
     </form>

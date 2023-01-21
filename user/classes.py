@@ -113,6 +113,7 @@ class User(db.Model, UserMixin):
             #adding admins to datebase 
             db.session.add(new_user)
             db.session.commit()
+            send_email(new_user.mail, 'Witaj w Sportowych Świrach!','emails/register_social', user = new_user)
             login_user(new_user)
 
             message = "Nowe konto zostało utworzone!"

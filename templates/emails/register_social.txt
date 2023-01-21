@@ -2,10 +2,6 @@ Cześć {{user.name}},
 
 Właśnie założył*ś konto w aplikacji Sportowe Świry!
 
-Żeby potwierdzić Twoje konto prosze kliknij w poniższy link:
-
-{{ url_for('user.confirm', token=token, _external=True) }}
-
 Dzięki dołączeniu do Sportowych Świrów możesz:
 
  -  stworzyć wyzwanie i zaprosić do niego przyjaciół, dzięki czemu będziecie mieć okazję do wspólnej i regularnej aktywności fizycznej,
@@ -18,7 +14,7 @@ Dzięki dołączeniu do Sportowych Świrów możesz:
 
  - dbać o swoją formę i zdrowie, a przy okazji próbować nowych aktywności fizycznych,
 
-A co najważniejsze to wszystko ZA DARMO
+A co najważniejsze to wszystko ZA DARMO!
 
 Do zobaczenia na trasie!
 Zespół Sportowych Świrów

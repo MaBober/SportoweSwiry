@@ -112,6 +112,7 @@ body {
         justify-content: flex-start;
         gap: 1%;
         margin-top: 6%;
+        text-decoration: none;
 
       }
 
@@ -125,14 +126,33 @@ body {
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
         background-color: #efefef;
         justify-content: center;
+        align-content: center;
+        text-decoration: none;
+        color: #000;
       }
+
+      .Content-Box:hover {
+        position: relative;
+        width: 40%;
+        height: auto;
+
+        padding: 30px 24px 23px 22px;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        background-color: #579956;
+        color: #fff !important;
+        justify-content: center;
+        align-content: center;
+
+      }
+
 
 
       .icon{
         /* width: 350px; */
         height: 65px;
         flex-grow: 0;
-        
+        fill: #000;
+      
 
       }
 
@@ -147,7 +167,7 @@ body {
         line-height: normal;
         letter-spacing: normal;
         text-align: center;
-        color: #000;
+ 
 
       }
 
@@ -161,8 +181,14 @@ body {
         font-style: normal;
         line-height: normal;
         letter-spacing: normal;
-        text-align: left;
-        color: #000;
+        text-align: justify;
+        
+        text-decoration: none;
+      }
+
+      a.box-text{
+        text-decoration: none !important;
+
       }
 
 

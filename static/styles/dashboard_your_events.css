@@ -23,14 +23,16 @@
 }
 
 .Arrow-Box-Left {
-    width: 2%;
+
     margin: auto;
-    margin-left: 15px;
+    /* margin-left: 15px; */
+    display: inline;
 }
 
 .Arrow-Box-Right {
-    width: 5%;
+
     margin: auto;
+    display: inline;
 }
 
 .Event-Main-Box {
@@ -48,28 +50,29 @@
     padding-bottom: 10px;
     padding-left: 15px;
     padding-right: 15px;
+    flex-direction: row;
+    display: flex;
 }
 
 
 .Details-Of-Event-Button {
     width: 80%;
-    height: 50px;
+    height: fit-content;
     flex-grow: 0;
-    display: flex;
-    flex-direction: row;
+    display: inline;
+    right: -10px;
+
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    /* margin: 26px 412px 0 2px; */
-    padding: 15px;
+
     border-radius: 15px;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     background-color: #579956 !important;
     font-family: Lato;
     border: 2px solid #579956;
     position:relative;
-    margin: auto;
-    margin-top: -5px;
+    padding: 0;
+
 
   }
 
@@ -79,16 +82,26 @@
 
   }
 
-.Event-Box-Value-Title {
+.Event-Box-Value-1 {
     margin: auto;
     text-align: center;
+    width: 33%;
 }
 
-.Event-Box-Value-Title-Border {
+.Event-Box-Value-2 {
     margin: auto;
+    width: 33%;
     text-align: center;
     border-right: 2px solid #fff;
     border-left: 2px solid #fff;
+}
+
+.Event-Box-Value-3 {
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    width: 33%;
 }
 
 .Event-Box-Value {
@@ -130,8 +143,54 @@
   }
 
 
+  @media (min-width: 850px) and (max-width: 1200px) {
+
+    .Event-Box {
+
+        flex-direction: column;
+
+    }
+
+
+    .Event-Box-Value-1 {
+
+        width: 100%;
+        
+        border-bottom: 2px solid #fff;
+        border-left: none;
+
+        border-right: none;
+    }
+    
+    .Event-Box-Value-2 {
+
+        width: 80%;
+        margin-top: 10px;
+        border-left: none;
+        border-right: none;
+
+    }
+
+    .Event-Box-Value-3 {
+        margin: auto;
+        text-align: center;
+        justify-content: center;
+        display: flex;
+        width: 60%;
+    }
+
+    .Details-Of-Event-Button {
+        width: 300px;
+        right: 0px;
+
+    
+      }
+
+  }
+
+
 /* FOR SMALL SCREENS */
-@media(max-width: 850px) {
+@media(max-width: 900px) {
 
     .Event-Box-Value-Title h5 {
         font-size: 12px !important;
@@ -149,7 +208,7 @@
         font-size: 12px !important;
     }
 
-    .Event-Main-Box {
+    /* .Event-Main-Box {
         width: 90% !important;
         max-width: 650px;
         margin-bottom: 10px;
@@ -162,9 +221,9 @@
     }
 
     .Details-Of-Event-Button {
-        width: 90%;
-        font-size: 12px;
+        font-size: 18px;
         height: 35px;
+        margin-top: 7px;
     
       }
 
@@ -172,8 +231,53 @@
         width: 90%;
         font-size: 16px;
 
-    }
+    } */
 
 
 }
+
+
+@media(max-width: 600px) {
+    .Event-Box {
+
+        flex-direction: column;
+
+    }
+
+
+    .Event-Box-Value-1 {
+
+        width: 100%;
+        
+        border-bottom: 2px solid #fff;
+        border-left: none;
+
+        border-right: none;
+    }
+    
+    .Event-Box-Value-2 {
+
+        width: 80%;
+        margin-top: 10px;
+        border-left: none;
+        border-right: none;
+
+    }
+
+    .Event-Box-Value-3 {
+        margin: auto;
+        text-align: center;
+        justify-content: center;
+        display: flex;
+        width: 60%;
+    }
+
+    .Details-Of-Event-Button {
+        width: 300px;
+        right: 0px;
+    
+      }
+}
+
+
 

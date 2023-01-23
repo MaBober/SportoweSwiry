@@ -111,8 +111,8 @@
         floating: true,
         fontSize: '17px',
         position: 'left',
-        offsetX: 120,
-        offsetY: 00,
+        offsetX: 50,
+        offsetY: 0,
         labels: {
         useSeriesColors: true,
         },
@@ -126,7 +126,8 @@
         vertical: 5
         }
     },
-    responsive: [{
+    responsive: [
+    {
         breakpoint: 500,
         options: {
         legend: {
@@ -141,14 +142,13 @@
         }
         }
     },
-
     {
         breakpoint: 600,
         options: {
         legend: {
             show: true,
             floating: true,
-            offsetX: 40,
+            offsetX: 50,
             offsetY: 0,
             fontSize: '14px',
             itemMargin: {
@@ -157,17 +157,45 @@
         }
         }
     },
-    
-        
+    {
+        breakpoint: 700,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 100,
+            offsetY: 0,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 850,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 150,
+            offsetY: 0,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },  
     {
         breakpoint: 900,
         options: {
         legend: {
             show: true,
             floating: true,
-            offsetX: 40,
-            offsetY: 30,
-            fontSize: '16px',
+            offsetX: 20,
+            offsetY: 0,
+            fontSize: '14px',
             itemMargin: {
             vertical: 3
             }
@@ -180,9 +208,9 @@
         legend: {
             show: true,
             floating: true,
-            offsetX: 30,
-            offsetY: 10,
-            fontSize: '16px',
+            offsetX: 20,
+            offsetY: 0,
+            fontSize: '14px',
             itemMargin: {
             vertical: 2
             }
@@ -196,14 +224,90 @@
             show: true,
             floating: true,
             offsetX: 30,
-            offsetY: 13,
+            offsetY: 0,
             fontSize: '16px',
             itemMargin: {
             vertical: 3
             }
         }
         }
-    }]
+    },
+    {
+        breakpoint: 1300,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 40,
+            offsetY: 0,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1400,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 50,
+            offsetY: 0,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1500,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 60,
+            offsetY: 0,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1600,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 70,
+            offsetY: 0,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1700,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 80,
+            offsetY: 0,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    }
+    ]
     };
 
     var myChart = new ApexCharts(document.querySelector("#myChart"), options);

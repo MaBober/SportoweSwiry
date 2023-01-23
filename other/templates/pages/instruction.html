@@ -1,0 +1,110 @@
+{% extends "pages//base.html" %}
+
+
+{% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/about.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/instruction.css') }}">
+
+<div class="Static-Content">
+    <div class="row justify-content-center">
+        <div class="instruction-box">
+            <div class="card-header instruction-box-title">Instrukcja</div>
+            <span class ="instruction-box-font">
+                <div class="row instruction-box-row">
+                    <div class="instruction-box-all-col">
+                        Dziękujemy za zainteresowanie naszą aplikacją!
+
+                        <ul>
+                             <a href="#new_event"><li>Tworzenie wyzwania</li></a> 
+                             <a href="#join_event"><li>Dołączenie do wyzwania</li></a>
+                        </ul>
+
+
+                    </div>
+                </div>
+                
+            </span>
+            <div class="card-header instruction-box-sub-title" id="new_event">Tworzenie wyzwania</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                    Aby stworzyć wyzwanie, wybierz w menu aplikacji <b>Wyzwania</b>, następnie <b>Stwórz Wyzwanie</b> na liście rozwijanej. Pamiętaj, że tworząc nowe wyzwanie, stajesz się jego Organizatorem!
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/new_event_1.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby stworzyć wyzwanie zarezerwuj sobie 5-10 minut na ustawienie wszystkich parametrów.
+                        Pamiętaj, że możesz być Organizatorem maksymalnie 3 aktualnie trwających wyzwań. Tworząc nowe wyzwania, musisz podać:
+                        <ul><br>
+                            <li><b>Nazwę wyzwania</b> (najlepiej coś charakterystycznego np. Two beavers better than one)</li>
+                            <li><b>Długość wyzwania</b> w tygodniach (od 2 do 15 tygodni)</li>
+                            <li><b>Maksymalną ilość uczestników</b>, która może zapisać się na wyzwanie (od 1 do 25 osób)</li>
+                            <li>Dzień <b>rozpoczęcia wyzwania</b> – musi być to przyszła data z przyszłości</li>
+                            <li>Określić <b>czy wydarzenie jest prywatne</b>, a jeżeli tak, utworzyć <b>hasło</b> umożliwiające innym uczestnikom dopisanie się do niego (pamiętaj, żeby przekazać uczestnikom to hasło!).</li>
+                            <li><b>Krótki opis wyzwania,</b> w którym możesz opisać, dla kogo przeznaczone jest to wyzwanie, jakie przewidywane są nagrody za realizacje celów oraz wszystkie inne informacje jakie mogą być przydatne dla uczestników.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/new_event_2.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Po kliknięciu <b>Utwórz!</b> zostaniesz przeniesiony na stronę z tabelą, w której musisz przypisać cel kilometrowy na każdy tydzień wyzwania. <br><br>
+                        <center><u>Pamiętaj, że końcowy wynik to suma dystansów pomnożona przez współczynniki przypisane do każdej aktywności!</u></center>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/new_event_3.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Jeżeli wypełniłeś wszystkie pola, kliknij <b>Zapisz!</b> i przenieś się do ekranu wyboru sportów uwzględnianych w Twoim wyzwaniu. <b>Jeżeli popełniłeś gdzieś błąd, nie przejmuj się, wszystkie dane można później skorygować.</b>
+                         W tabeli na obrazie poniżej widzisz tabelę sportów dla przykładowego wyzwania.
+                         Każde nowe wyzwanie ma początkowo przypisane wszystkie sporty dostępne w aplikacji z domyślnymi współczynnikami.
+
+                         Zwróć uwagę na kolumny Stała / Współczynnik oraz Wartość. Definiuje ona w jaki sposób zostaną przeliczone realne dystanse poszczególnych aktywności:
+                         <ul><br>
+                            <li>dystans Kolarstwa jest obliczany z użyciem współczynnika, tzn. jeżeli przejedziesz na rowerze 20 km to zaliczony dystans będzie wynosić 20*0,3 km = 6 km </li>
+                            <li>w przypadku Piłki Nożnej do tygodniowej sumy aktywności dodamy stałą wartość 5 km</li>
+                         </ul>
+                    </div>
+                </div>
+                    
+            </span>
+
+            <div class="card-header instruction-box-sub-title" id="join_event">Dołączenie do wyzwaniaa</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                    Aby stworzyć wyzwanie, wybierz w menu aplikacji <b>Wyzwania</b>, następnie <b>Stwórz Wyzwanie</b> na liście rozwijanej. Pamiętaj, że tworząc nowe wyzwanie, stajesz się jego Organizatorem!
+                    </div>
+                </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+{% endblock %}

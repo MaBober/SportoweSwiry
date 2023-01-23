@@ -1,0 +1,78 @@
+{% extends "pages//base.html" %}
+
+
+{% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/about.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/how_it_works.css') }}">
+
+<div class="Static-Content">
+
+
+    <div class="row justify-content-center">
+        
+        <div class="how_it_works-box">
+            <div class="card-header how_it_works-box-title">Jak to działa?</div>
+
+
+            <span class ="how_it_works-box-font">
+
+            <div class="row how_it_works-box-row"> 
+                <div class="how_it_works-box-all-col">
+                    Podsumowanie na 5 punktów jak działa aplikacja:<br><br>
+                    <ul>
+                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit ess  <br><br></li>
+                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit ess  <br><br></li>
+                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit ess  <br><br></li>
+                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit ess  <br><br></li>
+                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit ess  </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="row how_it_works-box-row" > 
+                <div class="how_it_works-box-all-col">
+                    <hr style="border-top: 10px solid #579956; opacity: 1;">
+                </div>
+            </div>
+
+            <div class="row how_it_works-box-row" > 
+                <div class="how_it_works-box-all-col">
+                    Jeżeli chcesz poznać więcej szczegółów na temat naszej aplikacji, przeczytaj szczegółową instrukcje, która krok po kroku przeprowadzić Cię przez proces zakładania konta, tworzenia własnych wyzwań, oraz dodawania aktywności. Dodatkowo zachęcamy Cię do przeczytania odpowiedzi na często zadawane pytania.
+                </div>
+            </div>
+            <div class="row how_it_works-box-row" > 
+                <div class="how_it_works-box-all-col">
+                    <br>Przed założeniem konta w naszej aplikacji, zapoznaj się również z obowiązującymi Regulaminem oraz Polityką Prywatności.    
+                </div>
+            </div>
+
+            <div class="row how_it_works-box-row" > 
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.instruction') }}">Szczegółowa instrukcja</a>
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.faq') }}">Często zadawane pytania</a>  
+                <div class="how_it_works-box-all-col" style="justify-content: center;">
+
+                </div>
+            </div>
+
+
+
+
+            <div class="row how_it_works-box-row" > 
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.statute') }}">Regulamin</a>
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.privacy_policy') }}">Polityka Prywatności</a>  
+                <div class="how_it_works-box-all-col" style="justify-content: center;">
+
+                </div>
+            </div>
+
+            </span>
+            
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+{% endblock %}

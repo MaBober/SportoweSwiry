@@ -57,7 +57,7 @@
 
 
     <header>
-      {% if menu_mode=="mainApp" %}
+      {% if current_user.is_authenticated %}
         {% include "includes/main_menu.html" %} 
       {% else %}
         {% include "includes/header_without_menu.html" %} 

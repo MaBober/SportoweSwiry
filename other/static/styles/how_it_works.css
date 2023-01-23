@@ -143,6 +143,19 @@ body {
       flex-wrap: wrap;
       overflow-wrap: break-word;
     }
+
+    .details-button{
+      display: block;
+      font-size: 16px;
+      max-width: 300px;
+      height: 45px;
+      margin: auto;
+      margin-top: 15px;
+      border-radius: 15px;
+      background-color: #579956 !important;
+      border: solid 2px #579956;
+  
+    }
     
   
   }

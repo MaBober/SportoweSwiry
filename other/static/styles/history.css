@@ -90,6 +90,7 @@ body {
   max-height: 550px;
   left: -10px;
   margin-top: 80px; 
+  margin-bottom: 20px;
 }
 
 .history-box-font{
@@ -105,7 +106,7 @@ body {
 
 
 /* FOR SMALL SCREENS */
-@media(max-width: 850px) {
+@media(max-width: 1010px) {
 
   .history-box {
       width: 85%;

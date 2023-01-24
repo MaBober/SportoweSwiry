@@ -23,14 +23,14 @@
 }
 
 .Arrow-Box-Left {
-
+    position: relative;
     margin: auto;
     /* margin-left: 15px; */
     display: inline;
 }
 
 .Arrow-Box-Right {
-
+    position: relative;
     margin: auto;
     display: inline;
 }
@@ -280,4 +280,22 @@
 }
 
 
+@media(max-width: 420px) {
+    .Event-Box {
+
+        width: 80%;
+        
+    }
+
+
+    .Arrow-Box-Left {
+    left: 30px;
+    }
+
+    .Arrow-Box-Right {
+    right: 30px;
+    }
+
+    
+}
 

@@ -89,7 +89,7 @@ body {
 .bober-img{
   max-height: 550px;
   left: -10px;
-  margin-top: 80px; 
+  margin-top: 40px; 
   margin-bottom: 20px;
 }
 
@@ -101,6 +101,21 @@ body {
   padding-bottom: 15px;
   flex-direction: row;
 
+}
+
+.details-button{
+  display: block;
+  max-width: 300px;
+  height: 50px;
+  margin: auto;
+  margin-top: 15px;
+  border-radius: 15px;
+  background-color: #579956 !important;
+  border: solid 2px #579956;
+
+}
+.details-button:hover {
+  background-color: #000 !important;
 }
 
 
@@ -137,6 +152,16 @@ body {
     max-height: 550px;
     left: -10px;
     margin-top: 0px; 
+  }
+
+
+  .details-button{
+    display: block;
+    max-width: 250px;
+    height: 45px;
+    font-size: 17px;
+
+  
   }
 
 }

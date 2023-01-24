@@ -415,7 +415,7 @@ class User(db.Model, UserMixin):
             return avatar_path
 
     @staticmethod
-    def reset_password(token, new_password):
+    def check_token(token):
 
         current_app.logger.info(f"User tries to reset password")
         s = Serializer(current_app.config['SECRET_KEY'])
@@ -424,31 +424,37 @@ class User(db.Model, UserMixin):
             data = s.loads(token.encode('utf-8'))
 
         except:
-            message = 'Hasło nie zostało poprawnie zmienione!'
+            message = 'Hasło nie zostało zmienione. Podano niepoprawny link!'
             current_app.logger.warning(f"User didn't reset password")
             return message, 'danger', redirect(url_for('other.hello'))
 
         user = User.query.get(data.get('resetPassword'))
 
         if user is None:
-            message = 'Hasło nie zostało poprawnie zmienione!'
+            message = 'Hasło nie zostało zmienione. Podano nie poprawny link!'
             current_app.logger.warning(f"User didn't reset password")
             return message, 'danger', redirect(url_for('other.hello'))
 
-        try:
-            user.password = new_password      
-            user.password = user.hash_password()
+        else:
+            return user
 
-            db.session.add(user)
+
+    def reset_password(self, new_password):
+
+        try:
+            self.password = new_password      
+            self.password = self.hash_password()
+
+            db.session.add(self)
             db.session.commit()
 
             message = 'Hasło zostało poprawnie zmienione. Możesz się zalogować'
-            current_app.logger.info(f"User {user.id} reset password")
+            current_app.logger.info(f"User {self.id} reset password")
             return message, 'success', redirect(url_for('user.login'))
 
         except:
             message = 'HASŁO NIE ZOSTAŁO ZMIENIONE. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
-            current_app.logger.exception(f"User {user.id} failed to reset password")
+            current_app.logger.exception(f"User {self.id} failed to reset password")
             return message, 'danger', redirect(url_for('other.hello'))
 
     

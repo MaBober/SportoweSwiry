@@ -217,14 +217,16 @@ class MailboxMessage(db.Model):
             event=Event.query.filter(Event.name==event_name).first()
             for participant in event.participants:
                 receiver_user=User.query.filter(User.id==participant.user_id).first()
-                receiver_mail=receiver_user.mail
-                receiver_name=receiver_user.name
-                receiver_last_name=receiver_user.last_name
-                receiver_full_name=receiver_name + " " + receiver_last_name
-                new_message = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, sender_name=sender_full_name, receiver = receiver_mail, receiver_name = receiver_full_name, subject = form.subject.data, message = form.message.data, send_by_app = form.send_by_app.data, send_by_email= form.send_by_email.data, message_readed=False, multiple_message=True )
-                db.session.add(new_message)
-                db.session.commit()
-                app.logger.info(f"User {current_user.id} sent message to {event_name} participants.")
+                
+                if receiver_user.mail!=current_user.mail:
+                    receiver_mail=receiver_user.mail
+                    receiver_name=receiver_user.name
+                    receiver_last_name=receiver_user.last_name
+                    receiver_full_name=receiver_name + " " + receiver_last_name
+                    new_message = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, sender_name=sender_full_name, receiver = receiver_mail, receiver_name = receiver_full_name, subject = form.subject.data, message = form.message.data, send_by_app = form.send_by_app.data, send_by_email= form.send_by_email.data, message_readed=False, multiple_message=True )
+                    db.session.add(new_message)
+                    db.session.commit()
+                    app.logger.info(f"User {current_user.id} sent message to {event_name} participants.")
         except:
             current_app.logger.exception(f"User {current_user.id} failed to send message to {event_name} participants.")
 
@@ -239,7 +241,7 @@ class MailboxMessage(db.Model):
             db.session.add(new_message)
             db.session.commit()
 
-            users=User.query.all()
+            users=User.query.filter(User.mail!=current_user.mail).all()
             for user in users:
                 receiver_mail=user.mail
                 receiver_name=user.name

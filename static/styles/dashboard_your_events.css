@@ -208,31 +208,6 @@
         font-size: 12px !important;
     }
 
-    /* .Event-Main-Box {
-        width: 90% !important;
-        max-width: 650px;
-        margin-bottom: 10px;
-        margin: auto;
-    }
-
-    .Arrow-Box-Left {
-        width: 4%;
-        margin: auto;
-    }
-
-    .Details-Of-Event-Button {
-        font-size: 18px;
-        height: 35px;
-        margin-top: 7px;
-    
-      }
-
-    .Main-Button {
-        width: 90%;
-        font-size: 16px;
-
-    } */
-
 
 }
 
@@ -241,22 +216,17 @@
     .Event-Box {
 
         flex-direction: column;
-
     }
 
 
     .Event-Box-Value-1 {
-
         width: 100%;
-        
         border-bottom: 2px solid #fff;
         border-left: none;
-
         border-right: none;
     }
     
     .Event-Box-Value-2 {
-
         width: 80%;
         margin-top: 10px;
         border-left: none;
@@ -282,9 +252,8 @@
 
 @media(max-width: 420px) {
     .Event-Box {
-
         width: 80%;
-        
+
     }
 
 
@@ -295,6 +264,15 @@
     .Arrow-Box-Right {
     right: 30px;
     }
+
+    .Event-Title-Box {
+        font-size: 17px;
+    }
+
+    .Main-Button {
+        width: 85%;
+        font-size: 14px;
+      }
 
     
 }

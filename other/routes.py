@@ -107,7 +107,8 @@ def mailbox(actionName):
             flash("Wiadomość przesłana do uczestników wyzwania: {}".format(event_name))
         else:
             MailboxMessage.save_message_in_db(form)
-            flash("Wiadomość przesłana do użytkownika: {}".format(form.receiver_email.data))
+            receiver_full_name=MailboxMessage.set_receiver_full_name(form)
+            flash("Wiadomość przesłana do użytkownika: {}".format(receiver_full_name))
 
     elif request.method == 'POST':
         messages_to_delete=request.form.getlist('checkboxesWithMessagesToDelete')
@@ -115,7 +116,7 @@ def mailbox(actionName):
             flash("Brak zaznaczonych wiadomości do usunięcia")
         else:
             MailboxMessage.delete_messages_from_db(messages_to_delete)
-            flash ("Zaznaczone wiadomości zostały poprawnie usnięte")
+            flash ("Zaznaczone wiadomości zostały poprawnie usunięte")
         return redirect(url_for('other.mailbox', actionName='inbox'))
 
 

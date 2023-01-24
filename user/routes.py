@@ -232,7 +232,7 @@ def list_of_users():
 
     ban_form = BanReason()
 
-    users = User.query.all()
+    users = User.query.order_by(User.added_on.desc()).all()
     return render_template('list_of_users.html',
                     users=users,
                     ban_form = ban_form,

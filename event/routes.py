@@ -645,7 +645,9 @@ def modify_sport_in_base(sport_id):
     sport_form = CoeficientsForm(activity_name = sport_to_modify.name,
                         value = sport_to_modify.default_coefficient,
                         is_constant = sport_to_modify.default_is_constant,
-                        strava_name = sport_to_modify.strava_name)
+                        strava_name = sport_to_modify.strava_name,
+                        old_name = sport_to_modify.name,
+                        old_strava_name = sport_to_modify.strava_name)
     del sport_form.event_name
 
     if sport_form.validate_on_submit():

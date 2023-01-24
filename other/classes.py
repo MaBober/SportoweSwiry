@@ -41,7 +41,7 @@ class MailboxMessage(db.Model):
 
         from user.classes import User
 
-        list_of_users=User.query.all()
+        list_of_users=User.query.filter(User.name!="Konto").filter(User.last_name!="Usunięte").all()
         list_of_users_mails = [(a.mail) for a in list_of_users]
         list_of_users_names = [(a.name) for a in list_of_users]
         list_of_users_last_names = [(a.last_name) for a in list_of_users]
@@ -76,9 +76,9 @@ class MailboxMessage(db.Model):
     @staticmethod
     def prepare_list_of_choices_for_normal_user():
         admin_user=MailboxMessage.prepare_list_of_admins()
-        current_user_events_users=MailboxMessage.prepare_list_of_current_user_events_users()
+        current_user_events=MailboxMessage.prepare_list_of_current_user_events()
         current_user_events_single_users=MailboxMessage.prepare_list_of_current_user_events_single_users()
-        available_list_of_choices=admin_user+current_user_events_users+current_user_events_single_users
+        available_list_of_choices=admin_user+current_user_events+current_user_events_single_users
         return available_list_of_choices
 
 
@@ -105,7 +105,7 @@ class MailboxMessage(db.Model):
 
 
     @staticmethod
-    def prepare_list_of_current_user_events_users():
+    def prepare_list_of_current_user_events():
         list_of_events=Event.query.all()
         list_of_real_events=[]
 
@@ -146,7 +146,6 @@ class MailboxMessage(db.Model):
         list_of_mails = []
         list_of_full_names = []
 
-
         try:
 
             for single_event in list_of_real_events:
@@ -157,9 +156,13 @@ class MailboxMessage(db.Model):
                     receiver_name=receiver_user.name
                     receiver_last_name=receiver_user.last_name
                     receiver_full_name=receiver_name + " " + receiver_last_name
-                    if receiver_mail is not current_user.mail and not receiver_mail in list_of_mails and not receiver_mail in list_of_admins[0] and not receiver_mail in list_of_admins[1] and not receiver_mail in list_of_admins[3]:
-                        list_of_mails.append(receiver_mail)
-                        list_of_full_names.append(receiver_full_name)
+                    if receiver_mail is not current_user.mail and not receiver_mail in list_of_mails and receiver_full_name != "Konto Usunięte":
+                        for admin_mail in list_of_admins:
+                            if receiver_mail in admin_mail[0]:
+                                 break
+                        else:
+                            list_of_mails.append(receiver_mail)
+                            list_of_full_names.append(receiver_full_name)
                     
 
         except:

@@ -8,31 +8,30 @@
             {% if dashboard.user_events|length !=1 %}
                 <div class="Arrow-Box-Left"><a href="{{ url_for('user.dashboard', event_id=dashboard.previous_event)}}"><img src="/static/img/turn_left.webp"></a></div>
             {% endif %}
-            <div class="card-body">
+            <div class="card-body" style="display: flex; justify-content: center; padding: 1%;">
                 <div class="Event-Box">
-                    <div class="row">
+                    
 
-                        <div class="col-4 Event-Box-Value-Title">
+                        <div class="Event-Box-Value-1">
                             <h5>{{dashboard.event.name}}</h5>
-                            <h6>Tydzień <br> 
-                            {{dashboard.event.current_week}} / {{dashboard.event.length_weeks}} </h6>
+                            <h6>Tydzień <wbr> {{dashboard.event.current_week}} / {{dashboard.event.length_weeks}} </h6>
                         </div>
 
-                        <div class="col-4 Event-Box-Value-Title-Border">
+                        <div class="Event-Box-Value-2">
                             <h5>Dystans</h5>
                             {% if dashboard.event_week_distance >= dashboard.event.current_week_target %}
-                            <span style="color:rgb(47, 129, 20)"><h6>{{dashboard.event_week_distance}} / <br> {{dashboard.event.current_week_target}} km</h6></span>
+                            <span style="color:rgb(47, 129, 20)"><h6>{{dashboard.event_week_distance}} / <wbr> {{dashboard.event.current_week_target}} km</h6></span>
                             {% endif %}
         
                             {% if dashboard.event_week_distance < dashboard.event.current_week_target %}
-                            <span style="color:rgb(146, 40, 7)"><h6>{{dashboard.event_week_distance}} / <br> {{dashboard.event.current_week_target}} km</h6></span>
+                            <span style="color:rgb(146, 40, 7)"><h6>{{dashboard.event_week_distance}} / <wbr> {{dashboard.event.current_week_target}} km</h6></span>
                             {% endif %}
                         </div>
 
-                        <div class="col-4 Event-Box-Value-Title">
-                            <a href="{{ url_for('event.event_main', event_id=dashboard.event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">Szczegóły  </a>
+                        <div class="Event-Box-Value-3">
+                            <a href="{{ url_for('event.event_main', event_id=dashboard.event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button">Szczegóły  </a>
                         </div>
-                    </div>
+                    
                 </div>
             </div>
             {% if dashboard.user_events|length !=1 %}
@@ -54,15 +53,14 @@
         
         {% for event in dashboard.future_events %}
         <div class="Event-Box-Row">
-            <div class="card-body">
+            <div class="card-body" style="display: flex; justify-content: center;">
                 <div class="Event-Box">
-                    <div class="row">
-                        <div class="col-4 Event-Box-Value-Title"><h5>{{event.name}}</h5></div>
-                        <div class="col-4 Event-Box-Value-Title-Border">Start<br><h5>{{event.start}} </h5></div>
-                        <div class="col-4 Event-Box-Value-Title">
+
+                        <div class="Event-Box-Value-1"><h5>{{event.name}}</h5></div>
+                        <div class="Event-Box-Value-2">Start<br><h5>{{event.start}} </h5></div>
+                        <div class="Event-Box-Value-3">
                             <a href="{{ url_for('event.event_main', event_id=event.id )}} " type="button" class="btn btn-dark btn-lg Details-Of-Event-Button" style="background-color: #182c07e8;">Szczegóły</a>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

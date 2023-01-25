@@ -112,6 +112,18 @@ body {
     background-color: #000 !important;
   }
 
+  .question-mark-img {
+    height: 150px;
+    top:40px;
+    position: relative;
+  }
+
+  .lock-img {
+    height: 120px;
+    top:20px;
+    position: relative;
+  }
+
   
   
   
@@ -150,6 +162,15 @@ body {
       font-size: 17px;
   
     
+    }
+
+    .question-mark-img {
+      top:10px;
+
+    }
+
+    .lock-img {
+      top:10px;
     }
     
   

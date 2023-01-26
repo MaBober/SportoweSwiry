@@ -798,8 +798,7 @@ class Event(db.Model):
     
     @classmethod
     def added_in_last_days(cls, days):
-
-        inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
+        inserts = cls.query.filter(cls.added_on <= dt.datetime.now()).filter(cls.added_on >= dt.datetime.now() - dt.timedelta(days=days)).all()
 
         return len(inserts)
 

@@ -43,6 +43,32 @@ def about():
 
     return render_template('/pages/about.html', title_prefix = "O nas" )
 
+@other.route("/admin_panel")
+@account_confirmation_check
+def admin_panel():
+
+    if not current_user.is_admin:
+        flash("Nie masz uprawnień do tej zawartości")
+        return redirect(url_for('other.hello'))
+
+    from user.classes import User
+    from activity.classes import Activities
+    from event.classes import Event
+
+    ranges = [1,7,30]
+    data = {'users' : [],
+            'events' : [],
+            'activities' : []
+            }
+
+    for range in ranges:
+        data['activities'].append(Activities.added_in_last_days(range))
+        data['users'].append(User.added_in_last_days(range))
+        data['events'].append(Event.added_in_last_days(range))
+
+
+    return render_template('/pages/admin_panel.html', title_prefix = "Panel Administratora", menu_mode = "mainApp", data = data )
+
 
 @other.route("/send_message", methods=['POST','GET'])
 def send_message():

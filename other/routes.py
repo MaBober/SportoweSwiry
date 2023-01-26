@@ -26,7 +26,11 @@ def hello():
 @other.route("/faq")
 def faq():
 
-    return render_template('/pages/faq.html', title_prefix = "FAQ" )
+    from activity.classes import Sport
+
+    all_sports = Sport.all_sports()
+
+    return render_template('/pages/faq.html', title_prefix = "FAQ", all_sports = all_sports )
 
 
 @other.route("/regulamin")

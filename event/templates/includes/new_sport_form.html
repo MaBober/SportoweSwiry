@@ -11,7 +11,7 @@
 
         <div class="row pt-3"></div>
         <div class="col-md-8"><label class="form-label"><b>{{ form.activity_name.label()}}</b></label> 
-            <br>{{ form.activity_name(class_="form-control form-control-sm" )}}
+            <br>{{ form.activity_name(class_="form-control form-control-sm Input-Box" )}}
             <ul>
             {% for error in  form.activity_name.errors %}
                 {{ error }}
@@ -21,16 +21,16 @@
 
         <div class="row pt-3"></div>
         <div class="col-md-4"><label class="form-label"><b>{{ form.value.label()}}</b></label> 
-            <br>{{ form.value(class_="form-control form-control-sm" ) }} 
+            <br>{{ form.value(class_="form-control form-control-sm Input-Box" ) }} 
         </div>
 
         <div class="col-md-4"><label class="form-label"><b>{{ form.is_constant.label()}}</b></label> 
-            <br>{{ form.is_constant(class="form-check-input") }} 
+            <br>{{ form.is_constant(class="form-control form-control-sm Input-Box") }}
         </div>
 
         <div class="row pt-3"></div>
         <div class="col-md-4"><label class="form-label"><b>{{ form.strava_name.label()}}</b></label> 
-            <br>{{ form.strava_name(class_="form-control form-control-sm" )}}
+            <br>{{ form.strava_name(class_="form-control form-control-sm Input-Box" )}}
             <ul>
                 {% for error in  form.strava_name.errors %}
                     {{ error }}

@@ -54,6 +54,11 @@ def instruction():
 
     return render_template('/pages/instruction.html', title_prefix = "Instrukcja" ) 
 
+@other.route("/krypto_tip")
+def crypto_tip():
+
+    return render_template('/pages/crypto_tip.html', title_prefix = "Napiwek w kryptowalutach" ) 
+
 
 @other.route("/send_message", methods=['POST','GET'])
 def send_message():

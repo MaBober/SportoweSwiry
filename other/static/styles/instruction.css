@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmailSent.webp") no-repeat center fixed;
+    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_verifyEmail.webp") no-repeat center fixed;
     min-height: 100%;
     background-size: cover;
     background-color: #3a3a3a;
@@ -130,9 +130,20 @@ body {
     padding-right: 4%;
     padding-bottom: 15px;
     flex-direction: row;
+
+  }
+
+  .details-button{
+    display: block;
+    max-width: 400px;
+    height: 50px;
+    margin: auto;
+    margin-top: 15px;
+    border-radius: 15px;
+    background-color: #579956 !important;
+    border: solid 2px #579956;
   
   }
-  
   
   
   /* FOR SMALL SCREENS */
@@ -181,3 +192,11 @@ body {
       }
   
   }
+  /* FOR SMALL SCREENS */
+  @media(max-width: 400px) {
+
+    .details-button{
+      font-size: 15px;
+    
+    }
+}

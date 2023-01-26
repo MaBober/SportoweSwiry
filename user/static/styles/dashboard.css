@@ -181,6 +181,10 @@ body {
 
 }
 
+.dashboard-toolip{
+  left:-150px !important;
+}
+
 
 
 /* FOR SMALL SCREENS */
@@ -210,7 +214,25 @@ body {
       .Dashboard-Main-Box {
         width: 100%;
       }
-  
+
+      .dashboard-toolip{
+        left:-350px !important;
+      }
+      
+}
+
+@media(max-width: 630px) {
+  .dashboard-toolip{
+    left:-250px !important;
+  }
+
+}
+
+@media(max-width: 400px) {
+  .dashboard-toolip{
+    left:-170px !important;
+  }
+
 }
 
 
@@ -221,5 +243,19 @@ body {
   .Dashboard-Main-Box {
     width: 49%;
   }
+  .dashboard-toolip{
+    left:-550px !important;
+  }
 
+}
+
+/* FOR BIG SCREENS */
+@media (min-width: 1400px){
+
+
+  .dashboard-toolip{
+    height: fit-content;
+    top: -100px;
+    left:-450px !important;
+  }
 }

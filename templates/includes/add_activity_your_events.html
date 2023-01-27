@@ -1,40 +1,37 @@
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dashboard_your_events.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_activity_your_events.css') }}">
 
 <div class="card Event-Main-Box">
     <div class="card-header Event-Title-Box">Twoje wyzwania</div>
     
-    <div class="card-body">
+    <div class="card-body" style="display: flex; justify-content: center; padding: 1%; flex-direction: column; ">
         {% for event in events: %}
 
-            <div class="Event-Box" style="margin-bottom: 15px;" >
-                <div class="row">
+        
+                <div class="Event-Box" style="margin: 10px; margin-bottom: 15px; ">
 
-                    <div class="col-4 Event-Box-Value-Title">
+                    <div class="Event-Box-Value-1">
                         <h5>{{event.name}}</h5>
                         <h6>Tydzień <br> 
                         {{event.current_week}} / {{event.length_weeks}} </h6>
                     </div>
 
-                    <div class="col-4 Event-Box-Add-Activity-Border">
+                    <div class="Event-Box-Value-2">
                         <h5>Dystans</h5>
                         {% if event.event_week_distance >= event.current_week_target %}
-                        <span style="color:rgb(47, 129, 20)"><h6>{{event.event_week_distance}} / <br> {{event.current_week_target}} km</h6></span>
+                        <span style="color:rgb(47, 129, 20)"><h6>{{event.event_week_distance}} / <wbr> {{event.current_week_target}} km</h6></span>
                         {% endif %}
     
                         {% if event.event_week_distance < event.current_week_target %}
-                        <span style="color:rgb(146, 40, 7)"><h6>{{event.event_week_distance}} / <br> {{event.current_week_target}} km</h6></span>
+                        <span style="color:rgb(146, 40, 7)"><h6>{{event.event_week_distance}} / <wbr> {{event.current_week_target}} km</h6></span>
                         {% endif %}
                     </div>
 
-                    <div class="col-4 Event-Box-Value-Title">
+                    <div class="Event-Box-Value-3">
                         <a href="{{ url_for('event.event_main', event_id=event.id )}}" type="button" class="btn btn-dark btn-lg Details-Of-Event-Button">Szczegóły  </a>
                     </div>
-                </div>
-            </div>
 
+                </div>
         {% endfor %}
     </div>
-    
-   
 </div>
 

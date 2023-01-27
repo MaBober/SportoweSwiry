@@ -40,7 +40,11 @@
                             </div>
                         </div>
                         <button class="btn btn-dark Account-Settings-Main-Button" type="submit" style="background-color: #182c07e8; margin-left: 10px; margin-right: 10px;">Prześlij nowe zdjęcie</button>
+
                     </form>
+                    <a href="{{ url_for('user.delete_avatar') }}">
+                        <button class="btn btn-dark Account-Settings-Main-Button" style="background-color: #182c07e8; margin-left: 10px; margin-right: 10px; margin-top: 15px;">Przywróć domyślne</button>
+                    </a>
                 </div>
             </div>
         </div>

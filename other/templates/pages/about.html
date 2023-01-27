@@ -5,23 +5,80 @@
 <!-- Site css sheet -->
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/about.css') }}">
 
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/about.css') }}">
+
+
 <div class="Static-Content">
-    <div class="Title-About-Us">O nas</div>
-    <div class="About-Us-Box">
-      <img src="static/img/BartschAndBober.webp" class="Bartsch-Bober-Image">
-      <div class="About-Us-Text">
-        <span class="About-Us-Font">
-          Przyjaźnimy się od 10 lat. Poznaliśmy się na Politechnice Wrocławskiej. Oprócz wspólnych studiów łączy nas również miłość do piłki nożnej.
-           Oprócz sportu naszą nową pasją jest programowanie. Z połączenia tych dwóch składników powstała ta aplikacja. Zapraszamy do korzystania i wspólnej zabawy!
-           <br><br>
-          Łukasz Bartsch i Marcin Bober
+
+
+        <div class="row justify-content-center">
+            
+            <div class="about-box">
+                <div class="card-header about-box-title">O autorach</div>
+
+                <span class ="about-box-font">
+                <div class="row about-box-row">
+                      <div class="col about-box-img-col">
+                        <img src="static/img/BartschAndBober.webp" class="about-box-img">
+                    </div>
+                    <div class="about-box-text-col">
+                      Znamy i przyjaźnimy się od czasu wspólnych studiów na Politechnice Wrocławskiej. 
+                      Poza studiami łączy nas również pasja do sportu, zwłaszcza piłki nożnej i biegania. 
+                      Od 2021 roku uczymy i rozwijamy się w dziedzinie tworzenie aplikacji webowych bazujących na języku Python i framework’u Flask. 
+                      Aplikacja Sportowe Świry powstała z połączenia tych dwóch zainteresowań.<br><br>
+
+                      <b>
+                      Zapraszamy do korzystania i wspólnej zabawy!<br>
+                      Łukasz Bartsch i Marcin Bober<br><br></b>
+                      
+
+                      <div class="row">
+                        <div class="col-1" style="min-width: 50px;">
+                          <img src="static/img/linkedin.png" style="width: 60px; padding-top: 8px; ">
+                        </div>
+                          <div class="col" style="margin-left: 20px; ; padding-bottom:25px">
+                          <a href="https://www.linkedin.com/in/lukasz-bartsch/">Łukasz Bartsch</a><br>
+                          <a href="https://www.linkedin.com/in/marcinbober/">Marcin Bober</a>
+                        </div>
+                      </div>
+                    </div>
+
+                </div>
+
+                <div class="row how_it_works-box-row" > 
+                  <div class="how_it_works-box-all-col">
+
+                      <hr style="border-top: 5px solid #579956; opacity: 1;">
+                      
+                  </div>
+              </div>
+
+                <div class="row about-box-row"> 
+                    <div class="about-box-all-col">
+             
+                      <b><center>Wsparcie aplikacji Sportowe Świry</center></b>
+                      <span style="font-size: 18px;">  Korzystanie z naszej aplikacji jest w pełni darmowe dla wszystkich użytkowników. Jeżeli jednak wyzwanie i aplikacja Ci się podobały to będzie nam niezmiernie miło, jeżeli udostępnisz informacje o naszej inicjatywie w swoich social mediach lub wesprzesz utrzymanie i rozwój Sportowych Świrów, poprzez postawienie nam „wirtualnej kawy”! 
+                        Dodatkowo, jeżeli jesteś sympatykiem kryptowalut, możesz zostawić nam „tipa” w jednej z popularnych wirtualnych walut.</span>
+                      
+                    </div>
+                </div>
+                <div class="instruction-box-img-col" style="flex-direction: row;">
+
+                  <a class="btn btn-dark btn-lg details-button"  href="https://www.buymeacoffee.com/SportoweSwiry" style="padding-top: 0px;"> <img src="/static/img/coffee.svg" class="details-button-icon">Wirtualna kawa</a>
           
-        </span>
-        <a href="https://www.buymeacoffee.com/SportoweSwiry">
-          <div class="Coffee-Button"></div>
-        </a>
-      </div>
+                  <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.crypto_tip') }}" style="padding-top: 0px;"> <img src="/static/img/btc_icon.svg" class="details-button-icon">Krypto napiwek</a>
+             
+                </div>
+
+        
+
+                </span>
+                
+            </div>
+        </div>
     </div>
+    
 </div>
 
 

@@ -53,7 +53,18 @@
         </div>
 
         <div class="Chart-Box">
-            <span class="Title-Box">Postęp wyzwania</span>
+            <span class="Title-Box">Postęp wyzwania
+                <div class="wrapper">
+                    <img src="/static/img/help_white.svg" style="height: 22px; margin-left: 10px;">
+
+
+                    <div class="tooltip dashboard-toolip">
+                        <b>Postęp wyzwania</b> - pokazuje ile dni z całego czasu wyzwania już za wami.<br><br>
+                        <b>Cel tygodniowy</b> - pokazuje jaki procent celu na dany tydzień wykonałeś. <br><br>
+                        <b>Skuteczność</b> - pokazuje jak skutecznie realizowałeś cele w poprzednich tygodniach wyzwania. Spada z każdym nie zrealizowanym tygodniem!
+                    </div>
+                </div>
+            </span>
             <div id="myChart"></div>
         </div>
 
@@ -66,9 +77,9 @@
 
 <script>  
     var options = {
-        series: ['{{ dashboard.d1}}','{{ dashboard.d2}}'],
+        series: ['{{ dashboard.d1}}','{{ dashboard.d2}}', '{{ dashboard.d3}}'],
         chart: {
-        height: '315px',
+        height: '350px',
         type: 'radialBar',
     },
     plotOptions: {
@@ -88,10 +99,11 @@
         dataLabels: {
             name: {
                 show: true,
+                fontSize: '13px',
             },
             value: {
                 show: true,
-                fontSize: '16px',
+                fontSize: '14px',
                 color: '#fff',
             },
             total: {
@@ -103,15 +115,15 @@
         }
         }
     },
-    colors: ['#579956', '#21ce1e'],
-    labels: ['Wyzwanie', 'Tydzień'],
+    colors: ['#579956', '#21ce1e', '#8BDF32'],
+    labels: ['Postęp wyzwania', 'Cel tygodniowy', 'Skuteczność'],
     legend: {
         show: true,
         floating: true,
-        fontSize: '16px',
+        fontSize: '17px',
         position: 'left',
-        offsetX: 120,
-        offsetY: 00,
+        offsetX: 50,
+        offsetY: 0,
         labels: {
         useSeriesColors: true,
         },
@@ -119,13 +131,14 @@
         size: 0
         },
         formatter: function(seriesName, opts) {
-        return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex] + "%"
+        return seriesName
         },
         itemMargin: {
         vertical: 5
         }
     },
-    responsive: [{
+    responsive: [
+    {
         breakpoint: 500,
         options: {
         legend: {
@@ -140,9 +153,98 @@
         }
         }
     },
-
     {
         breakpoint: 600,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 50,
+            offsetY: 0,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 700,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 100,
+            offsetY: 0,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 850,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 150,
+            offsetY: 0,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },  
+    {
+        breakpoint: 900,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 20,
+            offsetY: 0,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1000,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 20,
+            offsetY: 0,
+            fontSize: '14px',
+            itemMargin: {
+            vertical: 2
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1200,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 30,
+            offsetY: 0,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    },
+    {
+        breakpoint: 1300,
         options: {
         legend: {
             show: true,
@@ -156,16 +258,14 @@
         }
         }
     },
-    
-        
     {
-        breakpoint: 900,
+        breakpoint: 1400,
         options: {
         legend: {
             show: true,
             floating: true,
-            offsetX: 40,
-            offsetY: 30,
+            offsetX: 50,
+            offsetY: 0,
             fontSize: '16px',
             itemMargin: {
             vertical: 3
@@ -174,13 +274,13 @@
         }
     },
     {
-        breakpoint: 1200,
+        breakpoint: 1500,
         options: {
         legend: {
             show: true,
             floating: true,
-            offsetX: 20,
-            offsetY: 13,
+            offsetX: 60,
+            offsetY: 0,
             fontSize: '16px',
             itemMargin: {
             vertical: 3
@@ -189,20 +289,36 @@
         }
     },
     {
-        breakpoint: 1000,
+        breakpoint: 1600,
         options: {
         legend: {
             show: true,
             floating: true,
-            offsetX: 0,
-            offsetY: 5,
-            fontSize: '14px',
+            offsetX: 70,
+            offsetY: 0,
+            fontSize: '16px',
             itemMargin: {
-            vertical: 2
+            vertical: 3
             }
         }
         }
-    }]
+    },
+    {
+        breakpoint: 1700,
+        options: {
+        legend: {
+            show: true,
+            floating: true,
+            offsetX: 80,
+            offsetY: 0,
+            fontSize: '16px',
+            itemMargin: {
+            vertical: 3
+            }
+        }
+        }
+    }
+    ]
     };
 
     var myChart = new ApexCharts(document.querySelector("#myChart"), options);

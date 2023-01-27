@@ -13,52 +13,143 @@
 
     <div class="accordion accordion-flush" id="accordionFlushExample" style="border-width:0px;">
 
-        <div class="accordion-item" style="border-width:0px;">
-          <div class="Question-Backgorund" id="flush-headingOne">
-            <button class="Question-Font" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        <div class="accordion-item" style="border-width:0px; margin-bottom: 10px">
+          <button  class="Question-Backgorund" id="flush-heading_activity_without_event" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_activity_without_event" aria-expanded="false" aria-controls="flush-collapse_activity_without_event" style="border-width:0px; margin-top: 0px; ">
+            <div class="Question-Font" >
               Czy muszę zapisać się do jakiegoś wyzwania, żeby dodawć aktywności?
-            </button>
-          </div>
-          <div id="flush-collapseOne" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            </div>
+          </button>
+ 
+          <div id="flush-collapse_activity_without_event" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-heading_activity_without_event" data-bs-parent="#accordionFlushExample">
             <div class="Answer-Font">
-              Nie, możesz dodawać aktywności nie będąc zapisanym do żadnego wyzwania, i traktować naszą aplikację jako swego rodzaju archiwum swoich sportowych osiągnieć.
-              Jednak pamiętaj, że nic tak mobilizuje do działania jak rywalizacja ze swoimi przyjaciółmi<br><br>
+              Nie! Możesz dodawać aktywności nie będąc zapisanym do żadnego wyzwania i traktować naszą aplikację jako swego rodzaju archiwum swoich sportowych osiągnieć.
+              Jednak pamiętaj, że nic tak nie mobilizuje do działania jak rywalizacja ze swoimi przyjaciółmi.<br><br>
               <i><h5 style="text-align: center;"><b>"Zwycięstwo nie jest ważne, jest najważniejsze!"</b></i></h5>
             </div>
           </div>
         </div>
 
-      <div class="accordion-item"  style="border-width:0px;">
-        <div class="Question-Backgorund" id="flush-headingTwo">
-          <button class="Question-Font" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-            Czy mogę stworzyć swoje własne wyzwanie?
+
+        <div class="accordion-item" style="border-width:0px;  margin-bottom: 10px">
+          <button  class="Question-Backgorund" id="flush-heading_many_eventst" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_many_eventst" aria-expanded="false" aria-controls="flush-collapse_many_eventst" style="border-width:0px; margin-top: 0px;">
+            <div class="Question-Font" >
+              Czy mogę brać jednocześnie udział w paru wyzwaniach?
+            </div>
           </button>
-        </div>
-        <div id="flush-collapseTwo" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-          <div class="Answer-Font">
-            Na ten moment jedynie administratorzy aplikacji mogą uruchomić nowe wyzwania. Jeżeli chcesz stworzyć nowe wydarzenie, skontaktuj się nami przez <a href="{{ url_for('other.send_message') }}" >Formularz Kontaktowy</a>.
+ 
+          <div id="flush-collapse_many_eventst" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-heading_many_eventst" data-bs-parent="#accordionFlushExample">
+            <div class="Answer-Font">
+              Tak, jak najbardziej! Możesz się zapisać do kilku trwających jednocześnie wyzwań. Aplikacja policzy dodawaną aktywność do każdego z nich, uwzględniając przelicznik ustalony dla każdego z wyzwań.
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="accordion-item" style="border-width:0px;">
-        <div class="Question-Backgorund" id="flush-headingThree">
-          <button class="Question-Font" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-            Czy mogę brać jednocześnie udział w paru wyzwaniach?
+        <div class="accordion-item" style="border-width:0px;  margin-bottom: 10px">
+          <button  class="Question-Backgorund" id="flush-heading_awards_proposal" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_awards_proposal" aria-expanded="false" aria-controls="flush-collapse_awards_proposal" style="border-width:0px; margin-top: 0px;">
+            <div class="Question-Font" >
+              Co może być nagrodą w wyzwaniu?
+            </div>
           </button>
-        </div>
-        <div id="flush-collapseThree" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-          <div class="Answer-Font">
-            Tak, jak najbardziej! Możesz się zapisać do kilku trwających jednocześnie wyzwań. Aplikacja policzy dodawaną aktywność do każdego z nich, uwzględniając przelicznik ustalony dla każdego z wyzwań.
+ 
+          <div id="flush-collapse_awards_proposal" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-heading_awards_proposal" data-bs-parent="#accordionFlushExample">
+            <div class="Answer-Font">
+              Tak naprawdę ogranicza Cię tylko Twoja wyobraźnia, ale podpowiemy Ci kilka pomysłów:
+              <ul><br>
+                <li>Filiżanka dobrej kawy, </li>
+                <li>Butelka orzeźwiającego piwa,  </li>
+                <li>Kawałek pysznej pizzy, </li>
+                <li>Sprzątanie mieszkania w wyzwaniu współlokatorów, </li>
+                <li>Zobowiązanie do wyprowadzenia psa,</li>
+                <li>Cokolwiek tylko przyjdzie Ci do głowy. 😊</li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
 
-      
+
+        <div class="accordion-item" style="border-width:0px;  margin-bottom: 10px">
+          <button  class="Question-Backgorund" id="flush-heading__break_in_event" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse__break_in_event" aria-expanded="false" aria-controls="flush-collapse__break_in_event" style="border-width:0px; margin-top: 0px;">
+            <div class="Question-Font" >
+              Czy mogę zrobić sobie przerwę od wyzwania?
+            </div>
+          </button>
+ 
+          <div id="flush-collapse__break_in_event" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-heading__break_in_event" data-bs-parent="#accordionFlushExample">
+            <div class="Answer-Font">
+              Nie, nie możesz zawiesić swojego udziału w wyzwaniu. Jednak nic nie stoi na przeszkodzie, aby ustawić cel jednego, lub kilku, tygodnia w Twoim wyzwaniu na 0 km. 
+              Dzięki temu będziecie mogli zrobić sobie tydzień wolnego od treningów, bez naliczania nagród do kupienia! 
+              </div>
+          </div>
+        </div>
+
+        
+        <div class="accordion-item" style="border-width:0px;  margin-bottom: 10px">
+          <button  class="Question-Backgorund" id="flush-heading_sports_in_app" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_sports_in_app" aria-expanded="false" aria-controls="flush-collapse_sports_in_app" style="border-width:0px; margin-top: 0px;">
+            <div class="Question-Font" >
+              Jakie sporty są dostępne w aplikacji?
+            </div>
+          </button>
+ 
+          <div id="flush-collapse_sports_in_app" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-heading_sports_in_app" data-bs-parent="#accordionFlushExample">
+            <div class="Answer-Font">
+              W tym momencie do aplikacji możesz dodać poniższe rodzaje aktywność:
+              <ul><br>
+                {% for sport in all_sports: %}
+                  <li>{{sport[1]}}</li>
+                {% endfor %}
+              </ul>
+              Zależy Ci na dodaniu do aplikacji dodatkowego sportu, który chciałbyś dodać w swoim wyzwaniu? Kliknij <b><a href="{{ url_for('other.send_message', sport_proposal = True )}}" target="_blank">TUTAJ</a></b> i daj nam znać!
+            </div>
+          </div>
+        </div>
+
+
+        <div class="accordion-item" style="border-width:0px;  margin-bottom: 10px">
+          <button  class="Question-Backgorund" id="flush-heading_adding_sport" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_adding_sport" aria-expanded="false" aria-controls="flush-collapse_adding_sport" style="border-width:0px; margin-top: 0px;">
+            <div class="Question-Font" >
+              Czy mogę dodać własny sport?
+            </div>
+          </button>
+ 
+          <div id="flush-collapse_adding_sport" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-heading_adding_sport" data-bs-parent="#accordionFlushExample">
+            <div class="Answer-Font">
+              W tym momencie możesz korzystać tylko ze sportów, które są już dostępne w aplikacji. Jesteśmy jednak otwarci na nowe propozycje! 
+              Jeżeli zależy Ci na dodaniu nowego sportu Kliknij <b><a href="{{ url_for('other.send_message', sport_proposal = True )}}" target="_blank">TUTAJ</a></b> i daj nam znać!
+              </div>
+          </div>
+        </div>
+
+
+        <div class="accordion-item" style="border-width:0px;  margin-bottom: 10px">
+          <button  class="Question-Backgorund" id="flush-heading_statistics_vs_dashboard" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_statistics_vs_dashboard" aria-expanded="false" aria-controls="flush-collapse_statistics_vs_dashboard" style="border-width:0px; margin-top: 0px;">
+            <div class="Question-Font" >
+              Dlaczego w zakładce Statystyki i Panel Uczestnika widzę inny łączny dystans?
+            </div>
+          </button>
+ 
+          <div id="flush-collapse_statistics_vs_dashboard" class="accordion-collapse collapse Answer-Backgorund" aria-labelledby="flush-heading_statistics_vs_dashboard" data-bs-parent="#accordionFlushExample">
+            <div class="Answer-Font">
+              W zakładce <b>Statystyki</b> możesz zobaczyć informacje o wszystkich Twoich aktywnościach, w oderwaniu od wyzwań, w których bierzesz udział.  
+              Wszystkie dane o dystansie pokazują realny dystans pokonany przez Ciebie, bez uwzględnienia żadnych współczynników.
+              <br><br>
+              Z kolei strona <b>Panel Uczestnika</b> pokazuje dane podsumowujące Twój udział w konkretnym wyzwaniu. 
+              Oznacza to, że informacje dotyczące dystansów są pokazane z uwzględnieniem odpowiednich współczynników.
+              </div>
+          </div>
+        </div>
+
+
+
+
+        
+
+
+
+
 
     </div>
   </div>
-  </div>
 </div>
+
 
 {% endblock %}

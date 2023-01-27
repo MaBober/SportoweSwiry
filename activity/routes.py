@@ -14,8 +14,9 @@ activity = Blueprint("activity", __name__,
             static_url_path='/activity/static')
 
 
-@account_confirmation_check
+
 @activity.route("/add_activity", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def add_activity():
 
@@ -50,8 +51,9 @@ def add_activity():
                     events = user_events)
 
 
-@account_confirmation_check
+
 @activity.route('/delete_activity/<int:activity_id>')
+@account_confirmation_check
 @login_required #This page needs to be login
 def delete_activity(activity_id):
 
@@ -63,8 +65,9 @@ def delete_activity(activity_id):
     return redirect(url_for(url))
 
 
-@account_confirmation_check
+
 @activity.route("/modify_activity/<int:activity_id>", methods=['POST','GET'])
+@account_confirmation_check
 @login_required #This page needs to be login
 def modify_activity(activity_id):
     
@@ -111,8 +114,9 @@ def modify_activity(activity_id):
         return redirect(url_for('activity.my_activities'))
 
 
-@account_confirmation_check
+
 @activity.route("/my_activities")
+@account_confirmation_check
 @login_required #This page needs to be login
 def my_activities():
 
@@ -190,6 +194,7 @@ def my_activities():
 
 
 @activity.route("/strava_login")
+@account_confirmation_check
 @login_required
 def strava_login():
 
@@ -199,6 +204,7 @@ def strava_login():
 
 
 @activity.route("/strava-callback",methods=['GET'])
+@account_confirmation_check
 @login_required
 def strava_callback():
 

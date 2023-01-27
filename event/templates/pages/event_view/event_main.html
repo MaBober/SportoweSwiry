@@ -18,7 +18,7 @@
                     <h6><b>Koniec:</b> {{event.end}}</h6>
                     <h6><b>Długość:</b> {{event.length_weeks}} tygodni</h6>
                     <h6><b>Ilość uczestników: </b> {{ event.give_all_event_users()|length }} / {{event.max_user_amount}}</h6>
-                    <h6><b>Administrator:</b> {{event.admin.name}} {{event.admin.last_name}}</h6>
+                    <h6><b>Organizator:</b> {{event.admin.name}} {{event.admin.last_name}}</h6>
                     {% if event.description != '' %}
                     <h6>{{event.description}} </h6>
                     {% endif %}

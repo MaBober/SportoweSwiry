@@ -101,7 +101,7 @@ class Event(db.Model):
 
             current_app.logger.info(f"User {current_user.id} modified event {self.id} targets")
             message = f"Zmodyfikowano cele tygodniowe wyzwania {self.name}"
-            return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
+            return message, 'success', redirect(url_for('event.event_main', event_id = self.id))
 
         except:
             current_app.logger.exception(f"User {current_user.id} failed to modify event {self.name} targets.")
@@ -127,7 +127,7 @@ class Event(db.Model):
 
             current_app.logger.info(f"User {current_user.id} modified event {self.id}")
             message = f"Zmodyfikowano wyzwanie {self.name}"
-            return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
+            return message, 'success', redirect(url_for('event.event_main', event_id = self.id))
 
         except:
             current_app.logger.exception(f"User {current_user.id} failed to modify event {self.name}.")
@@ -139,7 +139,7 @@ class Event(db.Model):
 
         event_name = self.name
 
-        if not current_user.is_admin:
+        if not current_user.is_admin and (self.admin_id != current_user.id or self.current_users_amount != 1):
             current_app.logger.warning(f"User {current_user.id} tries to delete event {self.id}. He is not an admin!")
             message = "Nie masz uprawnień do tej zawartości!"
             return message, 'danger', redirect(url_for('other.hello'))
@@ -210,8 +210,7 @@ class Event(db.Model):
             return message, 'danger', redirect(url_for('event.explore_events'))
 
         from other.functions import send_email
-
-        send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'emails/welcome', event = self, user = current_user)
+    
 
         message = '''
         Czołem  {} {}!,
@@ -240,6 +239,8 @@ class Event(db.Model):
             db.session.add(participation)
             db.session.commit()
 
+            send_email(current_user.mail, "Witaj w wyzwaniu {}".format(self.name),'emails/welcome', event = self, user = current_user)
+
             message = "Zapisano do wyzwania " + self.name + "!"
             current_app.logger.info(f"User {current_user.id} joined event {self.id}")
             return message, 'success', redirect(url_for('event.event_main', event_id = self.id))
@@ -259,6 +260,20 @@ class Event(db.Model):
             message = "Administrator nie może opuścić swojego wyzwania!"
             current_app.logger.info(f"User {current_user.id} tries to leave event {self.id}. He is admin of that event!")
             return message, "danger", redirect(url_for('event.your_events', mode = 'future'))
+
+        if current_user.id == self.admin_id and self.status == "0":
+            try:
+                db.session.delete(is_participating)
+                db.session.commit()
+
+                message = f"Usunięto użytkownika {user.name} {user.last_name} z wyzwania!"
+                current_app.logger.info(f"User {current_user.id} erase {user.id} from event {self.id}")
+                return message, "success", redirect(url_for('event.event_contestants', event_id = self.id))
+
+            except:
+                message = "NIE WYPISANO Z WYDARZENIA! Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem"
+                current_app.logger.exception(f"User {current_user.id} failed to erase {user.id} from event {self.id}")
+                return message, "danger", redirect(url_for('event.event_contestants', event_id = self.id))
 
         if current_user.is_admin != True:
             
@@ -434,6 +449,11 @@ class Event(db.Model):
     def modifiy_sport_coefficient(self, sport_to_modify, coefficient_form):
         current_app.logger.info(f"User {current_user.id} tries to modify {sport_to_modify} in event {self.id}.")
 
+        if coefficient_form.is_constant.data == '1':
+            coefficient_form.is_constant.data = True
+        else:
+            coefficient_form.is_constant.data = False
+
         if sport_to_modify != None:
             try:
                 sport_to_modify.value = coefficient_form.value.data
@@ -489,7 +509,19 @@ class Event(db.Model):
             event_activities_calculated_values = all_event_activities.merge(event_coefficients_set, on = ['activity_type_id'])
 
             if event_activities_calculated_values.empty:
-                event_activities_calculated_values = event_activities_calculated_values.append({'user_id' : '---', 'date' : '---', 'distance' : 0, 'time' : 0, 'strava_id' : '---', 'activity_type_id' : '---', 'value' : 0, 'is_constant' : False } ,ignore_index=True)
+                
+                data = {'user_id' : '---',
+                         'date' : '---',
+                         'distance' : 0,
+                         'time' : 0,
+                         'strava_id' : '---',
+                         'added_on': "NaN",
+                         'activity_type_id' : '---',
+                         'value' : 0,
+                         'is_constant' : False }
+
+                event_activities_calculated_values = pd.DataFrame(data, index = [0])
+                
                 event_activities_calculated_values['calculated_distance'] = 0
 
             else:
@@ -610,6 +642,12 @@ class Event(db.Model):
         
         else:
             return False
+
+
+    @property
+    def current_users_amount(self):
+        return len(self.participants.all()) 
+
 
     def give_overall_weekly_summary(self, activites_list):
 
@@ -760,8 +798,7 @@ class Event(db.Model):
     
     @classmethod
     def added_in_last_days(cls, days):
-
-        inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
+        inserts = cls.query.filter(cls.added_on <= dt.datetime.now()).filter(cls.added_on >= dt.datetime.now() - dt.timedelta(days=days)).all()
 
         return len(inserts)
 

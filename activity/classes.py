@@ -23,6 +23,11 @@ class Sport(db.Model):
 
         current_app.logger.info(f"Admin {current_user.id} tries to add sport '{new_sport_form.activity_name.data}' to app.")
 
+        if new_sport_form.is_constant.data == '1':
+            new_sport_form.is_constant.data = True
+        else:
+            new_sport_form.is_constant.data = False
+
         try:
             new_sport = Sport(
                 name = new_sport_form.activity_name.data,
@@ -81,6 +86,12 @@ class Sport(db.Model):
 
     
     def modify(self, sport_form):
+
+        if sport_form.is_constant.data == '1':
+            sport_form.is_constant.data = True
+        else:
+            sport_form.is_constant.data = False
+            
 
         current_app.logger.info(f"Admin {current_user.id} tries to modfiy sport '{self.name}' in app.")
         try:
@@ -204,7 +215,8 @@ class Activities(db.Model):
 
     @classmethod
     def added_in_last_days(cls, days):
-        inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
+        inserts = cls.query.filter(cls.added_on <= dt.datetime.now()).filter(cls.added_on >= dt.datetime.now() - dt.timedelta(days=days)).all()
+        
         return len(inserts)
 
 

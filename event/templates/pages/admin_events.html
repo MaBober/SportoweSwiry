@@ -2,7 +2,7 @@
 
 {% block body_content %}
 
-<div class="container-xl px-4 mt-4">
+<div class="container-xl px-4 mt-4" style="padding-top:100px;">
     <div class="card-header" style="background-color: rgba(224, 153, 94);">
         <b>Lista wszystkich wyzwań</b>
     </div>
@@ -55,13 +55,15 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nazwa</th>
-                            <th scope="col">Administrator</th>
+                            <th scope="col">Organizator</th>
                             <th scope="col">Status</th>
                             <th scope="col">Początek</th>
                             <th scope="col">Długość</th>
                             <th scope="col">Koniec</th>
-                            <th scope="col">Wydarzenie prywatne</th>
+                            <th scope="col">Prywatne</th>
+                            <th scope="col">Utworzone</th>
                             <th scope="col">Operacje</th>
+                            
                         </tr>
                         </thead>
                         <tbody>
@@ -75,6 +77,7 @@
                                 <td>{{event.length_weeks}} tygodni</td>
                                 <td>{{event.end}}</td>
                                 <td >{{event.is_private}}</td>
+                                <td >{{event.added_on}}</td>
                                 <td>
                                     <!-- Button trigger modal -->
                                     <a href="{{ url_for('event.event_main', event_id = event.id )}}"  type="button" class="btn btn-sm delete-confirm" style="background-color: rgba(224, 153, 94); color:white">  Podgląd  </a></div>

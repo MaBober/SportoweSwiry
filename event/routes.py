@@ -18,7 +18,7 @@ event = Blueprint("event", __name__,
     static_url_path='/event/static')
 
 
-@account_confirmation_check
+
 @event.route("/explore_events")
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -34,7 +34,6 @@ def explore_events():
                         form=password_form )
 
 
-@account_confirmation_check
 @event.route("/join_event/<int:event_id>", methods=['POST','GET'])
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -56,6 +55,7 @@ def join_event(event_id):
     
 
 @event.route("/leave_event/<int:event_id>")
+@account_confirmation_check
 @login_required
 def leave_event(event_id):
 
@@ -71,6 +71,7 @@ def leave_event(event_id):
 
 
 @event.route("/your_events/<mode>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def your_events(mode):
 
@@ -96,8 +97,9 @@ def your_events(mode):
 
 ###############################
 
-@account_confirmation_check
+
 @event.route("/event_main/<int:event_id>")
+@account_confirmation_check
 @login_required
 def event_main(event_id):
 
@@ -143,8 +145,9 @@ def event_main(event_id):
         return redirect(url_for('event.explore_events'))
 
 
-@account_confirmation_check
+
 @event.route("/event_activities/<int:event_id>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def event_activities(event_id):
 
@@ -168,8 +171,9 @@ def event_activities(event_id):
         return redirect(url_for('event.explore_events'))
 
 
-@account_confirmation_check
+
 @event.route("/event_preview/<int:event_id>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def event_preview(event_id):
 
@@ -186,8 +190,9 @@ def event_preview(event_id):
                     form=password_form) 
 
 
-@account_confirmation_check
+
 @event.route("/event_statistics/<int:event_id>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def event_statistics(event_id):
 
@@ -217,8 +222,9 @@ def event_statistics(event_id):
         return redirect(url_for('event.explore_events'))
 
 
-@account_confirmation_check
+
 @event.route("/event_contestants/<int:event_id>")
+@account_confirmation_check
 @login_required
 def event_contestants(event_id):
 
@@ -242,8 +248,9 @@ def event_contestants(event_id):
         return redirect(url_for('event.explore_events'))
 
 
-@account_confirmation_check
+
 @event.route("/event_beers/<int:event_id>")
+@account_confirmation_check
 @login_required
 def event_beers(event_id):
 
@@ -280,7 +287,7 @@ def event_beers(event_id):
 ###############################
 
 
-@account_confirmation_check
+
 @event.route("/new_event", methods=['POST','GET'])
 @account_confirmation_check
 @login_required
@@ -306,11 +313,11 @@ def create_event():
                         menu_mode="mainApp",
                         mode = "create")
     else: 
-            flash('Jesteś już administratorem 3 trwających wyzwań. W tym momencie nie możesz stworzyć kolejnych!', 'danger')
+            flash('Jesteś już organizatorem 3 trwających wyzwań. W tym momencie nie możesz stworzyć kolejnych!', 'danger')
             return redirect(url_for('other.hello'))
 
 
-@account_confirmation_check
+
 @event.route("/new_event_targets/<int:event_id>", methods=['POST','GET'])
 @account_confirmation_check
 @login_required
@@ -504,10 +511,14 @@ def modify_coefficient(event_id, activity_type_id):
     coefficient_form = CoeficientsForm(event_name = coefficient_to_modify.event,
         activity_name = coefficient_to_modify.sport,
         value = coefficient_to_modify.value,
-        is_constant = coefficient_to_modify.is_constant)
+        is_constant = int(coefficient_to_modify.is_constant))
+
+    del coefficient_form.strava_name
+    coefficient_form.event_name.validators = []
+    coefficient_form.activity_name.validators = []
 
     if coefficient_form.validate_on_submit():
-    
+
         message, status, action = event.modifiy_sport_coefficient(coefficient_to_modify, coefficient_form)
     
         flash(message, status)
@@ -522,7 +533,7 @@ def modify_coefficient(event_id, activity_type_id):
 
 ###############################
 
-@account_confirmation_check
+
 @event.route("/admin_event_list")
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -532,13 +543,14 @@ def admin_list_of_events():
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    events=Event.query.all()
+    events=Event.query.order_by(Event.added_on.desc()).all()
     return render_template('/pages/admin_events.html',
                     events=events,
-                    title_prefix = "Lista wyzwań")
+                    title_prefix = "Lista wyzwań",
+                    menu_mode="mainApp")
 
 
-@account_confirmation_check
+
 @event.route("/admin_list_of_sports")
 @account_confirmation_check
 @login_required #This page needs to be login
@@ -551,10 +563,12 @@ def admin_list_of_sports():
     sports = Sport.query.all()
     return render_template('/pages/admin_sports.html',
                     sports = sports,
-                    title_prefix = "Lista sportów")
+                    title_prefix = "Lista sportów",
+                    menu_mode="mainApp")
     
 
 @event.route("/admin_delete_contestant/<int:event_id>/<user_id>")
+@account_confirmation_check
 @login_required
 def admin_delete_contestant(event_id, user_id):
 
@@ -567,8 +581,8 @@ def admin_delete_contestant(event_id, user_id):
     return action
 
 
-@account_confirmation_check
 @event.route("/delete_event/<int:event_id>")
+@account_confirmation_check
 @login_required #This page needs to be login
 def admin_delete_event(event_id):
     
@@ -633,7 +647,9 @@ def modify_sport_in_base(sport_id):
     sport_form = CoeficientsForm(activity_name = sport_to_modify.name,
                         value = sport_to_modify.default_coefficient,
                         is_constant = sport_to_modify.default_is_constant,
-                        strava_name = sport_to_modify.strava_name)
+                        strava_name = sport_to_modify.strava_name,
+                        old_name = sport_to_modify.name,
+                        old_strava_name = sport_to_modify.strava_name)
     del sport_form.event_name
 
     if sport_form.validate_on_submit():

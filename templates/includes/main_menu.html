@@ -5,13 +5,6 @@
         <a href="{{ url_for('other.hello') }}"><img src="/static/img/icon-logo 1.svg" class="Logo-Main"></a>
     {% endif %}
 
-
-
-    <!-- {% if current_user.isAdmin == True %}
-    <nav class="navbar sticky-top navbar-dark navbar-expand-xl MainNav" style="width: 973px;">
-    {% else %}
-    <nav class="navbar sticky-top navbar-dark navbar-expand-xl MainNav" style="width: 867px;">
-    {% endif %} -->
     <nav class="navbar sticky-top navbar-dark navbar-expand-xl MainNav">
         <div class="navbar-brand" href="#"></div>
         
@@ -22,10 +15,12 @@
         <div class="collapse navbar-collapse justify-content-end" id="MainMenu">
             <ul class="nav navbar-nav">
 
-                <li class="nav-item add-activity">
-                    <img src="/static/img/icon-Add.webp" class="icon-add-activity">
-                    <a class="nav-link" href="{{ url_for('activity.add_activity') }}">Dodaj aktywność</a>
-                </li>
+                <a class="nav-link" href="{{ url_for('activity.add_activity') }}">
+                    <li class="nav-item add-activity">
+                        <img src="/static/img/icon-Add.webp" class="icon-add-activity">
+                        <p>Dodaj aktywność</p>
+                    </li>
+                </a>
             </ul>
             <ul class="nav navbar-nav Background-Line">
 
@@ -48,13 +43,14 @@
                 </li>
 
 
-                <li class="nav-item Main-Menu-Message">
-                    <a class="nav-link Main-Menu-Message" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
-                    <a class="Alert-Message">
-                        {% if current_user.count_not_readed_messages()>0 %} 
-                            {{ current_user.count_not_readed_messages() }}
-                        {% endif %}
-                    </a>
+                <li class="nav-item">
+                    <a class="nav-link Messages" href="{{ url_for('other.mailbox', actionName='inbox') }}">Wiadomości</a>
+                    
+                    {% if current_user.count_not_readed_messages()>0 %}
+                    <p class="Alert-Message">
+                        {{ current_user.count_not_readed_messages() }}
+                    </p> 
+                    {% endif %}
                 </li>
 
 
@@ -62,6 +58,7 @@
                         <li class="nav-item dropdown" >
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('other.admin_panel') }}">Panel Administratora</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('user.list_of_users') }}">Użytkownicy</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('user.create_account') }}">Stwórz konto</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('event.admin_list_of_events') }}">Wyzwania</a></li>
@@ -82,8 +79,13 @@
                         Moje konto
                         </a>
                     {% endif %}
-
+                        
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('other.how_it_works') }}">Jak to działa?</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('other.about') }}">Twórcy</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('other.send_message') }}">Kontakt</a></li>
+                        <li><hr class="dropdown-divider"></li>
+
                         <li><a class="dropdown-item" href="{{ url_for('user.settings') }}">Ustawienia konta</a></li>
                         <li><hr class="dropdown-divider"></li>
                         

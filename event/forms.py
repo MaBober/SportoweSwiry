@@ -44,23 +44,28 @@ class EventPassword(FlaskForm):
 class CoeficientsForm(FlaskForm):
 
     def validate_name(form, field):
-        print(field.data)
-        if Sport.query.filter(Sport.name == field.data).first() is not None:
-            raise ValidationError("Istnieje już sport o takiej nazwie. Wybierz proszę inną nazwę.")
-        else:
+        name_to_check = Sport.query.filter(Sport.name == field.data).first()
+        if field.data == form.old_name.data:
             pass
+        elif name_to_check != None:
+            raise ValidationError("Istnieje już sport o takiej nazwie. Wybierz proszę inną nazwę.")
 
     def validate_strava_name(form, field):
-        if Sport.query.filter(Sport.strava_name == field.data).first() is not None and field.data != "":
-            raise ValidationError("Istnieje już sport o takiej nazwie w strava. Wybierz proszę inną nazwę Strava.")
-        else:
-            pass            
+        print(form.old_strava_name.data)
+        name_to_check = Sport.query.filter(Sport.strava_name == field.data).first()
+        print(name_to_check)
+        if field.data == form.old_strava_name.data:
+            pass
+        elif name_to_check != None and field.data != "":
+            raise ValidationError("Istnieje już sport o takiej nazwie w strava. Wybierz proszę inną nazwę Strava.")           
 
 
     event_name = StringField("Wyzwanie", validators=[DataRequired("Pole nie może być puste")])
     activity_name = StringField("Nazwa aktywności", validators=[DataRequired("Pole nie może być puste"), validate_name])
     is_constant = SelectField("Stała / Współczynnik", choices =[(1, "Stała"), (0, "Współczynnik")])
     strava_name = StringField("Nazwa aktywności w Strava [ENG]", validators=[validate_strava_name])
+    old_name =  StringField("Nazwa")
+    old_strava_name =  StringField("Nazwa")
     value = DecimalField("Wartość", validators=[NumberRange(min=0, message="Podaj proszę liczbę nie ujemną!")], default=1)
 
 class NewSportToEventForm(FlaskForm):

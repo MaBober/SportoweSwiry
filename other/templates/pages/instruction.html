@@ -1,0 +1,732 @@
+{% extends "pages//base.html" %}
+
+
+{% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/about.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/instruction.css') }}">
+
+<div class="Static-Content">
+    <div class="row justify-content-center">
+        <div class="instruction-box">
+            <div class="card-header instruction-box-title" id="topic_list">Instrukcja</div>
+            
+            <span class ="instruction-box-font">
+                <div class="row instruction-box-row">
+                    <div class="instruction-box-all-col">
+                        Dziękujemy za zainteresowanie naszą aplikacją! Poniżej znajdziesz dokładny opis wszystkich opcji, które znajdziesz w Sportowych Świrach.
+                        Sprawdź w jaki sposób przygotować wyzwanie idealnie skrojone pod siebie i swoich znajomych, a następnie śledzić wasze postępy!
+
+                        <br><br>Jeżeli po przeczytaniu instrukcji będziesz miał dodatkowe pytania, napisz do nas, korzystając z <a href="{{ url_for('other.send_message') }}">formularza kontaktowego</a>, lub wysyłając wiadomość na <a href ="mailto:kontakt@sportoweswiry.com.pl"> <u>kontakt@sportoweswiry.com.pl</u></a>.
+
+
+                        <br><br>Wybierz interesujący Cię temat:<br><br>
+                    </div>
+                </div>
+                <div class="row instruction-box-row">
+                    <div class="instruction-box-list-col">
+                        <ul>
+                            <a href="#new_event"><li>Tworzenie wyzwania</li></a> 
+                            <a href="#join_event"><li>Dołączenie do wyzwania</li></a>
+                            <a href="#leave_event"><li>Opuszczenie wyzwania</li></a>
+                            <a href="#modify_event"><li>Modyfikacja wyzwania</li></a>
+                            <a href="#event_menu"><li>Menu wyzwania</li></a>
+                            <a href="#add_activity"><li>Dodawanie aktywności</li></a>
+                            <a href="#modify_activity"><li>Modyfikacja / usuwanie aktywności</li></a>
+                            <a href="#dashboard"><li>Panel uczestnika</li></a>
+                        </ul>
+                    </div>
+
+                    <div class="instruction-box-list-col">
+                        <ul>
+                             <a href="#statistics"><li>Statystyki</li></a>
+                             <a href="#mailbox"><li>Wiadomości</li></a>
+                             <a href="#account_settings"><li>Ustawienia konta</li></a>
+                             <a href="#change_password"><li>Zmiana hasła</li></a>
+                             <a href="#delete_account"><li>Usuwanie konta</li></a>
+                             <a href="#questions"><li>Dodatkowe pytania</li></a>
+                             <a href="#donation"><li>Wsparcie rozwoju aplikacji Sportowe Świry</li></a>
+                        </ul>
+                    </div>
+                </div>
+                
+            </span>
+            <div class="card-header instruction-box-sub-title" id="new_event">Tworzenie wyzwania</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                    Aby stworzyć wyzwanie, wybierz w menu aplikacji <b>Wyzwania</b>, następnie <b>Stwórz Wyzwanie</b> na liście rozwijanej. Pamiętaj, że tworząc nowe wyzwanie, stajesz się jego Organizatorem!
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/new_event_1.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby stworzyć wyzwanie zarezerwuj sobie 5-10 minut na ustawienie wszystkich parametrów.
+                        Pamiętaj, że możesz być Organizatorem maksymalnie 3&nbspaktualnie trwających wyzwań. Tworząc nowe wyzwania, musisz podać:
+                        <ul><br>
+                            <li><b>Nazwę wyzwania</b> (najlepiej coś charakterystycznego np. Two beavers better than one)</li>
+                            <li><b>Długość wyzwania</b> w tygodniach (od 2 do 15 tygodni)</li>
+                            <li><b>Maksymalną ilość uczestników</b>, która może zapisać się na wyzwanie (od 1 do 25 osób)</li>
+                            <li>Dzień <b>rozpoczęcia wyzwania</b> – musi być to przyszła data z przyszłości</li>
+                            <li>Określić <b>czy wydarzenie jest prywatne</b>, a jeżeli tak, utworzyć <b>hasło</b> umożliwiające innym uczestnikom dopisanie się do niego (pamiętaj, żeby przekazać uczestnikom to hasło!).</li>
+                            <li><b>Krótki opis wyzwania,</b> w którym możesz opisać, dla kogo przeznaczone jest to wyzwanie, jakie przewidywane są nagrody za realizacje celów oraz wszystkie inne informacje jakie mogą być przydatne dla uczestników.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/new_event_2.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Po kliknięciu <b>Utwórz!</b> zostaniesz przeniesiony na stronę z tabelą, w której musisz przypisać cel kilometrowy na każdy tydzień wyzwania. <br><br>
+                        <center><u>Pamiętaj, że końcowy wynik to suma dystansów pomnożona przez współczynniki przypisane do każdej aktywności!</u></center>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/new_event_3.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Jeżeli wypełniłeś wszystkie pola, kliknij <b>Zapisz!</b> i przenieś się do ekranu wyboru sportów uwzględnianych w Twoim wyzwaniu. <b>Jeżeli popełniłeś gdzieś błąd, nie przejmuj się, wszystkie dane można później skorygować.</b>
+                         W tabeli na obrazie poniżej widzisz tabelę sportów dla przykładowego wyzwania.
+                         Każde nowe wyzwanie ma początkowo przypisane wszystkie sporty dostępne w aplikacji z domyślnymi współczynnikami.
+
+                         Zwróć uwagę na kolumny Stała / Współczynnik oraz Wartość. Definiuje ona w jaki sposób zostaną przeliczone realne dystanse poszczególnych aktywności:
+                         <ul><br>
+                            <li>dystans Kolarstwa jest obliczany z użyciem współczynnika, tzn. jeżeli przejedziesz na rowerze 20 km to zaliczony dystans będzie wynosić 20*0,3&nbspkm&nbsp=&nbsp6 km </li>
+                            <li>w przypadku Piłki Nożnej do tygodniowej sumy aktywności dodamy stałą wartość 5 km</li>
+                         </ul>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/new_event_4.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Jeżeli nie chcesz, żeby któryś ze sportów był brany pod uwagę w Twoim wyzwaniu, kliknij <b>Usuń</b> w odpowiednim wierszu.
+                         Jeżeli omyłkowo usunąłeś niewłaściwy sport, możesz dodać go ponownie wybierając go z listy rozwijanej <b>Wybierz Sport</b>, a następnie klikając <b>Dodaj Sport.</b><br><br>
+                    </div>
+                </div>
+
+                
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby edytować współczynnik dla konkretnej aktywności, kliknij <b>Edytuj</b> w odpowiednim wierszu. 
+                        Zostaniesz przeniesiony na ekran edycji sportu. Możesz podać tu nową wartość współczynnika, wpisując odpowiednią wartość w <b>polu Wartość</b>, lub zdecydować, że za dany sport będzie przyznawana stała ilość kilometrów, wybierając odpowiednią opcję w polu <b>Stała / Współczynnik</b>. 
+                        Po kliknięciu </b>Zapisz</b> wrócisz do tabeli wszystkich sportów w wzywaniu.
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/new_event_5.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Pod tabelą sportów znajdziesz znane Ci już okna, w których możesz zmodyfikować wszystkie informacje dotyczące wyzwania, oraz cele na poszczególne tygodnie. 
+                        <b>Pamiętaj, że dane te możesz zmienić tylko przed datą rozpoczęcia wyzwania!</b><br><br>
+                        <center><b>Wszystko gotowe? Świetnie! Zapisz wyzwanie, i udostępnij je swoim znajomym, żeby mogli do niego dołączyć już dziś!</b></center><br>
+                        
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+                    
+            </span>
+
+            <div class="card-header instruction-box-sub-title" id="join_event">Dołączenie do wyzwania</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby dołączyć do wyzwania wybierz w menu aplikacji <b>Wyzwania</b>, a następnie <b>Dostępne Wyzwania</b>.
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/join_event_1.png" class="instruction-img-wide" style="width: 650px;">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Zobaczysz wtedy wszystkie wyzwania, do których możesz się aktualnie zapisać. Są to wyzwania, które się nie rozpoczęły, lub takie które rozpoczęły się mniej niż tydzień temu. 
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/join_event_2.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Możesz dopisać się do wyzwania bezpośrednio z tego miejsca, klikając <b>Zapisz się!</b>. 
+                        Jeżeli chcesz poznać więcej szczegółów dotyczących wyzwania, takich jak uwzględnione w nim sporty lub cele na poszczególne tygodnie kliknij <b>Szczegóły</b>. 
+                        Zobaczysz wtedy szczegółowy podgląd wyzwania. Tutaj też możesz kliknąć <b>Zapisz się!</b> i dołączyć do rywalizacji. 
+                        Zwróć uwagę, że niektóre wyzwania są oznaczone kłódką, pojawiającą się obok nazwy wyzwania. 
+                        Oznacza to, że wyzwania jest <b>prywatne</b>, i aby do niego dołączyć musisz podać prawidłowe hasło.
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/join_event_3.png" class="instruction-img-wide">
+                    </div>
+                </div>
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+
+            </span>
+
+            <div class="card-header instruction-box-sub-title" id="leave_event">Opuszczenie wyzwania</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby opuścić wyzwanie wybierz w menu aplikacji <b>Wyzwania</b>, a następnie <b>Dostępne Wyzwania</b>.
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/join_event_1.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Następnie wybierz wyświetlanie nie rozpoczętych wyzwań, klikając Przyszłe. Kliknij Opuść.
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-img-col">
+                        <img src="static/pictures/leave_event_2.png" class="instruction-img-wide">
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <center><b>Pamiętaj, że nie możesz opuścić wyzwania, które już się rozpoczęło!</center></b>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+
+            </span>
+        
+            <div class="card-header instruction-box-sub-title" id="modify_event">Modyfikacja wyzwania</div>
+            <span class ="instruction-box-font">
+
+                
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby modyfikować wyzwanie, którego jesteś Organizatorem, musisz wejść do jego menu. Możesz zrobić to na dwa sposoby:
+                        <ul><br>
+                            <li>Na stronie <b>Panel Uczestnika</b> znajdziesz ramkę z wydarzeniami, do których jesteś zapisany. Kliknij w przycisk <b>Szczegóły</b> obok interesującego Cię wyzwania.</li>
+                            <li>Wybierz w menu aplikacji <b>Wyzwania</b>, a następnie <b>Twoje Wyzwania</b>. Kliknij <b>Szczegóły</b> w ramce interesującego Cię wyzwania.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/modify_event_1.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Po przejściu do menu wyzwania, w okienku <b>Szczegóły wyzwania</b> kliknij przycisk <b>Modyfikuj wyzwanie</b>. 
+                        Przeniesiesz się na stronę, którą znasz już z tworzenia wyzwania. Możesz tutaj edytować:
+                        <ul><br>
+                            <li>Nazwę wyzwania i jego opis,</li>
+                            <li>Czas trwania,</li>
+                            <li>Zmienić ustawienie prywatności,</li>
+                            <li>Cele na poszczególne tygodnie,</li>
+                            <li>Sporty dostępne w wyzwaniu i ich współczynniki.</li>
+                        </ul>
+                        Po wprowadzeniu zmian kliknij <b>Zapisz</b>, zostaniesz przeniesiony ponownie do menu wyzwania. Pamiętaj, że zmiany w wyzwaniu możesz wprowadzać tylko przed jego rozpoczęciem.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/modify_event_2.png" class="instruction-img-wide">
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/modify_event_3.png" class="instruction-img-wide">
+                </div>
+
+
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Po wprowadzeniu zmian kliknij <b>Zapisz</b>, zostaniesz przeniesiony ponownie do menu wyzwania. Pamiętaj, że zmiany w wyzwaniu możesz wprowadzać tylko przed jego rozpoczęciem.
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                        <div class="instruction-box-all-col">
+                            <a href =#topic_list>Wróć do spisu treści.</a>
+                        </div>
+                    </div>
+                </span>
+
+            <div class="card-header instruction-box-sub-title" id="event_menu">Menu wyzwania</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Po zapisaniu się do wyzwania, możesz wejść na jego stronę, aby zobaczyć jak radzi sobie reszta uczestników przypomnieć sobie tygodniowe cele, sprawdzić ile nagród czeka na Ciebie do odbioru i wiele innych rzeczy. 
+                        <br><br>Do menu wyzwania swojego wyzwania możesz wejść na dwa sposoby:
+                        <ul><br>
+                            <li>Na stronie <b>Panel Uczestnika</b> znajdziesz ramkę z wydarzeniami, do których jesteś zapisany. Kliknij w przycisk <b>Szczegóły</b> obok interesującego Cię wyzwania.</li>
+                            <li>Wybierz w menu aplikacji <b>Wyzwania</b>, a następnie <b>Twoje Wyzwania</b>. Kliknij <b>Szczegóły</b> w ramce interesującego Cię wyzwania.</li>
+                        </ul>
+                        Na stronie wyzwania znajdziesz 5 podstron z informacjami na temat Twojego wyzwania.
+                        <ol><br>
+                            <li><b>Stron Główna</b> – Możesz sprawdzić tutaj daty rozpoczęcia i zakończenia wyzwania, zobaczyć jakie rodzaje sportów są brane pod uwagę w wyzwaniu, wraz z ich współczynnikami, a także podejrzeć ile przeliczonych kilometrów zrobiłeś w danym tygodniu.
+                                <div class="instruction-box-img-col">
+                                    <img src="static/pictures/event_menu_1.png" class="instruction-img-wide">
+                                </div>
+                                Jednak przede wszystkim znajduje się tu tabela, która pokazuje podsumowanie aktywności wszystkich uczestników wyzwania z podziałem na poszczególne dni i tygodnie.
+                                Zobaczysz tutaj dokładnie, którzy uczestnicy zrealizowali cele postawione na każdy tydzień!
+                                <div class="instruction-box-img-col">
+                                    <img src="static/pictures/event_menu_2.png" class="instruction-img-wide">
+                                </div>
+                            </li>
+                            <li><b>Uczestnicy </b>–  Na tej podstronie sprawdzisz, kto bierze udział w wyzwaniu. Jeżeli jesteś jego Organizatorem, masz możliwość usunięcia uczestnikiem przed rozpoczęcia wyzwania.</li>  
+                            <li><b>Aktywności </b>–  Ta podstrona pokazuje wszystkie, które uczestnicy wykonali w ramach wyzwania.</li>  
+                            <li><b>Statystyki  </b>–  Jeżeli interesuje Cię kto z uczestników wyzwania pokonał najwięcej kilometrów, lub zrobił największą ilość aktywności, odwiedź tą podstronę.
+                                <div class="instruction-box-img-col">
+                                    <img src="static/pictures/event_menu_3.png" class="instruction-img-wide">
+                                </div>
+                            </li>  
+                            <li><b>Nagrody   </b>–  Ostatnia podstrona pokaże ile otrzymasz nagród za udział w wyzwaniu! Oczywiście, jeżeli nie zrealizowałeś celu, na któryś z tygodni, dowiesz się tu również ile nagród musisz wręczyć.
+                                <div class="instruction-box-img-col">
+                                    <img src="static/pictures/event_menu_4.png" class="instruction-img-wide">
+                                </div>
+                            </li>  
+                        </ol>
+                    </div>
+                </div>
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+            </span>
+
+
+            <div class="card-header instruction-box-sub-title" id="add_activity">Dodawanie aktywności </div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby dodać zapis wykonanej aktywności do aplikacji, wybierz przycisk <b>„Dodaj Aktywność”</b> na pasku menu. <br><br>
+                        Aktywności możesz wprowadzać na dwa sposób:
+                        <ol>
+                            <br>
+                            <li><b>Ręcznie</b> – Wypełnij pole daty (<b><u>możesz dodać aktywności nie starsze niż 10 dni!</u></b>), wybierz rodzaj aktywności spośród sportów dostępnych w aplikacji, a także wpisz pokonany dystans. 
+                                Podanie czasu trwania nie jest obowiązkowe, ale pomoże śledzić Ci Twoje postępy i planować treningi w przyszłości. Kliknij <b>„Dodaj”</b> aby zapisać aktywność w bazie danych. 
+                                <div class="instruction-box-img-col">
+                                    <img src="static/pictures/add_activity_1.png" class="instruction-img-wide" style="width: 400px;">
+                                </div>
+                            </li>
+                            <li><b>Poprzez synchronizacje z aplikacją Strava </b> – Kliknij przycisk <b> „Connect with Strava”</b> . Zostaniesz poproszony do zalogowanie na konto Strava, a następnie o zgodę na połączenie go z aplikacją Sportowe Świry. 
+                                Pamiętaj, aby zaznaczyć <b> wszystkie zgody</b> , w innym przypadku synchronizacja nie zostanie przeprowadzona. 
+                                Naciśnij przycisk  <b>„Authorize”</b>. Wszystkie nowe aktywności ze Strava zostaną zapisane w bazie danych Sportowych Świrów. 
+                            </li>
+                            <div class="instruction-box-img-col">
+                                <img src="static/pictures/add_activity_2.png" class="instruction-img-wide" style="width: 400px;">
+                            </div>
+
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+            </span>
+
+
+
+            <div class="card-header instruction-box-sub-title" id="modify_activity">Modyfikacja / usuwanie aktywności</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Każdą aktywność wprowadzoną do aplikacji można skorygować lub usunąć, co jest szczególnie przydatne, jeżeli omyłkowo wprowadzisz nie poprawne dane.
+                        Aby przejść do edycji aktywności wybierz <b>„Statystyki”</b> na pasku menu.<br><br>
+                        
+                        Na dole strony ze statystykami znajdziesz tabelę, która pokazuje wszystkie Twoje aktywności zapisane w aplikacji. 
+                        Aby <b>zmodyfikować</b> dane, wybierze <b>białą ikonę z długopisem (1)</b>. Zostaniesz przeniesiony na ekran modyfikacji aktywności, która wygląda tak samo jak, znana Ci już, strona dodawania aktywności. 
+                        Wprowadź poprawne dane i kliknij „Edytuj”.<br><br>
+
+                        Aby <b>usunąć</b> jedną, ze swoich aktywności kliknij w tabeli <b>czerwoną ikonę z krzyżykiem (2)</b>, a następnie potwierdź decyzje w wyskakującym okienku.
+
+                        <div class="instruction-box-img-col">
+                            <img src="static/pictures/modify_activity_1.png" class="instruction-img-wide">
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+            </span>
+
+
+
+            <div class="card-header instruction-box-sub-title" id="dashboard">Panel uczestnika</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Na stronie „Panel uczestnika” znajdziesz podsumowanie dotyczące Twojego udziału w wyzwaniach.  Wszystkie informacje, które są tu prezentowane dotyczą jednego wyzwania. 
+                        Jeżeli bierzesz udział jednocześnie w kilku wyzwaniach, możesz wybrać wyzwania, dla którego wyświetlane są dane, korzystając z <b>ikon strzałek w lewo (1) i w prawo (2)</b>.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/dashboard_1.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        W górnej znajdują się 4 okienka, które pokażą Ci:
+                        <ul><br>
+                            <li><b>Łączny dystans pokonany w ramach wyzwania</b> – jest to dystans przeliczony zgodnie ze współczynnikami ustawionymi dla danego wyzwania,</li>
+                            <li><b>Średni dystans pokonany w ramach wyzwania</b> – uwzględnia już odpowiednie współczynniki dla sportów,</li>
+                            <li><b>Średni czas aktywności w ramach wyzwania</b></li>
+                            <li><b>Zdobyte nagrody</b> – pamiętaj, że jest to wartość orientacyjna, gdyż niektórzy uczestnicy wyzwania mogli jeszcze nie uzupełnić swoich aktywności </li>
+                        </ul>
+                        Poniżej zobaczysz wykres kołowy, który graficznie pokazuje jak radzisz sobie z realizacją celi w wyzwaniu:
+
+                        <ol type ="A"><br>
+                            <li><b>Postęp wyzwania</b> – pokazuje jaki procent długości wyzwania już za Tobą,</li>
+                            <li><b>Cel tygodniowy</b>  – tutaj możesz zobaczyć jaki procent celu na aktualny tydzień już zrealizowałeś,</li>
+                            <li><b>Skuteczność</b> – zmniejsza się wraz z każdym tygodniem, w którym nie wypełnisz celu. Nie daj mu spaść poniżej 100% ! 😊</li>
+
+                        </ol>
+                        Dodatkowo znajdziesz tu przypomnienie, o wszystkich wyzwaniach, do których jesteś zapisany, a które rozpoczną się wkrótce.
+                    
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+
+            </span>
+
+
+            <div class="card-header instruction-box-sub-title" id="statistics">Statystyki</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Na stronie <b>Statystyki</b>, na którą wejdziesz klikając w odpowiedni przycisk na pasku menu, znajdziesz podsumowanie wszystkich swoich aktywności. 
+                        Wartości dystansu, które tu znajdziesz, są wartościami rzeczywistymi, nie przeliczonymi przez współczynniki dla konkretnych sportów.<br> Możesz sprawdzić tutaj:
+                        <ul>
+                            <li>Łączny dystans wszystkich aktywności,</li>
+                            <li>Średni dystans pojedynczej aktywność,</li>
+                            <li>Średni czas pojedynczej aktywności,</li>
+                            <li>Ilość zapisanych aktywności,</li>
+                            <li>Graficzną prezentację różnorodności sportów przez Ciebie uprawianych,</li>
+                            <li>Dystans aktywności z ostatnich dni,</li>
+                            <li>Tabelę pokazującą wszystkie Twoje aktywności.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/statistics_1.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        W przyszłości planujemy znacząco rozbudować zestaw dostępnych statystyk, tak abyś mógł jeszcze lepiej śledzić swoje postępy!<br><br>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+
+            </span>
+
+
+            <div class="card-header instruction-box-sub-title" id="mailbox">Wiadomości</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Nasza aplikacja posiada wbudowany system przesyłania wiadomości. Za jego pośrednictwem możesz wysłać wiadomość do administratorów aplikacji, a także do uczestników wyzwań, w których uczestniczysz. 
+                        Aby skorzystać ze skrzynki, kliknij w <b>Wiadomości</b> na pasku menu
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/send_message_1.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        W środkowej części znajdziesz listę wszystkich Twoich wiadomości. Aby odczytać jedną z nich kliknij w odpowiednią pozycji, wiadomość wyświetli się w wyskakującym okienku. 
+                        Po lewej stronie znajdziesz przyciski <b>Odebrane (A)</b> oraz <b>Wysłane (B)</b>. Z ich użyciem, możesz wyświetlać wiadomości, których jesteś odpowiednio adresatem lub nadawcą.
+                        <br><br>
+                        Aby napisać nową wiadomość, kliknij przycisk <b>Nowa wiadomość</b>. W wyskakującym okienku wybierz adresata swojej wiadomości, oraz wpisz temat oraz treść. 
+                        Po uzupełnieniu wszystkich pól, kliknij <b>Wyślij Wiadomość</b>.
+                        
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/send_message_2.png" class="instruction-img-wide" style="width: 400px;">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+
+            </span>
+
+
+            <div class="card-header instruction-box-sub-title" id="account_settings">Ustawienia konta</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby zmienić ustawienia swojego konta, wybierz w menu aplikacji swoje <b>Imię i Nazwisko</b>, następnie <b>Ustawienia Konta</b> na liście rozwijanej.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/change_password_1.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Na tej stronie możesz:
+                        <ul>
+                        <li>Zmienić wyświetlane w aplikacji imię i nazwisko – aby to zrobić wpisz nowe dane, a następnie kliknij Zapisz zmiany.</li>
+                        <li>Dodać zdjęcie profilowo, które będzie wyświetlane przy Twoim imieniu i nazwisku – Kliknij przycisk Wybierz plik. Zobaczysz okienko, w którym będziesz mógł wybrać plik z Twojego dysku, który ma zostać wgrany do aplikacji. Po zatwierdzeniu wyboru, kliknij Prześlij nowe zdjęcie.</li> 
+                        <li>Zapisać się na aplikacyjny Newsletter. Aby to zrobić musisz, zaakceptować naszą politykę prywatności.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/account_settings_1.png" class="instruction-img-wide">
+                </div>
+
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+            </span>
+
+
+            <div class="card-header instruction-box-sub-title" id="change_password">Zmiana hasła</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby zmienić hasło do aplikacji, wybierz w menu aplikacji <b>swoje Imię i Nazwisko</b>, następnie <b>Ustawienia Konta</b> na liście rozwijanej.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/change_password_1.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Następnie wybierz zakładkę <b>Prywatność</b>.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/change_password_2.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Na ekranie zobaczysz okno <b>„Zmień hasło”</b>. Podaj swoje obecne hasło, nowe hasło oraz potwierdź nowe hasło.
+                         Pamiętaj, że hasło musi składać się z min. 8 znaków! Następnie kliknij <b>„Zapisz zmiany”</b>.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/change_password_3.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+            </span>
+
+            <div class="card-header instruction-box-sub-title" id="delete_account">Usuwanie konta</div>
+            <span class ="instruction-box-font">
+
+                
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Aby usunąć konto w aplikacji, wybierz w menu aplikacji <b>swoje Imię i Nazwisko</b>, następnie <b>Ustawienia Konta</b> na liście rozwijanej.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/change_password_1.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Następnie wybierz zakładkę <b>Prywatność</b>.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/change_password_2.png" class="instruction-img-wide">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Na ekranie zobaczysz okno <b>„Usuń konto”</b>. Kliknij <b>„Rozumiem, usuń moje konto”</b>, a następnie potwierdź swoją decyzje w wyskakującym okienku.
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="static/pictures/delete_account_3.png" class="instruction-img-wide" style="width: 400px;">
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <center><b>Pamiętaj, że usunięcie konta jest czynnością nieodwracalną!</center></b>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+            </span>
+
+
+            <div class="card-header instruction-box-sub-title" id="questions">Dodatkowe pytania</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+
+                        Masz dodatkowe pytania co do działania naszej aplikacji? Zajrzyj do <a href="{{ url_for('other.faq') }}"> Najczęściej Zadawanych Pytań</a>, i sprawdź czy ktoś nie szukał już na nie odpowiedzi! <br><br>
+                        Dalej nie rozwialiśmy Twoich wszystkich wątpliwości? Napisz do nas, korzystając z <a href="{{ url_for('other.send_message') }}">formularza kontaktowego</a>, lub wysyłając wiadomość na <a href ="mailto:kontakt@sportoweswiry.com.pl"> <u>kontakt@sportoweswiry.com.pl</u></a>.
+
+
+                        <br><br>
+                    </div>
+                </div>
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+            </span>
+
+            <div class="card-header instruction-box-sub-title" id="donation">Wsparcie rozwouju Sportowych Świrów</div>
+            <span class ="instruction-box-font">
+
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Korzystanie z naszej aplikacji jest <b>w pełni darmowe</b> dla wszystkich użytkowników. Jeżeli jednak wyzwanie i aplikacja Ci się podobały to będzie nam niezmiernie miło, jeżeli <b>udostępnisz informacje</b> o naszej inicjatywie w swoich social mediach lub <b>wesprzesz utrzymanie i rozwój Sportowych Świrów</b>, poprzez postawienie nam „wirtualnej kawy”! 
+                        <br>
+                    </div>
+                </div>
+
+                <div class="instruction-box-img-col">
+                    <img src="https://www.twosoutherncorners.com/img/bmc-button.png" class="instruction-img-wide" style="width: 200px; margin-top: 30px;">
+                </div>
+
+                
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        Dodatkowo, jeżeli jesteś sympatykiem kryptowalut, możesz zostawić nam „tipa” w jednej z popularnych wirtualnych walut.
+                    </div>
+                </div>
+
+
+                <div class="instruction-box-img-col">
+                    <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.crypto_tip') }}" style="padding-top: 0px;"> <img src="/static/img/btc_icon.svg" alt="" width="45" style="margin-right: 20px; margin-bottom: 5px;">Zostaw krypto napiwek!</a>
+                </div>
+
+                
+                <div class="row history-box-row">
+                    <div class="instruction-box-all-col">
+                        <a href =#topic_list>Wróć do spisu treści.</a>
+                    </div>
+                </div>
+            </span>
+        
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+{% endblock %}

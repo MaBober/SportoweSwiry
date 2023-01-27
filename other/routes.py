@@ -43,6 +43,27 @@ def about():
 
     return render_template('/pages/about.html', title_prefix = "O nas" )
 
+
+@other.route("/historia")
+def history():
+
+    return render_template('/pages/history.html', title_prefix = "Jak to się zaczęło?" )
+
+@other.route("/jak_to_dziala")
+def how_it_works():
+
+    return render_template('/pages/how_it_works.html', title_prefix = "Jakt to działa?" ) 
+
+@other.route("/instrukcja")
+def instruction():
+
+    return render_template('/pages/instruction.html', title_prefix = "Instrukcja" ) 
+
+@other.route("/krypto_tip")
+def crypto_tip():
+
+    return render_template('/pages/crypto_tip.html', title_prefix = "Napiwek w kryptowalutach" ) 
+
 @other.route("/admin_panel")
 @account_confirmation_check
 def admin_panel():

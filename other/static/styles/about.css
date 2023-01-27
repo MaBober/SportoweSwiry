@@ -1,120 +1,256 @@
+body {
+  background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/bg_newUserForm.webp") no-repeat center fixed;
+  min-height: 100%;
+  background-size: cover;
+  background-color: #3a3a3a;
+  min-height: 100%;
+  position: relative;
+}
 
-  body {
-    background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7)), url("/static/img/icon-image 4.webp") no-repeat center fixed;
-    background-size: cover;
-    background-color: #3a3a3a;
-    min-height: 100%;
+.about-title{
+  
+  font-family: Lato;
+  font-size: 40px;
+  color: white;
+  text-align: center;
+  margin-top: 130px;
+}
+
+.about-box-title {
+  background-color: #000 !important;
+
+  flex-grow: 0;
+  font-family: Lato;
+  font-size: 30px;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 !important;
+  display: flex;
+  /* margin: auto; */
+  text-align: center;
+  justify-content: center;
+  width: 100% !important;
+
+  margin-bottom: 50px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+}
+
+
+.about-box {
+  width: 80%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 11px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background-color: #efefef;
+  margin-top: 180px;
+  margin-bottom: 70px;
+  
+}
+
+.about-box-row{
+  flex-direction: row;
+
+}
+
+.about-box-text-col{
+  width: 60%;
+  display: inline;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.about-box-all-col{
+  width: 100%;
+  display: inline;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+
+
+.about-box-img-col{
+  width: 35%;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-wrap: break-word;
+}
+
+.about-box-img{
+  position: relative;
+  border-radius: 6px;
+  max-height: 330px;
+   margin-top: 35px;
+}
+
+
+
+.about-box-font{
+  text-align: justify;
+  font-size: 20px;
+  padding-left: 4%;
+  padding-right: 4%;
+  padding-bottom: 15px;
+  flex-direction: row;
+
+}
+
+.details-button{
+  display: block;
+  max-width: 90%;
+  height: 50px;
+  margin: auto;
+  margin-top: 15px;
+  border-radius: 15px;
+  background-color: #579956 !important;
+  border: solid 2px #579956;
+
+}
+.details-button:hover {
+  background-color: #000 !important;
+}
+
+.question-mark-img {
+  height: 150px;
+  top:40px;
+  position: relative;
+}
+
+.lock-img {
+  height: 120px;
+  top:20px;
+  position: relative;
+}
+
+.Coffee-Button {
+  width: 170px;
+  height: 48px;
+  margin: 33px 140px 0 127px;
+  border-radius: 10px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background-image: url("https://www.twosoutherncorners.com/img/bmc-button.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.Coffee-Button:hover {
+  width: 153px;
+  height: 43px;
+  margin-bottom: 5px;
+  margin-left: 135px;
+}
+
+.details-button{
+  display: block;
+  max-width: 400px;
+  height: 50px;
+  margin: auto;
+  margin-top: 15px;
+  border-radius: 15px;
+  background-color: #579956 !important;
+  border: solid 2px #579956;
+
+}
+
+
+.details-button-icon{
+
+  margin-right: 20px;
+  margin-bottom: 5px;
+  width: 45px;
+}
+
+/* FOR SMALL SCREENS */
+@media(max-width: 1010px) {
+
+  .about-box-img{
     position: relative;
+    border-radius: 6px;
+    max-height: 330px;
+    margin-top: 0px;
+    margin-bottom: 25px;
   }
-  
-  /* TITLE "ABOUT US" */
-  
-  .Title-About-Us {
-  
-    font-family: Lato;
-    font-size: 40px;
-    color: white;
-    text-align: center;
-    margin-top: 110px;
+
+}
+
+
+
+/* FOR SMALL SCREENS */
+@media(max-width: 850px) {
+
+  .about-box {
+      width: 85%;
+      max-width: 650px;
+      margin-bottom: 0px;
   }
+
+  .about-box-row{
+    flex-direction: column;
   
-  
-  /* MAIN CONTENER WITH PHOTO AND TEXT - ABOUT US */
-  
-  .About-Us-Box {
-    display: flex;
-    flex-direction: row;
+  }
+
+  .about-box-text-col{
+    width: 100%;
+
+  }
+
+  .about-box-img-col{
+    padding-top: 10px;
+    width: 100%;
     justify-content: center;
-    padding-top: 54px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-wrap: break-word;
   }
+
+  .details-button{
+    display: block;
+    max-width: 90%;
+
+    font-size: 17px;
+
   
-  img.Bartsch-Bober-Image {
-    width: 336px;
-    height: 100%;
-    object-fit: contain;
   }
-  
-  .About-Us-Text {
-    width: 525px;
-    height: auto;
-    padding: 36px 28px 27px 38px;
-    background-color: #efefef;
+
+  .question-mark-img {
+    top:10px;
+
   }
-  
-  
-  .About-Us-Font {
-    margin: 0 0 33px;
-    font-family: Lato;
-    font-size: 18px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #000;
+
+  .lock-img {
+    top:10px;
   }
+
+
   
-  
-  .Coffee-Button {
-    width: 170px;
-    height: 48px;
-    margin: 33px 140px 0 127px;
-    border-radius: 10px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    background-image: url("https://www.twosoutherncorners.com/img/bmc-button.png");
-    background-size: contain;
-    background-repeat: no-repeat;
+
+}
+
+/* FOR SMALL SCREENS */
+@media(max-width: 400px) {
+
+  .about-box-img{
+  width: 90%;
   }
-  
-  .Coffee-Button:hover {
-    width: 153px;
-    height: 43px;
+
+  .details-button{
+    display: block;
+    max-width: 90%;
+    height: 46px;
+    font-size: 17px;
+    padding-top: 5px;
+
+  }
+
+  .details-button-icon{
+
+    margin-right: 10px;
     margin-bottom: 5px;
-    margin-left: 135px;
+    margin-top: 6px;
+    width: 30px;
   }
-  
-  
-  /* FOR SMALL SCREENS */
-  @media(max-width: 850px) {
-  
-  
-    /* TITLE "ABOUT US" */
-    .Title-About-Us {
-        font-size: 30px;
-        margin-top: 150px;
-    }
-  
-    /* MAIN CONTENER WITH PHOTO AND TEXT - ABOUT US */
-    .About-Us-Box {
-        flex-direction: column;
-        margin: auto;
-    }
-  
-    img.Bartsch-Bober-Image {
-        width: 325px;
-        height: 325px;
-        margin: auto;
-  
-      }
-  
-    .About-Us-Text {
-        width: 325px;
-      }
-
-    .About-Us-Font {
-        font-size: 14px;
-      }
-  
-    .Coffee-Button {
-        margin: auto;
-        margin-top: 30px;
-      }
-
-    .Coffee-Button:hover {
-        margin-left: 55px;
-      }
-  
-  
-  }
-  
+}

@@ -1,16 +1,26 @@
 <div class="Footer-box">
-    <div class="row">
+    <div class="row" style="justify-content: space-between; flex-wrap: nowrap;">
 
-        
-            <span class="Bartsch-Bober-Inc">&copy;2022 Bartsch & Bober Inc.</span>  
-    
+        <div class="Bartsch-Bober-Inc">
+            &copy;2022<wbr> Bartsch&nbsp&&nbspBober  
+        </div>
 
-            <a href="https://strava.com" class="Strava-logo">
-        </a>
-        <div class="col" style="text-align: right;">
-            <a href="{{ url_for('other.about') }}" class="Footer-text ">O nas</a> <span class="Footer-text "> | </span>
-            <a href="{{ url_for('other.send_message') }}" class="Footer-text ">Kontakt</a>  <span class="Footer-text "> | </span>
-            <a href="{{ url_for('other.faq') }}" class="Footer-text ">FAQ</a>
+        <div class="Strava-logo-col">
+            <a href="https://strava.com"><img src="/static/img/api_logo_cptblWith_strava_stack_white.png"  class="Strava-logo"> </a>
+        </div>
+
+        <div class="Links-col">
+            <div class="Footer-links">
+                <a href="{{ url_for('other.about') }}" class="Footer-text ">O nas</a>
+            </div>
+
+            <div class="Footer-links">
+                <a href="{{ url_for('other.send_message') }}" class="Footer-text ">Kontakt</a>
+            </div>
+            <div class="Footer-links" style="border: 0;">
+                <a href="{{ url_for('other.how_it_works') }}" class="Footer-text ">Jak to działa?</a>
+            </div>
+
         </div>
     
     </div>

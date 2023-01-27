@@ -8,7 +8,7 @@ html {
 body {
   background: linear-gradient(rgb(38,38,38,0.7), rgb(38,38,38,0.7));
   background-size: cover;
-  background-color: #3a3a3a;
+  background-color: #ffffff;
   min-height: 100%;
   position: relative;
 }
@@ -121,38 +121,54 @@ body {
 }
 
 .Bartsch-Bober-Inc {
-  height: 19px;
-  width: 30%;
+  height: 16px;
+  width: fit-content;
+  max-width: 40%;
   font-family: Lato;
   font-size: 16px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
   text-align: left;
   color: #636363;
   flex-direction: row;
 }
 
-.Footer-links {
+.Links-col {
+  justify-self: end ;
+  height: 16px;
+  width: fit-content;
+  /* max-width: 40%; */
   display: flex;
+  font-family: Lato;
+  font-size: 16px;
+  text-align: right;
+  color: #636363;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.Footer-links {
+  border-right: 2px solid #fff;
+  padding-right: 5px;
+  padding-left: 5px;
+
+}
+
+.Strava-logo-col{
+  width: 30%;
+  justify-content: left;
+  display: flex;
+  vertical-align: middle;
+
 }
 
 .Strava-logo{
+  justify-self: flex-start;
   position: absolute;
-  top: 10px;
-  height: 50px;
-  left: 240px;
-  width: 90px;
-  background-size: contain;
+  bottom: 14px;
+  height: 40px;
+  left: 220px;
   margin: 0 0 0 0;
   padding: 0 0 0 0;
-  background-image: url("/static/img/api_logo_cptblWith_strava_stack_white.png");
-  background-repeat: no-repeat;
-  vertical-align: baseline
-  
+
 }
 
 .Footer-text {
@@ -611,21 +627,6 @@ img.icon-add-activity {
   
   }
 
-
-  /* FOOTER */
-  .Bartsch-Bober-Inc {
-    font-size: 13px;
-  }
-
-  .Footer-text {
-    font-size: 13px;
-    margin-right: 3px;
-  }
-
-  .Strava-logo{
-    left:195px;
-  }
-  
   .cookie-box-content{
     flex-direction: column;
   }
@@ -636,16 +637,89 @@ img.icon-add-activity {
   
 }
 
+/* FOR SMALL SCREENS */
+@media(max-width: 750px) {
+
+  /* FOOTER */
+
+  .Bartsch-Bober-Inc {
+    font-size: 13px;
+  }
+
+  .Footer-text {
+    font-size: 13px;
+    margin-right: 3px;
+  }
+
+  /* .Strava-logo{
+    left:5px;
+  } */
+}
+
 /* FOR VERY SMALL SCREENS */
-@media(max-width: 500px) {
+@media(max-width: 530px) {
+
+  .Footer-links {
+    border-right: 0;
+
+  }
+  
+
+  
   .Strava-logo{
-    left:140px;
+    left:200px;
+    top:22px;
+    padding-left: 0px;
   }
 
   .wrapper .tooltip {
     font-size: 12px;
   }
+
+  .Footer-box {
+    height: 85px;
+    padding: 5px 16px 5px 29px;
+
+  }
+
+  .Links-col {
+    justify-self: end ;
+    height: 16px;
+    width: fit-content;
+    /* max-width: 40%; */
+    display: flex;
+    font-family: Lato;
+    font-size: 16px;
+    text-align: right;
+    color: #636363;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .Bartsch-Bober-Inc {
+    margin-top: 30px;
+  }
+  
+  
 }
+
+/* FOR SMALL SCREENS */
+@media(max-width: 420px) {
+  .Bartsch-Bober-Inc {
+
+    margin-top: 17px;
+
+  }
+
+  .Strava-logo{
+    left:150px;
+    top:20px;
+    padding-left: 0px;
+  }
+  
+
+}
+
 
 
 /* FOR SMALL SCREENS */

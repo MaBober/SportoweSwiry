@@ -1,0 +1,63 @@
+{% extends "pages//base.html" %}
+
+{% block body_content %}
+
+
+
+<div class="container-xl px-4 mt-4">
+
+    <div class="col-md-10">
+        <div class="table-responsive-md">
+            <table class="table table-sm table-secondary table-striped table-hover" style="margin-top: 100px; border-radius: 50px;">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Dzisiaj</th>
+                    <th scope="col">7 dni</th>
+                    <th scope="col">30 dni</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>Nowi użytkownicy: </td>
+                        <td>{{ data['users'][0] }}</td>
+                        <td>{{ data['users'][1] }}</td>
+                        <td>{{ data['users'][2] }}</td>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Nowe wyzwania: </td>
+                        <td>{{ data['events'][0] }}</td>
+                        <td>{{ data['events'][1] }}</td>
+                        <td>{{ data['events'][2] }}</td>
+                        </td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td>Nowe aktywności: </td>
+                        <td>{{ data['activities'][0] }}</td>
+                        <td>{{ data['activities'][1] }}</td>
+                        <td>{{ data['activities'][2] }}</td>
+                        </td>
+                    </tr>
+
+                                        
+                    <tr>
+                        <td>Unikalni użytkownicy<br> dodający aktywności: </td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

@@ -543,10 +543,11 @@ def admin_list_of_events():
         flash("Nie masz uprawnień do tej zawartości")
         return redirect(url_for('other.hello'))
 
-    events=Event.query.all()
+    events=Event.query.order_by(Event.added_on.desc()).all()
     return render_template('/pages/admin_events.html',
                     events=events,
-                    title_prefix = "Lista wyzwań")
+                    title_prefix = "Lista wyzwań",
+                    menu_mode="mainApp")
 
 
 
@@ -562,7 +563,8 @@ def admin_list_of_sports():
     sports = Sport.query.all()
     return render_template('/pages/admin_sports.html',
                     sports = sports,
-                    title_prefix = "Lista sportów")
+                    title_prefix = "Lista sportów",
+                    menu_mode="mainApp")
     
 
 @event.route("/admin_delete_contestant/<int:event_id>/<user_id>")
@@ -645,7 +647,9 @@ def modify_sport_in_base(sport_id):
     sport_form = CoeficientsForm(activity_name = sport_to_modify.name,
                         value = sport_to_modify.default_coefficient,
                         is_constant = sport_to_modify.default_is_constant,
-                        strava_name = sport_to_modify.strava_name)
+                        strava_name = sport_to_modify.strava_name,
+                        old_name = sport_to_modify.name,
+                        old_strava_name = sport_to_modify.strava_name)
     del sport_form.event_name
 
     if sport_form.validate_on_submit():

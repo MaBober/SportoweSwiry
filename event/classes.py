@@ -139,7 +139,7 @@ class Event(db.Model):
 
         event_name = self.name
 
-        if not current_user.is_admin:
+        if not current_user.is_admin and (self.admin_id != current_user.id or self.current_users_amount != 1):
             current_app.logger.warning(f"User {current_user.id} tries to delete event {self.id}. He is not an admin!")
             message = "Nie masz uprawnień do tej zawartości!"
             return message, 'danger', redirect(url_for('other.hello'))
@@ -798,8 +798,7 @@ class Event(db.Model):
     
     @classmethod
     def added_in_last_days(cls, days):
-
-        inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
+        inserts = cls.query.filter(cls.added_on <= dt.datetime.now()).filter(cls.added_on >= dt.datetime.now() - dt.timedelta(days=days)).all()
 
         return len(inserts)
 

@@ -51,7 +51,7 @@
             {% endfor %}
         </p>
 
-        {{ form.verifyPassword(class_="form-control Input-Box", placeholder="Powtórz hasło" ) }}
+        {{ form.verifyPassword(class_="form-control Input-Box", placeholder="Powtórz hasło") }}
         <p class="Error-Message">
             {% for error in form.verifyPassword.errors %}
                 {{ error }}
@@ -60,8 +60,8 @@
 
 
         <div class="Checkbox-Main-Box" style="margin-bottom: 10px;">
-            {{ form.statute_acceptance(class_="Checkbox-Box form-check-input" ) }}
-            <span class="Checkbox-Font">
+            {{ form.statute_acceptance(class_="Checkbox-Box form-check-input") }}
+            <span class="Checkbox-Font" style="text-align: left;">
                 Akceptuję <a href="{{ url_for('other.statute') }}">regulamin serwisu</a>
                 <p class="Error-Message">
                     {% for error in form.statute_acceptance.errors %}
@@ -72,7 +72,7 @@
         </div>
         <div class="Checkbox-Main-Box">
             {{ form.subscribe_newsletter(class_="Checkbox-Box form-check-input" ) }}
-            <span class="Checkbox-Font">
+            <span class="Checkbox-Font" style="text-align: left;">
                 Zapisuje się na newsletter. Akceptuję <a href="{{ url_for('other.privacy_policy') }}">politykę prywatności</a>
                 <p class="Error-Message">
                     {% for error in form.subscribe_newsletter.errors %}

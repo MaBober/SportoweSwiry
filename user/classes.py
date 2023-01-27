@@ -113,6 +113,7 @@ class User(db.Model, UserMixin):
             #adding admins to datebase 
             db.session.add(new_user)
             db.session.commit()
+            send_email(new_user.mail, 'Witaj w Sportowych Świrach!','emails/register_social', user = new_user)
             login_user(new_user)
 
             message = "Nowe konto zostało utworzone!"
@@ -414,7 +415,7 @@ class User(db.Model, UserMixin):
             return avatar_path
 
     @staticmethod
-    def reset_password(token, new_password):
+    def check_token(token):
 
         current_app.logger.info(f"User tries to reset password")
         s = Serializer(current_app.config['SECRET_KEY'])
@@ -423,31 +424,37 @@ class User(db.Model, UserMixin):
             data = s.loads(token.encode('utf-8'))
 
         except:
-            message = 'Hasło nie zostało poprawnie zmienione!'
+            message = 'Hasło nie zostało zmienione. Podano niepoprawny link!'
             current_app.logger.warning(f"User didn't reset password")
             return message, 'danger', redirect(url_for('other.hello'))
 
         user = User.query.get(data.get('resetPassword'))
 
         if user is None:
-            message = 'Hasło nie zostało poprawnie zmienione!'
+            message = 'Hasło nie zostało zmienione. Podano nie poprawny link!'
             current_app.logger.warning(f"User didn't reset password")
             return message, 'danger', redirect(url_for('other.hello'))
 
-        try:
-            user.password = new_password      
-            user.password = user.hash_password()
+        else:
+            return user
 
-            db.session.add(user)
+
+    def reset_password(self, new_password):
+
+        try:
+            self.password = new_password      
+            self.password = self.hash_password()
+
+            db.session.add(self)
             db.session.commit()
 
             message = 'Hasło zostało poprawnie zmienione. Możesz się zalogować'
-            current_app.logger.info(f"User {user.id} reset password")
+            current_app.logger.info(f"User {self.id} reset password")
             return message, 'success', redirect(url_for('user.login'))
 
         except:
             message = 'HASŁO NIE ZOSTAŁO ZMIENIONE. Jeżeli błąd będzie się powtarzał, skontaktuj się z administratorem'
-            current_app.logger.exception(f"User {user.id} failed to reset password")
+            current_app.logger.exception(f"User {self.id} failed to reset password")
             return message, 'danger', redirect(url_for('other.hello'))
 
     
@@ -635,7 +642,8 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def added_in_last_days(cls, days):
-        inserts = cls.query.filter(cls.added_on < dt.date.today()).filter(cls.added_on > dt.date.today() - dt.timedelta(days=days)).all()
+        inserts = cls.query.filter(cls.added_on <= dt.datetime.now()).filter(cls.added_on >= dt.datetime.now() - dt.timedelta(days=days)).all()
+
         return len(inserts)
 
     
@@ -742,6 +750,39 @@ class DashboardPage:
                 self.d2=100
         except:
                 current_app.logger.exception("self.event_week_distance < self.current_week_target")
+
+
+        try:
+
+            event_length_weeks = self.event.length_weeks
+            event_current_week = self.event.current_week
+
+            all_event_activities = self.event.give_all_event_activities(calculated_values = True)
+            split_list = self.event.give_overall_weekly_summary(all_event_activities)
+
+            weeks_done = 0
+            weeks_zero = 0
+            for week in split_list:
+                if week.loc['target_done','calculated_distance'].loc[current_user.id][0] and week.loc['total','calculated_distance'].loc[current_user.id][0]>0:
+                    weeks_done +=1
+                if week.loc['total','calculated_distance'].loc[current_user.id][0]==0 and week.loc['target_done','calculated_distance'].loc[current_user.id][0]:
+                    weeks_zero +=1
+
+
+            event_length_weeks = event_length_weeks - weeks_zero
+
+
+            if weeks_done < event_length_weeks:
+
+                current_event_offset = event_length_weeks - event_current_week
+                efficiency = (weeks_done/(event_length_weeks - current_event_offset))*100
+                self.d3 = round(efficiency, 0)
+
+            else:
+                self.d3=100
+        except:
+                current_app.logger.exception("weeks_done < event_length_weeks")
+
 
         return None
 

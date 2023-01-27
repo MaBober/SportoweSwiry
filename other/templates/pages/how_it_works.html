@@ -1,0 +1,101 @@
+{% extends "pages//base.html" %}
+
+
+{% block body_content %}
+<!-- Site css sheet -->
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/about.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('other.static',filename='styles/how_it_works.css') }}">
+
+<div class="Static-Content">
+
+
+    <div class="row justify-content-center">
+        
+        <div class="how_it_works-box">
+            <div class="card-header how_it_works-box-title">Jak to działa?</div>
+
+
+            <span class ="how_it_works-box-font">
+
+            <div class="row how_it_works-box-row"> 
+                <div class="how_it_works-box-all-col">
+
+                    Dzięki aplikacji Sportowe Świry znajdziesz dodatkową motywację do regularnych treningów oraz dbania o swoją kondycje i zdrowie.<br><br>
+                    <ol>
+                        <li>Skrzyknij swoich znajomych, którzy chcą zadbać o swoją formę i szukają dodatkowego bodźca do treningów. Stwórzcie wyzwanie, które będzie odpowiadało waszym możliwościom i chęciom.</li><br>
+                        <li>Ustalcie jaki dystans chcecie pokonywać w każdym tygodniu i jaką nagrodę będziecie sobie kupować za niewykonanie celu.</li> <br>
+                        <li>Twoi znajomi uprawiają różne sporty? Żaden problem! Dzięki systemowi współczynników kolarz może sprawiedliwie konkurować z pływakiem.</li><br>
+                        <li>Zapisuj aktywności i śledź swoje postępy w wyzwaniu.</li>
+                    </ol>
+                    <b><center>BAW SIĘ DOBRZE!</center></b>
+                </div>
+            </div>
+
+
+            <div class="row history-box-row" style="margin-top: 15px;"> 
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('user.create_account') }}">Załóż konto!</a>
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.hello') }}">Powrót</a>
+            </div>
+
+            <div class="row how_it_works-box-row" > 
+                <div class="how_it_works-box-all-col">
+                    <br>
+                    <hr style="border-top: 5px solid #579956; opacity: 1;">
+                    
+                </div>
+            </div>
+
+            <div class="row how_it_works-box-row" > 
+                <div class="how_it_works-box-img-col">
+                    <img src="static/img/help.svg" class="question-mark-img">
+                </div>
+                <div class="how_it_works-box-text-col">
+                    <br>Jeżeli chcesz poznać więcej szczegółów na temat naszej aplikacji, przeczytaj szczegółową instrukcje, która krok po kroku przeprowadzić Cię przez proces zakładania konta, tworzenia własnych wyzwań, oraz dodawania aktywności.
+                     Dodatkowo zachęcamy Cię do przeczytania odpowiedzi na często zadawane pytania.<br><br>
+                </div>
+
+            </div>
+
+
+            <div class="row how_it_works-box-row" > 
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.instruction') }}">Szczegółowa instrukcja</a>
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.faq') }}">Często zadawane pytania</a>  
+                <div class="how_it_works-box-all-col" style="justify-content: center;">
+
+                </div>
+            </div>
+
+            <div class="row how_it_works-box-row" > 
+                <div class="how_it_works-box-all-col">
+                    <br>
+                    <hr style="border-top: 5px solid #579956; opacity: 1;">
+                </div>
+            </div>
+
+            <div class="row how_it_works-box-row" > 
+                <div class="how_it_works-box-img-col">
+                    <img src="static/img/lock.svg" class="lock-img">
+                </div>
+                <div class="how_it_works-box-text-col">
+                    <br>Przed założeniem konta w naszej aplikacji, zapoznaj się również z obowiązującymi Regulaminem oraz Polityką Prywatności.   <br><br> 
+                </div>
+            </div>
+
+            <div class="row how_it_works-box-row" > 
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.statute') }}">Regulamin</a>
+                <a class="btn btn-dark btn-lg details-button"  href="{{ url_for('other.privacy_policy') }}">Polityka Prywatności</a>  
+                <div class="how_it_works-box-all-col" style="justify-content: center;">
+
+                </div>
+            </div>
+
+            </span>
+            
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+{% endblock %}

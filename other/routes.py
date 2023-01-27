@@ -26,7 +26,11 @@ def hello():
 @other.route("/faq")
 def faq():
 
-    return render_template('/pages/faq.html', title_prefix = "FAQ" )
+    from activity.classes import Sport
+
+    all_sports = Sport.all_sports()
+
+    return render_template('/pages/faq.html', title_prefix = "FAQ", all_sports = all_sports )
 
 
 @other.route("/regulamin")
@@ -40,19 +44,72 @@ def about():
     return render_template('/pages/about.html', title_prefix = "O nas" )
 
 
+@other.route("/historia")
+def history():
+
+    return render_template('/pages/history.html', title_prefix = "Jak to się zaczęło?" )
+
+@other.route("/jak_to_dziala")
+def how_it_works():
+
+    return render_template('/pages/how_it_works.html', title_prefix = "Jakt to działa?" ) 
+
+@other.route("/instrukcja")
+def instruction():
+
+    return render_template('/pages/instruction.html', title_prefix = "Instrukcja" ) 
+
+@other.route("/krypto_tip")
+def crypto_tip():
+
+    return render_template('/pages/crypto_tip.html', title_prefix = "Napiwek w kryptowalutach" ) 
+
+@other.route("/admin_panel")
+@account_confirmation_check
+def admin_panel():
+
+    if not current_user.is_admin:
+        flash("Nie masz uprawnień do tej zawartości")
+        return redirect(url_for('other.hello'))
+
+    from user.classes import User
+    from activity.classes import Activities
+    from event.classes import Event
+
+    ranges = [1,7,30]
+    data = {'users' : [],
+            'events' : [],
+            'activities' : []
+            }
+
+    for range in ranges:
+        data['activities'].append(Activities.added_in_last_days(range))
+        data['users'].append(User.added_in_last_days(range))
+        data['events'].append(Event.added_in_last_days(range))
+
+
+    return render_template('/pages/admin_panel.html', title_prefix = "Panel Administratora", menu_mode = "mainApp", data = data )
+
+
 @other.route("/send_message", methods=['POST','GET'])
 def send_message():
 
     if current_user.is_authenticated:
-        form=MessageForm(name=current_user.name, last_name=current_user.last_name, mail=current_user.mail)
-        form.name.data = form.name.data+" "+form.last_name.data
+        if 'sport_proposal' in request.args and request.args['sport_proposal'] == 'True':
+            form = MessageForm(name = current_user.name,
+                                last_name =  current_user.last_name,
+                                mail = current_user.mail,
+                                subject = "Propozycja dodania nowego sportu",
+                                message = 'Cześć,\nProponuję dodać do aplikacji sport : [PODAJ NAZWĘ SPORTU],\nze [STAŁĄ/WSPÓŁCZYNNIKIEM] o wartości [PODAJ PROPONOWANĄ WARTOŚĆ].')
+            form.name.data = form.name.data + " " + form.last_name.data
+        else:
+            form=MessageForm(name = current_user.name,
+                             last_name = current_user.last_name,
+                             mail=current_user.mail)
+            form.name.data = form.name.data + " " + form.last_name.data
     else:
         form=MessageForm()
         form.last_name.data="-"
-
-    if 'sport_proposal' in request.args and request.args['sport_proposal'] == 'True':
-        form.subject.data = "Propozycja dodania nowego sportu"
-        form.message.data = '''Cześć,\nProponuję dodać do aplikacji sport : [PODAJ NAZWĘ SPORTU],\nze [STAŁĄ/WSPÓŁCZYNNIKIEM] o wartości [PODAJ PROPONOWANĄ WARTOŚĆ].'''
 
 
     if form.validate_on_submit():
@@ -101,7 +158,8 @@ def mailbox(actionName):
             flash("Wiadomość przesłana do uczestników wyzwania: {}".format(event_name))
         else:
             MailboxMessage.save_message_in_db(form)
-            flash("Wiadomość przesłana do użytkownika: {}".format(form.receiver_email.data))
+            receiver_full_name=MailboxMessage.set_receiver_full_name(form)
+            flash("Wiadomość przesłana do użytkownika: {}".format(receiver_full_name))
 
     elif request.method == 'POST':
         messages_to_delete=request.form.getlist('checkboxesWithMessagesToDelete')
@@ -109,7 +167,7 @@ def mailbox(actionName):
             flash("Brak zaznaczonych wiadomości do usunięcia")
         else:
             MailboxMessage.delete_messages_from_db(messages_to_delete)
-            flash ("Zaznaczone wiadomości zostały poprawnie usnięte")
+            flash ("Zaznaczone wiadomości zostały poprawnie usunięte")
         return redirect(url_for('other.mailbox', actionName='inbox'))
 
 

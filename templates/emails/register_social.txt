@@ -1,0 +1,23 @@
+Cześć {{user.name}},
+
+Właśnie założył*ś konto w aplikacji Sportowe Świry!
+
+Dzięki dołączeniu do Sportowych Świrów możesz:
+
+ -  stworzyć wyzwanie i zaprosić do niego przyjaciół, dzięki czemu będziecie mieć okazję do wspólnej i regularnej aktywności fizycznej,
+
+ - dołączyć do wyzwania organizowanego przez Twojego znajomego i rywalizować o ciekawe nagrody,
+
+ - śledzić na bieżąco swoje postępy, by z tygodnia na tydzień przybliżać się do swoich wymarzonych celów,
+
+ - motywować się wzajemnie w grupie znajomych i dobrze się bawić w aktywny sposób,
+
+ - dbać o swoją formę i zdrowie, a przy okazji próbować nowych aktywności fizycznych,
+
+A co najważniejsze to wszystko ZA DARMO!
+
+Do zobaczenia na trasie!
+Zespół Sportowych Świrów
+
+PS Masz jakieś pytania lub wątpliwości? A możesz nie wiesz, jak zacząć działać? Chętnie odpowiemy na wszystkie Twoje pytania.
+Możesz po prostu odpowiedzieć na ten e-mail, lub napisać do nas na kontakt@sportoweswiry.com.pl

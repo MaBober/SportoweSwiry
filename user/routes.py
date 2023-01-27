@@ -165,15 +165,25 @@ def reset_password(token):
     form = NewPasswordForm()
     del form.oldPassword
 
-    if form.validate_on_submit():
+    user = User.check_token(token)
 
-        message, status, action = User.reset_password(token, form.newPassword.data)
-        flash(message, status)
-        return action
+    if type(user) == User:
 
-    return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
+        if form.validate_on_submit():
+
+            message, status, action = user.reset_password(form.newPassword.data)
+            flash(message, status)
+            return action
+
+        return render_template("reset_password.html", title_prefix = "Resetowanie hasła", form=form)
+    
+    message, status, action = user
+    flash(message, status)
+    return action
+
 
 @user.route("/ban_user/<user_id>", methods=['POST', 'GET'])
+@account_confirmation_check
 def ban_user(user_id):
 
     if not current_user.is_admin:
@@ -194,6 +204,7 @@ def ban_user(user_id):
     return redirect(url_for('other.hello'))
 
 @user.route("/unban_user/<user_id>", methods=['POST', 'GET'])
+@account_confirmation_check
 def unban_user(user_id):
 
     if not current_user.is_admin:
@@ -221,7 +232,7 @@ def list_of_users():
 
     ban_form = BanReason()
 
-    users = User.query.all()
+    users = User.query.order_by(User.added_on.desc()).all()
     return render_template('list_of_users.html',
                     users=users,
                     ban_form = ban_form,
@@ -363,7 +374,19 @@ def dashboard():
                     menu_mode = "mainApp")     
         
   
+
+@user.route("/delete_avatar")
+@account_confirmation_check
+@login_required #This page needs to be login
+def delete_avatar():
+
+    current_user.delete_avatar()
+    
+    return redirect(url_for('user.settings'))
+
+
 @user.route("/rotate_avatar_right")
+@account_confirmation_check
 @login_required #This page needs to be login
 def rotate_avatar_right():
 
@@ -373,6 +396,7 @@ def rotate_avatar_right():
 
 
 @user.route("/rotate_avatar_left")
+@account_confirmation_check
 @login_required #This page needs to be login
 def rotate_avatar_left():
 
@@ -532,6 +556,7 @@ def callback():
         
 
 @user.route("/subscribe_newsletter", methods=['GET'])
+@account_confirmation_check
 @login_required
 def subscribe_newsletter():
 

@@ -137,6 +137,7 @@ body {
     flex-grow: 0;
     margin: 10px 106px 14px 105px;
     padding: 15px 19px 15px 19px;
+    padding-left: 12px;
     border-radius: 0;
     background-color: #fff;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);

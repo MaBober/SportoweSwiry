@@ -16,7 +16,7 @@
         </div>
         <div class="modal-footer">
             <form action="" method="GET" id="confirmDeleteForm">
-                <button type="submit" class="btn btn-danger">Opuść wyzwanie</button>
+                <button type="submit" class="btn btn-danger" id="idConfirmButton">...</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
             </form>
         </div>
@@ -32,11 +32,13 @@
         // This function is applied to all elements with class ending with ".delete-confirm" 
         $('.delete-confirm').click(function () { 
             // get attributes of the found element 
+            var button = $(this).attr('data-button')
             var desc = $(this).attr('data-desc'); 
             var url = $(this).attr('data-url'); 
             // the #... designates id of an element - change the text in the modal window 
             $('#idDeleteModalBody').text(desc); 
             $("#confirmDeleteForm").attr("action", url); 
+            $('#idConfirmButton').text(button); 
         }); 
     }); 
 </script>
@@ -92,6 +94,7 @@
                         <h6><b>Start: </b> {{event.start}}<br></h6>
                         <h6><b>Koniec: </b> {{event.end}}</h6>
                         <h6><b>Status: </b> {{event.status_description}}</h6>
+                        <h6><b>Organizator: </b> {{event.admin.name}} {{event.admin.last_name}} </h6>
 
                     </div>
 
@@ -100,17 +103,33 @@
                             <a href="{{ url_for('event.event_main', event_id=event.id )}}" type="button" class="btn Main-Button" style="color:white">Szczegóły</a>
                         </div>
                         {% if event.status in ["0"] %}
-                        <div class = 'row'>
-                            <a href="#" type="button" class="btn Main-Button" style="color:white" onclick="copyText()">Udostępnij!</a>
-                        </div>
-                        
-                        <div class = 'row'>
-                            <a type="button" class="btn btn-danger btn delete-confirm"
-                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                            data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?"
-                            data-url="{{ url_for('event.leave_event', event_id = event.id )}}">
-                            Opuść</a>
-                        </div>  
+                            
+                            <div class = 'row'>
+                                <a href="#" type="button" class="btn Main-Button" style="color:white" onclick="copyText()">Udostępnij!</a>
+                            </div>
+                            
+                            {% if event.admin_id != current_user.id %}
+                                <div class = 'row'>
+                                    <a type="button" class="btn btn-danger btn delete-confirm"
+                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                    data-desc="Czy na pewno chesz opuścić wyzwanie {{event.name}}?"
+                                    data-url="{{ url_for('event.leave_event', event_id = event.id )}}"
+                                    data-button = "Opuść">
+                                    Opuść</a>
+                                </div>  
+                            {% endif %}
+                            
+                            {% if event.admin_id == current_user.id and event.current_users_amount == 1 %}
+                            <div class = 'row'>
+                                <a type="button" class="btn btn-danger btn delete-confirm"
+                                data-bs-toggle = "modal" data-bs-target="#confirmDeleteModal"
+                                data-desc="Czy na pewno chesz usunąć wyzwanie {{event.name}}?"
+                                data-url  ="{{ url_for('event.admin_delete_event', event_id = event.id )}}"
+                                data-button = "Usuń">
+                                Usuń wyzwanie</a>
+                            </div>  
+                        {% endif %}
+
                          {% endif %}
 
                     </div>
@@ -122,8 +141,12 @@
                 
                     /* Copy text into clipboard */
                     navigator.clipboard.writeText
-                        ("https://sportoweswiry.com.pl{{ url_for('event.event_preview', event_id=event.id) }}");
-                    alert("Skopiowano link do wydarzenia!")
+                        ("https://sportoweswiry.com.pl{{ url_for('event.event_preview', event_id=event.id) }}")
+                        .then(() => {
+                        alert("Skopiowano link do wydarzenia!");})
+                        .catch(() => {
+                         alert("Wystąpił błąd! Spróbuj ponownie.");
+                            });
                 }
             </script>
         {% endfor %}

@@ -41,7 +41,7 @@ class MailboxMessage(db.Model):
 
         from user.classes import User
 
-        list_of_users=User.query.all()
+        list_of_users=User.query.filter(User.name!="Konto").filter(User.last_name!="Usunięte").all()
         list_of_users_mails = [(a.mail) for a in list_of_users]
         list_of_users_names = [(a.name) for a in list_of_users]
         list_of_users_last_names = [(a.last_name) for a in list_of_users]
@@ -76,9 +76,9 @@ class MailboxMessage(db.Model):
     @staticmethod
     def prepare_list_of_choices_for_normal_user():
         admin_user=MailboxMessage.prepare_list_of_admins()
-        current_user_events_users=MailboxMessage.prepare_list_of_current_user_events_users()
+        current_user_events=MailboxMessage.prepare_list_of_current_user_events()
         current_user_events_single_users=MailboxMessage.prepare_list_of_current_user_events_single_users()
-        available_list_of_choices=admin_user+current_user_events_users+current_user_events_single_users
+        available_list_of_choices=admin_user+current_user_events+current_user_events_single_users
         return available_list_of_choices
 
 
@@ -105,7 +105,7 @@ class MailboxMessage(db.Model):
 
 
     @staticmethod
-    def prepare_list_of_current_user_events_users():
+    def prepare_list_of_current_user_events():
         list_of_events=Event.query.all()
         list_of_real_events=[]
 
@@ -146,7 +146,6 @@ class MailboxMessage(db.Model):
         list_of_mails = []
         list_of_full_names = []
 
-
         try:
 
             for single_event in list_of_real_events:
@@ -157,9 +156,13 @@ class MailboxMessage(db.Model):
                     receiver_name=receiver_user.name
                     receiver_last_name=receiver_user.last_name
                     receiver_full_name=receiver_name + " " + receiver_last_name
-                    if receiver_mail is not current_user.mail and not receiver_mail in list_of_mails and not receiver_mail in list_of_admins[0] and not receiver_mail in list_of_admins[1] and not receiver_mail in list_of_admins[3]:
-                        list_of_mails.append(receiver_mail)
-                        list_of_full_names.append(receiver_full_name)
+                    if receiver_mail is not current_user.mail and not receiver_mail in list_of_mails and receiver_full_name != "Konto Usunięte":
+                        for admin_mail in list_of_admins:
+                            if receiver_mail in admin_mail[0]:
+                                 break
+                        else:
+                            list_of_mails.append(receiver_mail)
+                            list_of_full_names.append(receiver_full_name)
                     
 
         except:
@@ -217,14 +220,16 @@ class MailboxMessage(db.Model):
             event=Event.query.filter(Event.name==event_name).first()
             for participant in event.participants:
                 receiver_user=User.query.filter(User.id==participant.user_id).first()
-                receiver_mail=receiver_user.mail
-                receiver_name=receiver_user.name
-                receiver_last_name=receiver_user.last_name
-                receiver_full_name=receiver_name + " " + receiver_last_name
-                new_message = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, sender_name=sender_full_name, receiver = receiver_mail, receiver_name = receiver_full_name, subject = form.subject.data, message = form.message.data, send_by_app = form.send_by_app.data, send_by_email= form.send_by_email.data, message_readed=False, multiple_message=True )
-                db.session.add(new_message)
-                db.session.commit()
-                app.logger.info(f"User {current_user.id} sent message to {event_name} participants.")
+                
+                if receiver_user.mail!=current_user.mail:
+                    receiver_mail=receiver_user.mail
+                    receiver_name=receiver_user.name
+                    receiver_last_name=receiver_user.last_name
+                    receiver_full_name=receiver_name + " " + receiver_last_name
+                    new_message = MailboxMessage(date=datetime.date.today(), sender=current_user.mail, sender_name=sender_full_name, receiver = receiver_mail, receiver_name = receiver_full_name, subject = form.subject.data, message = form.message.data, send_by_app = form.send_by_app.data, send_by_email= form.send_by_email.data, message_readed=False, multiple_message=True )
+                    db.session.add(new_message)
+                    db.session.commit()
+                    app.logger.info(f"User {current_user.id} sent message to {event_name} participants.")
         except:
             current_app.logger.exception(f"User {current_user.id} failed to send message to {event_name} participants.")
 
@@ -239,7 +244,7 @@ class MailboxMessage(db.Model):
             db.session.add(new_message)
             db.session.commit()
 
-            users=User.query.all()
+            users=User.query.filter(User.mail!=current_user.mail).all()
             for user in users:
                 receiver_mail=user.mail
                 receiver_name=user.name

@@ -374,6 +374,17 @@ def dashboard():
                     menu_mode = "mainApp")     
         
   
+
+@user.route("/delete_avatar")
+@account_confirmation_check
+@login_required #This page needs to be login
+def delete_avatar():
+
+    current_user.delete_avatar()
+    
+    return redirect(url_for('user.settings'))
+
+
 @user.route("/rotate_avatar_right")
 @account_confirmation_check
 @login_required #This page needs to be login

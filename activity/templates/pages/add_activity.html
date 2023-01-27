@@ -3,6 +3,7 @@
 {% block body_content %}
 
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('activity.static',filename='styles/add_activity.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_activity_your_events.css') }}">
 
 <div class="container-xl px-4 mt-4">
     
@@ -88,7 +89,7 @@
                 
         </div>
         
-        <div class="col-md-6 mt-4">{% include "includes/add_activity_your_events.html" %}</div>
+        <div class="col-md-6 mt-4 whole_box">{% include "includes/add_activity_your_events.html" %}</div>
     </div>
 </div>
 

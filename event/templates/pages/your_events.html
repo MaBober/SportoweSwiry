@@ -141,8 +141,12 @@
                 
                     /* Copy text into clipboard */
                     navigator.clipboard.writeText
-                        ("https://sportoweswiry.com.pl{{ url_for('event.event_preview', event_id=event.id) }}");
-                    alert("Skopiowano link do wydarzenia!")
+                        ("https://sportoweswiry.com.pl{{ url_for('event.event_preview', event_id=event.id) }}")
+                        .then(() => {
+                        alert("Skopiowano link do wydarzenia!");})
+                        .catch(() => {
+                         alert("Wystąpił błąd! Spróbuj ponownie.");
+                            });
                 }
             </script>
         {% endfor %}

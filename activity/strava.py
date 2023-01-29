@@ -20,10 +20,16 @@ def serve_strava_callback(request):
                 access_token = get_strava_access_token(code)
                 activities_since = (dt.datetime.today() - dt.timedelta(days = Config.DAYS_TO_ADD_ACTIVITY)).timestamp()
                 strava_activities = get_activities_from_strava(access_token, activities_since)
+
+                if strava_activities ==[]:
+                    message = "Połączono ze Strava. Nie znaleziono aktywności do synchronizacji."
+                    current_app.logger.info(f"User {current_user.id} doesn't have new activities")
+                    return message, 'message', redirect(url_for('other.hello'))
+
                 strava_activities = pd.json_normalize(strava_activities)
                 strava_activities = convert_strava_data(strava_activities)
-
                 add_strava_activities_to_db (strava_activities)
+                
                 message = "Zsynchronizowano aktywności ze Strava!"
                 current_app.logger.info(f"User {current_user.id} added activity with Strava")
                 return message, 'success', redirect(url_for('other.hello'))

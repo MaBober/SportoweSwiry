@@ -101,7 +101,7 @@ class Event(db.Model):
 
             current_app.logger.info(f"User {current_user.id} modified event {self.id} targets")
             message = f"Zmodyfikowano cele tygodniowe wyzwania {self.name}"
-            return message, 'success', redirect(url_for('event.event_main', event_id = self.id))
+            return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
 
         except:
             current_app.logger.exception(f"User {current_user.id} failed to modify event {self.name} targets.")
@@ -460,7 +460,7 @@ class Event(db.Model):
                 sport_to_modify.is_constant= coefficient_form.is_constant.data
                 db.session.commit()
 
-                message = f'Zmodyfikowano współczynnik wyzwania!'
+                message = f'Zmodyfikowano współczynnik sportu!'
                 current_app.logger.info(f"User {current_user.id} modified sport {sport_to_modify.activity_type_id} in event {self.id}.")
                 return message, 'success', redirect(url_for('event.modify_event', event_id = self.id))
 

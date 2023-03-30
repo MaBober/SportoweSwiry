@@ -2,6 +2,7 @@
 
 Web application for creating sports challenges, available [here](https://sportoweswiry.com.pl/).
 
+
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
@@ -57,13 +58,9 @@ Full instruction for application [here](https://sportoweswiry.com.pl/instrukcja)
 
 * Clone repository
 * Rename `.env.example` to `.env` and set your values:
-```
-SECRET_KEY=SomeRandomString
-SQLALCHEMY_DATABASE_URI=mysql+pymysql://<db_user>:<db_password>@<db_host>/<db_name>
-```
 
 ```
-SECRET_KEY=SportoweSwiry22
+SECRET_KEY=SomeRandomString
 SQLALCHEMY_DATABASE_URI=mysql://<db_user>:<db_password>@<db_host>/<db_name>
 
 MAIL_SERVER=<example.com>
@@ -101,6 +98,10 @@ In the future, the application will be developed in terms of:
 * Optimization of operation
 * Refinement of the graphical interface
 
+Demo account in the application:
+* login: PytDev
+* password: 12345678
+
 ## Contributing
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
@@ -128,6 +129,7 @@ and [@MaBober](https://github.com/MaBober)
 [![LinkedIn][linkedin-shield]][linkedin-bober-url]
 
 Feel free to contact us!
+
 
 ## License
 This project is open source and available under the MIT License.

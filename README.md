@@ -43,7 +43,7 @@ The backend of the application was created using the Python language and the Fla
 The most important functionalities of the application:
 
 * Saving your activities in the database. Keeping statistics and visual presentation of your achievements
-* Login and authorization via Google and Facebook accounts
+* Login and authorization via Google accounts
 * Possibility to create your own sports challenges (public or private)
 * Opportunity sync your activities with Strava account
 * Automatic emails with information about the status of your challenges, completed weeks and other important information
